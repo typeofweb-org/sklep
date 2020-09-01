@@ -2,6 +2,7 @@ import { initDb, prisma } from "./db";
 import { getServerWithPlugins } from "./server";
 import { getConfig } from "./config";
 import Dotenv from "dotenv";
+import type { PrismaClient } from "@prisma/client";
 
 if (getConfig("NODE_ENV") !== "production") {
   Dotenv.config({ path: ".env.dev" });
@@ -11,7 +12,7 @@ if (getConfig("NODE_ENV") !== "production") {
 
 declare module "@hapi/hapi" {
   export interface ServerApplicationState {
-    readonly db: typeof prisma;
+    readonly db: PrismaClient;
   }
 }
 

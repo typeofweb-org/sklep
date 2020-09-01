@@ -1,7 +1,6 @@
-import { prisma } from "./db";
+import type { PrismaClient } from "@prisma/client";
 
-type Prisma = typeof prisma;
-type PrismaDelegates = Pick<Prisma, ReadonlyKeys<Prisma>>;
+type PrismaDelegates = Pick<PrismaClient, ReadonlyKeys<PrismaClient>>;
 type Awaited<T> = T extends Promise<infer R> ? R : never;
 
 export type Models = {

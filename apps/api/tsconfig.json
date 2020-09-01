@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/node12/tsconfig.json",
   "compilerOptions": {
+    "incremental": false,
     "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,

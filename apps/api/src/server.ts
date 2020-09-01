@@ -71,7 +71,7 @@ export const getServerWithPlugins = async () => {
     },
     {
       routes: {
-        prefix: "/oauth",
+        prefix: "/auth",
       },
     }
   );

@@ -4,9 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail 'yarn db:start' 'yarn dev_'",
-    "dev_": "wait-on tcp:5432 --interval 3000 && yarn db:migrate:up && ts-node-dev src/index.ts",
-    "db:start": "docker-compose up",
+    "dev": "concurrently --kill-others-on-fail \"yarn:dev:start:*\"",
+    "dev:start:server": "wait-on tcp:5432 --interval 3000 && yarn db:migrate:up && ts-node-dev -s -H -T src/index.ts",
+    "dev:start:db": "docker-compose up",
     "db:stop": "docker-compose down",
     "db:migrate:up": "prisma migrate up --experimental && prisma generate"
   },
@@ -19,6 +19,8 @@
     "@hapi/joi": "17.1.1",
     "@hapi/vision": "6.0.1",
     "@prisma/client": "2.5.1",
+    "@types/bcrypt": "3.0.0",
+    "bcrypt": "5.0.0",
     "dotenv": "8.2.0",
     "hapi-swagger": "14.0.0",
     "joi": "17.2.1",
