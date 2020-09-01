@@ -2,6 +2,8 @@ type NameToType = {
   ENV: "production" | "staging" | "development" | "test";
   NODE_ENV: "production" | "development";
   PORT: number;
+  COOKIE_DOMAIN: string;
+  COOKIE_PASSWORD: string;
 };
 
 export function getConfig<T extends keyof NameToType>(name: T): NameToType[T];

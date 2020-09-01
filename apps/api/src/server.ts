@@ -1,4 +1,4 @@
-import { getConfig, isProd } from "./config";
+import { getConfig, isProd, isStaging } from "./config";
 import Joi from "joi";
 import Boom from "@hapi/boom";
 import Hapi from "@hapi/hapi";
@@ -7,6 +7,7 @@ import Vision from "@hapi/vision";
 import HapiSwagger from "hapi-swagger";
 
 import pkg from "../package.json";
+import { AuthPlugin } from "./plugins/auth";
 
 const getServer = () => {
   return new Hapi.Server({
@@ -59,15 +60,31 @@ export const getServerWithPlugins = async () => {
     },
   ]);
 
+  await server.register(
+    {
+      plugin: AuthPlugin,
+      options: {
+        cookieDomain: getConfig("COOKIE_DOMAIN"),
+        isProduction: isProd() || isStaging(),
+        cookiePassword: getConfig("COOKIE_PASSWORD"),
+      },
+    },
+    {
+      routes: {
+        prefix: "/oauth",
+      },
+    }
+  );
+
   await server.route({
     method: "GET",
     path: "/",
-    // options: {
-    //   auth: {
-    //     mode: "try",
-    //     strategy: "session",
-    //   },
-    // },
+    options: {
+      auth: {
+        mode: "try",
+        strategy: "session",
+      },
+    },
     handler(request) {
       if (request.auth.isAuthenticated) {
         return request.auth.credentials;
