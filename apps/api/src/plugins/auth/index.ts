@@ -1,5 +1,3 @@
-import Crypto from 'crypto';
-
 import Bell from '@hapi/bell';
 import Boom from '@hapi/boom';
 import HapiAuthCookie from '@hapi/cookie';
@@ -14,7 +12,13 @@ import {
   LoginPayloadSchema,
   MeAuthResponseSchema,
   meAuthResponseSchema,
+  registerPayloadSchema,
+  RegisterPayloadSchema,
 } from './authSchemas';
+import { loginUser, createUser } from './functions';
+import { sessionInclude } from './includes';
+
+const USER_REGISTERED_EVENT = 'auth:user:registered';
 
 type AuthPluginOptions = {
   cookiePassword: string;
@@ -28,28 +32,33 @@ declare module '@hapi/hapi' {
       user: Omit<Models['user'], 'password'>;
     };
   }
+
+  interface PluginsStates {
+    auth: {
+      loginUser: typeof loginUser;
+      createUser: typeof createUser;
+    };
+  }
+
+  interface ServerEvents {
+    on(
+      criteria: typeof USER_REGISTERED_EVENT | ServerEventCriteria<typeof USER_REGISTERED_EVENT>,
+      listener: (user: Models['user']) => void,
+    ): void;
+  }
 }
-
-const sessionInclude = {
-  user: {
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-    },
-  },
-};
-
-const SESSION_VALIDITY = ms('2 weeks');
 
 export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
   multiple: false,
   name: 'Sklep Auth Plugin',
   version: '1.0.0',
   async register(server, options) {
+    server.expose('loginUser', loginUser);
+    server.expose('createUser', createUser);
+
     await server.register(Bell);
     await server.register(HapiAuthCookie);
+    server.event(USER_REGISTERED_EVENT);
 
     const cookieOptions: HapiAuthCookie.Options = {
       cookie: {
@@ -104,6 +113,32 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
 
     server.route({
       method: 'POST',
+      path: '/register',
+      options: {
+        tags: ['api', 'auth'],
+        auth: {
+          mode: 'try',
+          strategy: 'session',
+        },
+        validate: {
+          payload: registerPayloadSchema,
+        },
+      },
+      async handler(request) {
+        if (request.auth.isAuthenticated) {
+          throw Boom.teapot();
+        }
+
+        const { email, password } = request.payload as RegisterPayloadSchema;
+
+        await createUser(request, { email, password });
+
+        return null;
+      },
+    });
+
+    server.route({
+      method: 'POST',
       path: '/login',
       options: {
         tags: ['api', 'auth'],
@@ -134,18 +169,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
           throw Boom.unauthorized();
         }
 
-        const session = await request.server.app.db.session.create({
-          data: {
-            id: Crypto.randomBytes(32).toString('hex'),
-            validUntil: new Date(Date.now() + SESSION_VALIDITY),
-            user: {
-              connect: user,
-            },
-          },
-          include: sessionInclude,
-        });
-
-        request.cookieAuth.set(session);
+        await loginUser(request, user);
 
         return null;
       },

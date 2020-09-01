@@ -12,6 +12,15 @@ export const loginPayloadSchema = Joi.object<LoginPayloadSchema>({
   password: Joi.string().required(),
 });
 
+export type RegisterPayloadSchema = {
+  email: string;
+  password: string;
+};
+export const registerPayloadSchema = Joi.object<RegisterPayloadSchema>({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
 export type MeAuthSchema = {
   id: string;
   validUntil: Date;
