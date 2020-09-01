@@ -1,0 +1,29 @@
+{
+  "name": "sklep.typeofweb",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": "true",
+  "scripts": {
+    "dev": "lerna run dev --parallel"
+  },
+  "workspaces": {
+    "packages": [
+      "apps/*"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "5.3.0",
+    "cross-env": "7.0.2",
+    "husky": "4.2.5",
+    "lerna": "^3.22.1",
+    "prettier": "2.1.1",
+    "ts-node": "9.0.0",
+    "typescript": "4.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "prettier --write"
+    }
+  }
+}

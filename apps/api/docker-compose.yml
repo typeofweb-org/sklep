@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+  typeofweb_sklep:
+    image: postgres:10-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_DBNAME: "sklep"
+      POSTGRES_PASSWORD: "sklep"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
