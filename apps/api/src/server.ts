@@ -1,21 +1,22 @@
-import { getConfig, isProd, isStaging } from "./config";
-import Joi from "joi";
-import Boom from "@hapi/boom";
-import Hapi from "@hapi/hapi";
-import Inert from "@hapi/inert";
-import Vision from "@hapi/vision";
-import HapiSwagger from "hapi-swagger";
+import Boom from '@hapi/boom';
+import Hapi from '@hapi/hapi';
+import Inert from '@hapi/inert';
+import Vision from '@hapi/vision';
+import HapiSwagger from 'hapi-swagger';
+import Joi from 'joi';
 
-import pkg from "../package.json";
-import { AuthPlugin } from "./plugins/auth";
+import pkg from '../package.json';
+
+import { getConfig, isProd, isStaging } from './config';
+import { AuthPlugin } from './plugins/auth';
 
 const getServer = () => {
   return new Hapi.Server({
-    host: "api.sklep.localhost",
-    port: getConfig("PORT"),
+    host: 'api.sklep.localhost',
+    port: getConfig('PORT'),
     routes: {
       cors: {
-        origin: ["*"],
+        origin: ['*'],
         credentials: true,
       },
       response: {
@@ -45,7 +46,7 @@ export const getServerWithPlugins = async () => {
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
       title: `${pkg.name} Documentation`,
-      version: getConfig("ENV") + "-" + pkg.version + "-",
+      version: getConfig('ENV') + '-' + pkg.version + '-',
       // fs.readFileSync(".version", "utf-8").trim(),
     },
     auth: false,
@@ -64,25 +65,25 @@ export const getServerWithPlugins = async () => {
     {
       plugin: AuthPlugin,
       options: {
-        cookieDomain: getConfig("COOKIE_DOMAIN"),
+        cookieDomain: getConfig('COOKIE_DOMAIN'),
         isProduction: isProd() || isStaging(),
-        cookiePassword: getConfig("COOKIE_PASSWORD"),
+        cookiePassword: getConfig('COOKIE_PASSWORD'),
       },
     },
     {
       routes: {
-        prefix: "/auth",
+        prefix: '/auth',
       },
-    }
+    },
   );
 
   await server.route({
-    method: "GET",
-    path: "/",
+    method: 'GET',
+    path: '/',
     options: {
       auth: {
-        mode: "try",
-        strategy: "session",
+        mode: 'try',
+        strategy: 'session',
       },
     },
     handler(request) {

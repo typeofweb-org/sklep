@@ -1,5 +1,6 @@
-import Joi from "joi";
-import { Nil } from "../../types";
+import Joi from 'joi';
+
+import { Nil } from '../../types';
 
 // @todo check if it's possible to infer this type
 export type LoginPayloadSchema = {
@@ -28,7 +29,7 @@ export const meAuthSchema = Joi.object<MeAuthSchema>({
   userId: Joi.number().required(),
   user: Joi.object({
     id: Joi.number().required(),
-    name: Joi.string().optional().allow(""),
+    name: Joi.string().optional().allow(''),
     email: Joi.string().required(),
     role: Joi.string().required(),
   }).required(),

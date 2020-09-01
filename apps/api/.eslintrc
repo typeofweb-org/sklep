@@ -1,0 +1,7 @@
+{
+  "root": false,
+  "extends": ["plugin:import/errors"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off"
+  }
+}

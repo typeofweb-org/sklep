@@ -44,5 +44,3 @@ migration ..20200830183720
 +  password String
 +}
 ```
-
-

@@ -1,17 +1,20 @@
-import Hapi from "@hapi/hapi";
-import Bell from "@hapi/bell";
-import HapiAuthCookie from "@hapi/cookie";
-import ms from "ms";
-import type { Models } from "../../models";
+import Crypto from 'crypto';
+
+import Bell from '@hapi/bell';
+import Boom from '@hapi/boom';
+import HapiAuthCookie from '@hapi/cookie';
+import Hapi from '@hapi/hapi';
+import Bcrypt from 'bcrypt';
+import ms from 'ms';
+
+import type { Models } from '../../models';
+
 import {
   loginPayloadSchema,
   LoginPayloadSchema,
   MeAuthResponseSchema,
   meAuthResponseSchema,
-} from "./authSchemas";
-import Boom from "@hapi/boom";
-import Bcrypt from "bcrypt";
-import Crypto from "crypto";
+} from './authSchemas';
 
 type AuthPluginOptions = {
   cookiePassword: string;
@@ -19,10 +22,10 @@ type AuthPluginOptions = {
   cookieDomain: string;
 };
 
-declare module "@hapi/hapi" {
+declare module '@hapi/hapi' {
   interface AuthCredentials {
-    session: Models["session"] & {
-      user: Omit<Models["user"], "password">;
+    session: Models['session'] & {
+      user: Omit<Models['user'], 'password'>;
     };
   }
 }
@@ -38,29 +41,29 @@ const sessionInclude = {
   },
 };
 
-const SESSION_VALIDITY = ms("2 weeks");
+const SESSION_VALIDITY = ms('2 weeks');
 
 export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
   multiple: false,
-  name: "Sklep Auth Plugin",
-  version: "1.0.0",
+  name: 'Sklep Auth Plugin',
+  version: '1.0.0',
   async register(server, options) {
     await server.register(Bell);
     await server.register(HapiAuthCookie);
 
     const cookieOptions: HapiAuthCookie.Options = {
       cookie: {
-        name: "session",
+        name: 'session',
         password: options.cookiePassword,
-        ttl: ms("7 days"),
-        encoding: "iron",
+        ttl: ms('7 days'),
+        encoding: 'iron',
         isSecure: options.isProduction,
         isHttpOnly: true,
         clearInvalid: true,
         strictHeader: true,
-        isSameSite: "Lax",
+        isSameSite: 'Lax',
         domain: options.cookieDomain,
-        path: "/",
+        path: '/',
       },
       async validateFunc(request, session: { id?: string } | undefined) {
         const sessionId = session?.id;
@@ -91,26 +94,22 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
 
         // await maybeUpdateSessionValidity(sessionModel);
 
-        const scope = [
-          "user",
-          `user-${sessionModel.userId}`,
-          `role-${sessionModel.user.role}`,
-        ];
+        const scope = ['user', `user-${sessionModel.userId}`, `role-${sessionModel.user.role}`];
 
         return { valid: true, credentials: { session: sessionModel, scope } };
       },
     };
-    server.auth.strategy("session", "cookie", cookieOptions);
-    server.auth.default("session");
+    server.auth.strategy('session', 'cookie', cookieOptions);
+    server.auth.default('session');
 
     server.route({
-      method: "POST",
-      path: "/login",
+      method: 'POST',
+      path: '/login',
       options: {
-        tags: ["api", "auth"],
+        tags: ['api', 'auth'],
         auth: {
-          mode: "try",
-          strategy: "session",
+          mode: 'try',
+          strategy: 'session',
         },
         validate: {
           payload: loginPayloadSchema,
@@ -137,7 +136,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
 
         const session = await request.server.app.db.session.create({
           data: {
-            id: Crypto.randomBytes(32).toString("hex"),
+            id: Crypto.randomBytes(32).toString('hex'),
             validUntil: new Date(Date.now() + SESSION_VALIDITY),
             user: {
               connect: user,
@@ -153,13 +152,13 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
     });
 
     server.route({
-      method: "POST",
-      path: "/logout",
+      method: 'POST',
+      path: '/logout',
       options: {
-        tags: ["api", "auth"],
+        tags: ['api', 'auth'],
         auth: {
-          mode: "try",
-          strategy: "session",
+          mode: 'try',
+          strategy: 'session',
         },
       },
       async handler(request) {
@@ -177,13 +176,13 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
     });
 
     server.route({
-      method: "GET",
-      path: "/me",
+      method: 'GET',
+      path: '/me',
       options: {
-        tags: ["api", "auth"],
+        tags: ['api', 'auth'],
         auth: {
-          mode: "try",
-          strategy: "session",
+          mode: 'try',
+          strategy: 'session',
         },
         response: {
           schema: meAuthResponseSchema,

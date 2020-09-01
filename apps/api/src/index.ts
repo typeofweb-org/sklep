@@ -1,16 +1,17 @@
-import { initDb, prisma } from "./db";
-import { getServerWithPlugins } from "./server";
-import { getConfig } from "./config";
-import Dotenv from "dotenv";
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from '@prisma/client';
+import Dotenv from 'dotenv';
 
-if (getConfig("NODE_ENV") !== "production") {
-  Dotenv.config({ path: ".env.dev" });
+import { getConfig } from './config';
+import { initDb, prisma } from './db';
+import { getServerWithPlugins } from './server';
+
+if (getConfig('NODE_ENV') !== 'production') {
+  Dotenv.config({ path: '.env.dev' });
 } else {
   Dotenv.config();
 }
 
-declare module "@hapi/hapi" {
+declare module '@hapi/hapi' {
   export interface ServerApplicationState {
     readonly db: PrismaClient;
   }
@@ -25,7 +26,7 @@ const start = async () => {
 
   await sklepServer.start();
 
-  console.info("Server running at:", sklepServer.info.uri);
+  console.info('Server running at:', sklepServer.info.uri);
 };
 
 start().catch((err) => {
