@@ -88,11 +88,10 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
           },
         });
 
-        const [sessionModel] = await request.server.app.db.session.findMany({
+        const sessionModel = await request.server.app.db.session.findOne({
           where: {
             id: sessionId,
           },
-          take: 1,
           include: sessionInclude,
         });
 
