@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "dskwrk.vscode-generate-getter-setter",
+    "esbenp.prettier-vscode",
+    "pmneo.tsimporter",
+    "prisma.prisma",
+    "redhat.vscode-yaml",
+    "vscode-icons-team.vscode-icons"
+  ]
+}
