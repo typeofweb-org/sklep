@@ -20,7 +20,6 @@
     "@hapi/joi": "17.1.1",
     "@hapi/vision": "6.0.1",
     "@prisma/client": "2.5.1",
-    "@types/bcrypt": "3.0.0",
     "bcrypt": "5.0.0",
     "dotenv": "8.2.0",
     "hapi-swagger": "14.0.0",
@@ -31,6 +30,7 @@
   "devDependencies": {
     "@prisma/cli": "2.5.1",
     "@tsconfig/node12": "1.0.7",
+    "@types/bcrypt": "3.0.0",
     "@types/hapi__bell": "11.0.0",
     "@types/hapi__cookie": "10.1.0",
     "@types/hapi__hapi": "20.0.0",
