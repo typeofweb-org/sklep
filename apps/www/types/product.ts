@@ -1,3 +1,4 @@
+// todo: correct it
 export type Product = {
   id: number;
   name: string;

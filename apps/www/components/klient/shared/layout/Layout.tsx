@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import React, { ReactNode } from 'react';
 
-interface LayoutProps {
+type LayoutProps = {
   children: ReactNode;
   title: string;
-}
+};
 
 export const Layout = React.memo<LayoutProps>(({ children, title }) => {
   return (

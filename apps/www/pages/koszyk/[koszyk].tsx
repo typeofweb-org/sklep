@@ -1,12 +1,12 @@
 import { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
-import { ProductCollection } from '../components/klient/modules/productCollection/ProductCollection';
-import { Header } from '../components/klient/shared/header/Header';
-import { Layout } from '../components/klient/shared/layout/Layout';
-import { Product } from '../types/product';
+import { ProductCollection } from '../../components/klient/modules/productCollection/ProductCollection';
+import { Header } from '../../components/klient/shared/header/Header';
+import { Layout } from '../../components/klient/shared/layout/Layout';
+import { Product } from '../../types/product';
 
-function HomePage({ products }: InferGetStaticPropsType<typeof getStaticProps>) {
+function CartPage({ products }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Layout title="Sklep strona główna">
       <Header />
@@ -52,4 +52,4 @@ export const getStaticProps = async () => {
   };
 };
 
-export default HomePage;
+export default CartPage;
