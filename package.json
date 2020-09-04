@@ -5,7 +5,8 @@
   "private": "true",
   "scripts": {
     "dev": "yarn --frozen-lockfile && lerna run dev --parallel",
-    "eslint": "yarn lerna run eslint --stream"
+    "eslint": "yarn lerna run eslint --stream",
+    "test": "yarn lerna run test --stream"
   },
   "workspaces": {
     "packages": [
