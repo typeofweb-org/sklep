@@ -1,6 +1,6 @@
-import type { PrismaClient } from '@prisma/client';
+import * as Prisma from '@prisma/client';
 
-type PrismaDelegates = Pick<PrismaClient, ReadonlyKeys<PrismaClient>>;
+type PrismaDelegates = Pick<Prisma.PrismaClient, ReadonlyKeys<Prisma.PrismaClient>>;
 type Awaited<T> = T extends Promise<infer R> ? R : never;
 
 export type Models = {
@@ -16,3 +16,14 @@ type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
 type ReadonlyKeys<T> = {
   [P in keyof T]-?: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>;
 }[keyof T];
+
+type EnumsKeys = {
+  [K in keyof typeof Prisma]: typeof Prisma[K] extends object
+    ? typeof Prisma[K] extends Function
+      ? never
+      : K
+    : never;
+}[keyof typeof Prisma];
+
+export type Enums = Pick<typeof Prisma, EnumsKeys>;
+export const Enums = Prisma as Enums;
