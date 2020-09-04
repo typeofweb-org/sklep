@@ -12,7 +12,7 @@
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "cross-env DATABASE_URL=\"postgresql://postgres:sklep@localhost:5432/sklep_test?schema=public\" concurrently --kill-others-on-fail \"yarn:test:*\"",
     "test:db": "docker-compose up",
-    "test:server": "wait-on tcp:5432 --interval 5000 && yarn db:migrate:up && jest --watch --runInBand --detectOpenHandles"
+    "test:server": "wait-on tcp:5432 --interval 5000 && yarn ts-node-script ./jest-cleanup.ts && yarn db:migrate:up && jest --watch --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "@hapi/bell": "12.1.0",
@@ -34,6 +34,7 @@
     "@prisma/cli": "2.5.1",
     "@tsconfig/node12": "1.0.7",
     "@types/bcrypt": "3.0.0",
+    "@types/faker": "4.1.12",
     "@types/hapi__bell": "11.0.0",
     "@types/hapi__cookie": "10.1.0",
     "@types/hapi__hapi": "20.0.0",
@@ -46,6 +47,7 @@
     "@types/zxcvbn": "4.4.0",
     "cross-env": "7.0.2",
     "eslint": "7.8.0",
+    "faker": "5.1.0",
     "jest": "26.4.2",
     "ts-jest": "26.3.0",
     "ts-node-dev": "1.0.0-pre.61",
