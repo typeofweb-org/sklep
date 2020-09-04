@@ -28,7 +28,8 @@ Aplikacja dzieli się na 2 części:
   - WWW:
     - [Next.js](https://nextjs.org) bez SSG ani SSR (nie potrzebujemy tego w Adminie)
     - [React Query](https://react-query.tanstack.com/docs/overview), dane ładowane dynamicznie z przeglądarki
-    - [React Hook Form](https://react-hook-form.com) do obsługi formularzy
+    - ~[React Hook Form](https://react-hook-form.com) do obsługi formularzy~ nie działało to zbyt dobrze z Carbon
+    - [React Final Form](https://final-form.org/react) do obsługi formularzy
     - [Carbon Design System](https://www.carbondesignsystem.com/components/overview) (gotowe komponenty)
     - TypeScript
     - SCSS
