@@ -7,7 +7,7 @@ export const AuthPlugin: Hapi.Plugin<EmailPluginOptions> = {
   name: 'Sklep Email Plugin',
   version: '1.0.0',
   async register(server, _options) {
-    server.events.on('auth:user:registered', (user) => {
+    server.events.on('auth:user:registered', (_user) => {
       // @todo send confirmation email
     });
   },

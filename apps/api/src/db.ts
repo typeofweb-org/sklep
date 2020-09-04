@@ -10,4 +10,4 @@ export const initDb = async () => {
 /**
  * @description Use `request.server.app.db` instead
  */
-export const prisma = client as never;
+export const prisma = client; // as never;
