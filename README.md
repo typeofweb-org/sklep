@@ -13,13 +13,39 @@
 
 ## Zasady
 
-### Stack:
-- Next.js (SSG), TypeScript
-- Node.js, Hapi, Prisma, TypeScript
+### Zarys architektury
+Aplikacja dzieli się na 2 części:
+1. Odpowiedzialną za zarządzanie produktami, dodawanie, edycję, ustalanie cen – nazwiemy ją Admin
+2. Sklep z perspektywy klienta: przeglądanie produktów, dodawanie do koszyka, zakup – nazwiemy ją Klient
 
-### Współpraca:
+### Stack
+- Admin
+  - API: 
+    - Node.js
+    - [Hapi](https://hapi.dev)
+    - [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
+    - TypeScript
+  - WWW:
+    - [Next.js](https://nextjs.org) bez SSG ani SSR (nie potrzebujemy tego w Adminie)
+    - [React Query](https://react-query.tanstack.com/docs/overview), dane ładowane dynamicznie z przeglądarki
+    - [React Hook Form](https://react-hook-form.com) do obsługi formularzy
+    - [Carbon Design System](https://www.carbondesignsystem.com/components/overview) (gotowe komponenty)
+    - TypeScript
+    - SCSS
+- Klient
+  - API:
+    - To samo API, tylko inne endpointy
+  - WWW:
+    - [Next.js z SSG](https://nextjs.org/docs/basic-features/data-fetching) do większości elementów.
+      - Incremental Static Regeneration
+      - Warto rozważyć bezpośrednie wbicie się do bazy z poziomu `getStaticProps`
+    - TypeScript
+    - SCSS
+    - … ?
+
+### Współpraca
 - Pracujemy w repo na branchach, których nazwy odpowiadają numerom tasków.
 - Robimy pull requesty do brancha `develop`.
 
-### Tablica zadań:
+### Tablica zadań
 - <https://github.com/typeofweb/sklep/projects/1>
