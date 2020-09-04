@@ -1,7 +1,7 @@
 import Faker from 'faker';
 
-import { prisma } from './db';
-import { getServerWithPlugins } from './server';
+import { prisma } from '../../db';
+import { getServerWithPlugins } from '../../server';
 
 const getServerForTest = async () => {
   const server = await getServerWithPlugins();
