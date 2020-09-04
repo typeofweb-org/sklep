@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React from 'react';
 
 import styles from './Container.module.scss';
@@ -8,6 +7,10 @@ type ContainerProps = {
   as?: 'div' | 'main' | 'section' | 'article' | 'footer' | 'header';
   children: React.ReactNode;
 };
-export default function Container({ children, className, as: As = 'div' }: ContainerProps) {
-  return <As className={clsx(styles.container, className)}>{children}</As>;
-}
+
+export const Container = React.memo<ContainerProps>(
+  ({ children, className = '', as: Element = 'div' }) => {
+    return <Element className={`${styles.container} ${className}`}>{children}</Element>;
+  },
+);
+Container.displayName = 'Container';

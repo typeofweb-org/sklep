@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import React from 'react';
 
-import Container from '../../components/admin/Container/Container';
-import ItemsForm from '../../components/admin/ItemsForm/ItemsForm';
+import { Container } from '../../components/admin/Container/Container';
+import { ItemsForm } from '../../components/admin/ItemsForm/ItemsForm';
 
 export default function AdminHome() {
   return (

@@ -3,76 +3,67 @@ import {
   Button,
   TextInput,
   TextArea,
-  Checkbox,
   NumberInput,
-  FormLabel,
   Loading,
   Toggle,
+  Checkbox,
 } from 'carbon-components-react';
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 
 import styles from './ItemsForm.module.scss';
-import { useFormReducer, Item } from './useFormReducer';
+
+type Item = {
+  name: string;
+  description: string;
+  price: number;
+  discountPrice?: number;
+  isPublic: boolean;
+};
+
 // Add Request URL
 const createItem = (payload: Item) =>
   fetch('http://api.sklep.localhost:3002/', { method: 'POST', body: JSON.stringify(payload) });
 
-export default function ItemsForm() {
+export const ItemsForm = () => {
   const [mutate, { isLoading, isError, isSuccess }] = useMutation(createItem);
-  const [state, dispatch] = useFormReducer();
-  const { name, description, price, discountPrice, isDiscount, isPublic } = state;
+  const { register, handleSubmit } = useForm();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isDiscount) {
-      return mutate(state);
-    }
-    const { discountPrice, ...rest } = state;
-    mutate(rest);
+  const onSubmit = (data: Item) => {
+    mutate(data);
   };
 
   return (
-    <Form className={styles.form} onSubmit={handleSubmit}>
+    <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <TextInput
         id="name"
+        name="name"
         invalidText="You already added item with this name"
         labelText="Item name"
         placeholder="Insert item name"
-        value={name}
-        onChange={(e) => dispatch({ type: 'setName', value: e.target.value })}
+        ref={register({ required: true })}
       />
-      <FormLabel htmlFor="price">Enter item price</FormLabel>
-      <NumberInput
-        id="price"
-        value={price}
-        onChange={(e) => dispatch({ type: 'setPrice', value: Number(e.target.value) })}
-      />
-      <Toggle
-        id="is-discount"
-        labelText="Set a discount for this item"
-        toggled={isDiscount}
-        onChange={() => dispatch({ type: 'toggleIsDiscount' })}
-      />
-      <FormLabel htmlFor="price">Discount Price</FormLabel>
+
+      <NumberInput id="price" name="price" label="Item price" ref={register({ required: true })} />
       <NumberInput
         id="discount-price"
+        name="discountPrice"
+        label="Item discount prize (Optional)"
         helperText="This is optional"
-        value={discountPrice || 0}
-        onChange={(e) => dispatch({ type: 'setDiscountPrice', value: Number(e.target.value) })}
-        disabled={!isDiscount}
+        ref={register({ required: false })}
       />
       <TextArea
         id="description"
+        name="description"
         labelText="Item description"
-        value={description}
-        onChange={(e) => dispatch({ type: 'setDescription', value: e.target.value })}
+        ref={register({ required: true })}
       />
       <Checkbox
         id="is-public"
+        name="isPublic"
         labelText="This item will show in the application"
-        checked={isPublic}
-        onChange={() => dispatch({ type: 'toggleIsPublic' })}
+        ref={register({ required: true })}
       />
       <Button kind="primary" type="submit">
         Add Item
@@ -80,4 +71,4 @@ export default function ItemsForm() {
       {isLoading && <Loading />}
     </Form>
   );
-}
+};
