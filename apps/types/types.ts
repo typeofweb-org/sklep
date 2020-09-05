@@ -4,6 +4,18 @@
  */
 
 export interface definitions {
+  Model1: {
+    id: number;
+    slug: string;
+    name: string;
+    description?: string;
+    isPublic: boolean;
+    regularPrice: number;
+    discountPrice?: number;
+    type: 'SINGLE' | 'BUNDLE';
+  };
+  data: definitions['Model1'][];
+  Model2: { data: definitions['data'] };
   user: {
     id: number;
     name?: string;
@@ -12,7 +24,7 @@ export interface definitions {
     createdAt?: string;
     updatedAt?: string;
   };
-  data: {
+  Model3: {
     id: string;
     validUntil: string;
     userId: number;
@@ -20,8 +32,8 @@ export interface definitions {
     updatedAt?: string;
     user: definitions['user'];
   };
-  Model1: { data: definitions['data'] };
-  Model2: {
+  Model4: { data: definitions['Model3'] };
+  Model5: {
     name: string;
     description: string;
     isPublic: boolean;
@@ -29,18 +41,20 @@ export interface definitions {
     discountPrice?: number;
     type: 'SINGLE' | 'BUNDLE';
   };
-  Model3: { email: string; password: string };
+  Model6: { email: string; password: string };
 
-  getAuthMe200Response: definitions['Model1'];
-  postProductsRequestBody: definitions['Model2'];
+  getProducts200Response: definitions['Model2'];
+  postProductsRequestBody: definitions['Model5'];
 
   postProductsDefaultResponse: string;
-  postAuthLoginRequestBody: definitions['Model3'];
+
+  getAuthMe200Response: definitions['Model4'];
+  postAuthLoginRequestBody: definitions['Model6'];
 
   postAuthLoginDefaultResponse: string;
 
   postAuthLogoutDefaultResponse: string;
-  postAuthRegisterRequestBody: definitions['Model3'];
+  postAuthRegisterRequestBody: definitions['Model6'];
 
   postAuthRegisterDefaultResponse: string;
 }
