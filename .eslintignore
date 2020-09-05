@@ -89,3 +89,4 @@ apps/www/.env.production
 
 apps/www/cypress/screenshots
 apps/www/cypress/videos
+apps/types/types.ts

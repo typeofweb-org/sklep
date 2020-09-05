@@ -1,56 +1,36 @@
+import type { SklepTypes } from '@sklep/types';
 import Joi from 'joi';
 
 import { Enums } from '../../models';
-import { Model, Nil } from '../../types';
 
-// @todo check if it's possible to infer this type
-export type LoginPayloadSchema = {
-  email: string;
-  password: string;
-};
-export const loginPayloadSchema = Joi.object<LoginPayloadSchema>({
+export const loginPayloadSchema = Joi.object<SklepTypes['postAuthLoginRequestBody']>({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
-export type RegisterPayloadSchema = {
-  email: string;
-  password: string;
-};
-export const registerPayloadSchema = Joi.object<RegisterPayloadSchema>({
+export const registerPayloadSchema = Joi.object<SklepTypes['postAuthRegisterRequestBody']>({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
-export type MeAuthSchema = Model<{
-  id: string;
-  validUntil: Date;
-  userId: number;
-
-  user: Model<{
-    id: number;
-    name: Nil<string>;
-    email: string;
-    role: keyof Enums['UserRole'];
-  }>;
-}>;
-export const meAuthSchema = Joi.object<MeAuthSchema>({
+export const meAuthSchema = Joi.object<SklepTypes['getAuthMe200Response']['data']>({
   id: Joi.string().required(),
   validUntil: Joi.date().required(),
   userId: Joi.number().required(),
+  createdAt: Joi.date(),
+  updatedAt: Joi.date(),
   user: Joi.object({
     id: Joi.number().required(),
-    name: Joi.string().optional().allow(''),
-    email: Joi.string().required(),
+    name: Joi.string().optional().allow('', null),
+    email: Joi.string().email().required(),
     role: Joi.string()
       .valid(...Object.keys(Enums.UserRole))
       .required(),
+    createdAt: Joi.date(),
+    updatedAt: Joi.date(),
   }).required(),
 });
 
-export type MeAuthResponseSchema = {
-  data: MeAuthSchema;
-};
-export const meAuthResponseSchema = Joi.object<MeAuthResponseSchema>({
+export const meAuthResponseSchema = Joi.object<SklepTypes['getAuthMe200Response']>({
   data: meAuthSchema.required().allow(null),
 }).required();

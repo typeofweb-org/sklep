@@ -1,0 +1,17 @@
+{
+  "name": "@sklep/types",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "chokidar \"../api/src/**/*.ts\" --initial -c \"yarn generate-api-types\"",
+    "generate-api-types": "wait-on tcp:3002 && ../../node_modules/@manifoldco/swagger-to-ts/pkg/bin/cli.js http://localhost:3002/swagger.json --output types.ts",
+    "postinstall": "cd ../../node_modules/@manifoldco/swagger-to-ts && yarn --frozen-lockfile && yarn build"
+  },
+  "dependencies": {
+    "@manifoldco/swagger-to-ts": "github:mmiszy/swagger-to-ts#develop"
+  },
+  "devDependencies": {
+    "chokidar-cli": "2.1.0",
+    "wait-on": "5.2.0"
+  }
+}
