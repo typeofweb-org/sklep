@@ -1,26 +1,34 @@
 # Sklep Type of Web
 
+Projekt edukacyjny. Licencja: [AGPL](./LICENSE)
+
 ## Uruchomienie
+
 1. W folderze repozytorium wpisz `yarn`, aby zainstalować wszystkie potrzebne zależności.
 2. Aby uruchomić API będziesz potrzebować dockera (polecenie `docker-compose` musi być dostępne).
 3. Uruchom frontend i backend jedną komendą `yarn dev`
 4. Do pliku `/etc/hosts` (lub `c:\Windows\System32\Drivers\etc\hosts`) dodaj dwie linijki:
+
 ```
 127.0.0.1 api.sklep.localhost
 127.0.0.1 www.sklep.localhost
 ```
+
 5. Aplikacja będzie dostępna pod adresem http://www.sklep.localhost:3000/ a API pod http://api.sklep.localhost:3002/
 
 ## Zasady
 
 ### Zarys architektury
+
 Aplikacja dzieli się na 2 części:
+
 1. Odpowiedzialną za zarządzanie produktami, dodawanie, edycję, ustalanie cen – nazwiemy ją Admin
 2. Sklep z perspektywy klienta: przeglądanie produktów, dodawanie do koszyka, zakup – nazwiemy ją Klient
 
 ### Stack
+
 - Admin
-  - API: 
+  - API:
     - Node.js
     - [Hapi](https://hapi.dev)
     - [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
@@ -47,23 +55,30 @@ Aplikacja dzieli się na 2 części:
 ### Styleguide
 
 - Strony (Pages)
+
 ```jsx
 export default function AdminHome() {
-  return <div>AdminHome</div>
+  return <div>AdminHome</div>;
 }
 ```
 
 - Komponenty
+
 ```jsx
-export const ProductList = React.memo<Props>((props) => {
-  return <div>ProductList</div>
-});
+export const ProductList =
+  React.memo <
+  Props >
+  ((props) => {
+    return <div>ProductList</div>;
+  });
 ProductList.displayName = 'ProductList';
 ```
 
 ### Współpraca
+
 - Pracujemy w repo na branchach, których nazwy odpowiadają numerom tasków.
 - Robimy pull requesty do brancha `develop`.
 
 ### Tablica zadań
+
 - <https://github.com/typeofweb/sklep/projects/1>
