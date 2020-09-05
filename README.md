@@ -56,7 +56,7 @@ Aplikacja dzieli się na 2 części:
 
 - Strony (Pages)
 
-```jsx
+```tsx
 export default function AdminHome() {
   return <div>AdminHome</div>;
 }
@@ -64,13 +64,10 @@ export default function AdminHome() {
 
 - Komponenty
 
-```jsx
-export const ProductList =
-  React.memo <
-  Props >
-  ((props) => {
-    return <div>ProductList</div>;
-  });
+```tsx
+export const ProductList = React.memo<Props>((props) => {
+  return <div>ProductList</div>;
+});
 ProductList.displayName = 'ProductList';
 ```
 
