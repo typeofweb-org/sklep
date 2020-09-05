@@ -2,6 +2,8 @@ import Hapi from '@hapi/hapi';
 import { SklepTypes } from '@sklep/types';
 import Slugify from 'slugify';
 
+import { Enums } from '../../models';
+
 import { addProductPayloadSchema } from './productSchemas';
 
 export const addProductRoute: Hapi.ServerRoute = {
@@ -10,7 +12,7 @@ export const addProductRoute: Hapi.ServerRoute = {
   options: {
     tags: ['api', 'products'],
     auth: {
-      // scope: Enums.UserRole.ADMIN,
+      scope: Enums.UserRole.ADMIN,
     },
     validate: {
       payload: addProductPayloadSchema,

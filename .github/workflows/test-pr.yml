@@ -5,7 +5,7 @@ on:
     branches: [develop, main]
 
 jobs:
-  test_api:
+  tests:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: ubuntu-latest
 
@@ -14,13 +14,7 @@ jobs:
         with:
           fetch-depth: 100
 
-      - uses: marceloprado/has-changed-path@master
-        id: changed-api
-        with:
-          paths: apps/api
-
       - name: Setup PostgreSQL
-        if: steps.changed-api.outputs.changed == 'true'
         uses: Harmon758/postgresql-action@v1.0.0
         with:
           postgresql version: 10-alpine
@@ -29,21 +23,17 @@ jobs:
           postgresql password: sklep
 
       - name: Read .nvmrc
-        if: steps.changed-api.outputs.changed == 'true'
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
         id: nvm
       - name: Use Node.js
-        if: steps.changed-api.outputs.changed == 'true'
         uses: actions/setup-node@v1
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
       - name: Get yarn cache directory path
-        if: steps.changed-api.outputs.changed == 'true'
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Cache Node.js modules
-        if: steps.changed-api.outputs.changed == 'true'
         uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -53,17 +43,16 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Install dependencies
-        if: steps.changed-api.outputs.changed == 'true'
-        run: yarn workspace api install --frozen-lockfile
+        run: yarn install --frozen-lockfile
+
+      - name: Migrate DB
+        run: yarn worspace api db:migrate:up
 
       - name: Run tsc
-        if: steps.changed-api.outputs.changed == 'true'
-        run: yarn workspace api tsc
+        run: yarn tsc
 
       - name: Run tests
-        if: steps.changed-api.outputs.changed == 'true'
-        run: yarn workspace api test
+        run: yarn test
 
       - name: Run eslint
-        if: steps.changed-api.outputs.changed == 'true'
-        run: yarn workspace api eslint
+        run: yarn eslint

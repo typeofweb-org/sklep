@@ -22,7 +22,7 @@ export const meAuthSchema = Joi.object<SklepTypes['getAuthMe200Response']['data'
   user: Joi.object({
     id: Joi.number().required(),
     name: Joi.string().optional().allow('', null),
-    email: Joi.string().required(),
+    email: Joi.string().email().required(),
     role: Joi.string()
       .valid(...Object.keys(Enums.UserRole))
       .required(),
