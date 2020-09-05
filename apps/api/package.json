@@ -29,6 +29,7 @@
     "hapi-swagger": "14.0.0",
     "joi": "17.2.1",
     "ms": "2.1.2",
+    "slugify": "1.4.5",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {

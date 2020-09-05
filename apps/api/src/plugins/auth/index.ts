@@ -96,13 +96,13 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
 
         // await maybeUpdateSessionValidity(sessionModel);
 
-        const scope = ['user', `user-${sessionModel.userId}`, `role-${sessionModel.user.role}`];
+        const scope = ['user', `user-${sessionModel.userId}`, sessionModel.user.role];
 
         return { valid: true, credentials: { session: sessionModel, scope } };
       },
     };
     server.auth.strategy('session', 'cookie', cookieOptions);
-    server.auth.default('session');
+    server.auth.default({ strategy: 'session', mode: 'required' });
 
     server.route({
       method: 'POST',
