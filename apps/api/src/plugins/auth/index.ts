@@ -2,19 +2,13 @@ import Bell from '@hapi/bell';
 import Boom from '@hapi/boom';
 import HapiAuthCookie from '@hapi/cookie';
 import Hapi from '@hapi/hapi';
+import type { SklepTypes } from '@sklep/types';
 import Bcrypt from 'bcrypt';
 import ms from 'ms';
 
 import type { Models } from '../../models';
 
-import {
-  loginPayloadSchema,
-  LoginPayloadSchema,
-  MeAuthResponseSchema,
-  meAuthResponseSchema,
-  registerPayloadSchema,
-  RegisterPayloadSchema,
-} from './authSchemas';
+import { loginPayloadSchema, meAuthResponseSchema, registerPayloadSchema } from './authSchemas';
 import { loginUser, createUser } from './functions';
 import { sessionInclude } from './includes';
 
@@ -128,7 +122,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
           throw Boom.teapot();
         }
 
-        const { email, password } = request.payload as RegisterPayloadSchema;
+        const { email, password } = request.payload as SklepTypes['postAuthRegisterRequestBody'];
 
         await createUser(request, { email, password });
 
@@ -153,7 +147,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
         if (request.auth.isAuthenticated) {
           return null;
         }
-        const { email, password } = request.payload as LoginPayloadSchema;
+        const { email, password } = request.payload as SklepTypes['postAuthLoginRequestBody'];
         const user = await request.server.app.db.user.findOne({
           where: { email },
         });
@@ -211,7 +205,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
           schema: meAuthResponseSchema,
         },
       },
-      async handler(request): Promise<MeAuthResponseSchema | { data: null }> {
+      async handler(request) {
         if (request.auth.credentials?.session) {
           return { data: request.auth.credentials.session };
         }
