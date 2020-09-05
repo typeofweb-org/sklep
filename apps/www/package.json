@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
+    "@carbon/icons-react": "10.17.0",
     "carbon-components": "10.18.0",
     "carbon-components-react": "7.18.0",
     "carbon-icons": "7.0.7",
@@ -20,11 +23,15 @@
   },
   "devDependencies": {
     "@types/carbon-components-react": "7.10.9",
+    "@types/carbon__icons-react": "10.17.0",
+    "@testing-library/cypress": "6.0.0",
     "@types/react": "16.9.49",
     "@types/react-dom": "16.9.8",
+    "@cypress/webpack-preprocessor": "5.4.3",
     "babel-eslint": "10.1.0",
     "cypress": "^5.1.0",
     "eslint-config-react-app": "5.2.1",
+    "eslint-plugin-cypress": "2.11.1",
     "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-jsx-a11y": "6.3.1",
     "eslint-plugin-react": "7.20.6",
@@ -32,6 +39,7 @@
     "node-sass": "4.14.1",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-preset-env": "6.7.0",
-    "tailwindcss": "1.7.4"
+    "tailwindcss": "1.7.4",
+    "ts-loader": "8.0.2"
   }
 }

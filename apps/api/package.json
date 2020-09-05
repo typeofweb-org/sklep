@@ -12,8 +12,10 @@
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "test": "cross-env DATABASE_URL=\"postgresql://postgres:sklep@localhost:5432/sklep_test?schema=public\" concurrently --kill-others-on-fail \"yarn:test:*\"",
     "test:db": "docker-compose up",
-    "test:server": "wait-on tcp:5432 --interval 5000 && yarn ts-node-script ./jest-cleanup.ts && yarn db:migrate:up && jest --watch --runInBand --detectOpenHandles",
-    "tsc": "tsc --noEmit"
+    "test:server": "wait-on tcp:5432 --interval 5000 && (yarn ts-node-script ./jest-cleanup.ts || true) && yarn db:migrate:up && jest --detectOpenHandles",
+    "test:lint": "wait-on tcp:5432 --interval 5000 && yarn run eslint && yarn run tsc",
+    "tsc": "tsc --noEmit",
+    "test:ci": "docker-compose up -d && cross-env DATABASE_URL=\"postgresql://postgres:sklep@localhost:5432/sklep_test?schema=public\" yarn test:server && yarn test:lint"
   },
   "dependencies": {
     "@hapi/bell": "12.1.0",
@@ -29,6 +31,7 @@
     "hapi-swagger": "14.0.0",
     "joi": "17.2.1",
     "ms": "2.1.2",
+    "slugify": "1.4.5",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
