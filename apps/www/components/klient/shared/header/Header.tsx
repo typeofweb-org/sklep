@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { Topbar } from '../topbar/Topbar';
+
 export const Header = React.memo(() => {
-  return <div className="">Header</div>;
+  return <Topbar />;
 });
 Header.displayName = 'Header';
