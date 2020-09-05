@@ -46,7 +46,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Migrate DB
-        run: yarn worspace api db:migrate:up
+        run: yarn workspace api db:migrate:up
 
       - name: Run tsc
         run: yarn tsc
