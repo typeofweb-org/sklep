@@ -11,7 +11,7 @@ export const Search = React.memo(() => {
                 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"
         />
       </svg>
-      <input className="focus:outline-none font-sans" name="search" placeholder="Szukaj" />
+      <input className="font-sans" name="search" placeholder="Szukaj" />
     </div>
   );
 });
