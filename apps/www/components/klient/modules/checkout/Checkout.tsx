@@ -1,6 +1,11 @@
 import React from 'react';
 
-export const Checkout = React.memo(() => {
-  return <div className="">Checkout</div>;
+import { Order } from '../../../../types/order';
+
+type CheckoutProps = {
+  order: Order;
+};
+export const Checkout = React.memo<CheckoutProps>(({ order }) => {
+  return <div className="">Checkoutid: {order.id}</div>;
 });
 Checkout.displayName = 'Checkout';
