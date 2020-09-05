@@ -4,7 +4,7 @@ import Slugify from 'slugify';
 
 import { Enums } from '../../models';
 
-import { addProductPayloadSchema } from './productSchemas';
+import { addProductPayloadSchema, getProductResponseSchema } from './productSchemas';
 
 export const addProductRoute: Hapi.ServerRoute = {
   method: 'POST',
@@ -20,7 +20,7 @@ export const addProductRoute: Hapi.ServerRoute = {
   },
   async handler(request) {
     const payload = request.payload as SklepTypes['postProductsRequestBody'];
-    const user = request.auth.credentials.session.user;
+    const user = request.auth.credentials!.session!.user;
 
     const slug = Slugify(payload.name);
 
@@ -37,5 +37,46 @@ export const addProductRoute: Hapi.ServerRoute = {
     });
 
     return { data: product };
+  },
+};
+
+export const getProductsRoute: Hapi.ServerRoute = {
+  method: 'GET',
+  path: '/products',
+  options: {
+    tags: ['api', 'products'],
+    auth: {
+      mode: 'try',
+    },
+    response: {
+      schema: getProductResponseSchema,
+    },
+  },
+  async handler(request): Promise<SklepTypes['getProducts200Response']> {
+    const user = request.auth.credentials?.session?.user;
+    const isAdmin = user?.role === Enums.UserRole.ADMIN;
+
+    const products = await request.server.app.db.product.findMany({
+      ...(!isAdmin && {
+        where: {
+          isPublic: true,
+        },
+      }),
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        isPublic: true,
+        regularPrice: true,
+        discountPrice: true,
+        type: true,
+        userId: false,
+        createdAt: false,
+        updatedAt: false,
+      },
+    });
+
+    return { data: products };
   },
 };

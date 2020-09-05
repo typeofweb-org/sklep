@@ -70,3 +70,4 @@ jspm_packages/
 
 *.tsbuildinfo
 .version
+apps/www/.next

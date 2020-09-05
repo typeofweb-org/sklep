@@ -118,7 +118,7 @@ describe('/auth', () => {
           },
         },
         handler(request) {
-          return request.auth.credentials.session;
+          return request.auth.credentials!.session!;
         },
       });
 

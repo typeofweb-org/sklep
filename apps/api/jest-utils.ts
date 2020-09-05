@@ -50,3 +50,8 @@ export const createAndAuthRole = async (
     },
   };
 };
+
+export const repeatRequest = <T>(n: number, fn: () => Promise<T>): Promise<T[]> => {
+  const repetitions = Array.from({ length: n }, () => fn());
+  return Promise.all(repetitions);
+};

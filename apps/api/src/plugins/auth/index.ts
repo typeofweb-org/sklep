@@ -22,7 +22,7 @@ type AuthPluginOptions = {
 
 declare module '@hapi/hapi' {
   interface AuthCredentials {
-    session: Models['session'] & {
+    session?: Models['session'] & {
       user: Omit<Models['user'], 'password'>;
     };
   }
