@@ -1114,6 +1114,13 @@
   dependencies:
     "@carbon/icon-helpers" "^10.9.0"
 
+"@carbon/icons-react@^10.17.0":
+  version "10.17.0"
+  resolved "https://registry.yarnpkg.com/@carbon/icons-react/-/icons-react-10.17.0.tgz#17c0450f2280680e6e6c778f68613723c55f8f39"
+  integrity sha512-XAz8RZW+na2ZAGLrw+ojYtI+RwyiGTnmAM0H+TWeG451hZHJ84CnU34G608h9eThndgFgAYYPr4ariFlaXdgZA==
+  dependencies:
+    "@carbon/icon-helpers" "^10.9.0"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -2656,6 +2663,11 @@
   dependencies:
     "@types/react" "*"
     flatpickr "4.6.1"
+
+"@types/carbon__icons-react@^10.17.0":
+  version "10.17.0"
+  resolved "https://registry.yarnpkg.com/@types/carbon__icons-react/-/carbon__icons-react-10.17.0.tgz#f82dd91ece2e66965c793268d0a7b5c0ea5f5019"
+  integrity sha512-qtA6CH/ST/elk4Ykx8G0s5XxH0Zi+9OqhnXxvjWQgLt2PgpfpDmkVKKDQtEH/p2AXjeI7ci9SM3O4WIh7qNXCA==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"

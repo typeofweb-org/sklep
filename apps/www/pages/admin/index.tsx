@@ -1,14 +1,19 @@
 import Head from 'next/head';
 import React from 'react';
 
+import { Header } from '../../components/admin/Header';
+
 export default function AdminHome() {
   return (
     <>
       <Head>
-        <title>Admin</title>
+        <title>Admin page</title>
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/carbon-components/css/carbon-components.min.css"
+        />
       </Head>
-      {/* Pass here your content */}
-      <div></div>
+      <Header />
     </>
   );
 }
