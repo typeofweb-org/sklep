@@ -7,6 +7,7 @@
     "dev": "yarn --frozen-lockfile && lerna run dev --parallel",
     "eslint": "yarn lerna run eslint --stream",
     "test": "yarn lerna run test --stream",
+    "test:ci": "yarn lerna run test:ci --stream",
     "tsc": "yarn lerna run tsc --stream"
   },
   "workspaces": {
