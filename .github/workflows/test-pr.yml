@@ -14,14 +14,6 @@ jobs:
         with:
           fetch-depth: 100
 
-      - name: Setup PostgreSQL
-        uses: Harmon758/postgresql-action@v1.0.0
-        with:
-          postgresql version: 10-alpine
-          postgresql db: sklep_test
-          postgresql user: postgres
-          postgresql password: sklep
-
       - name: Read .nvmrc
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
         id: nvm
