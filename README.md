@@ -41,8 +41,25 @@ Aplikacja dzieli się na 2 części:
       - Incremental Static Regeneration
       - Warto rozważyć bezpośrednie wbicie się do bazy z poziomu `getStaticProps`
     - TypeScript
+    - TailwindCSS
     - SCSS
-    - … ?
+
+### Styleguide
+
+- Strony (Pages)
+```jsx
+export default function AdminHome() {
+  return <div>AdminHome</div>
+}
+```
+
+- Komponenty
+```jsx
+export const ProductList = React.memo<Props>((props) => {
+  return <div>ProductList</div>
+});
+ProductList.displayName = 'ProductList';
+```
 
 ### Współpraca
 - Pracujemy w repo na branchach, których nazwy odpowiadają numerom tasków.
