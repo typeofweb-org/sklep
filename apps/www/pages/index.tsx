@@ -24,7 +24,7 @@ export const getStaticProps = async () => {
   const products: Product[] = [
     {
       id: 123,
-      name: '123',
+      name: 'Product Name',
       description: 'desc',
       slug: '123',
       isPublic: true,
@@ -34,9 +34,19 @@ export const getStaticProps = async () => {
     },
     {
       id: 345,
-      name: '345',
+      name: 'Another Name',
       description: 'desc',
       slug: '345',
+      isPublic: true,
+      regularPrice: 3454,
+      discountPrice: 12,
+      productType: 'footwear',
+    },
+    {
+      id: 346,
+      name: 'Beautiful socks',
+      description: 'desc',
+      slug: '346',
       isPublic: true,
       regularPrice: 3454,
       discountPrice: 12,
