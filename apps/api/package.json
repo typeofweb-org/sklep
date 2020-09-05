@@ -13,6 +13,7 @@
     "test": "cross-env DATABASE_URL=\"postgresql://postgres:sklep@localhost:5432/sklep_test?schema=public\" concurrently --kill-others-on-fail \"yarn:test:*\"",
     "test:db": "docker-compose up",
     "test:server": "wait-on tcp:5432 --interval 5000 && yarn ts-node-script ./jest-cleanup.ts && yarn db:migrate:up && jest --watch --runInBand --detectOpenHandles",
+    "test:lint": "wait-on tcp:5432 --interval 5000 && yarn run eslint && yarn run tsc",
     "tsc": "tsc --noEmit"
   },
   "dependencies": {

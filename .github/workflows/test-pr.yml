@@ -37,14 +37,5 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Migrate DB
-        run: yarn workspace api db:migrate:up
-
-      - name: Run tsc
-        run: yarn tsc
-
       - name: Run tests
         run: yarn test
-
-      - name: Run eslint
-        run: yarn eslint
