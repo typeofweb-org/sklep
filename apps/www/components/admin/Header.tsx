@@ -24,7 +24,7 @@ import {
 } from 'carbon-components-react';
 import React, { useState } from 'react';
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const [isNotificationExpanded, setNotificationExpand] = useState(false);
   const [isUserInfoExpanded, setUserInfoExpand] = useState(false);
 
@@ -41,63 +41,61 @@ export const Header: React.FC = () => {
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-        <>
-          <CarbonHeader aria-label="Typeofweb shop header">
-            <SkipToContent />
-            <HeaderMenuButton
-              aria-label="Open menu"
-              onClick={onClickSideNavExpand}
-              isActive={isSideNavExpanded}
-            />
-            <HeaderName prefix="Sklep">typeofweb.com</HeaderName>
+        <CarbonHeader aria-label="Typeofweb shop header">
+          <SkipToContent />
+          <HeaderMenuButton
+            aria-label="Open menu"
+            onClick={onClickSideNavExpand}
+            isActive={isSideNavExpanded}
+          />
+          <HeaderName prefix="Sklep">typeofweb.com</HeaderName>
 
-            <HeaderGlobalBar>
-              <HeaderGlobalAction
-                aria-label="Notifications"
-                onClick={toggleNotificationClick}
-                isActive={isNotificationExpanded}
-              >
-                <Notification20 />
-              </HeaderGlobalAction>
-              <HeaderGlobalAction
-                aria-label="User informations"
-                onClick={toggleUserInfoClick}
-                isActive={isUserInfoExpanded}
-              >
-                <UserProfile20 />
-              </HeaderGlobalAction>
-            </HeaderGlobalBar>
-
-            <HeaderPanel
-              aria-label="Header panel"
-              expanded={isNotificationExpanded || isUserInfoExpanded}
+          <HeaderGlobalBar>
+            <HeaderGlobalAction
+              aria-label="Notifications"
+              onClick={toggleNotificationClick}
+              isActive={isNotificationExpanded}
             >
-              {isNotificationExpanded ? <div>Notifications</div> : <div>User info</div>}
-            </HeaderPanel>
+              <Notification20 />
+            </HeaderGlobalAction>
+            <HeaderGlobalAction
+              aria-label="User informations"
+              onClick={toggleUserInfoClick}
+              isActive={isUserInfoExpanded}
+            >
+              <UserProfile20 />
+            </HeaderGlobalAction>
+          </HeaderGlobalBar>
 
-            <SideNav aria-label="Side navigation" expanded={isSideNavExpanded} isChildOfHeader>
-              <SideNavItems>
-                <SideNavMenu renderIcon={Store16} title="Shop settings">
-                  <SideNavMenuItem>Option 1</SideNavMenuItem>
-                  <SideNavMenuItem>Option 2</SideNavMenuItem>
-                  <SideNavMenuItem>Option 3</SideNavMenuItem>
-                </SideNavMenu>
-                <SideNavMenu renderIcon={Analytics16} title="Statistics">
-                  <SideNavMenuItem>Option 1</SideNavMenuItem>
-                  <SideNavMenuItem>Option 2</SideNavMenuItem>
-                  <SideNavMenuItem>Option 3</SideNavMenuItem>
-                </SideNavMenu>
-                <SideNavMenu renderIcon={Finance16} title="Finance">
-                  <SideNavMenuItem>Option 1</SideNavMenuItem>
-                  <SideNavMenuItem>Option 2</SideNavMenuItem>
-                  <SideNavMenuItem>Option 3</SideNavMenuItem>
-                </SideNavMenu>
-                <SideNavLink renderIcon={Group16}>Users</SideNavLink>
-                <SideNavLink renderIcon={Fade16}>Link</SideNavLink>
-              </SideNavItems>
-            </SideNav>
-          </CarbonHeader>
-        </>
+          <HeaderPanel
+            aria-label="Header panel"
+            expanded={isNotificationExpanded || isUserInfoExpanded}
+          >
+            {isNotificationExpanded ? <div>Notifications</div> : <div>User info</div>}
+          </HeaderPanel>
+
+          <SideNav aria-label="Side navigation" expanded={isSideNavExpanded} isChildOfHeader>
+            <SideNavItems>
+              <SideNavMenu renderIcon={Store16} title="Shop settings">
+                <SideNavMenuItem>Option 1</SideNavMenuItem>
+                <SideNavMenuItem>Option 2</SideNavMenuItem>
+                <SideNavMenuItem>Option 3</SideNavMenuItem>
+              </SideNavMenu>
+              <SideNavMenu renderIcon={Analytics16} title="Statistics">
+                <SideNavMenuItem>Option 1</SideNavMenuItem>
+                <SideNavMenuItem>Option 2</SideNavMenuItem>
+                <SideNavMenuItem>Option 3</SideNavMenuItem>
+              </SideNavMenu>
+              <SideNavMenu renderIcon={Finance16} title="Finance">
+                <SideNavMenuItem>Option 1</SideNavMenuItem>
+                <SideNavMenuItem>Option 2</SideNavMenuItem>
+                <SideNavMenuItem>Option 3</SideNavMenuItem>
+              </SideNavMenu>
+              <SideNavLink renderIcon={Group16}>Users</SideNavLink>
+              <SideNavLink renderIcon={Fade16}>Link</SideNavLink>
+            </SideNavItems>
+          </SideNav>
+        </CarbonHeader>
       )}
     />
   );
