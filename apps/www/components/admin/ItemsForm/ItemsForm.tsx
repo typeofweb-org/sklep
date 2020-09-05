@@ -5,70 +5,147 @@ import {
   TextArea,
   NumberInput,
   Loading,
-  Toggle,
   Checkbox,
 } from 'carbon-components-react';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Form as FinalForm, Field } from 'react-final-form';
 import { useMutation } from 'react-query';
+import * as z from 'zod';
 
 import styles from './ItemsForm.module.scss';
 
-type Item = {
-  name: string;
-  description: string;
-  price: number;
-  discountPrice?: number;
-  isPublic: boolean;
+const Item = z.object({
+  name: z.string(),
+  description: z.string(),
+  price: z.number(),
+  discountPrice: z.number().optional(),
+  isPublic: z.boolean(),
+});
+
+type ItemType = z.infer<typeof Item>;
+
+type Dict<T> = {
+  [key: string]: T;
 };
 
-// Add Request URL
-const createItem = (payload: Item) =>
+// We will change it to fetcher and env
+const createItem = (payload: ItemType) =>
   fetch('http://api.sklep.localhost:3002/', { method: 'POST', body: JSON.stringify(payload) });
 
-export const ItemsForm = () => {
-  const [mutate, { isLoading, isError, isSuccess }] = useMutation(createItem);
-  const { register, handleSubmit } = useForm();
+const validateFormValues = (schema: z.ZodObject<any>) => (values: unknown) => {
+  try {
+    schema.parse(values);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return err.errors.reduce((errors: Dict<string>, error) => {
+        const invalidProperty = error.path[0];
+        if (error.code === 'invalid_type') {
+          if (error.received === 'undefined') {
+            errors[invalidProperty] = 'This is required field';
+          }
+        }
+        return errors;
+      }, {});
+    }
+  }
+  return {};
+};
 
-  const onSubmit = (data: Item) => {
-    mutate(data);
+export const ItemsForm = () => {
+  const [mutate, { isLoading }] = useMutation(createItem);
+
+  const onSubmit = (values: ItemType) => {
+    mutate(values);
   };
 
   return (
-    <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-      <TextInput
-        id="name"
-        name="name"
-        invalidText="You already added item with this name"
-        labelText="Item name"
-        placeholder="Insert item name"
-        ref={register({ required: true })}
-      />
-
-      <NumberInput id="price" name="price" label="Item price" ref={register({ required: true })} />
-      <NumberInput
-        id="discount-price"
-        name="discountPrice"
-        label="Item discount prize (Optional)"
-        helperText="This is optional"
-        ref={register({ required: false })}
-      />
-      <TextArea
-        id="description"
-        name="description"
-        labelText="Item description"
-        ref={register({ required: true })}
-      />
-      <Checkbox
-        id="is-public"
-        name="isPublic"
-        labelText="This item will show in the application"
-        ref={register({ required: true })}
-      />
-      <Button kind="primary" type="submit">
-        Add Item
-      </Button>
-      {isLoading && <Loading />}
-    </Form>
+    <FinalForm
+      onSubmit={onSubmit}
+      validate={validateFormValues(Item)}
+      render={({ handleSubmit }) => {
+        return (
+          <Form className={styles.form} onSubmit={handleSubmit}>
+            <Field name="name">
+              {({ input, meta }) => {
+                const isError = meta.error && meta.touched;
+                return (
+                  <TextInput
+                    {...input}
+                    id="name"
+                    labelText="Item name"
+                    placeholder="Insert item name"
+                    invalid={isError}
+                    invalidText={meta.error}
+                  />
+                );
+              }}
+            </Field>
+            <Field name="price">
+              {({ input, meta }) => {
+                const isError = meta.error && meta.touched;
+                return (
+                  <NumberInput
+                    {...input}
+                    id="price"
+                    label="Item price"
+                    allowEmpty
+                    onChange={(e) => input.onChange(Number(e.target.value))}
+                    invalid={isError}
+                    invalidText={meta.error}
+                  />
+                );
+              }}
+            </Field>
+            <Field name="discountPrice">
+              {({ input, meta }) => {
+                const isError = meta.error && meta.touched;
+                return (
+                  <NumberInput
+                    {...input}
+                    id="discount-price"
+                    label="Item discount prize (Optional)"
+                    allowEmpty
+                    onChange={(e) => input.onChange(Number(e.target.value))}
+                    invalid={isError}
+                    invalidText={meta.error}
+                  />
+                );
+              }}
+            </Field>
+            <Field name="description">
+              {({ input, meta }) => {
+                const isError = meta.error && meta.touched;
+                return (
+                  <TextArea
+                    {...input}
+                    id="description"
+                    labelText="Item description"
+                    invalid={isError}
+                    invalidText={meta.error}
+                  />
+                );
+              }}
+            </Field>
+            <Field name="isPublic" initialValue={false}>
+              {({ input }) => {
+                const { value: excludedValue, ...rest } = input;
+                return (
+                  <Checkbox
+                    {...rest}
+                    id="is-public"
+                    labelText="This item will show in the application"
+                    checked={input.value}
+                  />
+                );
+              }}
+            </Field>
+            <Button kind="primary" type="submit">
+              Add Item
+            </Button>
+            {isLoading && <Loading />}
+          </Form>
+        );
+      }}
+    />
   );
 };
