@@ -2,7 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 
 import { Container } from '../../components/admin/Container/Container';
-import { ItemsForm } from '../../components/admin/ItemsForm/ItemsForm';
+import { ProductsForm } from '../../components/admin/ProductsForm/ProductsForm';
 
 export default function AdminHome() {
   return (
@@ -16,7 +16,7 @@ export default function AdminHome() {
       </Head>
       {/* Pass here your content */}
       <Container>
-        <ItemsForm />
+        <ProductsForm />
       </Container>
     </>
   );

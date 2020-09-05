@@ -12,9 +12,10 @@ import { Form as FinalForm, Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as z from 'zod';
 
-import styles from './ItemsForm.module.scss';
+import styles from './ProductsForm.module.scss';
+import { validateFormValues, createProduct } from './productsFormUtils';
 
-const Item = z.object({
+const Product = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
@@ -22,49 +23,51 @@ const Item = z.object({
   isPublic: z.boolean(),
 });
 
-type ItemType = z.infer<typeof Item>;
+export type ProductType = z.infer<typeof Product>;
 
-type Dict<T> = {
-  [key: string]: T;
+type FieldWrapperProps = {
+  name: string;
+  fieldComponent: React.ComponentType;
+  fieldComponentProps: {};
+};
+const FieldWrapper = ({
+  name,
+  fieldComponent: FieldComponent,
+  fieldComponentProps,
+}: FieldWrapperProps) => {
+  return (
+    <Field
+      name={name}
+      render={({ input, meta }) => {
+        const isError = meta.error && meta.touched;
+        return (
+          <FieldComponent
+            {...input}
+            {...fieldComponentProps}
+            invalid={isError}
+            invalidText={meta.error}
+          />
+        );
+      }}
+    />
+  );
 };
 
-// We will change it to fetcher and env
-const createItem = (payload: ItemType) =>
-  fetch('http://api.sklep.localhost:3002/', { method: 'POST', body: JSON.stringify(payload) });
+export const ProductsForm = () => {
+  const [mutate, { isLoading }] = useMutation(createProduct);
 
-const validateFormValues = (schema: z.ZodObject<any>) => (values: unknown) => {
-  try {
-    schema.parse(values);
-  } catch (err) {
-    if (err instanceof z.ZodError) {
-      return err.errors.reduce((errors: Dict<string>, error) => {
-        const invalidProperty = error.path[0];
-        if (error.code === 'invalid_type') {
-          if (error.received === 'undefined') {
-            errors[invalidProperty] = 'This is required field';
-          }
-        }
-        return errors;
-      }, {});
-    }
-  }
-  return {};
-};
-
-export const ItemsForm = () => {
-  const [mutate, { isLoading }] = useMutation(createItem);
-
-  const onSubmit = (values: ItemType) => {
+  const onSubmit = (values: ProductType) => {
     mutate(values);
   };
 
   return (
     <FinalForm
       onSubmit={onSubmit}
-      validate={validateFormValues(Item)}
+      validate={validateFormValues(Product)}
       render={({ handleSubmit }) => {
         return (
           <Form className={styles.form} onSubmit={handleSubmit}>
+            {/* <FieldWrapper name="name" fieldComponent={TextInput} fieldComponentProps={{}} /> */}
             <Field name="name">
               {({ input, meta }) => {
                 const isError = meta.error && meta.touched;
@@ -72,8 +75,8 @@ export const ItemsForm = () => {
                   <TextInput
                     {...input}
                     id="name"
-                    labelText="Item name"
-                    placeholder="Insert item name"
+                    labelText="Nazwa produktu"
+                    placeholder="Wpisz nazwę produktu"
                     invalid={isError}
                     invalidText={meta.error}
                   />
@@ -87,7 +90,7 @@ export const ItemsForm = () => {
                   <NumberInput
                     {...input}
                     id="price"
-                    label="Item price"
+                    label="Cena produktu"
                     allowEmpty
                     onChange={(e) => input.onChange(Number(e.target.value))}
                     invalid={isError}
@@ -103,7 +106,7 @@ export const ItemsForm = () => {
                   <NumberInput
                     {...input}
                     id="discount-price"
-                    label="Item discount prize (Optional)"
+                    label="Promocyjna cena produktu (Pole opcjonalne)"
                     allowEmpty
                     onChange={(e) => input.onChange(Number(e.target.value))}
                     invalid={isError}
@@ -119,7 +122,7 @@ export const ItemsForm = () => {
                   <TextArea
                     {...input}
                     id="description"
-                    labelText="Item description"
+                    labelText="Opis produktu"
                     invalid={isError}
                     invalidText={meta.error}
                   />
@@ -133,14 +136,14 @@ export const ItemsForm = () => {
                   <Checkbox
                     {...rest}
                     id="is-public"
-                    labelText="This item will show in the application"
+                    labelText="Produkt zostanie wyświetlony na stronie"
                     checked={input.value}
                   />
                 );
               }}
             </Field>
             <Button kind="primary" type="submit">
-              Add Item
+              Dodaj produkt
             </Button>
             {isLoading && <Loading />}
           </Form>
