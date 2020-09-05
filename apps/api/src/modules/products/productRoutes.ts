@@ -52,7 +52,7 @@ export const getProductsRoute: Hapi.ServerRoute = {
       schema: getProductResponseSchema,
     },
   },
-  async handler(request) {
+  async handler(request): Promise<SklepTypes['getProducts200Response']> {
     const user = request.auth.credentials?.session?.user;
     const isAdmin = user?.role === Enums.UserRole.ADMIN;
 
