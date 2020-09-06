@@ -15,14 +15,9 @@ export const Header = React.memo(() => {
   return (
     <header className="w-full z-30 top-0 py-1">
       <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
-        <label
-          htmlFor="menu-toggle"
-          className="cursor-pointer md:hidden block"
-          onClick={toggleMenu}
-        >
+        <button className="md:hidden block p-2" onClick={toggleMenu}>
           <img src={hamburgerIconSrc} className="fill-current text-gray-900" alt="Menu" />
-        </label>
-        <input className="hidden" type="checkbox" />
+        </button>
 
         <Menu isMenuOpen={isMenuOpen} />
 
