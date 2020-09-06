@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import React from 'react';
 
-import { Container } from '../../components/admin/Container/Container';
-import { ProductsForm } from '../../components/admin/ProductsForm/ProductsForm';
+import { Container } from '../../components/admin/container/Container';
+import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
 
 export default function AdminHome() {
   return (
@@ -14,7 +14,6 @@ export default function AdminHome() {
           href="https://unpkg.com/carbon-components@10.18.0/css/carbon-components.min.css"
         />
       </Head>
-      {/* Pass here your content */}
       <Container>
         <ProductsForm />
       </Container>

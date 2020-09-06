@@ -2,8 +2,6 @@ import { setIn } from 'final-form';
 import { ValidationError } from 'yup';
 import type { ObjectSchema, InferType } from 'yup';
 
-import type { ProductType } from './ProductsForm';
-
 export const createFormValidator = <T extends ObjectSchema<any>>(schema: T) => (
   values: InferType<typeof schema>,
 ) => {
@@ -19,6 +17,3 @@ export const createFormValidator = <T extends ObjectSchema<any>>(schema: T) => (
   }
   return {};
 };
-
-export const createProduct = (payload: ProductType) =>
-  fetch('http://api.sklep.localhost:3002/', { method: 'POST', body: JSON.stringify(payload) });
