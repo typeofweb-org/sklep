@@ -4,26 +4,57 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 model User {
-  id       Int     @default(autoincrement()) @id
-  name     String?
-  email    String  @unique
+  id Int @default(autoincrement()) @id
+  name String?
+  email String @unique
   password String
-  role     Role    @default(USER)
+  
+  role UserRole @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Session {
-  id         String   @id
+  id String @id
   validUntil DateTime
 
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
-enum Role {
+enum UserRole {
   USER
   ADMIN
+}
+
+model Product {
+  id Int @default(autoincrement()) @id
+  name String @unique
+  slug String @unique
+  description String
+  isPublic Boolean @default(false)
+  
+  regularPrice Int
+  discountPrice Int?
+
+  type ProductType @default(SINGLE)
+
+  userId Int
+  addedBy User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum ProductType {
+  SINGLE
+  BUNDLE // @todo
 }
