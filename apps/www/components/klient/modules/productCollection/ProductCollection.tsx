@@ -1,10 +1,11 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { FaSort } from 'react-icons/fa';
 
 import { Product } from '../../../../types/product';
 
+import FilterSelect from './filterSelect/FilterSelect';
 import { ProductItem } from './product/Product';
 
 type ProductCollectionProps = {
@@ -14,6 +15,7 @@ type ProductCollectionProps = {
 export const ProductCollection = React.memo<ProductCollectionProps>(({ products }) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSortVisible, setIsSortVisible] = useState(false);
+  const [sortedProducts, setSortedProducts] = useState(products);
 
   function handleSearchVisible() {
     setIsSearchVisible((prevState) => !prevState);
@@ -25,39 +27,45 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
 
   const searchStylesDesktop = clsx(
     'hidden md:block w-0',
-    isSearchVisible && 'border border-gray-700 rounded-sm mr-2 w-auto px-2',
+    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd mr-2 w-auto px-2 h-8',
   );
 
   const searchStylesMobile = clsx(
     'md:hidden h-0 w-full px-2',
-    isSearchVisible && 'border border-gray-700 rounded-sm h-10',
+    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd h-10',
   );
 
   const sortStylesDesktop = clsx(
     'hidden md:block w-0',
-    isSortVisible && 'border border-gray-700 rounded-sm mr-2 w-auto px-2',
+    isSortVisible && 'border border-gray-600 rounded-md shadow-sd mr-2 w-auto px-2 h-8',
   );
 
   const sortStylesMobile = clsx(
     'md:hidden h-0 w-full',
-    isSortVisible && 'border border-gray-700 rounded-sm h-10 mb-4',
+    isSortVisible && 'border border-gray-600 rounded-md shadow-sd h-10 my-4',
   );
 
   const productListStyles = clsx(
     'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8',
-    isSearchVisible && 'mt-8 md:mt-0',
+    isSearchVisible && 'mt-4 md:mt-0',
+  );
+
+  const headerStyles = clsx(
+    'flex justify-between items-center mt-4 py-0 md:py-4 border-b border-gray-700 md:border-0',
+    (isSearchVisible || isSortVisible) && 'border-b border-gray-700',
   );
 
   return (
-    <article className="w-full p-4">
-      <header className="flex justify-between items-center mt-4 md:py-4">
+    <section className="w-full p-4">
+      <header className={headerStyles}>
         <h3 className="text-2xl font-bold">STORE</h3>
         <div className="flex items-center">
-          <select name="sort" id="sort" className={sortStylesDesktop}>
-            <option value="">Featured</option>
-            <option value="">Price, low to high</option>
-            <option value="">ss</option>
-          </select>
+          <FilterSelect
+            products={products}
+            setSortedProducts={setSortedProducts}
+            isSortVisible={isSortVisible}
+            styles={sortStylesDesktop}
+          />
           <button onClick={handleSortVisible}>
             <FaSort className="w-6 h-6 mr-2 text-gray-700" />
           </button>
@@ -67,18 +75,19 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
           </button>
         </div>
       </header>
-      <select name="sort" id="sort" className={sortStylesMobile}>
-        <option value="">Featured</option>
-        <option value="">Price, low to high</option>
-        <option value="">ss</option>
-      </select>
-      <input type="text" className={searchStylesMobile} placeholder="Search" />
+      <FilterSelect
+        products={products}
+        setSortedProducts={setSortedProducts}
+        isSortVisible={isSortVisible}
+        styles={sortStylesMobile}
+      />
+      <input type="text" id="searchInput" className={searchStylesMobile} placeholder="Search" />
       <div className={productListStyles}>
-        {products.map((product) => (
+        {sortedProducts.map((product) => (
           <ProductItem key={product.id} product={product} />
         ))}
       </div>
-    </article>
+    </section>
   );
 });
 ProductCollection.displayName = 'ProductCollection';
