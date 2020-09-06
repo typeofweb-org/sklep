@@ -1,17 +1,6 @@
 import Faker from 'faker';
 
-import { prisma } from '../../db';
-import { getServerWithPlugins } from '../../server';
-
-const getServerForTest = async () => {
-  const server = await getServerWithPlugins();
-
-  // @note we could replace this with a mock in the future
-  // @ts-expect-error
-  server.app.db = prisma;
-
-  return server;
-};
+import { getServerForTest } from '../../../jest-utils';
 
 describe('/auth', () => {
   describe('/me', () => {
@@ -129,7 +118,7 @@ describe('/auth', () => {
           },
         },
         handler(request) {
-          return request.auth.credentials.session;
+          return request.auth.credentials!.session!;
         },
       });
 

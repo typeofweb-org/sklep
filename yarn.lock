@@ -1107,6 +1107,13 @@
   resolved "https://registry.yarnpkg.com/@carbon/icon-helpers/-/icon-helpers-10.9.0.tgz#5aee08e9d253d3bf6f996bc61f739660c62cbb21"
   integrity sha512-JtmCXV7iIc+N5RqQQy+MGT8T+5KcF7+BUKADvHnJKZ8o+ncF5gI4hmrP450dQD76mikI4fqQ0dQflaosesdSPw==
 
+"@carbon/icons-react@10.17.0":
+  version "10.17.0"
+  resolved "https://registry.yarnpkg.com/@carbon/icons-react/-/icons-react-10.17.0.tgz#17c0450f2280680e6e6c778f68613723c55f8f39"
+  integrity sha512-XAz8RZW+na2ZAGLrw+ojYtI+RwyiGTnmAM0H+TWeG451hZHJ84CnU34G608h9eThndgFgAYYPr4ariFlaXdgZA==
+  dependencies:
+    "@carbon/icon-helpers" "^10.9.0"
+
 "@carbon/icons-react@^10.16.0":
   version "10.16.0"
   resolved "https://registry.yarnpkg.com/@carbon/icons-react/-/icons-react-10.16.0.tgz#e0800a5aa61194fc86e71a0e26f393dcac71f8b6"
@@ -2429,6 +2436,15 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
+"@manifoldco/swagger-to-ts@github:mmiszy/swagger-to-ts#develop":
+  version "2.0.0"
+  resolved "https://codeload.github.com/mmiszy/swagger-to-ts/tar.gz/30d26b19bdc5d17fb1f0f99e1f6d2b2a48b1f557"
+  dependencies:
+    chalk "^4.0.0"
+    js-yaml "^3.13.1"
+    meow "^7.0.0"
+    prettier "^2.0.5"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -2669,6 +2685,11 @@
   dependencies:
     "@types/react" "*"
     flatpickr "4.6.1"
+
+"@types/carbon__icons-react@10.17.0":
+  version "10.17.0"
+  resolved "https://registry.yarnpkg.com/@types/carbon__icons-react/-/carbon__icons-react-10.17.0.tgz#f82dd91ece2e66965c793268d0a7b5c0ea5f5019"
+  integrity sha512-qtA6CH/ST/elk4Ykx8G0s5XxH0Zi+9OqhnXxvjWQgLt2PgpfpDmkVKKDQtEH/p2AXjeI7ci9SM3O4WIh7qNXCA==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"
@@ -4273,6 +4294,16 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+chokidar-cli@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/chokidar-cli/-/chokidar-cli-2.1.0.tgz#2491df133bd62cd145227b1746fbd94f2733e1bc"
+  integrity sha512-6n21AVpW6ywuEPoxJcLXMA2p4T+SLjWsXKny/9yTWFz0kKxESI3eUylpeV97LylING/27T/RVTY0f2/0QaWq9Q==
+  dependencies:
+    chokidar "^3.2.3"
+    lodash.debounce "^4.0.8"
+    lodash.throttle "^4.1.1"
+    yargs "^13.3.0"
+
 chokidar@2.1.8, chokidar@^2.1.8:
   version "2.1.8"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.1.8.tgz#804b3a7b6a99358c3c5c61e71d8728f041cff917"
@@ -4292,7 +4323,7 @@ chokidar@2.1.8, chokidar@^2.1.8:
   optionalDependencies:
     fsevents "^1.2.7"
 
-chokidar@^3.4.0, chokidar@^3.4.1:
+chokidar@^3.2.3, chokidar@^3.4.0, chokidar@^3.4.1:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.2.tgz#38dc8e658dec3809741eb3ef7bb0a47fe424232d"
   integrity sha512-IZHaDeBeI+sZJRX7lGcXsdzgvZqKv6sECqsbErJA4mHWfpRrD8B97kSFN4cQz6nGBGiuFia1MKR4d6c1o8Cv7A==
@@ -10170,7 +10201,7 @@ prepend-http@^1.0.0:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
-prettier@2.1.1:
+prettier@2.1.1, prettier@^2.0.5:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.1.tgz#d9485dd5e499daa6cb547023b87a6cf51bee37d6"
   integrity sha512-9bY+5ZWCfqj3ghYBLxApy2zf6m+NJo5GzmLTpr9FsApsfjriNnS2dahWReHMi7qNPhhHl9SYHJs2cHZLgexNIw==
@@ -11255,6 +11286,11 @@ slide@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
   integrity sha1-VusCfWW00tzmyy4tMsTUr8nh1wc=
+
+slugify@1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/slugify/-/slugify-1.4.5.tgz#a7517acf5f4c02a4df41e735354b660a4ed1efcf"
+  integrity sha512-WpECLAgYaxHoEAJ8Q1Lo8HOs1ngn7LN7QjXgOLbmmfkcWvosyk4ZTXkTzKyhngK640USTZUlgoQJfED1kz5fnQ==
 
 smart-buffer@^4.1.0:
   version "4.1.0"
