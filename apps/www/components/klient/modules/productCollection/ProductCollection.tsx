@@ -12,40 +12,67 @@ type ProductCollectionProps = {
 };
 
 export const ProductCollection = React.memo<ProductCollectionProps>(({ products }) => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isSortVisible, setIsSortVisible] = useState(false);
 
-  function handleSearchOpen() {
-    setIsSearchOpen((prevState) => !prevState);
+  function handleSearchVisible() {
+    setIsSearchVisible((prevState) => !prevState);
   }
 
-  const searchStyles = clsx(
-    'absolute left-0 bottom-0 md:static h-0 md:h-auto w-auto md:w-0',
-    isSearchOpen &&
-      'border border-gray-700 rounded-sm mr-0 md:mr-2 w-full md:w-auto mt-2 md:mt-0  px-2 py-6 md:py-0 top-20',
+  function handleSortVisible() {
+    setIsSortVisible((prevState) => !prevState);
+  }
+
+  const searchStylesDesktop = clsx(
+    'hidden md:block w-0',
+    isSearchVisible && 'border border-gray-700 rounded-sm mr-2 w-auto px-2',
+  );
+
+  const searchStylesMobile = clsx(
+    'md:hidden h-0 w-full px-2',
+    isSearchVisible && 'border border-gray-700 rounded-sm h-10',
+  );
+
+  const sortStylesDesktop = clsx(
+    'hidden md:block w-0',
+    isSortVisible && 'border border-gray-700 rounded-sm mr-2 w-auto px-2',
+  );
+
+  const sortStylesMobile = clsx(
+    'md:hidden h-0 w-full',
+    isSortVisible && 'border border-gray-700 rounded-sm h-10 mb-4',
   );
 
   const productListStyles = clsx(
     'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8',
-    isSearchOpen && 'mt-8 md:mt-0',
-  );
-
-  const headerStyles = clsx(
-    'flex justify-between items-center pb-6 relative',
-    isSearchOpen && 'pb-16 md:pb-6',
+    isSearchVisible && 'mt-8 md:mt-0',
   );
 
   return (
     <article className="w-full p-4">
-      <header className={headerStyles}>
+      <header className="flex justify-between items-center mt-4 md:py-4">
         <h3 className="text-2xl font-bold">STORE</h3>
         <div className="flex items-center">
-          <FaSort className="w-6 h-6 mr-2 text-gray-700" />
-          <input type="text" className={searchStyles} placeholder="Search" />
-          <button onClick={handleSearchOpen}>
+          <select name="sort" id="sort" className={sortStylesDesktop}>
+            <option value="">Featured</option>
+            <option value="">Price, low to high</option>
+            <option value="">ss</option>
+          </select>
+          <button onClick={handleSortVisible}>
+            <FaSort className="w-6 h-6 mr-2 text-gray-700" />
+          </button>
+          <input type="text" className={searchStylesDesktop} placeholder="Search" />
+          <button onClick={handleSearchVisible}>
             <BiSearch className="w-6 h-6 text-gray-700" />
           </button>
         </div>
       </header>
+      <select name="sort" id="sort" className={sortStylesMobile}>
+        <option value="">Featured</option>
+        <option value="">Price, low to high</option>
+        <option value="">ss</option>
+      </select>
+      <input type="text" className={searchStylesMobile} placeholder="Search" />
       <div className={productListStyles}>
         {products.map((product) => (
           <ProductItem key={product.id} product={product} />
