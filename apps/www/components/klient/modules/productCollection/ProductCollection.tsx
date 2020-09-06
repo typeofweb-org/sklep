@@ -27,12 +27,12 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
 
   const searchStylesDesktop = clsx(
     'hidden md:block w-0',
-    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd mr-2 w-auto px-2 h-8',
+    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd mr-2 w-auto px-2 h-8 ml-4',
   );
 
   const searchStylesMobile = clsx(
-    'md:hidden h-0 w-full px-2',
-    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd h-10',
+    'md:hidden h-0 w-full',
+    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd h-10 mx-6 px-2',
   );
 
   const sortStylesDesktop = clsx(
@@ -42,47 +42,63 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
 
   const sortStylesMobile = clsx(
     'md:hidden h-0 w-full',
-    isSortVisible && 'border border-gray-600 rounded-md shadow-sd h-10 my-4',
-  );
-
-  const productListStyles = clsx(
-    'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8',
-    isSearchVisible && 'mt-4 md:mt-0',
-  );
-
-  const headerStyles = clsx(
-    'flex justify-between items-center mt-4 py-0 md:py-4 border-b border-gray-700 md:border-0',
-    (isSearchVisible || isSortVisible) && 'border-b border-gray-700',
+    isSortVisible && 'border border-gray-600 rounded-md shadow-sd h-10 my-4 mx-6',
   );
 
   return (
-    <section className="w-full p-4">
-      <header className={headerStyles}>
-        <h3 className="text-2xl font-bold">STORE</h3>
-        <div className="flex items-center">
-          <FilterSelect
-            products={products}
-            setSortedProducts={setSortedProducts}
-            isSortVisible={isSortVisible}
-            styles={sortStylesDesktop}
-          />
-          <button onClick={handleSortVisible}>
-            <FaSort className="w-6 h-6 mr-2 text-gray-700" />
-          </button>
-          <input type="text" className={searchStylesDesktop} placeholder="Search" />
-          <button onClick={handleSearchVisible}>
-            <BiSearch className="w-6 h-6 text-gray-700" />
-          </button>
-        </div>
-      </header>
-      <FilterSelect
-        products={products}
-        setSortedProducts={setSortedProducts}
-        isSortVisible={isSortVisible}
-        styles={sortStylesMobile}
-      />
-      <input type="text" id="searchInput" className={searchStylesMobile} placeholder="Search" />
-      <div className={productListStyles}>
+    <section className="bg-white work-sans py-8">
+      <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
+        <header className="w-full z-30 top-0 px-6 py-1">
+          <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
+            <h3 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
+              STORE
+            </h3>
+            <div className="flex items-center">
+              <FilterSelect
+                products={products}
+                setSortedProducts={setSortedProducts}
+                isSortVisible={isSortVisible}
+                styles={sortStylesDesktop}
+              />
+              <button
+                onClick={handleSortVisible}
+                className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
+              >
+                <svg
+                  className="fill-current hover:text-black"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
+                </svg>
+              </button>
+              <input type="text" className={searchStylesDesktop} placeholder="Search" />
+              <button
+                onClick={handleSearchVisible}
+                className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
+              >
+                <svg
+                  className="fill-current hover:text-black"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+        <FilterSelect
+          products={products}
+          setSortedProducts={setSortedProducts}
+          isSortVisible={isSortVisible}
+          styles={sortStylesMobile}
+        />
+        <input type="text" id="searchInput" className={searchStylesMobile} placeholder="Search" />
         {sortedProducts.map((product) => (
           <ProductItem key={product.id} product={product} />
         ))}

@@ -52,6 +52,16 @@ export const getStaticProps = async () => {
       discountPrice: 12,
       productType: 'footwear',
     },
+    {
+      id: 347,
+      name: 'Beautiful socks 2',
+      description: 'desc',
+      slug: '347',
+      isPublic: true,
+      regularPrice: 3454,
+      discountPrice: 12,
+      productType: 'footwear',
+    },
   ];
 
   return {
