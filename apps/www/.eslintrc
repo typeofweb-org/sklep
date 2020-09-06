@@ -1,6 +1,12 @@
 {
   "root": false,
   "extends": ["react-app"],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "jest": true,
+    "node": true
+  },
   "rules": {
     "react-hooks/exhaustive-deps": ["error"],
     "jsx-a11y/anchor-is-valid": "off",
