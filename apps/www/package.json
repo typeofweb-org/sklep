@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
+    "test:ci": "test",
     "cy:open": "cypress open",
     "cy:run": "cypress run"
   },
