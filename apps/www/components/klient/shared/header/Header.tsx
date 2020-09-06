@@ -9,7 +9,7 @@ import { Menu } from '../menu/Menu';
 export const Header = React.memo(() => {
   const [isMenuOpen, setMenuOpen] = React.useState(false);
   const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
+    setMenuOpen((isMenuOpen) => !isMenuOpen);
   };
 
   return (

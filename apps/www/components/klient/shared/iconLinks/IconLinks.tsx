@@ -13,7 +13,7 @@ export const IconLinks = React.memo(() => (
     </Link>
 
     <Link href="/koszyk">
-      <a className="pl-3 inline-block no-underline hover:text-black" href="#">
+      <a className="pl-3 inline-block no-underline hover:text-black">
         <img src={cartIconSrc} className="fill-current hover:text-black" alt="Koszyk" />
       </a>
     </Link>
