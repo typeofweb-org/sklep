@@ -1,31 +1,36 @@
+import Link from 'next/Link';
 import React from 'react';
 
-interface MenuProps {
-  isMobileMenuOpen?: boolean;
-  type: 'mobile' | 'desktop';
-}
+type MenuProps = {
+  isMenuOpen: boolean;
+};
 
-export const Menu = React.memo<MenuProps>(({ isMobileMenuOpen, type }) => {
-  const mobileUlClassNames =
-    type === 'mobile'
-      ? `border-t border-teal-200 w-full mt-2 mb-4 ${
-          isMobileMenuOpen ? 'block' : 'hidden'
-        } md:hidden`
-      : '';
-  const mobileLiClassName = type === 'mobile' ? `py-3 font-bold border-b border-teal-200` : '';
-
-  const desktopUlClassNames = type === 'desktop' ? `hidden md:flex justify-center` : '';
-  const desktopLiClassName = type === 'desktop' ? `font-bold text-xl mr-4` : '';
-
+export const Menu = React.memo<MenuProps>(({ isMenuOpen }) => {
   return (
-    <ul className={`${mobileUlClassNames} ${desktopUlClassNames}`}>
-      <li className={`${mobileLiClassName} ${desktopLiClassName}`}>
-        <a href="#">Catalog</a>
-      </li>
-      <li className={`${mobileLiClassName} ${desktopLiClassName} mr-0`}>
-        <a href="#">Home</a>
-      </li>
-    </ul>
+    <div
+      className={`${
+        isMenuOpen ? 'flex' : 'hidden'
+      } md:flex md:items-center md:w-auto w-full order-3 md:order-1`}
+    >
+      <nav>
+        <ul className="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+          <li>
+            <Link href="/">
+              <a className="inline-block no-underline hover:text-black hover:underline py-2 px-4">
+                Sklep
+              </a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/o-nas">
+              <a className="inline-block no-underline hover:text-black hover:underline py-2 px-4">
+                O nas
+              </a>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 });
 
