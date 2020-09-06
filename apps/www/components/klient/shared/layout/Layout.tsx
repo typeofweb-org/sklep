@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import React, { ReactNode } from 'react';
 
+import { Footer } from '../footer/Footer';
 import { Header } from '../header/Header';
 
 type LayoutProps = {
@@ -16,6 +17,7 @@ export const Layout = React.memo<LayoutProps>(({ children, title }) => {
       </Head>
       <Header />
       <main className="leading-normal">{children}</main>
+      <Footer />
     </div>
   );
 });
