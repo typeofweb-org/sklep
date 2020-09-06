@@ -1,27 +1,24 @@
-import * as z from 'zod';
+import { setIn } from 'final-form';
+import { ValidationError } from 'yup';
+import type { ObjectSchema, InferType } from 'yup';
 
 import type { ProductType } from './ProductsForm';
 
-const validateFormValues = (schema: z.ZodObject<any>) => (values: unknown) => {
+export const createFormValidator = <T extends ObjectSchema<any>>(schema: T) => (
+  values: InferType<typeof schema>,
+) => {
   try {
-    schema.parse(values);
+    schema.validateSync(values, { abortEarly: false });
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return err.errors.reduce((errors: Record<string, string>, error) => {
-        const invalidProperty = error.path[0];
-        if (error.code === 'invalid_type') {
-          if (error.received === 'undefined') {
-            errors[invalidProperty] = 'This is required field';
-          }
-        }
-        return errors;
+    if (err instanceof ValidationError) {
+      return err.inner.reduce<object>((formError, innerError) => {
+        return setIn(formError, innerError.path, innerError.message);
       }, {});
     }
+    console.error(err);
   }
   return {};
 };
 
-const createProduct = (payload: ProductType) =>
+export const createProduct = (payload: ProductType) =>
   fetch('http://api.sklep.localhost:3002/', { method: 'POST', body: JSON.stringify(payload) });
-
-export { validateFormValues, createProduct };

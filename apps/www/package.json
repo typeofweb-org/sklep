@@ -19,12 +19,13 @@
     "react-dom": "16.13.1",
     "react-final-form": "6.5.1",
     "react-query": "2.14.1",
-    "zod": "1.11.5"
+    "yup": "0.29.3"
   },
   "devDependencies": {
     "@types/carbon-components-react": "7.10.9",
     "@types/react": "16.9.49",
     "@types/react-dom": "16.9.8",
+    "@types/yup": "0.29.6",
     "babel-eslint": "10.1.0",
     "eslint-config-react-app": "5.2.1",
     "eslint-plugin-flowtype": "5.2.0",
