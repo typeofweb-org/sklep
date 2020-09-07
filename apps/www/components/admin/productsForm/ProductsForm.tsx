@@ -1,3 +1,4 @@
+import { Add16 } from '@carbon/icons-react';
 import {
   Button,
   TextInput,
@@ -6,7 +7,6 @@ import {
   Loading,
   Toggle,
   Link as CarbonLink,
-  FormGroup,
   Grid,
   Row,
   Column,
@@ -108,19 +108,21 @@ export const ProductsForm = () => {
             />
           )}
         </Field>
-        <Field name="isPublic" initialValue={false}>
-          {({ input: { value, ...rest } }) => (
-            <Toggle
-              {...rest}
-              checked={value}
-              id="isPublic"
-              labelText="Czy produkt ma być widoczny na stronie?"
-              labelA="Nie"
-              labelB="Tak"
-            />
-          )}
+        <Field name="isPublic" defaultValue={false} type="checkbox">
+          {({ input: { value, checked, ...rest } }) => {
+            return (
+              <Toggle
+                {...rest}
+                toggled={checked}
+                id="isPublic"
+                labelText="Czy produkt ma być widoczny na stronie?"
+                labelA="Nie"
+                labelB="Tak"
+              />
+            );
+          }}
         </Field>
-        <Button kind="primary" type="submit">
+        <Button kind="primary" type="submit" renderIcon={Add16}>
           Dodaj produkt
         </Button>
         {isLoading && <Loading />}
