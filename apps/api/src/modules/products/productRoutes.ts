@@ -1,6 +1,5 @@
 import Boom from '@hapi/boom';
 import Hapi from '@hapi/hapi';
-import { PrismaClientKnownRequestError } from '@prisma/client';
 import { SklepTypes } from '@sklep/types';
 import Slugify from 'slugify';
 
@@ -16,9 +15,6 @@ import {
 
 function handlePrismaError(err: any) {
   console.log(err);
-  // if (err instanceof PrismaClientKnownRequestError) {
-  //   err.code
-  // }
 
   throw err;
 }
