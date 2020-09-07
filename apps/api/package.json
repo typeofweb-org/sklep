@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@prisma/cli": "2.5.1",
+    "@swc-node/jest": "0.3.4",
     "@tsconfig/node12": "1.0.7",
     "@types/bcrypt": "3.0.0",
     "@types/faker": "4.1.12",
@@ -53,7 +54,6 @@
     "eslint": "7.8.0",
     "faker": "5.1.0",
     "jest": "26.4.2",
-    "ts-jest": "26.3.0",
     "ts-node-dev": "1.0.0-pre.61",
     "wait-on": "5.2.0"
   }
