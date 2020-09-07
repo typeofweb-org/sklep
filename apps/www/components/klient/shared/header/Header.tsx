@@ -1,4 +1,4 @@
-import Link from 'next/Link';
+import Link from 'next/link';
 import React from 'react';
 
 import bagIconSrc from '../../../../assets/bag.svg';
@@ -15,7 +15,7 @@ export const Header = React.memo(() => {
   return (
     <header className="w-full z-30 top-0 py-1">
       <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
-        <button className="md:hidden block p-2" onClick={toggleMenu}>
+        <button className="md:hidden block p-2" onClick={toggleMenu} aria-label="Menu">
           <img src={hamburgerIconSrc} className="fill-current text-gray-900" alt="Menu" />
         </button>
 
