@@ -8,7 +8,12 @@ import Joi from 'joi';
 import pkg from '../package.json';
 
 import { getConfig, isProd, isStaging } from './config';
-import { addProductRoute, getProductsRoute } from './modules/products/productRoutes';
+import {
+  addProductRoute,
+  deleteProductRoute,
+  editProductRoute,
+  getProductsRoute,
+} from './modules/products/productRoutes';
 import { AuthPlugin } from './plugins/auth';
 
 const getServer = () => {
@@ -112,7 +117,9 @@ export const getServerWithPlugins = async () => {
   });
 
   server.route(addProductRoute);
+  server.route(editProductRoute);
   server.route(getProductsRoute);
+  server.route(deleteProductRoute);
 
   return server;
 };

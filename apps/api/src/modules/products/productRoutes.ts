@@ -1,10 +1,41 @@
+import Boom from '@hapi/boom';
 import Hapi from '@hapi/hapi';
+import { PrismaClientKnownRequestError } from '@prisma/client';
 import { SklepTypes } from '@sklep/types';
 import Slugify from 'slugify';
 
 import { Enums } from '../../models';
 
-import { addProductPayloadSchema, getProductResponseSchema } from './productSchemas';
+import {
+  addProductPayloadSchema,
+  addProductResponseSchema,
+  editProductParamsSchema,
+  editProductPayloadSchema,
+  getProductResponseSchema,
+} from './productSchemas';
+
+function handlePrismaError(err: any) {
+  console.log(err);
+  // if (err instanceof PrismaClientKnownRequestError) {
+  //   err.code
+  // }
+
+  throw err;
+}
+
+const productSelect = {
+  id: true,
+  name: true,
+  slug: true,
+  description: true,
+  isPublic: true,
+  regularPrice: true,
+  discountPrice: true,
+  type: true,
+  userId: false,
+  createdAt: false,
+  updatedAt: false,
+} as const;
 
 export const addProductRoute: Hapi.ServerRoute = {
   method: 'POST',
@@ -16,6 +47,9 @@ export const addProductRoute: Hapi.ServerRoute = {
     },
     validate: {
       payload: addProductPayloadSchema,
+    },
+    response: {
+      schema: addProductResponseSchema,
     },
   },
   async handler(request) {
@@ -34,9 +68,75 @@ export const addProductRoute: Hapi.ServerRoute = {
           },
         },
       },
+      select: productSelect,
     });
 
     return { data: product };
+  },
+};
+
+export const editProductRoute: Hapi.ServerRoute = {
+  method: 'PUT',
+  path: '/products/{productId}',
+  options: {
+    tags: ['api', 'products'],
+    auth: {
+      scope: Enums.UserRole.ADMIN,
+    },
+    validate: {
+      payload: editProductPayloadSchema,
+      params: editProductParamsSchema,
+    },
+  },
+  async handler(request) {
+    const payload = request.payload as SklepTypes['putProductsProductIdRequestBody'];
+    const params = request.params as SklepTypes['putProductsProductIdRequestPathParams'];
+
+    const count = await request.server.app.db.product.count({ where: { id: params.productId } });
+    if (!count) {
+      throw Boom.notFound();
+    }
+
+    const slug = Slugify(payload.name);
+
+    const product = await request.server.app.db.product
+      .update({
+        where: {
+          id: params.productId,
+        },
+        data: {
+          ...payload,
+          slug,
+        },
+      })
+      .catch(handlePrismaError);
+
+    return { data: product };
+  },
+};
+
+export const deleteProductRoute: Hapi.ServerRoute = {
+  method: 'DELETE',
+  path: '/products/{productId}',
+  options: {
+    tags: ['api', 'products'],
+    auth: {
+      scope: Enums.UserRole.ADMIN,
+    },
+    validate: {
+      params: editProductParamsSchema,
+    },
+  },
+  async handler(request) {
+    const params = request.params as SklepTypes['deleteProductsProductIdRequestPathParams'];
+
+    const count = await request.server.app.db.product.count({ where: { id: params.productId } });
+    if (!count) {
+      return null;
+    }
+
+    await request.server.app.db.product.delete({ where: { id: params.productId } });
+    return null;
   },
 };
 
@@ -62,19 +162,7 @@ export const getProductsRoute: Hapi.ServerRoute = {
           isPublic: true,
         },
       }),
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        description: true,
-        isPublic: true,
-        regularPrice: true,
-        discountPrice: true,
-        type: true,
-        userId: false,
-        createdAt: false,
-        updatedAt: false,
-      },
+      select: productSelect,
     });
 
     return { data: products };
