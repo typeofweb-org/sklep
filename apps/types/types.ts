@@ -41,20 +41,32 @@ export interface definitions {
     discountPrice?: number;
     type: 'SINGLE' | 'BUNDLE';
   };
-  Model6: { email: string; password: string };
+  Model6: { data: definitions['Model1'] };
+  Model7: { email: string; password: string };
 
   getProducts200Response: definitions['Model2'];
   postProductsRequestBody: definitions['Model5'];
 
-  postProductsDefaultResponse: string;
+  postProducts200Response: definitions['Model6'];
 
   getAuthMe200Response: definitions['Model4'];
-  postAuthLoginRequestBody: definitions['Model6'];
+  postAuthLoginRequestBody: definitions['Model7'];
 
   postAuthLoginDefaultResponse: string;
 
   postAuthLogoutDefaultResponse: string;
-  postAuthRegisterRequestBody: definitions['Model6'];
+  postAuthRegisterRequestBody: definitions['Model7'];
 
   postAuthRegisterDefaultResponse: string;
+  putProductsProductIdRequestPathParams: {
+    productId: number;
+  };
+  putProductsProductIdRequestBody: definitions['Model5'];
+
+  putProductsProductIdDefaultResponse: string;
+  deleteProductsProductIdRequestPathParams: {
+    productId: number;
+  };
+
+  deleteProductsProductIdDefaultResponse: string;
 }

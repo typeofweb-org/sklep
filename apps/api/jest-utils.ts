@@ -19,7 +19,9 @@ export const createAndAuthRole = async (
   server: Hapi.Server,
   role: keyof Enums['UserRole'] = Enums.UserRole.ADMIN,
 ) => {
-  const email = Faker.internet.email(undefined, undefined, 'typeofweb.com');
+  const firstName = Faker.name.firstName();
+  const lastName = Faker.name.lastName();
+  const email = Faker.internet.email(firstName, lastName, 'typeofweb.com');
   const password = 'asdASD123!@#';
 
   await server.inject({

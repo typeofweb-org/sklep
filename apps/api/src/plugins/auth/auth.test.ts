@@ -19,15 +19,16 @@ describe('/auth', () => {
   describe('/register', () => {
     it(`should register`, async () => {
       const server = await getServerForTest();
-
-      const email = Faker.internet.email(undefined, undefined, 'typeofweb.com');
+      const firstName = Faker.name.firstName();
+      const lastName = Faker.name.lastName();
+      const email = Faker.internet.email(firstName, lastName, 'typeofweb.com');
 
       const injection = await server.inject({
         method: 'POST',
         url: '/auth/register',
         payload: {
           email,
-          password: 'asdASD123!@#',
+          password: 'asasdASD123dASD123!@#',
         },
       });
 
@@ -37,11 +38,15 @@ describe('/auth', () => {
     it(`should return 400 TOO_EASY because the password is easy`, async () => {
       const server = await getServerForTest();
 
+      const firstName = Faker.name.firstName();
+      const lastName = Faker.name.lastName();
+      const email = Faker.internet.email(firstName, lastName, 'typeofweb.com');
+
       const injection = await server.inject({
         method: 'POST',
         url: '/auth/register',
         payload: {
-          email: Faker.internet.email(undefined, undefined, 'typeofweb.com'),
+          email,
           password: '123123123',
         },
       });
@@ -53,7 +58,9 @@ describe('/auth', () => {
     it(`should return 409 when user with the same email exists`, async () => {
       const server = await getServerForTest();
 
-      const email = Faker.internet.email(undefined, undefined, 'typeofweb.com');
+      const firstName = Faker.name.firstName();
+      const lastName = Faker.name.lastName();
+      const email = Faker.internet.email(firstName, lastName, 'typeofweb.com');
 
       await server.inject({
         method: 'POST',
@@ -81,7 +88,9 @@ describe('/auth', () => {
     it('should allow logging in', async () => {
       const server = await getServerForTest();
 
-      const email = Faker.internet.email(undefined, undefined, 'typeofweb.com');
+      const firstName = Faker.name.firstName();
+      const lastName = Faker.name.lastName();
+      const email = Faker.internet.email(firstName, lastName, 'typeofweb.com');
       const password = 'asdASD123!@#';
 
       await server.inject({
@@ -128,7 +137,9 @@ describe('/auth', () => {
       });
       expect(failingInjection.statusCode).toEqual(401);
 
-      const email = Faker.internet.email(undefined, undefined, 'typeofweb.com');
+      const firstName = Faker.name.firstName();
+      const lastName = Faker.name.lastName();
+      const email = Faker.internet.email(firstName, lastName, 'typeofweb.com');
       const password = 'asdASD123!@#';
 
       await server.inject({

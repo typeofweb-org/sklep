@@ -12,6 +12,7 @@ function CartPage() {
   return (
     <Layout title="Sklep strona główna">
       <Header />
+      Koszyk
       <Cart order={order} />
     </Layout>
   );
