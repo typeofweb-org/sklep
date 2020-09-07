@@ -2,14 +2,12 @@ import { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
 import { FeaturedProduct } from '../../components/klient/modules/featuredProduct/FeaturedProduct';
-import { Header } from '../../components/klient/shared/header/Header';
 import { Layout } from '../../components/klient/shared/layout/Layout';
 import { Product } from '../../types/product';
 
 function ProductPage({ product }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout title="Sklep strona główna">
-      <Header />
+    <Layout title={product.name}>
       <FeaturedProduct product={product} />
     </Layout>
   );

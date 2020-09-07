@@ -11,7 +11,7 @@ type LayoutProps = {
 
 export const Layout = React.memo<LayoutProps>(({ children, title }) => {
   return (
-    <div className="font-sans antialiased text-gray-900 bg-gray-200 min-h-screen">
+    <div className="font-sans antialiased text-gray-900 min-h-screen">
       <Head>
         <title>{title}</title>
       </Head>

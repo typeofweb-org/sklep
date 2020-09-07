@@ -2,15 +2,18 @@ import React from 'react';
 
 import { Product } from '../../../../types/product';
 
+import { Breadcrumbs } from './breadcrumbs/Breadcrumbs';
 type FeaturedProductProps = {
   product: Product;
 };
 
 export const FeaturedProduct = React.memo<FeaturedProductProps>(({ product }) => {
   return (
-    <div className="">
-      <div key={product.id}>{product.id}</div>
-    </div>
+    <section className="w-full bg-gray-300">
+      <div className="container mx-auto">
+        <Breadcrumbs productName={product.name} />
+      </div>
+    </section>
   );
 });
 FeaturedProduct.displayName = 'FeaturedProduct';
