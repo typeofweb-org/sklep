@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React, { useState, useEffect } from 'react';
 
 import { Product } from '../../../../types/product';
-import SearchIcon from '../../shared/icons/SearchIcon';
-import SortIcon from '../../shared/icons/SortIcon';
+import { SearchIcon } from '../../shared/icons/SearchIcon';
+import { SortIcon } from '../../shared/icons/SortIcon';
 
 import { ProductItem } from './product/Product';
 

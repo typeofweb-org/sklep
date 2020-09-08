@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HeartIcon = () => {
+export const HeartIcon = () => {
   return (
     <svg
       className="h-6 w-6 fill-current text-gray-500 hover:text-black"
@@ -11,5 +11,3 @@ const HeartIcon = () => {
     </svg>
   );
 };
-
-export default HeartIcon;

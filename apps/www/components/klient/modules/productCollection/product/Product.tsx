@@ -1,9 +1,8 @@
 import React from 'react';
 
-import heartIcon from '../../../../../../www/assets/heartIcon.svg';
 import { Product } from '../../../../../types/product';
-import HeartIcon from '../../../shared/icons/HeartIcon';
-import ShoppingCartIcon from '../../../shared/icons/ShoppingCartIcon';
+import { HeartIcon } from '../../../shared/icons/HeartIcon';
+import { ShoppingCartIcon } from '../../../shared/icons/ShoppingCartIcon';
 
 type ProductItemProps = {
   product: Product;

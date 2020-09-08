@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ShoppingCartIcon = () => {
+export const ShoppingCartIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,5 +19,3 @@ const ShoppingCartIcon = () => {
     </svg>
   );
 };
-
-export default ShoppingCartIcon;

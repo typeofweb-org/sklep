@@ -1,9 +1,9 @@
 import React from 'react';
 
-const SearchIcon = () => {
+export const SearchIcon = () => {
   return (
     <svg
-      className="fill-current"
+      className="fill-current hover:text-black"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -13,5 +13,3 @@ const SearchIcon = () => {
     </svg>
   );
 };
-
-export default SearchIcon;
