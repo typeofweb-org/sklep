@@ -10,6 +10,7 @@ import {
   Grid,
   Row,
   Column,
+  InlineNotification,
 } from 'carbon-components-react';
 import React from 'react';
 import { Field } from 'react-final-form';
@@ -32,8 +33,9 @@ const productSchema = Yup.object({
 export type ProductType = Yup.InferType<typeof productSchema>;
 
 export const ProductsForm = () => {
-  const [mutate, { isLoading }] = useMutation(createProduct);
+  const [mutate, { isLoading, isSuccess, isError, data }] = useMutation(createProduct);
 
+  console.log(data);
   const handleSubmit = React.useCallback(
     async (values: ProductType) => {
       // @todo handle server errors
@@ -122,10 +124,17 @@ export const ProductsForm = () => {
             );
           }}
         </Field>
-        <Button kind="primary" type="submit" renderIcon={Add16}>
+        <Button kind="primary" type="submit" renderIcon={Add16} disabled={isLoading}>
           Dodaj produkt
         </Button>
         {isLoading && <Loading />}
+        {isSuccess && <InlineNotification title="Dodałeś produkt do bazy danych" kind="success" />}
+        {isError && (
+          <InlineNotification
+            title="Wystąpił błąd podczas dodawania produktu do bazy danych"
+            kind="success"
+          />
+        )}
       </Grid>
     </ToWForm>
   );
