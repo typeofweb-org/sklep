@@ -1,7 +1,5 @@
 import clsx from 'clsx';
 import React, { useState, useEffect } from 'react';
-import { BiSearch } from 'react-icons/bi';
-import { FaSort } from 'react-icons/fa';
 
 import { Product } from '../../../../types/product';
 import SearchIcon from '../../shared/icons/SearchIcon';
