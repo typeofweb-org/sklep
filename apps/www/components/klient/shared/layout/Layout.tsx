@@ -14,6 +14,10 @@ export const Layout = React.memo<LayoutProps>(({ children, title }) => {
     <div className="font-sans antialiased text-gray-900 min-h-screen">
       <Head>
         <title>{title}</title>
+        <link
+          href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
       <Header />
       <main className="leading-normal">{children}</main>
