@@ -50,11 +50,12 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
       <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
         <header className="w-full z-30 top-0 px-6 py-1">
           <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
-            <h3 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
+            <h2 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
               STORE
-            </h3>
+            </h2>
             <div className="flex items-center">
               <button
+                aria-label="Sort"
                 onClick={handleSortVisible}
                 className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
               >
@@ -67,6 +68,7 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
                 aria-label="Search"
               />
               <button
+                aria-label="Search"
                 onClick={handleSearchVisible}
                 className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
               >

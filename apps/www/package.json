@@ -23,8 +23,7 @@
     "next-images": "1.4.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-query": "2.15.4",
-    "tailwindcss": "1.8.4"
+    "react-query": "2.15.4"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "5.4.5",
@@ -52,7 +51,6 @@
     "node-sass": "4.14.1",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-preset-env": "6.7.0",
-    "tailwindcss": "1.7.4",
     "ts-loader": "8.0.3"
   }
 }
