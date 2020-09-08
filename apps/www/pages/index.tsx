@@ -8,9 +8,6 @@ import { Product } from '../types/product';
 function HomePage({ products }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Layout title="Sklep strona główna">
-      {products.map((p) => (
-        <div key={p.id}>{p.description}</div>
-      ))}
       <ProductCollection products={products} />
     </Layout>
   );

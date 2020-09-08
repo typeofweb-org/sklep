@@ -18,7 +18,7 @@
     "carbon-icons": "7.0.7",
     "clsx": "1.1.1",
     "next": "9.5.2",
-    "next-images": "^1.4.1",
+    "next-images": "1.4.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-query": "2.15.4",
@@ -51,7 +51,6 @@
     "node-sass": "4.14.1",
     "postcss-flexbugs-fixes": "4.2.1",
     "postcss-preset-env": "6.7.0",
-    "react-placeholder-image": "0.1.8",
-    "ts-loader": "8.0.3"
+    "react-placeholder-image": "^0.1.8"
   }
 }
