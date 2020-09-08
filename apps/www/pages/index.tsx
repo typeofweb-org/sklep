@@ -32,7 +32,7 @@ export const getStaticProps = async () => {
     },
     {
       id: 345,
-      name: 'Another Name',
+      name: 'To jest dłuższa prawdziwa nazwa',
       description: 'desc',
       slug: '345',
       isPublic: true,

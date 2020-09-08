@@ -11,15 +11,13 @@ type ProductItemProps = {
 
 export const ProductItem = React.memo<ProductItemProps>(({ product }) => {
   return (
-    <section className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+    <section className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col self-start">
       <div className="hover:grow hover:shadow-lg">
         <img src="https://picsum.photos/400" alt="Placeholder" className="w-full" />
       </div>
       <div className="flex justify-between items-center pt-4">
-        <div className="flex flex-wrap">
-          <p className="text-gray-600">{product.name}</p>
-        </div>
-        <div className="flex">
+        <p className="text-gray-600 pr-2">{product.name}</p>
+        <div className="flex self-start">
           <button aria-label="Dodaj do koszyka" title="Dodaj do koszyka">
             <ShoppingCartIcon />
           </button>
