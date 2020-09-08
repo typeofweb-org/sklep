@@ -1,11 +1,8 @@
 import clsx from 'clsx';
-import React, { useState, useEffect } from 'react';
-import { BiSearch } from 'react-icons/bi';
-import { FaSort } from 'react-icons/fa';
+import React, { useState } from 'react';
 
 import { Product } from '../../../../types/product';
-import SearchIcon from '../../shared/icons/SearchIcon';
-import SortIcon from '../../shared/icons/SortIcon';
+import { SearchIcon } from '../../shared/icons/SearchIcon';
 
 import { ProductItem } from './product/Product';
 
@@ -15,14 +12,9 @@ type ProductCollectionProps = {
 
 export const ProductCollection = React.memo<ProductCollectionProps>(({ products }) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [isSortVisible, setIsSortVisible] = useState(false);
 
   function handleSearchVisible() {
     setIsSearchVisible((prevState) => !prevState);
-  }
-
-  function handleSortVisible() {
-    setIsSortVisible((prevState) => !prevState);
   }
 
   const searchStylesDesktop = clsx(
@@ -35,31 +27,15 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
     isSearchVisible && 'border border-gray-600 rounded-md shadow-sd h-10 mx-6 px-2',
   );
 
-  const sortStylesDesktop = clsx(
-    'hidden md:block w-0',
-    isSortVisible && 'border border-gray-600 rounded-md shadow-sd mr-2 w-auto px-2 h-8',
-  );
-
-  const sortStylesMobile = clsx(
-    'md:hidden h-0 w-full',
-    isSortVisible && 'border border-gray-600 rounded-md shadow-sd h-10 my-4 mx-6',
-  );
-
   return (
     <section className="bg-white worksans py-8">
       <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
         <header className="w-full z-30 top-0 px-6 py-1">
           <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
-            <h3 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
+            <h2 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
               STORE
-            </h3>
+            </h2>
             <div className="flex items-center">
-              <button
-                onClick={handleSortVisible}
-                className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
-              >
-                <SortIcon />
-              </button>
               <input
                 type="text"
                 className={searchStylesDesktop}
@@ -67,6 +43,7 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
                 aria-label="Search"
               />
               <button
+                aria-label="Search"
                 onClick={handleSearchVisible}
                 className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
               >

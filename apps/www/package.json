@@ -22,7 +22,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-query": "2.15.4",
-    "tailwindcss": "1.8.4"
+    "tailwindcss": "1.8.5"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "5.4.5",

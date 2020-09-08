@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SortIcon = () => {
+export const SortIcon = () => {
   return (
     <svg
       className="fill-current"
@@ -13,5 +13,3 @@ const SortIcon = () => {
     </svg>
   );
 };
-
-export default SortIcon;
