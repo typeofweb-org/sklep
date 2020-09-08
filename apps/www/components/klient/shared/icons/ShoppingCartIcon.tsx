@@ -4,7 +4,7 @@ export const ShoppingCartIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="fill-current text-gray-500 hover:text-black"
+      className="fill-current"
       width="24"
       height="24"
       viewBox="0 0 24 24"
