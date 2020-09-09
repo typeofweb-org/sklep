@@ -17,8 +17,8 @@ export const ProductItem = React.memo<ProductItemProps>(({ product }) => {
       <div className="hover:grow hover:shadow-lg">
         <img src="https://picsum.photos/400" alt="Placeholder" className="w-full" />
       </div>
-      <button className="bg-gray-900 text-white w-full rounded-sm mt-2 p-2 shadow-sm">
-        <div className="flex justify-center transform transition-transform duration-200 hover:scale-105">
+      <button className="bg-gray-900 hover:bg-gray-800 transform transition-color duration-200 text-white w-full rounded-sm mt-2 shadow-sm">
+        <div className="w-full flex justify-center p-2">
           <ShoppingCartIcon />
           <p className="ml-4 self-end">Do koszyka</p>
         </div>

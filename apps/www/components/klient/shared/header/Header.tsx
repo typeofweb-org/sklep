@@ -13,8 +13,8 @@ export const Header = React.memo(() => {
   };
 
   return (
-    <header className="w-full z-30 top-0 py-1">
-      <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
+    <header className="z-30 top-0 py-1 container mx-auto">
+      <div className="w-full flex flex-wrap items-center justify-between mt-0 px-6 py-3">
         <button className="md:hidden block p-2" onClick={toggleMenu} aria-label="Menu">
           <img src={hamburgerIconSrc} className="fill-current text-gray-900" alt="Menu" />
         </button>
@@ -33,7 +33,6 @@ export const Header = React.memo(() => {
             </a>
           </Link>
         </div>
-
         <IconLinks />
       </div>
     </header>

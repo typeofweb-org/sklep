@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Product } from '../../../../types/product';
 import { SearchIcon } from '../../shared/icons/SearchIcon';
@@ -31,16 +31,6 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
   const searchStylesMobile = clsx(
     'md:hidden h-0 w-full',
     isSearchVisible && 'border border-gray-600 rounded-md shadow-sd h-10 mx-6 px-2',
-  );
-
-  const sortStylesDesktop = clsx(
-    'hidden md:block w-0',
-    isSortVisible && 'border border-gray-600 rounded-md shadow-sd mr-2 w-auto px-2 h-8',
-  );
-
-  const sortStylesMobile = clsx(
-    'md:hidden h-0 w-full',
-    isSortVisible && 'border border-gray-600 rounded-md shadow-sd h-10 my-4 mx-6',
   );
 
   return (
