@@ -5,7 +5,7 @@ Projekt edukacyjny. Licencja: [AGPL](./LICENSE)
 ## Uruchomienie
 
 1. W folderze repozytorium wpisz `yarn`, aby zainstalować wszystkie potrzebne zależności.
-2. Aby uruchomić API będziesz potrzebować dockera (polecenie `docker-compose` musi być dostępne).
+2. Aby uruchomić API będziesz potrzebować dockera (polecenie `docker-compose` musi być dostępne, port 5432 musi być wolny).
 3. Uruchom frontend i backend jedną komendą `yarn dev`
 4. Do pliku `/etc/hosts` (lub `c:\Windows\System32\Drivers\etc\hosts`) dodaj dwie linijki:
 
@@ -32,6 +32,7 @@ Aplikacja dzieli się na 2 części:
     - Node.js
     - [Hapi](https://hapi.dev)
     - [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
+    - [PostgreSQL](https://www.postgresql.org/)
     - TypeScript
   - WWW:
     - [Next.js](https://nextjs.org) bez SSG ani SSR (nie potrzebujemy tego w Adminie)
