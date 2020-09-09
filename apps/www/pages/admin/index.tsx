@@ -3,6 +3,7 @@ import Head from 'next/head';
 import React from 'react';
 
 import { Header } from '../../components/admin/Header';
+import LoginForm from '../../components/admin/loginForm/LoginForm';
 import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
 
 export default function AdminHome() {
@@ -16,9 +17,9 @@ export default function AdminHome() {
         />
       </Head>
       <Header />
-
       <Content>
         <Column lg={{ offset: 3 }}>
+          <LoginForm />
           <ProductsForm />
         </Column>
       </Content>
