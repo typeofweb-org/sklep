@@ -33,9 +33,8 @@ const productSchema = Yup.object({
 export type ProductType = Yup.InferType<typeof productSchema>;
 
 export const ProductsForm = () => {
-  const [mutate, { isLoading, isSuccess, isError, data }] = useMutation(createProduct);
+  const [mutate, { isLoading, isSuccess, isError }] = useMutation(createProduct);
 
-  console.log(data);
   const handleSubmit = React.useCallback(
     async (values: ProductType) => {
       // @todo handle server errors

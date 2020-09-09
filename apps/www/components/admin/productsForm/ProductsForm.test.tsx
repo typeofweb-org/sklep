@@ -8,9 +8,8 @@ import React from 'react';
 import { ProductsForm } from './ProductsForm';
 
 const server = setupServer(
-  rest.post('api.sklep.localhost:3002/products', (req, res, ctx) => {
-    console.log('Call made');
-    return res(ctx.status(200), ctx.body({}));
+  rest.post('http://api.sklep.localhost:3002/products', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}), ctx.delay(300));
   }),
 );
 
@@ -29,7 +28,7 @@ test('shows error after confirming without required data', () => {
 });
 
 test('allows user to add product', async () => {
-  const { getByLabelText, getByText, findByRole, findByText } = render(<ProductsForm />);
+  const { getByLabelText, getByText, findByRole } = render(<ProductsForm />);
 
   userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
   userEvent.type(getByLabelText('Cena produktu'), '99.9');
@@ -39,4 +38,23 @@ test('allows user to add product', async () => {
 
   const notification = await findByRole('alert');
   expect(notification).toHaveTextContent('Dodałeś produkt do bazy danych');
+});
+
+test('shows error notification after bad request server exception', async () => {
+  server.use(
+    rest.post('http://api.sklep.localhost:3002/products', (req, res, ctx) => {
+      return res(ctx.status(403), ctx.delay(300), ctx.json({}));
+    }),
+  );
+
+  const { getByLabelText, getByText, findByRole } = render(<ProductsForm />);
+
+  userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
+  userEvent.type(getByLabelText('Cena produktu'), '99.9');
+  userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+
+  userEvent.click(getByText('Dodaj produkt'));
+
+  const notification = await findByRole('alert');
+  expect(notification).toHaveTextContent('Wystąpił błąd podczas dodawania produktu do bazy danych');
 });
