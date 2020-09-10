@@ -19,7 +19,7 @@ export const ProductItem = React.memo<ProductItemProps>(({ product }) => {
       </div>
       <button className="bg-gray-900 hover:bg-gray-800 transform transition-color duration-200 text-white w-full rounded-sm mt-2 shadow-sm">
         <div className="w-full flex justify-center p-2">
-          <ShoppingCartIcon />
+          <ShoppingCartIcon className={'fill-current'} />
           <p className="ml-4 self-end">Do koszyka</p>
         </div>
       </button>
