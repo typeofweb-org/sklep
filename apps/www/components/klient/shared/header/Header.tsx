@@ -27,7 +27,7 @@ export const Header = React.memo(() => {
               <img
                 src={bagIconSrc}
                 className="fill-current text-gray-800 mr-2"
-                alt="Skelp TypeOfWeb"
+                alt="Sklep TypeOfWeb"
               />
               Sklep TypeOfWeb
             </a>
