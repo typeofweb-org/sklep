@@ -3,7 +3,7 @@ import Head from 'next/head';
 import React from 'react';
 
 import { Header } from '../../components/admin/Header';
-import LoginForm from '../../components/admin/loginForm/LoginForm';
+import { LoginForm } from '../../components/admin/loginForm/LoginForm';
 import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
 
 export default function AdminHome() {

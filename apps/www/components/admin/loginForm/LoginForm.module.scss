@@ -1,6 +1,6 @@
-.loginButton {
+.githubWrapper {
+  display: inline-block;
   width: 100%;
-  max-width: unset;
 }
 
 .form {
@@ -31,4 +31,5 @@
 
 .title {
   font-size: 2rem;
+  margin-bottom: 0.5rem;
 }
