@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Layout } from '../../components/klient/shared/layout/Layout';
 
-function ONasPage() {
+function AboutPage() {
   return (
     <Layout title="Sklep - o nas">
       <section className="bg-white worksans py-8">
@@ -22,4 +22,4 @@ function ONasPage() {
   );
 }
 
-export default ONasPage;
+export default AboutPage;
