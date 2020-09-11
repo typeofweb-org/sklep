@@ -1,6 +1,13 @@
 import { User24 } from '@carbon/icons-react';
-import { Button, Grid, TextInput } from 'carbon-components-react';
-import React from 'react';
+import {
+  Button,
+  Grid,
+  InlineNotification,
+  Loading,
+  TextInput,
+  ToastNotification,
+} from 'carbon-components-react';
+import React, { useState } from 'react';
 import { Field } from 'react-final-form';
 import * as Yup from 'yup';
 
@@ -16,9 +23,26 @@ const loginSchema = Yup.object({
 export type LoginType = Yup.InferType<typeof loginSchema>;
 
 export const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const handleSubmit = async (values: LoginType) => {
-    console.log(values);
-    fetcher('http://api.sklep.localhost:3002/auth/login', 'POST', values);
+    setIsLoading(true);
+    fetcher('http://api.sklep.localhost:3002/auth/login', 'POST', values)
+      .then((res) => {
+        // TODO authorize user
+        setIsLoading(false);
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 2000);
+        console.log(res);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        setIsError(true);
+      });
   };
 
   return (
@@ -54,6 +78,22 @@ export const LoginForm = () => {
         <Button kind="primary" type="submit" renderIcon={User24}>
           Zaloguj się
         </Button>
+        {isLoading && <Loading />}
+        {isSuccess && (
+          <ToastNotification
+            kind="success"
+            title="notka"
+            caption="Logowanie udane"
+            className={styles.toast}
+          />
+        )}
+        {isError && (
+          <InlineNotification
+            kind="error"
+            title="Wprowadzone dane nie są poprawne"
+            onCloseButtonClick={() => setIsError(false)}
+          />
+        )}
       </Grid>
     </ToWForm>
   );
