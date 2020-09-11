@@ -1,6 +1,7 @@
 import { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
+import { Hero } from '../components/klient/modules/hero/Hero';
 import { ProductCollection } from '../components/klient/modules/productCollection/ProductCollection';
 import { Layout } from '../components/klient/shared/layout/Layout';
 import { Product } from '../types/product';
@@ -8,6 +9,7 @@ import { Product } from '../types/product';
 function HomePage({ products }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Layout title="Sklep strona główna">
+      <Hero />
       <ProductCollection products={products} />
     </Layout>
   );
