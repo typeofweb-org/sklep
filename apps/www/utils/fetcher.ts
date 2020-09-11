@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 export async function fetcher(
   url: string,
   method: string = 'GET',
@@ -6,10 +8,14 @@ export async function fetcher(
 ) {
   const response = await fetch(url, {
     method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
     ...config,
   });
   const data = await response.json();
+  console.log(response);
   if (response.ok) {
     return data;
   }
