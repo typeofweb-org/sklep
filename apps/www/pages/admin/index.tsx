@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Header } from '../../components/admin/Header';
 import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
+import { ProductsList } from '../../components/admin/productsList/ProductsList';
 
 export default function AdminHome() {
   return (
@@ -20,6 +21,7 @@ export default function AdminHome() {
       <Content>
         <Column lg={{ offset: 3 }}>
           <ProductsForm />
+          <ProductsList products={[]} title="" description="" />
         </Column>
       </Content>
     </>
