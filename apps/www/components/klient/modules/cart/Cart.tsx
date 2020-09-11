@@ -11,6 +11,7 @@ type CartProps = {
 export const Cart = React.memo<CartProps>(({ order }) => {
   return (
     <section className="bg-white worksans py-8">
+      {order.id}
       <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
         <ShoppingList />
         <CartTotal />

@@ -22,6 +22,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-query": "2.15.4",
+    "react-query-devtools": "2.4.7",
     "tailwindcss": "1.8.5"
   },
   "devDependencies": {
@@ -50,7 +51,6 @@
     "jest-watch-typeahead": "0.6.1",
     "node-sass": "4.14.1",
     "postcss-flexbugs-fixes": "4.2.1",
-    "postcss-preset-env": "6.7.0",
-    "react-placeholder-image": "^0.1.8"
+    "postcss-preset-env": "6.7.0"
   }
 }
