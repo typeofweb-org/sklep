@@ -1,4 +1,3 @@
-import type { SklepTypes } from '@sklep/types';
 import {
   DataTable,
   TableContainer,
@@ -10,11 +9,9 @@ import {
 } from 'carbon-components-react';
 import React from 'react';
 
-import { PRODUCT_FIELDS } from './ProductFields';
+import { getHeaders, getRows, Product } from './ProductListUtils';
 import styles from './ProductsList.module.scss';
 import { ProductsListRow } from './productsListRow/ProductsListRow';
-
-export type Product = SklepTypes['getProducts200Response']['data'][number];
 
 type Props = {
   title?: string;
@@ -23,26 +20,12 @@ type Props = {
 };
 
 export const ProductsList = React.memo<Props>(({ title = '', description = '', products }) => {
-  const headers = PRODUCT_FIELDS.map(({ key, name }) => {
-    return {
-      key,
-      header: name,
-    };
-  });
-
-  const rows = products.map((product) => {
-    return {
-      ...product,
-      id: product.id.toString(),
-    };
-  });
-
   return (
     <section className={styles.productsList}>
       <DataTable
-        rows={rows}
-        headers={headers}
-        render={({ headers, getHeaderProps, getTableProps }) => (
+        rows={getRows(products)}
+        headers={getHeaders()}
+        render={({ rows, headers, getHeaderProps, getTableProps }) => (
           <TableContainer title={title} description={description}>
             <Table {...getTableProps()}>
               <TableHead>

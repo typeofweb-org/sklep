@@ -1,9 +1,5 @@
 export const PRODUCT_FIELDS = [
   {
-    key: 'id',
-    name: 'ID',
-  },
-  {
     key: 'slug',
     name: 'Slug',
   },
