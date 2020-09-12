@@ -1,6 +1,8 @@
-.githubWrapper {
-  display: inline-block;
-  width: 100%;
+.content-wraper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 
 .form {
@@ -38,6 +40,4 @@
   position: absolute;
   top: 0;
   right: 0;
-  min-width: 30rem;
-  margin-bottom: 0.5rem;
 }
