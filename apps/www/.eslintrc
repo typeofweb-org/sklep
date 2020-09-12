@@ -1,12 +1,13 @@
 {
   "root": false,
-  "extends": ["react-app"],
+  "extends": ["react-app", "plugin:jsx-a11y/recommended"],
   "env": {
     "es6": true,
     "browser": true,
     "jest": true,
     "node": true
   },
+  "plugins": ["jsx-a11y"],
   "rules": {
     "react-hooks/exhaustive-deps": ["error"],
     "jsx-a11y/anchor-is-valid": "off",

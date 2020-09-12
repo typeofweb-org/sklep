@@ -7,5 +7,5 @@ import CartPage from '../koszyk';
 test('tests works', async () => {
   render(<CartPage />);
 
-  expect(screen.getByText('Koszyk')).toBeDefined();
+  expect(screen.getByText('Koszyk zakupowy')).toBeDefined();
 });
