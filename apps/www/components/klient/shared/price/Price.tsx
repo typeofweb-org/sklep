@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 type PriceProps = {
   regularPrice: number;
   discountPrice?: number | null;
-  direction: 'row' | 'column';
+  direction?: 'row' | 'column';
 };
 
 export const Price = React.memo<PriceProps>(
