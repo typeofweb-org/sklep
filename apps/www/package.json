@@ -27,10 +27,10 @@
     "react-query": "2.15.4",
     "slugify": "1.4.5",
     "yup": "0.29.3",
-    "react-query-devtools": "2.4.7",
     "tailwindcss": "1.8.5"
   },
   "devDependencies": {
+    "react-query-devtools": "2.4.7",
     "@cypress/webpack-preprocessor": "5.4.5",
     "@testing-library/cypress": "7.0.0",
     "@testing-library/dom": "7.24.1",

@@ -1,5 +1,7 @@
 import { SklepTypes } from '@sklep/types';
-import React from 'react';
+import React, { useCallback } from 'react';
+
+import { Price } from '../../../../shared/price/Price';
 
 import { CartItemImage } from './image/CartItemImage';
 import { CartQuantityButton } from './quantity/CartQuantityButton';
@@ -7,14 +9,14 @@ import { CartQuantityInput } from './quantity/CartQuantityInput';
 import { RemoveButton } from './removeButton/RemoveButton';
 
 // temporary type
-type CartItemProps = {
+type CartItemRowProps = {
   product: SklepTypes['getProducts200Response']['data'][number];
 };
 
-export const CartItem = React.memo<CartItemProps>(({ product }) => {
-  const increaseQuantity = () => console.log('incr');
-  const decreaseQuantity = () => console.log('decr');
-  const removeItemFromCart = () => console.log('rmv');
+export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
+  const increaseQuantity = useCallback(() => () => console.log('incr'), []);
+  const decreaseQuantity = useCallback(() => () => console.log('decr'), []);
+  const removeItemFromCart = useCallback(() => () => console.log('remv'), []);
 
   return (
     <tr className="border border-gray-300 border-t-0 border-r-0 border-l-0">
@@ -25,17 +27,25 @@ export const CartItem = React.memo<CartItemProps>(({ product }) => {
         <div>
           <h3 className="mb-2">{product.name}</h3>
           <div className="">
-            <CartQuantityButton text="-" onClick={decreaseQuantity} />
+            <CartQuantityButton
+              text="-"
+              onClick={decreaseQuantity}
+              ariaLabel="zwiększ liczbę sztuk"
+            />
             <CartQuantityInput />
-            <CartQuantityButton text="+" onClick={increaseQuantity} />
+            <CartQuantityButton
+              text="+"
+              onClick={increaseQuantity}
+              ariaLabel="zmienjsz liczbę sztuk"
+            />
           </div>
         </div>
       </td>
       <td className="px-4 py-6 relative">
-        {product.regularPrice}
+        <Price regularPrice={product.regularPrice} discountPrice={product.discountPrice} />
         <RemoveButton onClick={removeItemFromCart} />
       </td>
     </tr>
   );
 });
-CartItem.displayName = 'CartItem';
+CartItemRow.displayName = 'CartItemRow';
