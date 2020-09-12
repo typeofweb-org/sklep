@@ -1,7 +1,7 @@
 import { SklepTypes } from '@sklep/types';
 import React from 'react';
 
-import { CartItem } from '../item/CartItem';
+import { CartItemRow } from '../item/CartItem';
 
 type CartListProps = {
   products: SklepTypes['getProducts200Response']['data'];
@@ -14,7 +14,7 @@ export const CartList = React.memo<CartListProps>(({ products }) => {
       <table className="table-fixed">
         <tbody>
           {products.map((product) => (
-            <CartItem key={product.id} product={product} />
+            <CartItemRow key={product.id} product={product} />
           ))}
         </tbody>
       </table>

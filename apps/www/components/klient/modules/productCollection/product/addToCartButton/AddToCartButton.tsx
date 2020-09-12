@@ -3,13 +3,14 @@ import React from 'react';
 import { ShoppingCartIcon } from '../../../../shared/icons/ShoppingCartIcon';
 
 type AddToCartButtonProps = {
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export const AddToCartButton = React.memo<AddToCartButtonProps>(({ onClick }) => {
   return (
     <button
       className="bg-gray-900 text-white w-full rounded-sm mt-2 p-2 shadow-sm hover:bg-gray-800"
+      title="dodaj do koszyka"
       onClick={onClick}
     >
       <div className="flex justify-center transform transition-transform">

@@ -36,7 +36,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
             <CartQuantityButton
               text="+"
               onClick={increaseQuantity}
-              ariaLabel="zmienjsz liczbę sztuk"
+              ariaLabel="zmniejsz liczbę sztuk"
             />
           </div>
         </div>

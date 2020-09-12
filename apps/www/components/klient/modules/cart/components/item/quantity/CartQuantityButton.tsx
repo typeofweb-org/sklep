@@ -2,7 +2,7 @@ import React from 'react';
 
 type CartQuantityButtonProps = {
   text: string;
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
   ariaLabel: string;
 };
 
