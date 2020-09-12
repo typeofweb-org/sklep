@@ -70,8 +70,8 @@ export const LoginForm = () => {
         {isSuccess && (
           <ToastNotification
             kind="success"
-            title="notka"
-            caption="Logowanie udane"
+            title="Logowanie udane"
+            caption=""
             className={styles.toast}
           />
         )}
