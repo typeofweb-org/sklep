@@ -1,19 +1,18 @@
+import { SklepTypes } from '@sklep/types';
 import React from 'react';
 
-import { Order } from '../../../../types/order';
-
-import { CartTotal } from './components/cartTotal/CartTotal';
-import { ShoppingList } from './components/shoppingList/ShoppingList';
+import { CartList } from './components/list/CartList';
+import { CartTotal } from './components/total/CartTotal';
 
 type CartProps = {
-  order: Order;
+  products: SklepTypes['getProducts200Response']['data'];
 };
-export const Cart = React.memo<CartProps>(({ order }) => {
+
+export const Cart = React.memo<CartProps>(({ products }) => {
   return (
-    <section className="bg-white worksans py-8">
-      {order.id}
-      <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-        <ShoppingList />
+    <section className="cart bg-white worksans py-8">
+      <div className="container mx-auto flex flex-wrap px-2 pt-4 pb-12">
+        <CartList products={products} />
         <CartTotal />
       </div>
     </section>
