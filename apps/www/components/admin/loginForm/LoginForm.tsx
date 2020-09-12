@@ -7,14 +7,15 @@ import {
   TextInput,
   ToastNotification,
 } from 'carbon-components-react';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { Field } from 'react-final-form';
+import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
-import { fetcher } from '../../../utils/fetcher';
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 
 import styles from './LoginForm.module.scss';
+import { login } from './loginFormUtils';
 
 const loginSchema = Yup.object({
   email: Yup.string().email().required(),
@@ -23,27 +24,14 @@ const loginSchema = Yup.object({
 export type LoginType = Yup.InferType<typeof loginSchema>;
 
 export const LoginForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [mutate, { isLoading, isSuccess, isError }] = useMutation(login);
 
-  const handleSubmit = async (values: LoginType) => {
-    setIsLoading(true);
-    fetcher('http://api.sklep.localhost:3002/auth/login', 'POST', values)
-      .then((res) => {
-        // TODO authorize user
-        setIsLoading(false);
-        setIsSuccess(true);
-        setTimeout(() => {
-          setIsSuccess(false);
-        }, 2000);
-        console.log(res);
-      })
-      .catch((e) => {
-        setIsLoading(false);
-        setIsError(true);
-      });
-  };
+  const handleSubmit = useCallback(
+    async (values: LoginType) => {
+      mutate(values);
+    },
+    [mutate],
+  );
 
   return (
     <ToWForm className={styles.form} onSubmit={handleSubmit} schema={loginSchema}>
@@ -56,7 +44,7 @@ export const LoginForm = () => {
               {...getErrorProps(meta)}
               id="email"
               invalidText="Wpisz poprawny adres email"
-              labelText="Nazwa użytkownika"
+              labelText="Adres email"
               placeholder="Wpisz nazwę użytkownika"
             />
           )}
@@ -87,13 +75,7 @@ export const LoginForm = () => {
             className={styles.toast}
           />
         )}
-        {isError && (
-          <InlineNotification
-            kind="error"
-            title="Wprowadzone dane nie są poprawne"
-            onCloseButtonClick={() => setIsError(false)}
-          />
-        )}
+        {isError && <InlineNotification kind="error" title="Wprowadzone dane nie są poprawne" />}
       </Grid>
     </ToWForm>
   );
