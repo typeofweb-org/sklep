@@ -26,7 +26,6 @@ export const getStaticProps = async () => {
       slug: '123',
       isPublic: true,
       regularPrice: 1234,
-      discountPrice: null,
       productType: 'footwear',
     },
     {

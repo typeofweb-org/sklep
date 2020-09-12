@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 import { Product } from '../../../../types/product';
 import { SearchIcon } from '../../shared/icons/SearchIcon';
-import { SortIcon } from '../../shared/icons/SortIcon';
 
 import { ProductItem } from './product/Product';
 
@@ -13,14 +12,9 @@ type ProductCollectionProps = {
 
 export const ProductCollection = React.memo<ProductCollectionProps>(({ products }) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [isSortVisible, setIsSortVisible] = useState(false);
 
   function handleSearchVisible() {
     setIsSearchVisible((prevState) => !prevState);
-  }
-
-  function handleSortVisible() {
-    setIsSortVisible((prevState) => !prevState);
   }
 
   const searchStylesDesktop = clsx(
@@ -42,13 +36,6 @@ export const ProductCollection = React.memo<ProductCollectionProps>(({ products 
               STORE
             </h2>
             <div className="flex items-center">
-              <button
-                aria-label="Sort"
-                onClick={handleSortVisible}
-                className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
-              >
-                <SortIcon />
-              </button>
               <input
                 type="text"
                 className={searchStylesDesktop}
