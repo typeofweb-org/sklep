@@ -1,8 +1,9 @@
-.content-wraper {
+.contentWraper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
+  padding: 0;
 }
 
 .form {
@@ -33,7 +34,7 @@
 
 .title {
   font-size: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
 }
 
 .toast {
