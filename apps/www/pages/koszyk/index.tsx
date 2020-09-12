@@ -35,7 +35,7 @@ function CartPage() {
       slug: '346',
       isPublic: true,
       regularPrice: 3454,
-      discountPrice: 1234.2,
+      discountPrice: 1234,
     },
     {
       id: 347,

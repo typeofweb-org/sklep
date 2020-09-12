@@ -42,7 +42,11 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
         </div>
       </td>
       <td className="px-4 py-6 relative">
-        <Price regularPrice={product.regularPrice} discountPrice={product.discountPrice} />
+        <Price
+          regularPrice={product.regularPrice}
+          discountPrice={product.discountPrice}
+          direction="column"
+        />
         <RemoveButton onClick={removeItemFromCart} />
       </td>
     </tr>
