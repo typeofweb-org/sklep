@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Product } from '../../../../../types/product';
 import { HeartIcon } from '../../../shared/icons/HeartIcon';
 import { ShoppingCartIcon } from '../../../shared/icons/ShoppingCartIcon';
-
-import { RenderPrice } from './renderPrice/RenderPrice';
+import { Price } from '../../../shared/price/Price';
 
 type ProductItemProps = {
   product: Product;
@@ -12,6 +11,9 @@ type ProductItemProps = {
 
 export const ProductItem = React.memo<ProductItemProps>(({ product }) => {
   const { name, regularPrice, discountPrice } = product;
+
+  const addToCart = useCallback(() => console.log('add to cart'), []);
+
   return (
     <section className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col self-start">
       <div className="hover:grow hover:shadow-lg">
@@ -31,7 +33,7 @@ export const ProductItem = React.memo<ProductItemProps>(({ product }) => {
           </button>
         </div>
       </div>
-      <RenderPrice regularPrice={regularPrice} discountPrice={discountPrice} />
+      <Price regularPrice={regularPrice} discountPrice={discountPrice} />
     </section>
   );
 });
