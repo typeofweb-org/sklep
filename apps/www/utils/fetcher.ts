@@ -1,17 +1,30 @@
-export async function fetcher(
-  url: string,
-  method: string = 'GET',
-  body: object = {},
-  config: RequestInit = {},
-) {
-  const response = await fetch(url, {
+type Method =
+  | 'GET'
+  | 'HEAD'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'CONNECT'
+  | 'OPTIONS'
+  | 'TRACE'
+  | 'PATCH';
+export function fetcher(url: string, method: Method, body: object = {}, config: RequestInit = {}) {
+  return fetch(url, {
     method,
-    body: JSON.stringify(body),
+    body: body ? JSON.stringify(body) : undefined,
     ...config,
-  });
-  const data = await response.json();
-  if (response.ok) {
-    return data;
+  }).then(checkResponseStatus);
+}
+
+class ResponseError extends Error {
+  constructor(message: string, public readonly response: Response) {
+    super(message);
+    Object.setPrototypeOf(this, ResponseError.prototype);
   }
-  throw data;
+}
+function checkResponseStatus(response: Response) {
+  if (response.ok) {
+    return response;
+  }
+  throw new ResponseError(response.statusText, response);
 }
