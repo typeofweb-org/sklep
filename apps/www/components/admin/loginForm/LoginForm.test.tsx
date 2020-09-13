@@ -8,12 +8,17 @@ import React from 'react';
 import { LoginForm } from './LoginForm';
 
 const server = setupServer(
-  rest.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, (req, res, ctx) => {
+  rest.post('http://api.sklep.localhost:3002/auth/login', (req, res, ctx) => {
     return res(ctx.status(401), ctx.json({}), ctx.delay(300));
   }),
 );
 
-beforeAll(() => server.listen());
+beforeAll(() => {
+  process.env = Object.assign(process.env, {
+    NEXT_PUBLIC_API_URL: 'http://api.sklep.localhost:3002',
+  });
+  server.listen();
+});
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
@@ -39,15 +44,15 @@ test('unsuccesfull login', async () => {
 });
 
 test('succesfull login', async () => {
-  await server.use(
-    rest.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, (req, res, ctx) => {
+  server.use(
+    rest.post('http://api.sklep.localhost:3002/auth/login', (req, res, ctx) => {
       return res(ctx.status(204), ctx.json({}), ctx.delay(300));
     }),
   );
 
   const { getByLabelText, getByText, findByRole } = render(<LoginForm />);
 
-  userEvent.type(getByLabelText('Adres email'), 'test@test2.pl');
+  userEvent.type(getByLabelText('Adres email'), 'test@test1.pl');
   userEvent.type(getByLabelText('Hasło'), 'qwertyTESTOWY');
 
   await userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
