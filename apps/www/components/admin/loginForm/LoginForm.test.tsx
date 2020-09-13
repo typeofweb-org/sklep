@@ -8,7 +8,7 @@ import React from 'react';
 import { LoginForm } from './LoginForm';
 
 const server = setupServer(
-  rest.post('http://api.sklep.localhost:3002/auth/login', (req, res, ctx) => {
+  rest.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, (req, res, ctx) => {
     return res(ctx.status(401), ctx.json({}), ctx.delay(300));
   }),
 );
@@ -35,20 +35,19 @@ test('unsuccesfull login', async () => {
   await userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
 
   const notification = await findByRole('alert');
-  console.log(notification);
   expect(notification).toHaveTextContent('Wprowadzone dane nie są poprawne');
 });
 
 test('succesfull login', async () => {
-  server.use(
-    rest.post('http://api.sklep.localhost:3002/auth/login', (req, res, ctx) => {
+  await server.use(
+    rest.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, (req, res, ctx) => {
       return res(ctx.status(204), ctx.json({}), ctx.delay(300));
     }),
   );
 
   const { getByLabelText, getByText, findByRole } = render(<LoginForm />);
 
-  userEvent.type(getByLabelText('Adres email'), 'test@test1.pl');
+  userEvent.type(getByLabelText('Adres email'), 'test@test2.pl');
   userEvent.type(getByLabelText('Hasło'), 'qwertyTESTOWY');
 
   await userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
