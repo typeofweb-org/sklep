@@ -13,7 +13,9 @@ export function fetcher(url: string, method: Method, body: object = {}, config: 
     method,
     body: body ? JSON.stringify(body) : undefined,
     ...config,
-  }).then(checkResponseStatus);
+  })
+    .then(checkResponseStatus)
+    .then((res) => res.json());
 }
 
 class ResponseError extends Error {

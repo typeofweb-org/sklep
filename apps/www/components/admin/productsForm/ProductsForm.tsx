@@ -26,7 +26,7 @@ import { createProduct } from './productsFormUtils';
 const productSchema = Yup.object({
   name: Yup.string().required(),
   description: Yup.string().required(),
-  price: Yup.number().required(),
+  regularPrice: Yup.number().required(),
   discountPrice: Yup.number().optional(),
   isPublic: Yup.boolean().required().default(false),
 }).required();
@@ -71,12 +71,12 @@ export const ProductsForm = () => {
         </Field>
         <Row>
           <Column>
-            <Field name="price">
+            <Field name="regularPrice">
               {({ input, meta }) => (
                 <NumberInput
                   {...input}
                   {...getErrorProps(meta)}
-                  id="price"
+                  id="regularPrice"
                   label="Cena produktu"
                   helperText="Cena bez rabatów i bez podatków (VAT, GST)."
                   allowEmpty
@@ -131,7 +131,7 @@ export const ProductsForm = () => {
         {isError && (
           <InlineNotification
             title="Wystąpił błąd podczas dodawania produktu do bazy danych"
-            kind="success"
+            kind="error"
           />
         )}
       </Grid>
