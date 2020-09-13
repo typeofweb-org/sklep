@@ -8,14 +8,28 @@ type Method =
   | 'OPTIONS'
   | 'TRACE'
   | 'PATCH';
-export function fetcher(url: string, method: Method, body: object = {}, config: RequestInit = {}) {
-  return fetch(url, {
-    method,
-    body: body ? JSON.stringify(body) : undefined,
-    ...config,
-  })
-    .then(checkResponseStatus)
-    .then((res) => res.json());
+export async function fetcher(
+  url: string,
+  method: Method,
+  body: object = {},
+  config: RequestInit = {},
+) {
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: body ? JSON.stringify(body) : undefined,
+      ...config,
+    });
+    const data = await getJSON(response);
+
+    return data;
+  } catch (e) {
+    return e;
+  }
 }
 
 class ResponseError extends Error {
@@ -24,9 +38,16 @@ class ResponseError extends Error {
     Object.setPrototypeOf(this, ResponseError.prototype);
   }
 }
-function checkResponseStatus(response: Response) {
+
+async function getJSON(response: Response) {
   if (response.ok) {
-    return response;
+    const contentType = response.headers.get('Content-Type');
+    const emptyCodes = [204, 205];
+    if (!emptyCodes.includes(response.status) && contentType?.includes('json')) {
+      return response.json();
+    } else {
+      return Promise.resolve();
+    }
   }
   throw new ResponseError(response.statusText, response);
 }
