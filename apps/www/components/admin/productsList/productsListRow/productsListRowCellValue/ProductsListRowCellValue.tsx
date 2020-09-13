@@ -9,18 +9,15 @@ type Props = {
 export const ProductsListRowCellValue = React.memo<Props>(({ key, row }) => {
   const value = row[key as keyof DataTableRow];
 
-  let formattedValue: string | number = '-';
-
   switch (typeof value) {
     case 'boolean':
-      formattedValue = value ? 'Yes' : 'No';
-      break;
+      return <>{value ? 'Yes' : 'No'}</>;
     case 'number':
     case 'string':
-      formattedValue = value;
+      return <>{value}</>;
+    default:
+      return <>-</>;
   }
-
-  return <>{formattedValue}</>;
 });
 
 ProductsListRowCellValue.displayName = 'ProductsListRowCellValue';
