@@ -25,8 +25,10 @@ export async function fetcher(
       ...config,
     });
     const data = await getJSON(response);
-
-    return data;
+    if (response.ok) {
+      return data;
+    }
+    throw new ResponseError(response.statusText, response);
   } catch (e) {
     return e;
   }
@@ -40,14 +42,11 @@ class ResponseError extends Error {
 }
 
 async function getJSON(response: Response) {
-  if (response.ok) {
-    const contentType = response.headers.get('Content-Type');
-    const emptyCodes = [204, 205];
-    if (!emptyCodes.includes(response.status) && contentType?.includes('json')) {
-      return response.json();
-    } else {
-      return Promise.resolve();
-    }
+  const contentType = response.headers.get('Content-Type');
+  const emptyCodes = [204, 205];
+  if (!emptyCodes.includes(response.status) && contentType?.includes('json')) {
+    return response.json();
+  } else {
+    return Promise.resolve();
   }
-  throw new ResponseError(response.statusText, response);
 }
