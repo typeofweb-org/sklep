@@ -14,7 +14,7 @@ export const ProductsListRow = React.memo<Props>(({ row }) => {
     <TableRow>
       {PRODUCT_FIELDS.map(({ key }) => (
         <TableCell key={key}>
-          <ProductsListRowCellValue value={row[key as keyof DataTableRow]} />
+          <ProductsListRowCellValue key={key} row={row} />
         </TableCell>
       ))}
     </TableRow>

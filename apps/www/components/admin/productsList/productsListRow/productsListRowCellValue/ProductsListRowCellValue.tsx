@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import { DataTableRow } from 'carbon-components-react';
+import React from 'react';
 
 type Props = {
-  value: string | number | boolean | null | undefined;
+  key: string;
+  row: DataTableRow<string>;
 };
 
-export const ProductsListRowCellValue = React.memo<Props>(({ value }) => {
-  const [displayedValue, setDisplayedValue] = useState<string | number>('-');
+export const ProductsListRowCellValue = React.memo<Props>(({ key, row }) => {
+  const value = row[key as keyof DataTableRow];
 
-  useEffect(() => {
-    switch (typeof value) {
-      case 'boolean':
-        setDisplayedValue(value ? 'Yes' : 'No');
-        break;
-      case 'number':
-      case 'string':
-        setDisplayedValue(value);
-        break;
-      default:
-        break;
-    }
-  }, [value]);
+  let formattedValue: string | number = '-';
 
-  return <>{displayedValue}</>;
+  switch (typeof value) {
+    case 'boolean':
+      formattedValue = value ? 'Yes' : 'No';
+      break;
+    case 'number':
+    case 'string':
+      formattedValue = value;
+  }
+
+  return <>{formattedValue}</>;
 });
 
 ProductsListRowCellValue.displayName = 'ProductsListRowCellValue';

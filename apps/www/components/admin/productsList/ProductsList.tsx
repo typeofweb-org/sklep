@@ -9,7 +9,7 @@ import {
 } from 'carbon-components-react';
 import React from 'react';
 
-import { getHeaders, getRows, Product } from './ProductListUtils';
+import { headers, getRows, Product } from './ProductListUtils';
 import styles from './ProductsList.module.scss';
 import { ProductsListRow } from './productsListRow/ProductsListRow';
 
@@ -24,7 +24,7 @@ export const ProductsList = React.memo<Props>(({ title = '', description = '', p
     <section className={styles.productsList}>
       <DataTable
         rows={getRows(products)}
-        headers={getHeaders()}
+        headers={headers}
         render={({ rows, headers, getHeaderProps, getTableProps }) => (
           <TableContainer title={title} description={description}>
             <Table {...getTableProps()}>

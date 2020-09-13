@@ -4,14 +4,12 @@ import { PRODUCT_FIELDS } from './ProductFields';
 
 export type Product = SklepTypes['getProducts200Response']['data'][number];
 
-export const getHeaders = () => {
-  return PRODUCT_FIELDS.map(({ key, name }) => {
-    return {
-      key,
-      header: name,
-    };
-  });
-};
+export const headers = PRODUCT_FIELDS.map(({ key, name }) => {
+  return {
+    key,
+    header: name,
+  };
+});
 
 export const getRows = (products: Product[]) => {
   return products.map((product) => {
