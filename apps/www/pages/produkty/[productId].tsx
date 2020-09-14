@@ -33,8 +33,9 @@ export const getStaticProps = async () => {
   // todo: change with api call result
   const product: Product = {
     id: 345,
-    name: '345',
-    description: 'desc',
+    name: 'Lorem ipsum dolor sit amet,',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum interdum leo non orci fringilla scelerisque nec eget arcu. Aenean id lacinia nunc, cursus condimentum massa. Nunc semper lorem eu erat sollicitudin, gravida vulputate ante eleifend. Cras pretium auctor lorem, sed dignissim ipsum maximus at. Integer at lorem massa. Aliquam leo dui, convallis ac ultrices eget, iaculis eu felis. Aliquam in est accumsan, efficitur erat vitae, scelerisque risus. Etiam vel diam tincidunt, placerat nisi non, convallis lectus. Nulla facilisi. Quisque placerat velit quis augue egestas, et pharetra elit commodo. Nam sollicitudin, est sit amet molestie malesuada, lorem lacus ultricies leo, a dignissim sapien nibh quis justo. Morbi porta magna nec egestas pellentesque. Aenean dictum tortor posuere mi gravida vestibulum. Proin gravida faucibus fringilla. Donec finibus iaculis ultrices. Curabitur sit amet ipsum eu ligula imperdiet dapibus at eu metus.',
     slug: '345',
     isPublic: true,
     regularPrice: 3454,
