@@ -8,12 +8,16 @@ export const IconLinks = React.memo(() => (
   <div className="order-2 md:order-3 flex items-center">
     <span className="hidden md:contents">
       <Link href="/profil" className="hidden md:inline-block">
-        <UserIcon className="fill-current text-gray-600 hover:text-black cursor-pointer" />
+        <a>
+          <UserIcon className="fill-current text-gray-600 hover:text-black cursor-pointer" />
+        </a>
       </Link>
     </span>
 
     <Link href="/koszyk">
-      <ShoppingCartIcon className="fill-current text-gray-600 hover:text-black text-6xl ml-3 cursor-pointer" />
+      <a>
+        <ShoppingCartIcon className="fill-current text-gray-600 hover:text-black text-6xl ml-3 cursor-pointer" />
+      </a>
     </Link>
   </div>
 ));
