@@ -24,9 +24,10 @@ type BodyType<
 type ParamsType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = Get<SklepTypes['pathsDefinitions'], [CurrentPath, CurrentMethod]> extends {
-  requestPathParams: infer R;
-}
+> = Get<
+  SklepTypes['pathsDefinitions'],
+  [CurrentPath, CurrentMethod, 'requestPathParams']
+> extends infer R
   ? R
   : undefined;
 

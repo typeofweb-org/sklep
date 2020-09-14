@@ -14,6 +14,4 @@ type _2LevelsPretty<T> = {
   [K in keyof T]: T[K] extends object ? { [L in keyof T[K]]: T[K][L] } : T[K];
 };
 
-type SklepTypes = _2LevelsPretty<DeepNil<definitions>>;
-
-export { SklepTypes };
+export type SklepTypes = _2LevelsPretty<DeepNil<definitions>>;
