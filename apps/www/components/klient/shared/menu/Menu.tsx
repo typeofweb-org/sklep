@@ -16,32 +16,18 @@ export const Menu = React.memo<MenuProps>(({ isMenuOpen }) => {
     >
       <nav>
         <ul className="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
-          <li>
-            <Link href="/">
-              <a className="inline-block no-underline hover:text-black hover:underline py-2 px-4">
-                Sklep
-              </a>
-            </Link>
+          <li className="no-underline hover:text-black hover:underline py-2 px-4 cursor-pointer">
+            <Link href="/">Sklep</Link>
           </li>
-          <li>
-            <Link href="/o-nas">
-              <a className="inline-block no-underline hover:text-black hover:underline py-2 px-4">
-                O nas
-              </a>
-            </Link>
+          <li className="no-underline hover:text-black hover:underline py-2 px-4 cursor-pointer">
+            <Link href="/o-nas">O nas</Link>
           </li>
           <li className="md:hidden">
             <Link href="/profil">
-              <a
-                className="inline-block no-underline hover:text-black hover:underline py-2 px-4"
-                aria-label="Profil"
-                title="POrofil"
-              >
-                <div className="flex gap-1">
-                  <span>Profil</span>
-                  <UserIcon />
-                </div>
-              </a>
+              <div className="flex gap-1 py-2 px-4">
+                <span>Profil</span>
+                <UserIcon className="fill-current text-gray-600 hover:text-black cursor-pointer" />
+              </div>
             </Link>
           </li>
         </ul>
