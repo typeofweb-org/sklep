@@ -14,24 +14,20 @@ export async function fetcher(
   body: object = {},
   config: RequestInit = {},
 ) {
-  try {
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: body ? JSON.stringify(body) : undefined,
-      ...config,
-    });
-    const data = await getJSON(response);
-    if (response.ok) {
-      return data;
-    }
-    throw new ResponseError(response.statusText, response);
-  } catch (e) {
-    return e;
+  const response = await fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: body ? JSON.stringify(body) : undefined,
+    ...config,
+  });
+  const data = await getJSON(response);
+  if (response.ok) {
+    return data;
   }
+  throw new ResponseError(response.statusText, response);
 }
 
 class ResponseError extends Error {
