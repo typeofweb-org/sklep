@@ -4,7 +4,7 @@ import React from 'react';
 import { ShoppingCartIcon } from '../icons/ShoppingCartIcon';
 
 export const IconLinks = React.memo(() => (
-  <div className="order-2 md:order-3 flex items-center">
+  <div className="order-2 md:order-3 flex items-center px-4">
     <Link href="/koszyk">
       <a>
         <ShoppingCartIcon className="fill-current text-gray-600 hover:text-black text-6xl ml-3 cursor-pointer" />
