@@ -22,8 +22,8 @@ export const Header = React.memo(() => {
         <div className="order-2 md:order-3">
           <Link href="/">
             <a className="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
-              <BagIcon className="fill-current text-gray-800 mr-2" />
-              <span className="text-sm sm:text-lg">Sklep TypeOfWeb</span>
+              <BagIcon className="hidden md:block fill-current text-gray-800 mr-2" />
+              <span className="text-base sm:text-lg">Sklep TypeOfWeb</span>
             </a>
           </Link>
         </div>
