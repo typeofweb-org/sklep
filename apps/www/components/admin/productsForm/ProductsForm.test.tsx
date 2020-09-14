@@ -23,9 +23,9 @@ describe('form for adding products', () => {
 
     userEvent.click(getByText('Dodaj produkt'));
 
-    expect(getByText('name is a required field')).toBeInTheDocument();
-    expect(getByText('regularPrice is a required field')).toBeInTheDocument();
-    expect(getByText('description is a required field')).toBeInTheDocument();
+    expect(getByText('Nazwa produktu jest polem wymaganym')).toBeInTheDocument();
+    expect(getByText('Cena produktu jest polem wymaganym')).toBeInTheDocument();
+    expect(getByText('Opis produktu jest polem wymaganym')).toBeInTheDocument();
   });
 
   it('allows user to add product', async () => {
