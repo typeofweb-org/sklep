@@ -14,8 +14,8 @@ export const FeaturedProduct = React.memo<FeaturedProductProps>(({ product }) =>
       <div className="container mx-auto">
         <div className="w-full px-6">
           <Breadcrumbs productName={product.name} />
-          <div className="flex justify-between">
-            <div className="w-5/12">
+          <div className="md:flex justify-between">
+            <div className="w-full md:w-5/12 mb-8 md:mb-0">
               <img
                 className="w-full h-auto"
                 src="https://picsum.photos/600/600"
