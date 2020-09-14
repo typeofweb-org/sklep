@@ -10,12 +10,9 @@
     "no-const-assign": "error",
     "import/no-anonymous-default-export": "error",
     "import/dynamic-import-chunkname": "error",
-    "import/order": [
-      "error",
-      { "newlines-between": "always", "alphabetize": { "order": "asc" } }
-    ],
+    "import/order": ["error", { "newlines-between": "always", "alphabetize": { "order": "asc" } }],
     "import/no-duplicates": "error",
     "import/no-cycle": "error",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "error"
   }
 }

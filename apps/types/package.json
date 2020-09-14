@@ -7,7 +7,7 @@
     "generate-api-types": "wait-on tcp:3002 && yarn swagger-to-ts http://localhost:3002/swagger.json --output types.ts --prettier-config ../../.prettierrc"
   },
   "dependencies": {
-    "@manifoldco/swagger-to-ts": "github:mmiszy/swagger-to-ts#pkg"
+    "@manifoldco/swagger-to-ts": "github:mmiszy/swagger-to-ts#a19913e6b2a700c7ba1880f98fde718c9aedcde1"
   },
   "devDependencies": {
     "chokidar-cli": "2.1.0",
