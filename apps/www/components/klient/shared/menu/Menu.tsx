@@ -23,11 +23,6 @@ export const Menu = React.memo<MenuProps>(({ isMenuOpen }) => {
               <a>Sklep</a>
             </Link>
           </li>
-          <li className="no-underline hover:text-black hover:underline py-2 px-4 cursor-pointer">
-            <Link href="/o-nas">
-              <a>O nas</a>
-            </Link>
-          </li>
           <li className="md:hidden">
             <Link href="/profil">
               <a className="flex gap-1 py-2 px-4">
