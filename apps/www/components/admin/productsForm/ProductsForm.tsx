@@ -23,10 +23,16 @@ import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
 import { createProduct } from './productsFormUtils';
 
+Yup.setLocale({
+  mixed: {
+    required: ({ label }) => `${label} jest wymaganym polem`,
+  },
+});
+
 const productSchema = Yup.object({
-  name: Yup.string().required(),
-  description: Yup.string().required(),
-  regularPrice: Yup.number().required(),
+  name: Yup.string().required().label('Nazwa produktu'),
+  description: Yup.string().required().label('Opis produktu'),
+  regularPrice: Yup.number().required().label('Cena produktu'),
   discountPrice: Yup.number().optional(),
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
