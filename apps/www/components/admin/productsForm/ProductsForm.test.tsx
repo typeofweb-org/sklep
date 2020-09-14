@@ -8,7 +8,7 @@ import React from 'react';
 import { ProductsForm } from './ProductsForm';
 
 const server = setupServer(
-  rest.post('http://api.sklep.localhost:3002/products', (req, res, ctx) => {
+  rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json({}), ctx.delay(300));
   }),
 );
@@ -43,7 +43,7 @@ describe('form for adding products', () => {
 
   it('shows error notification after bad request server exception', async () => {
     server.use(
-      rest.post('http://api.sklep.localhost:3002/products', (req, res, ctx) => {
+      rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
         return res(ctx.status(400), ctx.delay(300), ctx.json({}));
       }),
     );

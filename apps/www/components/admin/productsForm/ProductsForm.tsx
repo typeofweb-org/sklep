@@ -29,6 +29,7 @@ const productSchema = Yup.object({
   regularPrice: Yup.number().required(),
   discountPrice: Yup.number().optional(),
   isPublic: Yup.boolean().required().default(false),
+  type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
 }).required();
 export type ProductType = Yup.InferType<typeof productSchema>;
 
@@ -38,7 +39,7 @@ export const ProductsForm = () => {
   const handleSubmit = React.useCallback(
     async (values: ProductType) => {
       // @todo handle server errors
-      mutate(values);
+      await mutate({ ...values, type: 'SINGLE' }); // @todo
     },
     [mutate],
   );
