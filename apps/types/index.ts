@@ -9,6 +9,11 @@ type DeepNil<T extends object> = {
     : never;
 };
 
-type SklepTypes = DeepNil<definitions>;
+// pretty-print type
+type _2LevelsPretty<T> = {
+  [K in keyof T]: T[K] extends object ? { [L in keyof T[K]]: T[K][L] } : T[K];
+};
+
+type SklepTypes = _2LevelsPretty<DeepNil<definitions>>;
 
 export { SklepTypes };

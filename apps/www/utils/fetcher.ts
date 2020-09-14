@@ -1,6 +1,8 @@
 import { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
 
+import { Get } from './fetcherTypes';
+
 type Method =
   | 'GET'
   | 'HEAD'
@@ -15,30 +17,26 @@ type Method =
 type BodyType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = SklepTypes['pathsDefinitions'][CurrentPath] extends { [K in CurrentMethod]: any }
-  ? SklepTypes['pathsDefinitions'][CurrentPath][CurrentMethod] extends { requestBody: infer R }
-    ? R
-    : undefined
+> = Get<SklepTypes['pathsDefinitions'], [CurrentPath, CurrentMethod, 'requestBody']> extends infer R
+  ? R
   : undefined;
+
 type ParamsType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = SklepTypes['pathsDefinitions'][CurrentPath] extends { [K in CurrentMethod]: any }
-  ? SklepTypes['pathsDefinitions'][CurrentPath][CurrentMethod] extends {
-      requestPathParams: infer R;
-    }
-    ? R
-    : undefined
+> = Get<SklepTypes['pathsDefinitions'], [CurrentPath, CurrentMethod]> extends {
+  requestPathParams: infer R;
+}
+  ? R
   : undefined;
+
 type ResponseType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = SklepTypes['pathsDefinitions'][CurrentPath] extends { [K in CurrentMethod]: any }
-  ? SklepTypes['pathsDefinitions'][CurrentPath][CurrentMethod] extends { response: infer R }
-    ? R extends string // Swagger types empty responses as "string" but we never respond with just strings
-      ? never
-      : R
-    : never
+> = Get<SklepTypes['pathsDefinitions'], [CurrentPath, CurrentMethod, 'response']> extends infer R
+  ? R extends string // Swagger types empty responses as "string" but we never respond with just strings
+    ? never
+    : R
   : never;
 
 type FetcherConfigCommon = { config?: RequestInit };
