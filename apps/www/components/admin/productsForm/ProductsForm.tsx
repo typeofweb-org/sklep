@@ -25,7 +25,7 @@ import { createProduct } from './productsFormUtils';
 
 Yup.setLocale({
   mixed: {
-    required: ({ label }) => `${label} jest wymaganym polem`,
+    required: ({ label }) => `${label} jest polem wymaganym`,
   },
 });
 
