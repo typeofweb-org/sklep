@@ -1,13 +1,13 @@
 import React from 'react';
 
-export const UserIcon = () => {
+export const UserIcon = ({ className }: string) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
       viewBox="0 0 24 24"
-      className="fill-current text-gray-600 hover:text-black"
+      className={className}
     >
       <circle fill="none" cx="12" cy="7" r="3" />
       <path
