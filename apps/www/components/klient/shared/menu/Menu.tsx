@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
 
+import { UserIcon } from '../icons/UserIcon';
+
 type MenuProps = {
   isMenuOpen: boolean;
 };
@@ -25,6 +27,20 @@ export const Menu = React.memo<MenuProps>(({ isMenuOpen }) => {
             <Link href="/o-nas">
               <a className="inline-block no-underline hover:text-black hover:underline py-2 px-4">
                 O nas
+              </a>
+            </Link>
+          </li>
+          <li className="md:hidden">
+            <Link href="/profil">
+              <a
+                className="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                aria-label="Profil"
+                title="POrofil"
+              >
+                <div className="flex gap-1">
+                  <span>Profil</span>
+                  <UserIcon />
+                </div>
               </a>
             </Link>
           </li>
