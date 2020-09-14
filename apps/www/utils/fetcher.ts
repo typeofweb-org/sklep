@@ -1,4 +1,5 @@
 import { SklepTypes } from '@sklep/types';
+import { difference } from 'ramda';
 
 type Method =
   | 'GET'
@@ -12,18 +13,28 @@ type Method =
   | 'PATCH';
 
 type BodyType<
-  CurrentUrl extends keyof SklepTypes['pathsDefinitions'],
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = SklepTypes['pathsDefinitions'][CurrentUrl] extends { [K in CurrentMethod]: any }
-  ? SklepTypes['pathsDefinitions'][CurrentUrl][CurrentMethod] extends { requestBody: infer R }
+> = SklepTypes['pathsDefinitions'][CurrentPath] extends { [K in CurrentMethod]: any }
+  ? SklepTypes['pathsDefinitions'][CurrentPath][CurrentMethod] extends { requestBody: infer R }
+    ? R
+    : undefined
+  : undefined;
+type ParamsType<
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
+  CurrentMethod extends Method
+> = SklepTypes['pathsDefinitions'][CurrentPath] extends { [K in CurrentMethod]: any }
+  ? SklepTypes['pathsDefinitions'][CurrentPath][CurrentMethod] extends {
+      requestPathParams: infer R;
+    }
     ? R
     : undefined
   : undefined;
 type ResponseType<
-  CurrentUrl extends keyof SklepTypes['pathsDefinitions'],
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = SklepTypes['pathsDefinitions'][CurrentUrl] extends { [K in CurrentMethod]: any }
-  ? SklepTypes['pathsDefinitions'][CurrentUrl][CurrentMethod] extends { response: infer R }
+> = SklepTypes['pathsDefinitions'][CurrentPath] extends { [K in CurrentMethod]: any }
+  ? SklepTypes['pathsDefinitions'][CurrentPath][CurrentMethod] extends { response: infer R }
     ? R extends string // Swagger types empty responses as "string" but we never respond with just strings
       ? never
       : R
@@ -32,22 +43,59 @@ type ResponseType<
 
 type FetcherConfigCommon = { config?: RequestInit };
 type FetcherConfig<
-  CurrentUrl extends keyof SklepTypes['pathsDefinitions'],
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
 > = FetcherConfigCommon &
-  (BodyType<CurrentUrl, CurrentMethod> extends object
-    ? { body: BodyType<CurrentUrl, CurrentMethod> }
-    : { body?: never });
+  (BodyType<CurrentPath, CurrentMethod> extends object
+    ? { body: BodyType<CurrentPath, CurrentMethod> }
+    : { body?: never }) &
+  (ParamsType<CurrentPath, CurrentMethod> extends object
+    ? { params: ParamsType<CurrentPath, CurrentMethod> }
+    : { params?: never });
+
+export function findMismatchingParams(requiredParams: string[], params: object) {
+  const providedParams = Object.keys(params);
+
+  const excessParams = difference(providedParams, requiredParams);
+  const missingParams = difference(requiredParams, providedParams);
+  return {
+    excessParams,
+    missingParams,
+  };
+}
+
+const PARAMS_PATTERN = /{(\w+)}/g;
+export function compileUrl<CurrentPath extends keyof SklepTypes['pathsDefinitions']>(
+  path: CurrentPath,
+  params?: Record<string, any>,
+): string {
+  if (!params) {
+    return process.env.NEXT_PUBLIC_API_URL + path;
+  }
+  const requiredParams = [...path.matchAll(PARAMS_PATTERN)].map((match) => match[1]);
+  const { excessParams, missingParams } = findMismatchingParams(requiredParams, params);
+  if (excessParams.length > 0 || missingParams.length > 0) {
+    throw new Error(
+      `Invalid params. Excessive params: ${JSON.stringify(
+        excessParams,
+      )}; Missing params: ${JSON.stringify(missingParams)}`,
+    );
+  }
+
+  const compiledPath = path.replace(PARAMS_PATTERN, (_, param) => params[param]);
+  return process.env.NEXT_PUBLIC_API_URL + compiledPath;
+}
 
 export async function fetcher<
-  CurrentUrl extends keyof SklepTypes['pathsDefinitions'],
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
 >(
-  url: CurrentUrl,
+  path: CurrentPath,
   method: CurrentMethod,
-  { body, config }: FetcherConfig<CurrentUrl, CurrentMethod>,
-): Promise<ResponseType<CurrentUrl, CurrentMethod>> {
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
+  { body, params, config }: FetcherConfig<CurrentPath, CurrentMethod>,
+): Promise<ResponseType<CurrentPath, CurrentMethod>> {
+  const url = compileUrl(path, params);
+  const response = await fetch(url, {
     method,
     headers: {
       'Content-Type': 'application/json',
