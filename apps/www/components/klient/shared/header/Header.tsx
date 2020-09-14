@@ -13,7 +13,7 @@ export const Header = React.memo(() => {
   };
 
   return (
-    <header className="z-30 top-0 py-1 mx-auto w-full">
+    <header className="z-30 xl:container top-0 py-1 mx-auto w-full">
       <div className="w-full flex flex-wrap items-center justify-between mt-0 px-6 py-3">
         <button className="md:hidden block p-2" onClick={toggleMenu} aria-label="Menu">
           <HamburgerIcon className="fill-current text-gray-900" />
