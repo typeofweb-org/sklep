@@ -4,7 +4,7 @@ import React from 'react';
 import { CartList } from './components/list/CartList';
 import { CartSummary } from './components/summary/CartSummary';
 
-type CartProps = {
+export type CartProps = {
   products: SklepTypes['getProducts200Response']['data'];
 };
 
