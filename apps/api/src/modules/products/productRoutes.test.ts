@@ -251,7 +251,7 @@ describe('/products', () => {
         payload: {
           name: Faker.lorem.sentence(5),
           description: Faker.lorem.sentences(5),
-          isPublic: true,
+          isPublic: false,
           regularPrice: parseInt(Faker.commerce.price(50, 100), 10),
           discountPrice: parseInt(Faker.commerce.price(10, 49), 10),
           type: Enums.ProductType.SINGLE,
