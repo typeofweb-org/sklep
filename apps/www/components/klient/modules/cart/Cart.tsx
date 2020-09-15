@@ -10,8 +10,8 @@ export type CartProps = {
 
 export const Cart = React.memo<CartProps>(({ products }) => {
   return (
-    <section className="cart bg-white worksans py-8">
-      <div className="container mx-auto flex flex-wrap px-2 pt-4 pb-12">
+    <section className="bg-white worksans py-8">
+      <div className="container mx-auto flex flex-col md:flex-row px-2 pt-4 pb-12">
         <CartList products={products} />
         <CartSummary />
       </div>
