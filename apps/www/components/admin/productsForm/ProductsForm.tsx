@@ -21,7 +21,6 @@ import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 
 import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
-import { createProduct } from './productsFormUtils';
 
 Yup.setLocale({
   mixed: {
@@ -39,8 +38,14 @@ const productSchema = Yup.object({
 }).required();
 export type ProductType = Yup.InferType<typeof productSchema>;
 
-export const ProductsForm = () => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(createProduct);
+type ProductsFormProps = {
+  mutation: (values: any) => Promise<any>;
+  isEditing?: boolean;
+  initialValues?: ProductType;
+};
+
+export const ProductsForm = ({ mutation, isEditing, initialValues }: ProductsFormProps) => {
+  const [mutate, { isLoading, isSuccess, isError }] = useMutation(mutation);
 
   const handleSubmit = React.useCallback(
     async (values: ProductType) => {
@@ -51,7 +56,12 @@ export const ProductsForm = () => {
   );
 
   return (
-    <ToWForm onSubmit={handleSubmit} schema={productSchema} className={styles.form}>
+    <ToWForm
+      onSubmit={handleSubmit}
+      schema={productSchema}
+      className={styles.form}
+      initialValues={initialValues}
+    >
       <Grid>
         <Field name="name">
           {({ input, meta }) => (
@@ -131,13 +141,22 @@ export const ProductsForm = () => {
           }}
         </Field>
         <Button kind="primary" type="submit" renderIcon={Add16} disabled={isLoading}>
-          Dodaj produkt
+          {isEditing ? 'Zaaktualizuj produkt' : 'Dodaj produkt'}
         </Button>
         {isLoading && <Loading />}
-        {isSuccess && <InlineNotification title="Dodałeś produkt do bazy danych" kind="success" />}
+        {isSuccess && (
+          <InlineNotification
+            title={isEditing ? 'Produkt został zaaktualizowany' : 'Dodałeś produkt do bazy danych'}
+            kind="success"
+          />
+        )}
         {isError && (
           <InlineNotification
-            title="Wystąpił błąd podczas dodawania produktu do bazy danych"
+            title={
+              isEditing
+                ? 'Wystąpił błąd podczas aktualizacji produktu'
+                : 'Wystąpił błąd podczas dodawania produktu do bazy danych'
+            }
             kind="error"
           />
         )}

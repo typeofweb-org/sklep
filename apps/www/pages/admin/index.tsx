@@ -6,6 +6,7 @@ import { Header } from '../../components/admin/Header';
 import { LoginForm } from '../../components/admin/loginForm/LoginForm';
 import styles from '../../components/admin/loginForm/LoginForm.module.scss';
 import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
+import { createProduct } from '../../components/admin/productsForm/productsFormUtils';
 import { ProductsList } from '../../components/admin/productsList/ProductsList';
 
 export default function AdminHome() {
@@ -22,7 +23,7 @@ export default function AdminHome() {
       <Content className={styles.contentWraper}>
         <Column lg={{ offset: 3 }} style={{ margin: '0 auto' }}>
           <LoginForm />
-          <ProductsForm />
+          <ProductsForm mutation={createProduct} />
           <ProductsList products={[]} title="" description="" />
         </Column>
       </Content>
