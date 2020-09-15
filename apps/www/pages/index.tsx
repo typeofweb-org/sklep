@@ -5,6 +5,7 @@ import { Hero } from '../components/klient/modules/hero/Hero';
 import { ProductCollection } from '../components/klient/modules/productCollection/ProductCollection';
 import { Layout } from '../components/klient/shared/layout/Layout';
 import { Product } from '../types/product';
+// import { getProducts } from '../utils/api/getProducts';
 
 function HomePage({ products }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
@@ -15,7 +16,7 @@ function HomePage({ products }: InferGetStaticPropsType<typeof getStaticProps>) 
   );
 }
 export const getStaticProps = async () => {
-  // const res = await fetch('https://.../posts')
+  // const res = getProducts();
 
   // todo: change with api call result
   const products: Product[] = [

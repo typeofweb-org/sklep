@@ -39,7 +39,7 @@ export const addProductRoute: Hapi.ServerRoute = {
   options: {
     tags: ['api', 'products'],
     auth: {
-      scope: Enums.UserRole.ADMIN,
+      scope: Enums.UserRole.USER,
     },
     validate: {
       payload: addProductPayloadSchema,
