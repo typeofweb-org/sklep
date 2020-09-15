@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useCallback } from 'react';
+import React from 'react';
 
 type PriceProps = {
   regularPrice: number;
@@ -12,22 +12,14 @@ export const Price = React.memo<PriceProps>(
     const priceClassName = clsx('pt-1 text-gray-900 flex', direction === 'column' && 'flex-col');
     const discountClassName = direction === 'column' ? 'pl-0' : 'pl-2';
 
-    const toLocaleCurrency = useCallback((price: number): string => {
-      return price.toLocaleString('pl-PL', {
-        style: 'currency',
-        currency: 'PLN',
-        minimumFractionDigits: 2,
-      });
-    }, []);
-
     if (!discountPrice) {
-      return <p className="pt-1 text-gray-900">${toLocaleCurrency(regularPrice)}</p>;
+      return <p className="pt-1 text-gray-900">{regularPrice / 100}&nbsp;PLN</p>;
     }
 
     return (
       <p className={priceClassName}>
-        <del className="text-gray-600 text-sm">${toLocaleCurrency(regularPrice)}</del>{' '}
-        <span className={discountClassName}>${toLocaleCurrency(discountPrice)}</span>
+        <del className="text-gray-600 text-sm">{regularPrice / 100}&nbsp;PLN</del>{' '}
+        <span className={discountClassName}>{discountPrice / 100}&nbsp;PLN</span>
       </p>
     );
   },
