@@ -1,22 +1,24 @@
 import { Request } from '@hapi/hapi';
 
+const cartSelect = {
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  cartProducts: {
+    select: {
+      productId: true,
+      quantity: true,
+    },
+  },
+} as const;
+
 export async function findOrCreateCart(request: Request) {
   const cartId = request.state['cart'];
 
   if (cartId) {
     const [cart] = await request.server.app.db.cart.findMany({
       where: { id: cartId },
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        cartProducts: {
-          select: {
-            productId: true,
-            quantity: true,
-          },
-        },
-      },
+      select: cartSelect,
     });
     if (cart) {
       return cart;
@@ -25,9 +27,7 @@ export async function findOrCreateCart(request: Request) {
 
   return request.server.app.db.cart.create({
     data: {},
-    include: {
-      cartProducts: true,
-    },
+    select: cartSelect,
   });
 }
 
