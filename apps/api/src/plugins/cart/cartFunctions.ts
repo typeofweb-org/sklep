@@ -19,6 +19,7 @@ export async function findOrCreateCart(request: Request) {
     const [cart] = await request.server.app.db.cart.findMany({
       where: { id: cartId },
       select: cartSelect,
+      take: 1,
     });
     if (cart) {
       return cart;
