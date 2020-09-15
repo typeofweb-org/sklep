@@ -158,17 +158,18 @@ export const getProductRoute: Hapi.ServerRoute = {
     const isAdmin = user?.role === Enums.UserRole.ADMIN;
     const params = request.params as SklepTypes['getProductsProductIdRequestPathParams'];
 
-    const [product] = await request.server.app.db.product.findMany({
+    const product = await request.server.app.db.product.findOne({
       where: {
         id: params.productId,
-        ...(!isAdmin && {
-          isPublic: true,
-        }),
       },
       select: productSelect,
     });
 
     if (!product) {
+      throw Boom.notFound('Product not found.');
+    }
+
+    if (!product.isPublic && !isAdmin) {
       throw Boom.notFound('Product not found.');
     }
 
