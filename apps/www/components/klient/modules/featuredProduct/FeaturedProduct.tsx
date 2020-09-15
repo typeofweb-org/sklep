@@ -3,7 +3,7 @@ import React from 'react';
 import { Product } from '../../../../types/product';
 
 import { Breadcrumbs } from './breadcrumbs/Breadcrumbs';
-import { Content } from './content/Content';
+import { ProductInfo } from './productInfo/ProductInfo';
 type FeaturedProductProps = {
   product: Product;
 };
@@ -22,7 +22,7 @@ export const FeaturedProduct = React.memo<FeaturedProductProps>(({ product }) =>
                 alt={`Zdjęcie ${product.name}`}
               />
             </div>
-            <Content product={product} />
+            <ProductInfo product={product} />
           </div>
         </div>
       </div>
