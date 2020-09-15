@@ -35,7 +35,7 @@ Aplikacja dzieli się na 2 części:
     - TypeScript
   - WWW:
     - [Next.js](https://nextjs.org) bez SSG ani SSR (nie potrzebujemy tego w Adminie)
-    - [React Query](https://react-query.tanstack.com/docs/overview), dane ładowane dynamicznie z przeglądarki
+~
     - ~[React Hook Form](https://react-hook-form.com) do obsługi formularzy~ nie działało to zbyt dobrze z Carbon
     - [React Final Form](https://final-form.org/react) do obsługi formularzy
     - [Carbon Design System](https://www.carbondesignsystem.com/components/overview) (gotowe komponenty)
@@ -47,7 +47,8 @@ Aplikacja dzieli się na 2 części:
   - WWW:
     - [Next.js z SSG](https://nextjs.org/docs/basic-features/data-fetching) do większości elementów.
       - Incremental Static Regeneration
-      - Warto rozważyć bezpośrednie wbicie się do bazy z poziomu `getStaticProps`
+      - ~Warto rozważyć bezpośrednie wbicie się do bazy z poziomu `getStaticProps`~
+      - [React Query](https://react-query.tanstack.com/docs/overview) dobrze [działa z SSR](https://react-query.tanstack.com/docs/guides/ssr)
     - TypeScript
     - TailwindCSS
     - SCSS

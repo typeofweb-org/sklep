@@ -2436,9 +2436,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@manifoldco/swagger-to-ts@github:mmiszy/swagger-to-ts#pkg":
+"@manifoldco/swagger-to-ts@github:mmiszy/swagger-to-ts#a19913e6b2a700c7ba1880f98fde718c9aedcde1":
   version "2.0.0"
-  resolved "https://codeload.github.com/mmiszy/swagger-to-ts/tar.gz/8887f6217393dae579c4f96d7295ebcca265f86e"
+  resolved "https://codeload.github.com/mmiszy/swagger-to-ts/tar.gz/a19913e6b2a700c7ba1880f98fde718c9aedcde1"
   dependencies:
     chalk "^4.0.0"
     js-yaml "^3.13.1"
@@ -11146,6 +11146,11 @@ quick-lru@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
+
+ramda@0.27.1:
+  version "0.27.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.1.tgz#66fc2df3ef873874ffc2da6aa8984658abacf5c9"
+  integrity sha512-PgIdVpn5y5Yns8vqb8FzBUEYn98V3xcPgawAkkgj0YJ0qDsnHCiNmZYfOGMgOvoB0eWFLpYbhxUR3mxfDIMvpw==
 
 ramda@~0.26.1:
   version "0.26.1"

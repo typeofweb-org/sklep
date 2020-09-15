@@ -1,24 +1,13 @@
 import Link from 'next/link';
 import React from 'react';
 
-import cartIconSrc from '../../../../assets/cart.svg';
-import userIconSrc from '../../../../assets/user.svg';
+import { ShoppingCartIcon } from '../icons/ShoppingCartIcon';
 
 export const IconLinks = React.memo(() => (
-  <div className="order-2 md:order-3 flex items-center">
-    <Link href="/profil">
-      <a className="inline-block no-underline hover:text-black" aria-label="Koszyk" title="Koszyk">
-        <img src={userIconSrc} className="fill-current hover:text-black" alt="Profil użytkownika" />
-      </a>
-    </Link>
-
+  <div className="order-2 md:order-3 flex items-center px-4">
     <Link href="/koszyk">
-      <a
-        className="pl-3 inline-block no-underline hover:text-black"
-        aria-label="Koszyk"
-        title="Koszyk"
-      >
-        <img src={cartIconSrc} className="fill-current hover:text-black" alt="Koszyk" />
+      <a>
+        <ShoppingCartIcon className="fill-current text-gray-600 hover:text-black text-6xl ml-3 cursor-pointer" />
       </a>
     </Link>
   </div>

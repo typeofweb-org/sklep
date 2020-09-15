@@ -4,7 +4,9 @@ import React from 'react';
 
 import { Header } from '../../components/admin/Header';
 import { LoginForm } from '../../components/admin/loginForm/LoginForm';
+import styles from '../../components/admin/loginForm/LoginForm.module.scss';
 import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
+import { ProductsList } from '../../components/admin/productsList/ProductsList';
 
 export default function AdminHome() {
   return (
@@ -17,10 +19,11 @@ export default function AdminHome() {
         />
       </Head>
       <Header />
-      <Content>
-        <Column lg={{ offset: 3 }}>
+      <Content className={styles.contentWraper}>
+        <Column lg={{ offset: 3 }} style={{ margin: '0 auto' }}>
           <LoginForm />
           <ProductsForm />
+          <ProductsList products={[]} title="" description="" />
         </Column>
       </Content>
     </>

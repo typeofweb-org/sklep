@@ -14,7 +14,7 @@ export const AddToCartButton = React.memo<AddToCartButtonProps>(({ onClick }) =>
       onClick={onClick}
     >
       <div className="flex justify-center transform transition-transform">
-        <ShoppingCartIcon />
+        <ShoppingCartIcon className="fill-current text-white" />
         <p className="ml-4 self-end">Do koszyka</p>
       </div>
     </button>

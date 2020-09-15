@@ -69,4 +69,58 @@ export interface definitions {
   };
 
   deleteProductsProductIdDefaultResponse: string;
+
+  pathsDefinitions: {
+    '/products': {
+      GET: {
+        response: definitions['Model2'];
+      };
+      POST: {
+        requestBody: definitions['Model5'];
+
+        response: definitions['Model6'];
+      };
+    };
+    '/auth/me': {
+      GET: {
+        response: definitions['Model4'];
+      };
+    };
+    '/auth/login': {
+      POST: {
+        requestBody: definitions['Model7'];
+
+        response: string;
+      };
+    };
+    '/auth/logout': {
+      POST: {
+        response: string;
+      };
+    };
+    '/auth/register': {
+      POST: {
+        requestBody: definitions['Model7'];
+
+        response: string;
+      };
+    };
+    '/products/{productId}': {
+      PUT: {
+        requestPathParams: {
+          productId: number;
+        };
+        requestBody: definitions['Model5'];
+
+        response: string;
+      };
+      DELETE: {
+        requestPathParams: {
+          productId: number;
+        };
+
+        response: string;
+      };
+    };
+  };
 }

@@ -8,12 +8,14 @@ import React from 'react';
 import { LoginForm } from './LoginForm';
 
 const server = setupServer(
-  rest.post('http://api.sklep.localhost:3002/auth/login', (req, res, ctx) => {
+  rest.post(process.env.NEXT_PUBLIC_API_URL + '/auth/login', (_req, res, ctx) => {
     return res(ctx.status(401), ctx.json({}), ctx.delay(300));
   }),
 );
 
-beforeAll(() => server.listen());
+beforeAll(() => {
+  server.listen();
+});
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
@@ -35,13 +37,12 @@ test('unsuccesfull login', async () => {
   await userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
 
   const notification = await findByRole('alert');
-  console.log(notification);
   expect(notification).toHaveTextContent('Wprowadzone dane nie są poprawne');
 });
 
 test('succesfull login', async () => {
   server.use(
-    rest.post('http://api.sklep.localhost:3002/auth/login', (req, res, ctx) => {
+    rest.post(process.env.NEXT_PUBLIC_API_URL + '/auth/login', (_req, res, ctx) => {
       return res(ctx.status(204), ctx.json({}), ctx.delay(300));
     }),
   );
