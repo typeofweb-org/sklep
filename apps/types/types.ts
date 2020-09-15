@@ -33,7 +33,8 @@ export interface definitions {
     user: definitions['user'];
   };
   Model4: { data: definitions['Model3'] };
-  Model5: {
+  Model5: { data: definitions['Model1'] };
+  Model6: {
     name: string;
     description: string;
     isPublic: boolean;
@@ -41,15 +42,30 @@ export interface definitions {
     discountPrice?: number;
     type: 'SINGLE' | 'BUNDLE';
   };
-  Model6: { data: definitions['Model1'] };
   Model7: { email: string; password: string };
 
   getProducts200Response: definitions['Model2'];
-  postProductsRequestBody: definitions['Model5'];
+  postProductsRequestBody: definitions['Model6'];
 
-  postProducts200Response: definitions['Model6'];
+  postProducts200Response: definitions['Model5'];
 
   getAuthMe200Response: definitions['Model4'];
+  getProductsProductIdRequestPathParams: {
+    productId: number;
+  };
+
+  getProductsProductId200Response: definitions['Model5'];
+  putProductsProductIdRequestPathParams: {
+    productId: number;
+  };
+  putProductsProductIdRequestBody: definitions['Model6'];
+
+  putProductsProductIdDefaultResponse: string;
+  deleteProductsProductIdRequestPathParams: {
+    productId: number;
+  };
+
+  deleteProductsProductIdDefaultResponse: string;
   postAuthLoginRequestBody: definitions['Model7'];
 
   postAuthLoginDefaultResponse: string;
@@ -58,69 +74,4 @@ export interface definitions {
   postAuthRegisterRequestBody: definitions['Model7'];
 
   postAuthRegisterDefaultResponse: string;
-  putProductsProductIdRequestPathParams: {
-    productId: number;
-  };
-  putProductsProductIdRequestBody: definitions['Model5'];
-
-  putProductsProductIdDefaultResponse: string;
-  deleteProductsProductIdRequestPathParams: {
-    productId: number;
-  };
-
-  deleteProductsProductIdDefaultResponse: string;
-
-  pathsDefinitions: {
-    '/products': {
-      GET: {
-        response: definitions['Model2'];
-      };
-      POST: {
-        requestBody: definitions['Model5'];
-
-        response: definitions['Model6'];
-      };
-    };
-    '/auth/me': {
-      GET: {
-        response: definitions['Model4'];
-      };
-    };
-    '/auth/login': {
-      POST: {
-        requestBody: definitions['Model7'];
-
-        response: string;
-      };
-    };
-    '/auth/logout': {
-      POST: {
-        response: string;
-      };
-    };
-    '/auth/register': {
-      POST: {
-        requestBody: definitions['Model7'];
-
-        response: string;
-      };
-    };
-    '/products/{productId}': {
-      PUT: {
-        requestPathParams: {
-          productId: number;
-        };
-        requestBody: definitions['Model5'];
-
-        response: string;
-      };
-      DELETE: {
-        requestPathParams: {
-          productId: number;
-        };
-
-        response: string;
-      };
-    };
-  };
 }
