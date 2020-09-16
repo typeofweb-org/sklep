@@ -11,7 +11,7 @@ export const headers = PRODUCT_FIELDS.map(({ key, name }) => {
   };
 });
 
-export const getRows = (products: Product[]) => {
+export const getRows = (products: readonly Product[]) => {
   return products.map((product) => {
     return {
       ...product,

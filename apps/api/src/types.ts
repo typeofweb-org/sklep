@@ -1,14 +1,14 @@
-import { Models } from './models';
+import type { Models } from './models';
 export type Nil<T> = T | undefined | null;
 
 export type Model<T extends Partial<Models[keyof Models]>> = T & {
-  createdAt: Date;
-  updatedAt: Date;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
 };
 
 export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends Array<infer U>
-    ? Array<DeepPartial<U>>
+  readonly [P in keyof T]?: T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
     : T[P] extends ReadonlyArray<infer U>
     ? ReadonlyArray<DeepPartial<U>>
     : DeepPartial<T[P]>;

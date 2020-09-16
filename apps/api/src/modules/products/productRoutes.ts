@@ -1,5 +1,5 @@
 import Boom from '@hapi/boom';
-import Hapi from '@hapi/hapi';
+import type Hapi from '@hapi/hapi';
 import type { SklepTypes } from '@sklep/types';
 import Slugify from 'slugify';
 

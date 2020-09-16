@@ -1,7 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
 
-import { Get } from './fetcherTypes';
+import type { Get } from './fetcherTypes';
 
 type Method =
   | 'GET'
@@ -17,7 +17,10 @@ type Method =
 type BodyType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = Get<SklepTypes['pathsDefinitions'], [CurrentPath, CurrentMethod, 'requestBody']> extends infer R
+> = Get<
+  SklepTypes['pathsDefinitions'],
+  readonly [CurrentPath, CurrentMethod, 'requestBody']
+> extends infer R
   ? R
   : undefined;
 
@@ -26,7 +29,7 @@ type ParamsType<
   CurrentMethod extends Method
 > = Get<
   SklepTypes['pathsDefinitions'],
-  [CurrentPath, CurrentMethod, 'requestPathParams']
+  readonly [CurrentPath, CurrentMethod, 'requestPathParams']
 > extends infer R
   ? R
   : undefined;
@@ -34,25 +37,28 @@ type ParamsType<
 type ResponseType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
-> = Get<SklepTypes['pathsDefinitions'], [CurrentPath, CurrentMethod, 'response']> extends infer R
+> = Get<
+  SklepTypes['pathsDefinitions'],
+  readonly [CurrentPath, CurrentMethod, 'response']
+> extends infer R
   ? R extends string // Swagger types empty responses as "string" but we never respond with just strings
     ? never
     : R
   : never;
 
-type FetcherConfigCommon = { config?: RequestInit };
+type FetcherConfigCommon = { readonly config?: RequestInit };
 type FetcherConfig<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
 > = FetcherConfigCommon &
   (BodyType<CurrentPath, CurrentMethod> extends object
-    ? { body: BodyType<CurrentPath, CurrentMethod> }
-    : { body?: never }) &
+    ? { readonly body: BodyType<CurrentPath, CurrentMethod> }
+    : { readonly body?: never }) &
   (ParamsType<CurrentPath, CurrentMethod> extends object
-    ? { params: ParamsType<CurrentPath, CurrentMethod> }
-    : { params?: never });
+    ? { readonly params: ParamsType<CurrentPath, CurrentMethod> }
+    : { readonly params?: never });
 
-export function findMismatchingParams(requiredParams: string[], params: object) {
+export function findMismatchingParams(requiredParams: readonly string[], params: object) {
   const providedParams = Object.keys(params);
 
   const excessParams = difference(providedParams, requiredParams);
@@ -113,6 +119,7 @@ export async function fetcher<
 class ResponseError extends Error {
   constructor(message: string, public readonly status: number, public readonly data: unknown) {
     super(message);
+    // eslint-disable-next-line functional/no-this-expression
     Object.setPrototypeOf(this, ResponseError.prototype);
   }
 }

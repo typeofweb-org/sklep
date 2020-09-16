@@ -3,7 +3,7 @@ import React from 'react';
 import { ShoppingCartIcon } from '../../../../shared/icons/ShoppingCartIcon';
 
 type AddToCartButtonProps = {
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  readonly onClick: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export const AddToCartButton = React.memo<AddToCartButtonProps>(({ onClick }) => {

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Order } from '../../../../types/order';
+import type { Order } from '../../../../types/order';
 
 type CheckoutProps = {
-  order: Order;
+  readonly order: Order;
 };
 export const Checkout = React.memo<CheckoutProps>(({ order }) => {
   return <div className="">Checkoutid: {order.id}</div>;

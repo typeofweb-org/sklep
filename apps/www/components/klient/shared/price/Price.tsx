@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React from 'react';
 
 type PriceProps = {
-  regularPrice: number;
-  discountPrice?: number | null;
-  direction?: 'row' | 'column';
+  readonly regularPrice: number;
+  readonly discountPrice?: number | null;
+  readonly direction?: 'row' | 'column';
 };
 
 export const Price = React.memo<PriceProps>(

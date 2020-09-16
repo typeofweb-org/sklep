@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
@@ -7,7 +7,7 @@ import { SearchIcon } from '../../shared/icons/SearchIcon';
 import { ProductItem } from './product/Product';
 
 type ProductCollectionProps = {
-  products: SklepTypes['getProducts200Response']['data'];
+  readonly products: SklepTypes['getProducts200Response']['data'];
 };
 
 export const ProductCollection = React.memo<ProductCollectionProps>(({ products }) => {

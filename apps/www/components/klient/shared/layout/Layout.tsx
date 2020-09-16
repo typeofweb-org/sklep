@@ -1,12 +1,13 @@
 import Head from 'next/head';
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 
 import { Footer } from '../footer/Footer';
 import { Header } from '../header/Header';
 
 type LayoutProps = {
-  children: ReactNode;
-  title: string;
+  readonly children: ReactNode;
+  readonly title: string;
 };
 
 export const Layout = React.memo<LayoutProps>(({ children, title }) => {

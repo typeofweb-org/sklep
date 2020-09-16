@@ -1,7 +1,7 @@
 import React from 'react';
 
 type SummaryButtonProps = {
-  onClick: React.FormEventHandler<HTMLButtonElement>;
+  readonly onClick: React.FormEventHandler<HTMLButtonElement>;
 };
 
 export const SummaryButton = React.memo<SummaryButtonProps>(({ onClick }) => {
