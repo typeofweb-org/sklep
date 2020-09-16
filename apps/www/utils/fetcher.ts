@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
 
 import { Get } from './fetcherTypes';

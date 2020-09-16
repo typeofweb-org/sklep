@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { Cart } from '../../components/klient/modules/cart/Cart';

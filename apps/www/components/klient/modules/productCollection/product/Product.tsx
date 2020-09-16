@@ -1,14 +1,14 @@
+import { SklepTypes } from '@sklep/types';
 import React, { useCallback } from 'react';
 
-import { Product } from '../../../../../types/product';
-import { AddToCartButton } from '../../../shared/addToCartButton/AddToCartButton';
 import { HeartIcon } from '../../../shared/icons/HeartIcon';
 import { Price } from '../../../shared/price/Price';
 
+import { AddToCartButton } from './addToCartButton/AddToCartButton';
 import { ProductImage } from './image/ProductImage';
 
 type ProductItemProps = {
-  product: Product;
+  product: SklepTypes['getProducts200Response']['data'][number];
 };
 
 export const ProductItem = React.memo<ProductItemProps>(({ product }) => {

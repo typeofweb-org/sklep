@@ -1,12 +1,12 @@
 .cart-item-close-btn {
-    @apply absolute;
-    top: 0.5rem;
-    right: 1rem;
+  @apply absolute;
+  top: 0.5rem;
+  right: 0;
 }
 
 /* hack to remove arrows from inputs with type=number */
-.cart input[type=number]::-webkit-inner-spin-button,
-.cart input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.cart input[type='number']::-webkit-inner-spin-button,
+.cart input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import React, { useCallback } from 'react';
 
 import { Price } from '../../../../shared/price/Price';
