@@ -74,4 +74,65 @@ export interface definitions {
   postAuthRegisterRequestBody: definitions['Model7'];
 
   postAuthRegisterDefaultResponse: string;
+
+  pathsDefinitions: {
+    '/products': {
+      GET: {
+        response: definitions['Model2'];
+      };
+      POST: {
+        requestBody: definitions['Model6'];
+
+        response: definitions['Model5'];
+      };
+    };
+    '/auth/me': {
+      GET: {
+        response: definitions['Model4'];
+      };
+    };
+    '/products/{productId}': {
+      GET: {
+        requestPathParams: {
+          productId: number;
+        };
+
+        response: definitions['Model5'];
+      };
+      PUT: {
+        requestPathParams: {
+          productId: number;
+        };
+        requestBody: definitions['Model6'];
+
+        response: string;
+      };
+      DELETE: {
+        requestPathParams: {
+          productId: number;
+        };
+
+        response: string;
+      };
+    };
+    '/auth/login': {
+      POST: {
+        requestBody: definitions['Model7'];
+
+        response: string;
+      };
+    };
+    '/auth/logout': {
+      POST: {
+        response: string;
+      };
+    };
+    '/auth/register': {
+      POST: {
+        requestBody: definitions['Model7'];
+
+        response: string;
+      };
+    };
+  };
 }
