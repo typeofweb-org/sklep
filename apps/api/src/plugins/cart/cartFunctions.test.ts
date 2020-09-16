@@ -4,7 +4,7 @@ import { calculateCartTotals } from './cartFunctions';
 
 describe('cartFunctions', () => {
   describe('calculateCartTotals', () => {
-    it('should work', () => {
+    it('should calculate subtotals', () => {
       type CartArg = Parameters<typeof calculateCartTotals>[0];
       const cart: CartArg = {
         id: Faker.random.uuid(),
