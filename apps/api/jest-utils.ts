@@ -48,7 +48,7 @@ export const createAndAuthRole = async (
     email,
     password,
     headers: {
-      Cookie: cookies[0].split(';')[0],
+      Cookie: cookies?.[0]?.split(';')?.[0],
     },
   };
 };

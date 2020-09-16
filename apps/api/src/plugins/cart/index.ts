@@ -3,9 +3,14 @@ import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
 
 import { isProd } from '../../config';
-import { Awaited } from '../../types';
 
-import { addToCart, clearCart, findOrCreateCart, removeFromCart } from './cartFunctions';
+import {
+  addToCart,
+  calculateCartTotals,
+  clearCart,
+  findOrCreateCart,
+  removeFromCart,
+} from './cartFunctions';
 import {
   addToCartPayloadSchema,
   createCartResponseSchema,
@@ -43,25 +48,6 @@ export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
       clearInvalid: true,
       strictHeader: true,
     });
-
-    function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreateCart>>) {
-      return cart.cartProducts.reduce(
-        (acc, cartProduct) => {
-          const regularSum = cartProduct.product.regularPrice * cartProduct.quantity;
-          const discountSum =
-            (cartProduct.product.discountPrice ?? cartProduct.product.regularPrice) *
-            cartProduct.quantity;
-
-          acc.regularSubTotal += Math.trunc(regularSum);
-          acc.discountSubTotal += Math.trunc(discountSum);
-          return acc;
-        },
-        {
-          regularSubTotal: 0,
-          discountSubTotal: 0,
-        },
-      );
-    }
 
     server.route({
       method: 'POST',

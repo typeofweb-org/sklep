@@ -1,4 +1,6 @@
-import { Request } from '@hapi/hapi';
+import type { Request } from '@hapi/hapi';
+
+import type { Awaited } from '../../types';
 
 const cartSelect = {
   id: true,
@@ -7,8 +9,10 @@ const cartSelect = {
   cartProducts: {
     select: {
       quantity: true,
-    },
-    include: {
+      cartId: false,
+      productId: false,
+      createdAt: false,
+      updatedAt: false,
       product: {
         select: {
           id: true,
@@ -92,4 +96,23 @@ export function clearCart(request: Request, { cartId }: { cartId: string }) {
       cartId,
     },
   });
+}
+
+export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreateCart>>) {
+  return cart.cartProducts.reduce(
+    (acc, cartProduct) => {
+      const regularSum = cartProduct.product.regularPrice * cartProduct.quantity;
+      const discountSum =
+        (cartProduct.product.discountPrice ?? cartProduct.product.regularPrice) *
+        cartProduct.quantity;
+
+      acc.regularSubTotal += Math.trunc(regularSum);
+      acc.discountSubTotal += Math.trunc(discountSum);
+      return acc;
+    },
+    {
+      regularSubTotal: 0,
+      discountSubTotal: 0,
+    },
+  );
 }
