@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { CartItemRow } from '../item/CartItem';

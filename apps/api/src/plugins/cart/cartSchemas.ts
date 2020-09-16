@@ -1,6 +1,5 @@
+import type { SklepTypes } from '@sklep/types';
 import Joi from 'joi';
-
-import { SklepTypes } from '../../../../types/index';
 
 export const addToCartPayloadSchema = Joi.object<SklepTypes['patchCartAddRequestBody']>({
   productId: Joi.number().integer().required(),
@@ -16,11 +15,19 @@ export const createCartResponseSchema = Joi.object<SklepTypes['postCart200Respon
     id: Joi.string().required(),
     createdAt: Joi.date().iso().required(),
     updatedAt: Joi.date().iso().required(),
+    regularSubTotal: Joi.number().integer().required(),
+    discountSubTotal: Joi.number().integer().required(),
     cartProducts: Joi.array()
       .items(
         Joi.object({
-          productId: Joi.number().integer().required(),
           quantity: Joi.number().integer().required(),
+          product: Joi.object({
+            id: Joi.number().integer().required(),
+            name: Joi.string().required(),
+            slug: Joi.string().required(),
+            regularPrice: Joi.number().integer().required(),
+            discountPrice: Joi.number().integer().optional().allow(null),
+          }),
         }).optional(),
       )
       .required(),

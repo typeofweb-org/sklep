@@ -6,8 +6,18 @@ const cartSelect = {
   updatedAt: true,
   cartProducts: {
     select: {
-      productId: true,
       quantity: true,
+    },
+    include: {
+      product: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          regularPrice: true,
+          discountPrice: true,
+        },
+      },
     },
   },
 } as const;
@@ -32,7 +42,7 @@ export async function findOrCreateCart(request: Request) {
   });
 }
 
-export async function addToCart(
+export function addToCart(
   request: Request,
   { cartId, quantity, productId }: { cartId: string; quantity: number; productId: number },
 ) {
@@ -64,7 +74,7 @@ export async function addToCart(
   });
 }
 
-export async function removeFromCart(
+export function removeFromCart(
   request: Request,
   { cartId, productId }: { cartId: string; productId: number },
 ) {
@@ -76,7 +86,7 @@ export async function removeFromCart(
   });
 }
 
-export async function clearCart(request: Request, { cartId }: { cartId: string }) {
+export function clearCart(request: Request, { cartId }: { cartId: string }) {
   return request.server.app.db.cartToProduct.deleteMany({
     where: {
       cartId,

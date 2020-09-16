@@ -1,8 +1,9 @@
 import Hapi from '@hapi/hapi';
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
 
 import { isProd } from '../../config';
+import { Awaited } from '../../types';
 
 import { addToCart, clearCart, findOrCreateCart, removeFromCart } from './cartFunctions';
 import {
@@ -43,6 +44,25 @@ export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
       strictHeader: true,
     });
 
+    function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreateCart>>) {
+      return cart.cartProducts.reduce(
+        (acc, cartProduct) => {
+          const regularSum = cartProduct.product.regularPrice * cartProduct.quantity;
+          const discountSum =
+            (cartProduct.product.discountPrice ?? cartProduct.product.regularPrice) *
+            cartProduct.quantity;
+
+          acc.regularSubTotal += Math.trunc(regularSum);
+          acc.discountSubTotal += Math.trunc(discountSum);
+          return acc;
+        },
+        {
+          regularSubTotal: 0,
+          discountSubTotal: 0,
+        },
+      );
+    }
+
     server.route({
       method: 'POST',
       path: '/',
@@ -57,9 +77,13 @@ export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
         const cart = await findOrCreateCart(request);
         h.state('cart', cart.id);
 
+        const { regularSubTotal, discountSubTotal } = calculateCartTotals(cart);
+
         return {
           data: {
             ...cart,
+            regularSubTotal,
+            discountSubTotal,
             createdAt: cart.createdAt.toISOString(),
             updatedAt: cart.updatedAt.toISOString(),
           },

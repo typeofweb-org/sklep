@@ -33,12 +33,15 @@ export interface definitions {
     user: definitions['user'];
   };
   Model4: { data: definitions['Model3'] };
-  Model5: { productId: number; quantity: number };
+  product: { id: number; name: string; slug: string; regularPrice: number; discountPrice?: number };
+  Model5: { quantity: number; product?: definitions['product'] };
   cartProducts: definitions['Model5'][];
   Model6: {
     id: string;
     createdAt: string;
     updatedAt: string;
+    regularSubTotal: number;
+    discountSubTotal: number;
     cartProducts: definitions['cartProducts'];
   };
   Model7: { data: definitions['Model6'] };
