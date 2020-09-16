@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom';
 import Hapi from '@hapi/hapi';
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import Slugify from 'slugify';
 
 import { Enums } from '../../models';

@@ -16,6 +16,7 @@ import {
   getProductRoute,
 } from './modules/products/productRoutes';
 import { AuthPlugin } from './plugins/auth';
+import { CartPlugin } from './plugins/cart/index';
 
 const getServer = () => {
   return new Hapi.Server({
@@ -80,6 +81,20 @@ export const getServerWithPlugins = async () => {
     {
       routes: {
         prefix: '/auth',
+      },
+    },
+  );
+
+  await server.register(
+    {
+      plugin: CartPlugin,
+      options: {
+        cookiePassword: getConfig('CART_COOKIE_PASSWORD'),
+      },
+    },
+    {
+      routes: {
+        prefix: '/cart',
       },
     },
   );

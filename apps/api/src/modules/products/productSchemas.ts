@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import Joi from 'joi';
 
 import { Enums } from '../../models';

@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import Faker from 'faker';
 
 import { createAndAuthRole, getServerForTest, repeatRequest } from '../../../jest-utils';
