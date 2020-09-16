@@ -1,4 +1,5 @@
 import Hapi from '@hapi/hapi';
+import Cookie from 'cookie';
 import Faker from 'faker';
 
 import { prisma } from './src/db';
@@ -43,12 +44,13 @@ export const createAndAuthRole = async (
     },
   });
   const cookies = loginInjection.headers['set-cookie'];
+  const parsedCookies = Cookie.parse(String(cookies ?? ''));
 
   return {
     email,
     password,
     headers: {
-      Cookie: cookies?.[0]?.split(';')?.[0],
+      Cookie: `session=${parsedCookies['session']}`,
     },
   };
 };
