@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const ShoppingCartIcon = ({ className }: string) => {
+type ShoppingCartIconProps = {
+  className: string;
+};
+
+export const ShoppingCartIcon = ({ className }: ShoppingCartIconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

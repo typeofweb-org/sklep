@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const HamburgerIcon = ({ className }: string) => {
+type HamburgerIconProps = {
+  className: string;
+};
+
+export const HamburgerIcon = ({ className }: HamburgerIconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
