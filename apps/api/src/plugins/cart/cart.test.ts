@@ -33,7 +33,7 @@ describe('/cart', () => {
       return products.data;
     }
 
-    it(`it should create an empty cart and return it`, async () => {
+    it(`should create an empty cart and return it`, async () => {
       const server = await getServerForTest();
 
       const injection = await server.inject({
