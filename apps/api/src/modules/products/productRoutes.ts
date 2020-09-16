@@ -6,11 +6,13 @@ import Slugify from 'slugify';
 import { Enums } from '../../models';
 
 import {
+  getProductParamsSchema,
+  getProductResponseSchema,
   addProductPayloadSchema,
   addProductResponseSchema,
   editProductParamsSchema,
   editProductPayloadSchema,
-  getProductResponseSchema,
+  getProductsResponseSchema,
 } from './productSchemas';
 
 function handlePrismaError(err: any) {
@@ -136,6 +138,45 @@ export const deleteProductRoute: Hapi.ServerRoute = {
   },
 };
 
+export const getProductRoute: Hapi.ServerRoute = {
+  method: 'GET',
+  path: '/products/{productId}',
+  options: {
+    tags: ['api', 'products'],
+    auth: {
+      mode: 'try',
+    },
+    response: {
+      schema: getProductResponseSchema,
+    },
+    validate: {
+      params: getProductParamsSchema,
+    },
+  },
+  async handler(request): Promise<SklepTypes['getProductsProductId200Response']> {
+    const user = request.auth.credentials?.session?.user;
+    const isAdmin = user?.role === Enums.UserRole.ADMIN;
+    const params = request.params as SklepTypes['getProductsProductIdRequestPathParams'];
+
+    const [product] = await request.server.app.db.product.findMany({
+      where: {
+        id: params.productId,
+        ...(!isAdmin && {
+          isPublic: true,
+        }),
+      },
+      select: productSelect,
+      take: 1,
+    });
+
+    if (!product) {
+      throw Boom.notFound('Product not found.');
+    }
+
+    return { data: product };
+  },
+};
+
 export const getProductsRoute: Hapi.ServerRoute = {
   method: 'GET',
   path: '/products',
@@ -145,7 +186,7 @@ export const getProductsRoute: Hapi.ServerRoute = {
       mode: 'try',
     },
     response: {
-      schema: getProductResponseSchema,
+      schema: getProductsResponseSchema,
     },
   },
   async handler(request): Promise<SklepTypes['getProducts200Response']> {
