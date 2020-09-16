@@ -13,6 +13,7 @@ import {
   deleteProductRoute,
   editProductRoute,
   getProductsRoute,
+  getProductRoute,
 } from './modules/products/productRoutes';
 import { AuthPlugin } from './plugins/auth';
 import { CartPlugin } from './plugins/cart/index';
@@ -133,6 +134,7 @@ export const getServerWithPlugins = async () => {
 
   server.route(addProductRoute);
   server.route(editProductRoute);
+  server.route(getProductRoute);
   server.route(getProductsRoute);
   server.route(deleteProductRoute);
 

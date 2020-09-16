@@ -37,6 +37,14 @@ export const editProductParamsSchema = Joi.object({
   productId: Joi.number().required(),
 }).required();
 
+export const getProductParamsSchema = Joi.object({
+  productId: Joi.number().required(),
+}).required();
+
 export const getProductResponseSchema = Joi.object<SklepTypes['getProducts200Response']>({
+  data: productSchema.required(),
+}).required();
+
+export const getProductsResponseSchema = Joi.object<SklepTypes['getProducts200Response']>({
   data: Joi.array().items(productSchema.optional()).required(),
 }).required();

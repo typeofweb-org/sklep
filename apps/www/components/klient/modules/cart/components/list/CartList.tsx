@@ -9,7 +9,7 @@ type CartListProps = {
 
 export const CartList = React.memo<CartListProps>(({ products }) => {
   return (
-    <div className="w-full sm:w-1/2 md:w-2/3 mb-4">
+    <div className="w-full md:w-2/3 mb-4 px-4">
       <h3 className="text-2xl">Koszyk zakupowy</h3>
       <table className="table-fixed">
         <tbody>
