@@ -1,9 +1,18 @@
 import React from 'react';
 
+import { SummaryButton } from './summaryButton/SummaryButton';
+
 export const CartSummary = React.memo(() => {
   return (
-    <div className="w-full sm:w-1/2 md:w-1/3 mb-4 bg-gray-400">
-      <h3 className="text-2xl">Podsumowanie</h3>
+    <div className="w-full md:w-1/3 mb-4">
+      <h3 className="text-2xl mb-6">Podsumowanie</h3>
+      <div className="border border-gray-400 bg-gray-100">
+        <div className="flex justify-between p-4 text-2xl border-t border-gray-300">
+          <h4>Razem</h4>
+          <span>2020 zł</span>
+        </div>
+      </div>
+      <SummaryButton />
     </div>
   );
 });
