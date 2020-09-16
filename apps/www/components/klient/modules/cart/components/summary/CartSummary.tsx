@@ -13,7 +13,11 @@ export const CartSummary = React.memo(() => {
           <span>2020 zł</span>
         </div>
       </div>
-      <SummaryButton />
+      <Link href="/platnosc">
+        <a>
+          <SummaryButton />
+        </a>
+      </Link>
     </div>
   );
 });
