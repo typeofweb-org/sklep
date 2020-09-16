@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as Prisma from '@prisma/client';
 
 type PrismaDelegates = Pick<Prisma.PrismaClient, ReadonlyKeys<Prisma.PrismaClient>>;
@@ -16,12 +17,7 @@ type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   ? A
   : B;
 type ReadonlyKeys<T> = {
-  readonly [P in keyof T]-?: IfEquals<
-    { readonly [Q in P]: T[P] },
-    { -readonly [Q in P]: T[P] },
-    never,
-    P
-  >;
+  [P in keyof T]-?: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>;
 }[keyof T];
 
 type EnumsKeys = {
