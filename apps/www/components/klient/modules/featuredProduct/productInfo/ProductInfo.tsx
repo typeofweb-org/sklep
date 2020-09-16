@@ -1,12 +1,12 @@
+import { SklepTypes } from '@sklep/types';
 import React from 'react';
 
-import { Product } from '../../../../../types/product';
 import { AddToCartButton } from '../../../shared/addToCartButton/AddToCartButton';
 import { Price } from '../../../shared/price/Price';
 import { Amount } from '../amount/Amount';
 
 type ContentProps = {
-  product: Product;
+  product: SklepTypes['getProducts200Response']['data'];
 };
 
 export const ProductInfo = React.memo<ContentProps>(({ product }) => (

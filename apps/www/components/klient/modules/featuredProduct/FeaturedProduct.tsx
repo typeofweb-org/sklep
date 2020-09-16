@@ -1,11 +1,11 @@
+import { SklepTypes } from '@sklep/types';
 import React from 'react';
-
-import { Product } from '../../../../types/product';
 
 import { Breadcrumbs } from './breadcrumbs/Breadcrumbs';
 import { ProductInfo } from './productInfo/ProductInfo';
+
 type FeaturedProductProps = {
-  product: Product;
+  product: SklepTypes['getProducts200Response']['data'];
 };
 
 export const FeaturedProduct = React.memo<FeaturedProductProps>(({ product }) => {
