@@ -54,7 +54,7 @@ describe('/cart', () => {
       expect(parsedCookies).toHaveProperty('cart', expect.any(String));
     });
 
-    it(`it adds products to the cart`, async () => {
+    it(`adds products to the cart`, async () => {
       const server = await getServerForTest();
       const products = await mockProducts(server);
 
@@ -105,7 +105,7 @@ describe('/cart', () => {
       });
     });
 
-    it(`it adds products to the cart`, async () => {
+    it(`adds products to the cart`, async () => {
       const server = await getServerForTest();
       const products = await mockProducts(server);
 
