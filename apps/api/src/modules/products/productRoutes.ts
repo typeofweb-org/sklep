@@ -162,7 +162,7 @@ export const getProductRoute: Hapi.ServerRoute = {
       where: {
         id: params.productId,
         ...(!isAdmin && {
-          isPulic: true,
+          isPublic: true,
         }),
       },
       select: productSelect,
