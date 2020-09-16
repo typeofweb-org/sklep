@@ -8,6 +8,7 @@ type NameToType = {
   PORT: number;
   COOKIE_DOMAIN: string;
   COOKIE_PASSWORD: string;
+  CART_COOKIE_PASSWORD: string;
   DB_USERNAME: string;
   DB_PASSWORD: string;
   DB_NAME: string;

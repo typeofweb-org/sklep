@@ -13,8 +13,10 @@ import {
   deleteProductRoute,
   editProductRoute,
   getProductsRoute,
+  getProductRoute,
 } from './modules/products/productRoutes';
 import { AuthPlugin } from './plugins/auth';
+import { CartPlugin } from './plugins/cart/index';
 
 const getServer = () => {
   return new Hapi.Server({
@@ -83,6 +85,20 @@ export const getServerWithPlugins = async () => {
     },
   );
 
+  await server.register(
+    {
+      plugin: CartPlugin,
+      options: {
+        cookiePassword: getConfig('CART_COOKIE_PASSWORD'),
+      },
+    },
+    {
+      routes: {
+        prefix: '/cart',
+      },
+    },
+  );
+
   server.events.on({ name: 'request', channels: 'error' }, (_request, event, _tags) => {
     // const baseUrl = `${server.info.protocol}://${request.info.host}`;
     console.error(event.error);
@@ -118,6 +134,7 @@ export const getServerWithPlugins = async () => {
 
   server.route(addProductRoute);
   server.route(editProductRoute);
+  server.route(getProductRoute);
   server.route(getProductsRoute);
   server.route(deleteProductRoute);
 

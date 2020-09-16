@@ -13,3 +13,5 @@ export type DeepPartial<T> = {
     ? ReadonlyArray<DeepPartial<U>>
     : DeepPartial<T[P]>;
 };
+
+export type Awaited<T> = T extends Promise<infer R> ? R : T;

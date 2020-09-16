@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import Faker from 'faker';
 
 import { createAndAuthRole, getServerForTest, repeatRequest } from '../../../jest-utils';
@@ -207,6 +207,115 @@ describe('/products', () => {
   });
 
   describe('GET', () => {
+    it('should get a single public product by id', async () => {
+      const server = await getServerForTest();
+      const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+      const postInjection = await server.inject({
+        method: 'POST',
+        url: '/products',
+        headers: auth.headers,
+        payload: {
+          name: Faker.lorem.sentence(5),
+          description: Faker.lorem.sentences(5),
+          isPublic: true,
+          regularPrice: parseInt(Faker.commerce.price(50, 100), 10),
+          discountPrice: parseInt(Faker.commerce.price(10, 49), 10),
+          type: Enums.ProductType.SINGLE,
+        },
+      });
+
+      const { data } = postInjection.result as SklepTypes['postProducts200Response'];
+
+      const getInjection = await server.inject({
+        method: 'GET',
+        url: `/products/${data.id}`,
+        headers: auth.headers,
+      });
+
+      const result = getInjection.result as SklepTypes['getProductsProductId200Response'];
+
+      expect(getInjection.statusCode).toEqual(200);
+      expect(result).toHaveProperty('data');
+      expect(result.data.isPublic).toBe(true);
+    });
+
+    it('should get not public product with admin role', async () => {
+      const server = await getServerForTest();
+      const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+      const postInjection = await server.inject({
+        method: 'POST',
+        url: '/products',
+        headers: auth.headers,
+        payload: {
+          name: Faker.lorem.sentence(5),
+          description: Faker.lorem.sentences(5),
+          isPublic: false,
+          regularPrice: parseInt(Faker.commerce.price(50, 100), 10),
+          discountPrice: parseInt(Faker.commerce.price(10, 49), 10),
+          type: Enums.ProductType.SINGLE,
+        },
+      });
+
+      const { data } = postInjection.result as SklepTypes['postProducts200Response'];
+
+      const getInjection = await server.inject({
+        method: 'GET',
+        url: `/products/${data.id}`,
+        headers: auth.headers,
+      });
+
+      const result = getInjection.result as SklepTypes['getProductsProductId200Response'];
+
+      expect(getInjection.statusCode).toEqual(200);
+      expect(result).toHaveProperty('data');
+      expect(result.data.isPublic).toBe(false);
+    });
+
+    it('should fail to get nonexisting product', async () => {
+      const server = await getServerForTest();
+      const auth = await createAndAuthRole(server, Enums.UserRole.USER);
+
+      const getInjection = await server.inject({
+        method: 'GET',
+        url: `/products/69`,
+        headers: auth.headers,
+      });
+
+      expect(getInjection.statusCode).toEqual(404);
+    });
+
+    it('should fail to get not public product for user role', async () => {
+      const server = await getServerForTest();
+      const adminAuth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+      const userAuth = await createAndAuthRole(server, Enums.UserRole.USER);
+
+      const postInjection = await server.inject({
+        method: 'POST',
+        url: '/products',
+        headers: adminAuth.headers,
+        payload: {
+          name: Faker.lorem.sentence(5),
+          description: Faker.lorem.sentences(5),
+          isPublic: false,
+          regularPrice: parseInt(Faker.commerce.price(50, 100), 10),
+          discountPrice: parseInt(Faker.commerce.price(10, 49), 10),
+          type: Enums.ProductType.SINGLE,
+        },
+      });
+
+      const { data } = postInjection.result as SklepTypes['postProducts200Response'];
+
+      const getInjection = await server.inject({
+        method: 'GET',
+        url: `/products/${data.id}`,
+        headers: userAuth.headers,
+      });
+
+      expect(getInjection.statusCode).toEqual(404);
+    });
+
     it(`should get a list of public products`, async () => {
       const server = await getServerForTest();
       const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
