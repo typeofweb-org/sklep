@@ -48,3 +48,4 @@ export const ProductsList = React.memo<Props>(({ title = '', description = '', p
     </section>
   );
 });
+ProductsList.displayName = 'ProductsList';

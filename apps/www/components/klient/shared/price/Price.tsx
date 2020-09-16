@@ -19,7 +19,7 @@ export const Price = React.memo<PriceProps>(
     return (
       <p className={priceClassName}>
         <del className="text-gray-600 text-sm">{regularPrice / 100}&nbsp;PLN</del>{' '}
-        <span className={discountClassName}>{discountPrice / 100}&nbsp;PLN</span>
+        <ins className={discountClassName}>{discountPrice / 100}&nbsp;PLN</ins>
       </p>
     );
   },
