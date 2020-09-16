@@ -9,6 +9,7 @@
     "start": "next start",
     "test": "jest",
     "test:ci": "jest",
+    "eslint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "cy:open": "cypress open",
     "cy:run": "cypress run"
   },

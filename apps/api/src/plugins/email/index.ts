@@ -1,4 +1,4 @@
-import Hapi from '@hapi/hapi';
+import type Hapi from '@hapi/hapi';
 
 export type EmailPluginOptions = {};
 

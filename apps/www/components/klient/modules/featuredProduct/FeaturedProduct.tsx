@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Product } from '../../../../types/product';
+import type { Product } from '../../../../types/product';
 
 type FeaturedProductProps = {
-  product: Product;
+  readonly product: Product;
 };
 
 export const FeaturedProduct = React.memo<FeaturedProductProps>(({ product }) => {

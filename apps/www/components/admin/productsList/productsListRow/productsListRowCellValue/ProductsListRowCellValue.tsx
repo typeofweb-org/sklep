@@ -1,9 +1,9 @@
-import { DataTableRow } from 'carbon-components-react';
+import type { DataTableRow } from 'carbon-components-react';
 import React from 'react';
 
 type Props = {
-  key: string;
-  row: DataTableRow<string>;
+  readonly key: string;
+  readonly row: DataTableRow<string>;
 };
 
 export const ProductsListRowCellValue = React.memo<Props>(({ key, row }) => {

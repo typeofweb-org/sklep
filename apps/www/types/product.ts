@@ -1,11 +1,11 @@
 // todo: correct it
 export type Product = {
-  id: number;
-  name: string;
-  description?: string;
-  slug?: string;
-  isPublic: boolean;
-  regularPrice: number;
-  discountPrice?: number;
-  productType?: string;
+  readonly id: number;
+  readonly name: string;
+  readonly description?: string;
+  readonly slug?: string;
+  readonly isPublic: boolean;
+  readonly regularPrice: number;
+  readonly discountPrice?: number;
+  readonly productType?: string;
 };

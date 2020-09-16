@@ -3,17 +3,17 @@ import { parse } from 'url';
 import type { Nil } from './types';
 
 type NameToType = {
-  ENV: 'production' | 'staging' | 'development' | 'test';
-  NODE_ENV: 'production' | 'development';
-  PORT: number;
-  COOKIE_DOMAIN: string;
-  COOKIE_PASSWORD: string;
-  CART_COOKIE_PASSWORD: string;
-  DB_USERNAME: string;
-  DB_PASSWORD: string;
-  DB_NAME: string;
-  DB_HOSTNAME: string;
-  DATABASE_URL: string;
+  readonly ENV: 'production' | 'staging' | 'development' | 'test';
+  readonly NODE_ENV: 'production' | 'development';
+  readonly PORT: number;
+  readonly COOKIE_DOMAIN: string;
+  readonly COOKIE_PASSWORD: string;
+  readonly CART_COOKIE_PASSWORD: string;
+  readonly DB_USERNAME: string;
+  readonly DB_PASSWORD: string;
+  readonly DB_NAME: string;
+  readonly DB_HOSTNAME: string;
+  readonly DATABASE_URL: string;
 };
 
 function getConfigForName<T extends keyof NameToType>(name: T): Nil<NameToType[T]>;

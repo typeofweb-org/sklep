@@ -48,7 +48,11 @@ export async function findOrCreateCart(request: Request) {
 
 export function addToCart(
   request: Request,
-  { cartId, quantity, productId }: { cartId: string; quantity: number; productId: number },
+  {
+    cartId,
+    quantity,
+    productId,
+  }: { readonly cartId: string; readonly quantity: number; readonly productId: number },
 ) {
   return request.server.app.db.cartToProduct.upsert({
     where: {
@@ -80,7 +84,7 @@ export function addToCart(
 
 export function removeFromCart(
   request: Request,
-  { cartId, productId }: { cartId: string; productId: number },
+  { cartId, productId }: { readonly cartId: string; readonly productId: number },
 ) {
   return request.server.app.db.cartToProduct.deleteMany({
     where: {
@@ -90,7 +94,7 @@ export function removeFromCart(
   });
 }
 
-export function clearCart(request: Request, { cartId }: { cartId: string }) {
+export function clearCart(request: Request, { cartId }: { readonly cartId: string }) {
   return request.server.app.db.cartToProduct.deleteMany({
     where: {
       cartId,
