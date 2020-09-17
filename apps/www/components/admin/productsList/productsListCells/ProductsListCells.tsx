@@ -3,12 +3,11 @@ import { TableCell } from 'carbon-components-react';
 import React from 'react';
 
 import { PRODUCT_FIELDS } from '../ProductFields';
-import type { ProductsTableRow } from '../ProductListUtils';
 
 import { ProductsListRowCellValue } from './productsListRowCellValue/ProductsListRowCellValue';
 
 type Props = {
-  readonly row: DenormalizedRow<ProductsTableRow>;
+  readonly row: DenormalizedRow;
 };
 
 export const ProductsListCells = React.memo<Props>(({ row }) => {

@@ -4,7 +4,7 @@ import React from 'react';
 import type { ProductsTableRow } from '../../ProductListUtils';
 
 type Props = {
-  readonly row: DenormalizedRow<ProductsTableRow>;
+  readonly row: DenormalizedRow;
   readonly name: keyof ProductsTableRow;
 };
 

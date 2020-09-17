@@ -18,7 +18,7 @@ export default function ProductsPage() {
       </Head>
       <Header />
       <ContentWrapper>
-        <Column lg={{ offset: 3 }} style={{ margin: '0 auto' }}>
+        <Column lg={{ offset: 3 }}>
           <AdminProducts />
         </Column>
       </ContentWrapper>

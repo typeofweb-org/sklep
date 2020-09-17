@@ -1,5 +1,6 @@
-import type { DataTableCustomRenderProps } from 'carbon-components-react';
+import type { DataTableCustomRenderProps, DenormalizedRow } from 'carbon-components-react';
 import {
+  DataTableSkeleton,
   Table,
   TableHead,
   TableRow,
@@ -13,12 +14,13 @@ import {
 } from 'carbon-components-react';
 import React from 'react';
 
-import type { ProductsTableHeader, ProductsTableRow } from './ProductListUtils';
 import { ProductsListCells } from './productsListCells/ProductsListCells';
 
 export const ProductsTable = React.memo<
-  DataTableCustomRenderProps<ProductsTableRow, ProductsTableHeader>
->(({ rows, headers, getHeaderProps, getTableProps, getRowProps, getSelectionProps }) => {
+  DataTableCustomRenderProps & {
+    readonly onDelete: (row: DenormalizedRow) => void;
+  }
+>(({ rows, headers, getHeaderProps, getTableProps, getRowProps, getSelectionProps, onDelete }) => {
   return (
     <Table {...getTableProps()} useZebraStyles={true}>
       <TableHead>
@@ -38,7 +40,12 @@ export const ProductsTable = React.memo<
               <TableCell key="actions">
                 <OverflowMenu>
                   <OverflowMenuItem itemText="Edit" />
-                  <OverflowMenuItem isDelete itemText="Delete" hasDivider />
+                  <OverflowMenuItem
+                    isDelete
+                    itemText="Delete"
+                    hasDivider
+                    onClick={() => onDelete(row)}
+                  />
                 </OverflowMenu>
               </TableCell>
             </TableRow>

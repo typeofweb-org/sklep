@@ -22,7 +22,7 @@ export const ProductsTableToolbar = React.memo<
           renderIcon={Delete16}
           onClick={() => console.log('clicked')}
         >
-          Delete
+          Usuń produkt(y)
         </TableBatchAction>
       </TableBatchActions>
       <TableToolbarContent>
@@ -32,7 +32,7 @@ export const ProductsTableToolbar = React.memo<
           size="small"
           kind="primary"
         >
-          Add new
+          Dodaj nowy produkt
         </Button>
       </TableToolbarContent>
     </TableToolbar>

@@ -7,7 +7,7 @@ const PRODUCTS_PAGE_SIZE = 20;
 
 export const AdminProducts = React.memo(() => {
   const [page, setPage] = React.useState(1);
-  const { latestData } = useGetProducts({
+  const { data, isLoading } = useGetProducts({
     take: PRODUCTS_PAGE_SIZE,
     skip: (page - 1) * PRODUCTS_PAGE_SIZE,
   });
@@ -21,12 +21,13 @@ export const AdminProducts = React.memo(() => {
 
   return (
     <ProductsList
-      products={latestData?.data ?? []}
+      products={data?.data ?? []}
+      isLoading={isLoading}
       page={page}
       pageSize={PRODUCTS_PAGE_SIZE}
       changePage={handlePageChange}
-      productsCount={latestData?.meta.total ?? 0}
-    ></ProductsList>
+      productsCount={data?.meta.total ?? 0}
+    />
   );
 });
 AdminProducts.displayName = 'AdminProducts';

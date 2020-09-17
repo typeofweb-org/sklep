@@ -19,7 +19,7 @@ export const getRows = (products: readonly Product[]) => {
   return products.map((product) => {
     return {
       ...product,
-      id: `product-${product.id}`,
+      id: String(product.id),
       description: product.description?.slice(0, 50) + '…',
       isSelected: undefined,
       isExpanded: undefined,
