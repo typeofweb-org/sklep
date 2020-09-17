@@ -27,7 +27,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-final-form": "6.5.1",
-    "react-query": "2.15.4",
+    "react-query": "2.21.2",
     "slugify": "1.4.5",
     "tailwindcss": "1.8.5",
     "yup": "0.29.3"
