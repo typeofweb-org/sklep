@@ -1,5 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
+import type { QueryConfig } from 'react-query';
+import { useQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';
 
@@ -133,3 +135,15 @@ async function getJSON(response: Response) {
     return undefined;
   }
 }
+
+export const useToWQuery = <
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
+  CurrentMethod extends Method
+>(
+  [path, method, config]: readonly [
+    CurrentPath,
+    CurrentMethod,
+    FetcherConfig<CurrentPath, CurrentMethod>,
+  ],
+  queryConfig?: QueryConfig<ResponseType<CurrentPath, CurrentMethod>, unknown>,
+) => useQuery([path, method, config], () => fetcher(path, method, config), queryConfig);
