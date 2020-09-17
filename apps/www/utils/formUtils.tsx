@@ -17,6 +17,7 @@ export const ToWForm: <
   const validate = React.useMemo(() => createFormValidator(schema), [schema]);
   const handleSubmit = React.useCallback<typeof onSubmit>(
     async (values, ...args) => {
+      console.log(values);
       const validatedValues = await schema.validate(values);
       return onSubmit(validatedValues, ...args);
     },

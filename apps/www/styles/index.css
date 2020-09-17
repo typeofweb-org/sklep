@@ -9,6 +9,7 @@
 /* Write you own custom component styles here */
 @import './components/hero.css';
 @import './components/cart.css';
+@import './components/addressForm.css';
 
 /* Start purging... */
 @tailwind utilities;

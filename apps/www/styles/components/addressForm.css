@@ -1,0 +1,10 @@
+.custom-select {
+  position: relative;
+  font-family: Arial;
+  color: red;
+  padding: 20px;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
