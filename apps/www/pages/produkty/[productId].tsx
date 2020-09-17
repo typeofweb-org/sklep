@@ -1,9 +1,9 @@
+import type { SklepTypes } from '@sklep/types';
 import type { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
 import { FeaturedProduct } from '../../components/klient/modules/featuredProduct/FeaturedProduct';
 import { Layout } from '../../components/klient/shared/layout/Layout';
-import type { Product } from '../../types/product';
 
 function ProductPage({ product }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
@@ -31,7 +31,7 @@ export const getStaticProps = async () => {
   // const res = await fetch('https://.../product/${params.id}'
 
   // todo: change with api call result
-  const product: Product = {
+  const product: SklepTypes['getProducts200Response']['data'] = {
     id: 345,
     name: 'Lorem ipsum dolor sit amet,',
     description:
