@@ -110,7 +110,7 @@ export async function fetcher<
   throw new ResponseError(response.statusText, response.status, data);
 }
 
-class ResponseError extends Error {
+export class ResponseError extends Error {
   constructor(message: string, public readonly status: number, public readonly data: unknown) {
     super(message);
     Object.setPrototypeOf(this, ResponseError.prototype);

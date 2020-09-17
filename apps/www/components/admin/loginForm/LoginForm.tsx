@@ -7,11 +7,12 @@ import {
   TextInput,
   ToastNotification,
 } from 'carbon-components-react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
+import { ResponseError } from '../../../utils/fetcher';
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 
 import styles from './LoginForm.module.scss';
@@ -24,7 +25,7 @@ const loginSchema = Yup.object({
 export type LoginType = Yup.InferType<typeof loginSchema>;
 
 export const LoginForm = () => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(login);
+  const [mutate, { isLoading, isSuccess, isError, error }] = useMutation(login);
 
   const handleSubmit = useCallback(
     async (values: LoginType) => {
@@ -32,6 +33,20 @@ export const LoginForm = () => {
     },
     [mutate],
   );
+
+  const errorMsg = useMemo(() => {
+    if (error instanceof ResponseError) {
+      if (error.status === 401) {
+        return 'Podane dane są niepoprawne';
+      }
+
+      if (`${error.status}`[0] === '5') {
+        return 'Coś poszło nie tak, błąd serwera';
+      }
+    }
+
+    return '';
+  }, [error]);
 
   return (
     <ToWForm className={styles.form} onSubmit={handleSubmit} schema={loginSchema}>
@@ -75,7 +90,7 @@ export const LoginForm = () => {
             className={styles.toast}
           />
         )}
-        {isError && <InlineNotification kind="error" title="Wprowadzone dane nie są poprawne" />}
+        {isError && errorMsg && <InlineNotification kind="error" title={errorMsg} />}
       </Grid>
     </ToWForm>
   );
