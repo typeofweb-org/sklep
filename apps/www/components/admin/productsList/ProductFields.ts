@@ -1,9 +1,5 @@
 export const PRODUCT_FIELDS = [
   {
-    name: 'slug',
-    label: 'Slug',
-  },
-  {
     name: 'name',
     label: 'Name',
   },
@@ -22,9 +18,5 @@ export const PRODUCT_FIELDS = [
   {
     name: 'discountPrice',
     label: 'Discount price',
-  },
-  {
-    name: 'type',
-    label: 'Type',
   },
 ] as const;

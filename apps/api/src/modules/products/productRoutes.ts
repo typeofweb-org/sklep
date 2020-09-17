@@ -205,16 +205,25 @@ export const getProductsRoute: Hapi.ServerRoute = {
     const user = request.auth.credentials?.session?.user;
     const isAdmin = user?.role === Enums.UserRole.ADMIN;
 
-    const products = await request.server.app.db.product.findMany({
+    const query = {
       ...(!isAdmin && {
         where: {
           isPublic: true,
         },
       }),
-      ...(take && { take, skip }),
-      select: productSelect,
-    });
+    };
 
-    return { data: products };
+    const [total, products] = await Promise.all([
+      request.server.app.db.product.count({
+        ...query,
+      }),
+      request.server.app.db.product.findMany({
+        ...query,
+        ...(take && { take, skip }),
+        select: productSelect,
+      }),
+    ]);
+
+    return { data: products, meta: { total } };
   },
 };

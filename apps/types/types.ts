@@ -15,7 +15,8 @@ export interface definitions {
     type: 'SINGLE' | 'BUNDLE';
   };
   data: definitions['Model1'][];
-  Model2: { data: definitions['data'] };
+  meta: { total: number };
+  Model2: { data: definitions['data']; meta: definitions['meta'] };
   user: {
     id: number;
     name?: string;
