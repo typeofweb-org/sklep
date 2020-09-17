@@ -8,7 +8,7 @@ export interface definitions {
     id: number;
     slug: string;
     name: string;
-    description?: string;
+    description: string;
     isPublic: boolean;
     regularPrice: number;
     discountPrice?: number;
@@ -58,6 +58,11 @@ export interface definitions {
   Model11: { productId: number; quantity: number };
   Model12: { productId: number };
 
+  getProductsRequestQuery: {
+    take?: number;
+    skip?: number;
+  };
+
   getProducts200Response: definitions['Model2'];
   postProductsRequestBody: definitions['Model9'];
 
@@ -102,6 +107,11 @@ export interface definitions {
   pathsDefinitions: {
     '/products': {
       GET: {
+        requestQuery: {
+          take?: number;
+          skip?: number;
+        };
+
         response: definitions['Model2'];
       };
       POST: {

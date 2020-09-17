@@ -1,6 +1,7 @@
 import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { SklepTypes } from '@sklep/types';
+import { isNil } from 'ramda';
 import Slugify from 'slugify';
 
 import { Enums } from '../../models';
@@ -13,6 +14,7 @@ import {
   editProductParamsSchema,
   editProductPayloadSchema,
   getProductsResponseSchema,
+  getProductsQuerySchema,
 } from './productSchemas';
 
 function handlePrismaError(err: any) {
@@ -188,8 +190,18 @@ export const getProductsRoute: Hapi.ServerRoute = {
     response: {
       schema: getProductsResponseSchema,
     },
+    validate: {
+      query: getProductsQuerySchema,
+    },
   },
   async handler(request): Promise<SklepTypes['getProducts200Response']> {
+    const { take, skip } = request.query as SklepTypes['getProductsRequestQuery'];
+
+    // if one is defined and the other is not
+    if (isNil(take) !== isNil(skip)) {
+      throw Boom.badRequest();
+    }
+
     const user = request.auth.credentials?.session?.user;
     const isAdmin = user?.role === Enums.UserRole.ADMIN;
 
@@ -199,6 +211,7 @@ export const getProductsRoute: Hapi.ServerRoute = {
           isPublic: true,
         },
       }),
+      ...(take && { take, skip }),
       select: productSelect,
     });
 
