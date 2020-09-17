@@ -1,33 +1,76 @@
 import React from 'react';
+import { useMutation, useQueryCache } from 'react-query';
 
+import type { Nil } from '../../../../api/src/types';
 import { useGetProducts } from '../../../utils/api/queryHooks';
+import { fetcher } from '../../../utils/fetcher';
+import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
+import type { Product } from '../productsList/ProductListUtils';
 import { ProductsList } from '../productsList/ProductsList';
-
-const PRODUCTS_PAGE_SIZE = 20;
+import { useToasts } from '../toasts/Toasts';
 
 export const AdminProducts = React.memo(() => {
   const [page, setPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(20);
   const { data, isLoading } = useGetProducts({
-    take: PRODUCTS_PAGE_SIZE,
-    skip: (page - 1) * PRODUCTS_PAGE_SIZE,
+    take: pageSize,
+    skip: (page - 1) * pageSize,
   });
+  const { addToast } = useToasts();
+  const cache = useQueryCache();
+
+  const [deleteProduct] = useMutation(
+    (productId: number) => fetcher('/products/{productId}', 'DELETE', { params: { productId } }),
+    {
+      onSuccess() {
+        addToast({
+          kind: 'success',
+          title: 'Operacja udana',
+          caption: 'Produkt został usunięty pomyślnie',
+        });
+        cache.refetchQueries('/products');
+        closeDeletionModal();
+      },
+    },
+  );
 
   const handlePageChange = React.useCallback(
     (data: { readonly page: number; readonly pageSize: number }) => {
       setPage(data.page);
+      setPageSize(data.pageSize);
     },
     [],
   );
 
+  const handleDeleteProduct = React.useCallback((product: Product) => {
+    setProductForDeletion(product);
+  }, []);
+
+  // we need 2 states to avoid flash of "UNDEFINED" in the modal
+  const [showDeletionModal, setShowDeletionModal] = React.useState(false);
+  const [productForDeletion, setProductForDeletion] = React.useState<Nil<Product>>(null);
+  React.useEffect(() => setShowDeletionModal(!!productForDeletion), [productForDeletion]);
+
+  const closeDeletionModal = React.useCallback(() => setShowDeletionModal(false), []);
+
   return (
-    <ProductsList
-      products={data?.data ?? []}
-      isLoading={isLoading}
-      page={page}
-      pageSize={PRODUCTS_PAGE_SIZE}
-      changePage={handlePageChange}
-      productsCount={data?.meta.total ?? 0}
-    />
+    <>
+      <ProductsList
+        products={data?.data ?? []}
+        isLoading={isLoading}
+        page={page}
+        pageSize={pageSize}
+        changePage={handlePageChange}
+        deleteProduct={handleDeleteProduct}
+        productsCount={data?.meta.total ?? 0}
+      />
+
+      <DeleteProductConfirmationModal
+        isOpen={showDeletionModal}
+        product={productForDeletion}
+        handleDelete={deleteProduct}
+        handleClose={closeDeletionModal}
+      />
+    </>
   );
 });
-AdminProducts.displayName = 'AdminProducts';

@@ -2,9 +2,6 @@ import type { DenormalizedRow } from 'carbon-components-react';
 import { DataTableSkeleton, Pagination, DataTable, TableContainer } from 'carbon-components-react';
 import React from 'react';
 
-import type { Nil } from '../../../../api/src/types';
-import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
-
 import type { Product } from './ProductListUtils';
 import { headers, getRows } from './ProductListUtils';
 import styles from './ProductsList.module.scss';
@@ -17,29 +14,24 @@ type ProductsListProps = {
   readonly page: number;
   readonly pageSize: number;
   readonly productsCount: number;
+  deleteProduct(produt: Product): void;
   changePage(data: { readonly page: number; readonly pageSize: number }): void;
 };
 
 export const ProductsList = React.memo<ProductsListProps>(
-  ({ isLoading, products, page, pageSize, productsCount, changePage }) => {
+  ({ isLoading, products, deleteProduct, page, pageSize, productsCount, changePage }) => {
     const rows = React.useMemo(() => getRows(products), [products]);
 
     const handleDeleteAction = React.useCallback(
       (row: DenormalizedRow) => {
         const productId = Number(row.id);
         const product = products.find((p) => p.id === productId);
-        setProductForDeletion(product);
+        if (product) {
+          deleteProduct(product);
+        }
       },
-      [products],
+      [products, deleteProduct],
     );
-
-    // we need 2 states to avoid flash of "UNDEFINED" in the modal
-    const [showDeletionModal, setShowDeletionModal] = React.useState(false);
-    const [productForDeletion, setProductForDeletion] = React.useState<Nil<Product>>(null);
-    React.useEffect(() => setShowDeletionModal(!!productForDeletion), [productForDeletion]);
-
-    const closeDeletionModal = React.useCallback(() => setShowDeletionModal(false), []);
-    const deleteProduct = () => {}; // @todo
 
     return (
       <section className={styles.productsList}>
@@ -71,7 +63,7 @@ export const ProductsList = React.memo<ProductsListProps>(
                   page={page}
                   pageNumberText="Numer strony"
                   pageSize={pageSize}
-                  pageSizes={[pageSize]}
+                  pageSizes={[10, 20, 50, 100]}
                   totalItems={productsCount}
                   onChange={changePage}
                 />
@@ -79,12 +71,6 @@ export const ProductsList = React.memo<ProductsListProps>(
             );
           }}
         ></DataTable>
-        <DeleteProductConfirmationModal
-          isOpen={showDeletionModal}
-          product={productForDeletion}
-          handleDelete={deleteProduct}
-          handleClose={closeDeletionModal}
-        />
       </section>
     );
   },

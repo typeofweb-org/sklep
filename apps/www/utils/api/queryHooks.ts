@@ -1,6 +1,6 @@
 import type { QueryCache } from 'react-query';
 
-import { fetcher, useToWQuery } from '../fetcher';
+import { fetcher, useToWMutation, useToWQuery } from '../fetcher';
 
 export const useGetProducts = ({ take, skip }: { readonly take: number; readonly skip: number }) =>
   useToWQuery(['/products', 'GET', { query: { take, skip } }] as const);

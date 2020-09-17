@@ -29,6 +29,7 @@ export const DeleteProductConfirmationModal = React.memo<DeleteProductConfirmati
         onRequestClose={handleClose}
         onRequestSubmit={submit}
         onSecondarySubmit={handleClose}
+        style={{ width: '100%' }}
       ></Modal>
     );
   },

@@ -1,8 +1,8 @@
 import type { SklepTypes } from '@sklep/types';
 import { QueryByText } from '@testing-library/dom';
 import { difference } from 'ramda';
-import type { QueryConfig } from 'react-query';
-import { usePaginatedQuery } from 'react-query';
+import type { MutationConfig, QueryConfig } from 'react-query';
+import { useMutation, usePaginatedQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';
 
@@ -164,3 +164,19 @@ export const useToWQuery = <
   ],
   queryConfig?: QueryConfig<ResponseType<CurrentPath, CurrentMethod>, unknown>,
 ) => usePaginatedQuery([path, method, config], () => fetcher(path, method, config), queryConfig);
+
+export const useToWMutation = <
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
+  CurrentMethod extends Method
+>(
+  [path, method, config]: readonly [
+    CurrentPath,
+    CurrentMethod,
+    FetcherConfig<CurrentPath, CurrentMethod>,
+  ],
+  mutationConfig?: MutationConfig<
+    ResponseType<CurrentPath, CurrentMethod>,
+    unknown,
+    readonly [CurrentPath, CurrentMethod, FetcherConfig<CurrentPath, CurrentMethod>]
+  >,
+) => useMutation(() => fetcher(path, method, config), mutationConfig);
