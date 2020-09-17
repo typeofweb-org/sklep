@@ -1,6 +1,6 @@
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
-import type { QueryConfig } from 'react-query';
+import { QueryConfig, MutationConfig, useMutation } from 'react-query';
 import { useQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';

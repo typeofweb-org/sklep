@@ -8,7 +8,7 @@ export interface definitions {
     id: number;
     slug: string;
     name: string;
-    description?: string;
+    description: string;
     isPublic: boolean;
     regularPrice: number;
     discountPrice?: number;

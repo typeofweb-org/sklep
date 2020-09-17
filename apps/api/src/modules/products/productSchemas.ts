@@ -7,7 +7,7 @@ const productSchema = Joi.object({
   id: Joi.number().required(),
   slug: Joi.string().required(),
   name: Joi.string().required(),
-  description: Joi.string().optional().allow(null, ''),
+  description: Joi.string().required(),
   isPublic: Joi.boolean().required(),
   regularPrice: Joi.number().required(),
   discountPrice: Joi.number().optional().allow(null),

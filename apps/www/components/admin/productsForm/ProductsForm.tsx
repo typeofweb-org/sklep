@@ -1,4 +1,5 @@
 import { Add16 } from '@carbon/icons-react';
+import type { SklepTypes } from '@sklep/types';
 import {
   Button,
   TextInput,
@@ -21,7 +22,6 @@ import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 
 import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
-import { createProduct } from './productsFormUtils';
 
 Yup.setLocale({
   mixed: {
@@ -33,47 +33,63 @@ const productSchema = Yup.object({
   name: Yup.string().required().label('Nazwa produktu'),
   description: Yup.string().required().label('Opis produktu'),
   regularPrice: Yup.number().required().label('Cena produktu'),
-  discountPrice: Yup.number().optional(),
+  discountPrice: Yup.number().optional().nullable(),
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
 }).required();
-export type ProductType = Yup.InferType<typeof productSchema>;
 
-export const ProductsForm = () => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(createProduct);
+type Mode = 'Normal' | 'Edition';
+
+type ProductsFormProps =
+  | {
+      readonly mutation: (values: SklepTypes['postProductsRequestBody']) => Promise<any>;
+      readonly mode: 'Normal';
+      readonly initialValues?: undefined;
+    }
+  | {
+      readonly mutation: (values: SklepTypes['putProductsProductIdRequestBody']) => Promise<any>;
+      readonly mode: 'Edition';
+      readonly initialValues: SklepTypes['postProductsRequestBody'];
+    };
+
+export const ProductsForm = ({ mutation, mode = 'Normal', initialValues }: ProductsFormProps) => {
+  const [mutate, { isLoading, isSuccess, isError }] = useMutation(mutation);
 
   const handleSubmit = React.useCallback(
-    async (values: ProductType) => {
+    async (body: SklepTypes['postProductsRequestBody']) => {
       // @todo handle server errors
-      await mutate({ ...values, type: 'SINGLE' }); // @todo
+      await mutate({ ...body, type: 'SINGLE' }); // @todo
     },
     [mutate],
   );
 
   return (
-    <ToWForm onSubmit={handleSubmit} schema={productSchema} className={styles.form}>
+    <ToWForm
+      onSubmit={handleSubmit}
+      schema={productSchema}
+      className={styles.form}
+      initialValues={initialValues}
+    >
       <Grid>
         <Field name="name">
           {({ input, meta }) => (
-            <>
-              <TextInput
-                {...input}
-                {...getErrorProps(meta)}
-                id="name"
-                labelText="Nazwa produktu"
-                placeholder="Wpisz nazwę produktu"
-                helperText={
-                  <>
-                    Adres produktu:{' '}
-                    <CarbonLink disabled>
-                      https://www.sklep.localhost:3000/produkt/
-                      <ProductSlug name={input.value} />
-                    </CarbonLink>
-                  </>
-                }
-                // helperText="Ta nazwa będzie widoczna dla Twoich klientów. Jej uproszczona wersja posłuży także jako adres strony."
-              />
-            </>
+            <TextInput
+              {...input}
+              {...getErrorProps(meta)}
+              id="name"
+              labelText="Nazwa produktu"
+              placeholder="Wpisz nazwę produktu"
+              helperText={
+                <>
+                  Adres produktu:{' '}
+                  <CarbonLink disabled>
+                    https://www.sklep.localhost:3000/produkt/
+                    <ProductSlug name={input.value} />
+                  </CarbonLink>
+                </>
+              }
+              // helperText="Ta nazwa będzie widoczna dla Twoich klientów. Jej uproszczona wersja posłuży także jako adres strony."
+            />
           )}
         </Field>
         <Row>
@@ -131,17 +147,39 @@ export const ProductsForm = () => {
           }}
         </Field>
         <Button kind="primary" type="submit" renderIcon={Add16} disabled={isLoading}>
-          Dodaj produkt
+          {getFormSubmitText(mode)}
         </Button>
         {isLoading && <Loading />}
-        {isSuccess && <InlineNotification title="Dodałeś produkt do bazy danych" kind="success" />}
-        {isError && (
-          <InlineNotification
-            title="Wystąpił błąd podczas dodawania produktu do bazy danych"
-            kind="error"
-          />
-        )}
+        {isSuccess && <InlineNotification title={getFormSuccesMessage(mode)} kind="success" />}
+        {isError && <InlineNotification title={getFormErrorMessage(mode)} kind="error" />}
       </Grid>
     </ToWForm>
   );
 };
+
+function getFormSubmitText(mode: Mode) {
+  switch (mode) {
+    case 'Normal':
+      return 'Dodaj produkt';
+    case 'Edition':
+      return 'Zaaktualizuj produkt';
+  }
+}
+
+function getFormErrorMessage(mode: Mode) {
+  switch (mode) {
+    case 'Normal':
+      return 'Wystąpił błąd podczas dodawania produktu do bazy danych';
+    case 'Edition':
+      return 'Wystąpił błąd podczas aktualizowania produktu';
+  }
+}
+
+function getFormSuccesMessage(mode: Mode) {
+  switch (mode) {
+    case 'Normal':
+      return 'Dodałeś produkt do bazy danych';
+    case 'Edition':
+      return 'Produkt został pomyślnie edytowany';
+  }
+}
