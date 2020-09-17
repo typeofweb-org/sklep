@@ -1,9 +1,9 @@
 import React from 'react';
 
 type AmountProps = {
-  amount: number;
-  increaseAmount: () => void;
-  decreaseAmount: () => void;
+  readonly amount: number;
+  readonly increaseAmount: () => void;
+  readonly decreaseAmount: () => void;
 };
 
 export const Amount = React.memo<AmountProps>(({ amount, increaseAmount, decreaseAmount }) => (
@@ -17,3 +17,5 @@ export const Amount = React.memo<AmountProps>(({ amount, increaseAmount, decreas
     </button>
   </div>
 ));
+
+Amount.displayName = 'Amount';

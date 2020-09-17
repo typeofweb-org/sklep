@@ -8,7 +8,6 @@
 
 /* Write you own custom component styles here */
 @import './components/hero.css';
-@import './components/breadcrumbs.css';
 @import './components/cart.css';
 
 /* Start purging... */

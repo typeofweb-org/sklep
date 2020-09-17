@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { AddToCartButton } from '../../../shared/addToCartButton/AddToCartButton';
@@ -6,7 +6,7 @@ import { Price } from '../../../shared/price/Price';
 import { Amount } from '../amount/Amount';
 
 type ContentProps = {
-  product: SklepTypes['getProducts200Response']['data'];
+  readonly product: SklepTypes['getProducts200Response']['data'];
 };
 
 export const ProductInfo = React.memo<ContentProps>(({ product }) => (
@@ -20,3 +20,5 @@ export const ProductInfo = React.memo<ContentProps>(({ product }) => (
     </div>
   </div>
 ));
+
+ProductInfo.displayName = 'Amount';

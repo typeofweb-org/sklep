@@ -1,15 +1,21 @@
 import Link from 'next/link';
 import React from 'react';
 
+import styles from './Breadcrumbs.module.css';
+
 type BreadcrumbsProps = {
-  productName: string;
+  readonly productName: string;
 };
 
-const LinkWrapper = React.memo<{ title: string; href: string }>(({ title, href }) => (
-  <Link href={href}>
-    <a className="breadcrumb">{title}</a>
-  </Link>
-));
+const LinkWrapper = React.memo<{ readonly title: string; readonly href: string }>(
+  ({ title, href }) => (
+    <Link href={href}>
+      <a className={styles.breadcrumb}>{title}</a>
+    </Link>
+  ),
+);
+
+LinkWrapper.displayName = 'LinkWrapper';
 
 export const Breadcrumbs = React.memo<BreadcrumbsProps>(({ productName }) => {
   return (
@@ -20,3 +26,5 @@ export const Breadcrumbs = React.memo<BreadcrumbsProps>(({ productName }) => {
     </nav>
   );
 });
+
+Breadcrumbs.displayName = 'Breadcrumbs';
