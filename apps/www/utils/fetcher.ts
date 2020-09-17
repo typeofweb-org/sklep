@@ -1,7 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
 import type { QueryConfig } from 'react-query';
-import { useQuery } from 'react-query';
+import { usePaginatedQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';
 
@@ -146,4 +146,4 @@ export const useToWQuery = <
     FetcherConfig<CurrentPath, CurrentMethod>,
   ],
   queryConfig?: QueryConfig<ResponseType<CurrentPath, CurrentMethod>, unknown>,
-) => useQuery([path, method, config], () => fetcher(path, method, config), queryConfig);
+) => usePaginatedQuery([path, method, config], () => fetcher(path, method, config), queryConfig);

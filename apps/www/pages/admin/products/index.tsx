@@ -2,12 +2,11 @@ import { Column } from 'carbon-components-react';
 import Head from 'next/head';
 import React from 'react';
 
-import { Header } from '../../components/admin/Header';
-import { ContentWrapper } from '../../components/admin/contentWrapper/ContentWrapper';
-import { LoginForm } from '../../components/admin/loginForm/LoginForm';
-import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
+import { Header } from '../../../components/admin/Header';
+import { AdminProducts } from '../../../components/admin/adminProducts/AdminProducts';
+import { ContentWrapper } from '../../../components/admin/contentWrapper/ContentWrapper';
 
-export default function AdminHome() {
+export default function ProductsPage() {
   return (
     <>
       <Head>
@@ -20,8 +19,7 @@ export default function AdminHome() {
       <Header />
       <ContentWrapper>
         <Column lg={{ offset: 3 }} style={{ margin: '0 auto' }}>
-          <LoginForm />
-          <ProductsForm />
+          <AdminProducts />
         </Column>
       </ContentWrapper>
     </>

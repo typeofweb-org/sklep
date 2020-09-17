@@ -1,30 +1,30 @@
 export const PRODUCT_FIELDS = [
   {
-    key: 'slug',
-    name: 'Slug',
+    name: 'slug',
+    label: 'Slug',
   },
   {
-    key: 'name',
-    name: 'Name',
+    name: 'name',
+    label: 'Name',
   },
   {
-    key: 'description',
-    name: 'Description',
+    name: 'description',
+    label: 'Description',
   },
   {
-    key: 'isPublic',
-    name: 'Public',
+    name: 'isPublic',
+    label: 'Public',
   },
   {
-    key: 'regularPrice',
-    name: 'Regular price',
+    name: 'regularPrice',
+    label: 'Regular price',
   },
   {
-    key: 'discountPrice',
-    name: 'Discount price',
+    name: 'discountPrice',
+    label: 'Discount price',
   },
   {
-    key: 'type',
-    name: 'Type',
+    name: 'type',
+    label: 'Type',
   },
-];
+] as const;
