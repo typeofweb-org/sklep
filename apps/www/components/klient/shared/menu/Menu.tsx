@@ -5,7 +5,7 @@ import React from 'react';
 import { BagIcon } from '../icons/BagIcon';
 
 type MenuProps = {
-  isMenuOpen: boolean;
+  readonly isMenuOpen: boolean;
 };
 
 export const Menu = React.memo<MenuProps>(({ isMenuOpen }) => {

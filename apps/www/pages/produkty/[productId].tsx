@@ -1,9 +1,9 @@
-import { InferGetStaticPropsType } from 'next';
+import type { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
 import { FeaturedProduct } from '../../components/klient/modules/featuredProduct/FeaturedProduct';
 import { Layout } from '../../components/klient/shared/layout/Layout';
-import { Product } from '../../types/product';
+import type { Product } from '../../types/product';
 
 function ProductPage({ product }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (

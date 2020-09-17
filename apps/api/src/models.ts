@@ -1,10 +1,13 @@
+/* eslint-disable */
 import * as Prisma from '@prisma/client';
 
 type PrismaDelegates = Pick<Prisma.PrismaClient, ReadonlyKeys<Prisma.PrismaClient>>;
 type Awaited<T> = T extends Promise<infer R> ? R : never;
 
 export type Models = {
-  [K in keyof PrismaDelegates]: NonNullable<Awaited<ReturnType<PrismaDelegates[K]['findOne']>>>;
+  readonly [K in keyof PrismaDelegates]: NonNullable<
+    Awaited<ReturnType<PrismaDelegates[K]['findOne']>>
+  >;
 };
 
 // https://stackoverflow.com/questions/49579094/typescript-conditional-types-filter-out-readonly-properties-pick-only-requir
@@ -18,7 +21,7 @@ type ReadonlyKeys<T> = {
 }[keyof T];
 
 type EnumsKeys = {
-  [K in keyof typeof Prisma]: typeof Prisma[K] extends object
+  readonly [K in keyof typeof Prisma]: typeof Prisma[K] extends object
     ? typeof Prisma[K] extends Function
       ? never
       : K

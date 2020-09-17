@@ -1,4 +1,4 @@
-import Hapi from '@hapi/hapi';
+import type Hapi from '@hapi/hapi';
 import Cookie from 'cookie';
 import Faker from 'faker';
 
@@ -55,7 +55,7 @@ export const createAndAuthRole = async (
   };
 };
 
-export const repeatRequest = <T>(n: number, fn: () => Promise<T>): Promise<T[]> => {
+export const repeatRequest = <T>(n: number, fn: () => Promise<T>): Promise<readonly T[]> => {
   const repetitions = Array.from({ length: n }, () => fn());
   return Promise.all(repetitions);
 };

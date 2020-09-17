@@ -11,6 +11,16 @@
   "rules": {
     "react-hooks/exhaustive-deps": ["error"],
     "jsx-a11y/anchor-is-valid": "off",
-    "@typescript-eslint/no-unused-vars": "error"
-  }
+    "@typescript-eslint/no-unused-vars": "error",
+    "import/no-default-export": "error",
+    "react/display-name": "error"
+  },
+  "overrides": [
+    {
+      "files": "pages/**/*.tsx",
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ]
 }
