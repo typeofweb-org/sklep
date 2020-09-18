@@ -6,10 +6,12 @@ const FooterItem = React.memo(({ children }) => (
     {children}
   </div>
 ));
+FooterItem.displayName = 'FooterItem';
 
 const FooterItemHeading = React.memo(({ children }) => (
   <h3 className="text-center lg:text-left font-bold text-gray-900 mb-4">{children}</h3>
 ));
+FooterItemHeading.displayName = 'FooterItemHeading';
 
 export const Footer = React.memo(() => (
   <footer className="w-full bg-white py-16 border-t border-gray-400">
@@ -37,3 +39,4 @@ export const Footer = React.memo(() => (
     <p className="text-center">Copyright © 2020 Sklep TypeOfWeb</p>
   </footer>
 ));
+Footer.displayName = 'Footer';

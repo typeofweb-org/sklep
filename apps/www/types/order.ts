@@ -1,3 +1,3 @@
 export type Order = {
-  id: string;
+  readonly id: string;
 };

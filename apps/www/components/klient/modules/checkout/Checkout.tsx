@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Order } from '../../../../types/order';
+import type { Order } from '../../../../types/order';
 
 import { AddressForm } from './components/addressForm/AddressForm';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
 
 type CheckoutProps = {
-  order: Order;
+  readonly order: Order;
   products: SklepTypes['getProducts200Response']['data'];
 };
 export const Checkout = React.memo<CheckoutProps>(({ order, products }) => {

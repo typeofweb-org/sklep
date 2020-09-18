@@ -1,16 +1,16 @@
 import React from 'react';
-import { makeQueryCache, useQuery } from 'react-query';
+import { QueryCache } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { Hero } from '../components/klient/modules/hero/Hero';
 import { ProductCollection } from '../components/klient/modules/productCollection/ProductCollection';
 import { Layout } from '../components/klient/shared/layout/Layout';
-import { getProducts } from '../utils/api/getProducts';
+import { useGetProducts } from '../utils/api/queryHooks';
 
 function HomePage() {
-  const { data } = useQuery('products', getProducts);
+  const { data } = useGetProducts();
 
-  if (!data) {
+  if (!data?.data) {
     return (
       <Layout title="Sklep strona główna">
         <Hero />
@@ -22,13 +22,13 @@ function HomePage() {
   return (
     <Layout title="Sklep strona główna">
       <Hero />
-      <ProductCollection products={data} />
+      <ProductCollection products={data.data} />
     </Layout>
   );
 }
 export const getStaticProps = async () => {
-  const queryCache = makeQueryCache();
-  await queryCache.prefetchQuery('products', getProducts);
+  const queryCache = new QueryCache();
+  await useGetProducts.prefetch(queryCache);
 
   return {
     props: {

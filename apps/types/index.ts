@@ -15,3 +15,5 @@ type _2LevelsPretty<T> = {
 };
 
 export type SklepTypes = _2LevelsPretty<DeepNil<definitions>>;
+
+export type Nil<T> = T | undefined | null;

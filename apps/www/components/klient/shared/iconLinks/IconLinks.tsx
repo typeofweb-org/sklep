@@ -12,3 +12,4 @@ export const IconLinks = React.memo(() => (
     </Link>
   </div>
 ));
+IconLinks.displayName = 'IconLinks';

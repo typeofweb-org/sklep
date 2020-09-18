@@ -10,7 +10,7 @@ import { RemoveButton } from './removeButton/RemoveButton';
 
 // temporary type
 type CartItemRowProps = {
-  product: SklepTypes['getProducts200Response']['data'][number];
+  readonly product: SklepTypes['getProducts200Response']['data'][number];
 };
 
 export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {

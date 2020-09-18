@@ -1,7 +1,7 @@
 import Bell from '@hapi/bell';
 import Boom from '@hapi/boom';
 import HapiAuthCookie from '@hapi/cookie';
-import Hapi from '@hapi/hapi';
+import type Hapi from '@hapi/hapi';
 import type { SklepTypes } from '@sklep/types';
 import Bcrypt from 'bcrypt';
 import ms from 'ms';
@@ -15,22 +15,22 @@ import { sessionInclude } from './includes';
 const USER_REGISTERED_EVENT = 'auth:user:registered';
 
 type AuthPluginOptions = {
-  cookiePassword: string;
-  isProduction: boolean;
-  cookieDomain: string;
+  readonly cookiePassword: string;
+  readonly isProduction: boolean;
+  readonly cookieDomain: string;
 };
 
 declare module '@hapi/hapi' {
   interface AuthCredentials {
-    session?: Models['session'] & {
-      user: Omit<Models['user'], 'password'>;
+    readonly session?: Models['session'] & {
+      readonly user: Omit<Models['user'], 'password'>;
     };
   }
 
   interface PluginsStates {
-    auth: {
-      loginUser: typeof loginUser;
-      createUser: typeof createUser;
+    readonly auth: {
+      readonly loginUser: typeof loginUser;
+      readonly createUser: typeof createUser;
     };
   }
 
@@ -68,7 +68,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
         domain: options.cookieDomain,
         path: '/',
       },
-      async validateFunc(request, session: { id?: string } | undefined) {
+      async validateFunc(request, session: { readonly id?: string } | undefined) {
         const sessionId = session?.id;
         if (!sessionId || !request) {
           return { valid: false };

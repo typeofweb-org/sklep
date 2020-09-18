@@ -1,12 +1,12 @@
 import Crypto from 'crypto';
 
 import Boom from '@hapi/boom';
-import { Request } from '@hapi/hapi';
+import type { Request } from '@hapi/hapi';
 import Bcrypt from 'bcrypt';
 import ms from 'ms';
 import Zxcvbn from 'zxcvbn';
 
-import { Models } from '../../models';
+import type { Models } from '../../models';
 
 import { sessionInclude } from './includes';
 
@@ -35,7 +35,7 @@ export function isPasswordStrongEnough(password: string) {
 
 export async function createUser(
   request: Request,
-  { email, password }: { email: string; password: string },
+  { email, password }: { readonly email: string; readonly password: string },
 ) {
   const existingUser = await request.server.app.db.user.findOne({ where: { email } });
   if (existingUser) {

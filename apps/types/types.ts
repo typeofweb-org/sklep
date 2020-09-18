@@ -8,14 +8,15 @@ export interface definitions {
     id: number;
     slug: string;
     name: string;
-    description?: string;
+    description: string;
     isPublic: boolean;
     regularPrice: number;
     discountPrice?: number;
     type: 'SINGLE' | 'BUNDLE';
   };
   data: definitions['Model1'][];
-  Model2: { data: definitions['data'] };
+  meta: { total: number };
+  Model2: { data: definitions['data']; meta: definitions['meta'] };
   user: {
     id: number;
     name?: string;
@@ -57,6 +58,11 @@ export interface definitions {
   Model10: { email: string; password: string };
   Model11: { productId: number; quantity: number };
   Model12: { productId: number };
+
+  getProductsRequestQuery: {
+    take?: number;
+    skip?: number;
+  };
 
   getProducts200Response: definitions['Model2'];
   postProductsRequestBody: definitions['Model9'];
@@ -102,6 +108,11 @@ export interface definitions {
   pathsDefinitions: {
     '/products': {
       GET: {
+        requestQuery: {
+          take?: number;
+          skip?: number;
+        };
+
         response: definitions['Model2'];
       };
       POST: {
