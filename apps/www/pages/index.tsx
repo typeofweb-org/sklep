@@ -26,6 +26,7 @@ function HomePage() {
     </Layout>
   );
 }
+
 export const getStaticProps = async () => {
   const queryCache = makeQueryCache();
   await queryCache.prefetchQuery('products', getProducts);
@@ -34,7 +35,7 @@ export const getStaticProps = async () => {
     props: {
       dehydratedState: dehydrate(queryCache),
     },
-    revalidate: 1, // In seconds
+    revalidate: 60, // In seconds
   };
 };
 

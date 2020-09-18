@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { IconLinks } from '../iconLinks/IconLinks';
+import { CartStatus } from '../cartStatus/CartStatus';
 import { BagIcon } from '../icons/BagIcon';
 import { HamburgerIcon } from '../icons/HamburgerIcon';
 import { Menu } from '../menu/Menu';
@@ -27,7 +27,9 @@ export const Header = React.memo(() => {
             </a>
           </Link>
         </div>
-        <IconLinks />
+        <div className="order-2 md:order-3 flex items-center px-4">
+          <CartStatus />
+        </div>
         <Menu isMenuOpen={isMenuOpen} />
       </div>
     </header>
