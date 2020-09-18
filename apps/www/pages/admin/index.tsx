@@ -1,11 +1,9 @@
-import { Column } from 'carbon-components-react';
 import Head from 'next/head';
 import React from 'react';
 
 import { Header } from '../../components/admin/Header';
-import { ContentWrapper } from '../../components/admin/contentWrapper/ContentWrapper';
+import { AdminLayout } from '../../components/admin/adminLayout/AdminLayout';
 import { LoginForm } from '../../components/admin/loginForm/LoginForm';
-import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
 
 export default function AdminHome() {
   return (
@@ -18,11 +16,9 @@ export default function AdminHome() {
         />
       </Head>
       <Header />
-      <ContentWrapper>
-        <Column lg={{ offset: 3 }} style={{ margin: '0 auto' }}>
-          <LoginForm />
-        </Column>
-      </ContentWrapper>
+      <AdminLayout>
+        <LoginForm />
+      </AdminLayout>
     </>
   );
 }

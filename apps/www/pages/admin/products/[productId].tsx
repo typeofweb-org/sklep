@@ -1,38 +1,76 @@
 import type { SklepTypes } from '@sklep/types';
-import { Content, Column, Loading, Button, InlineNotification } from 'carbon-components-react';
+import { Loading, Button } from 'carbon-components-react';
 import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import React from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryCache } from 'react-query';
+import { AdminLayout } from '../../../components/admin/adminLayout/AdminLayout';
+import { DeleteProductConfirmationModal } from '../../../components/admin/deleteProductConfirmationModal/DeleteProductConfirmationModal';
 
-import { Header } from '../../../components/admin/Header';
-import styles from '../../../components/admin/loginForm/LoginForm.module.scss';
 import { ProductsForm } from '../../../components/admin/productsForm/ProductsForm';
-import { deleteProduct } from '../../../utils/api/deleteProduct';
+import { ToastsContextProvider, useToasts } from '../../../components/admin/toasts/Toasts';
 import { useGetProductById } from '../../../utils/api/queryHooks';
 import { updateProduct } from '../../../utils/api/updateProduct';
+import { fetcher } from '../../../utils/fetcher';
+import styles from '../../../styles/components/SingleProductPage.module.scss';
 
-export default function Product() {
+export default function SingleProductPageProvider() {
+  return (
+    <ToastsContextProvider>
+      <SingleProductPage />
+    </ToastsContextProvider>
+  );
+}
+
+function SingleProductPage() {
+  const { addToast } = useToasts();
   const router = useRouter();
-  const { productId } = router.query;
-  const convertedProductId = Number(productId);
-  const isConvertedProductId = !Number.isNaN(convertedProductId);
+  const productId = Number(router.query.productId);
 
-  const { data, isLoading } = useGetProductById(convertedProductId, {
-    enabled: isConvertedProductId,
+  const { latestData: latestProductResponse, isLoading } = useGetProductById(productId, {
+    enabled: Boolean(productId),
   });
-  const [mutate, { isLoading: isDeletionLoading, isSuccess, isError }] = useMutation(deleteProduct);
+
+  const cache = useQueryCache();
+  const [deleteProduct, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
+    (productId: number) => fetcher('/products/{productId}', 'DELETE', { params: { productId } }),
+    {
+      async onSuccess() {
+        addToast({
+          kind: 'success',
+          title: 'Operacja udana',
+          caption: 'Produkt został usunięty pomyślnie',
+        });
+        await cache.refetchQueries('/products');
+        closeDeletionModal();
+        resetDeletionStatus();
+      },
+      async onError(error?: Error) {
+        addToast({
+          kind: 'error',
+          title: 'Wystąpił błąd',
+          caption: `Nie udało się usunąć produktu: ${error?.message}`,
+        });
+      },
+    },
+  );
 
   const memoizedUpdateProduct = React.useCallback(
     (body: SklepTypes['putProductsProductIdRequestBody']) => {
-      return updateProduct(convertedProductId, body);
+      return updateProduct(productId, body);
     },
-    [convertedProductId],
+    [productId],
   );
+  const handleDeleteProduct = React.useCallback(() => {
+    setShowDeletionModal(true);
+  }, []);
 
-  const handleDelete = () => {
-    mutate(convertedProductId);
-  };
+  const [showDeletionModal, setShowDeletionModal] = React.useState(false);
+
+  const closeDeletionModal = React.useCallback(() => setShowDeletionModal(false), []);
+  if (!productId) {
+    return null;
+  }
 
   return (
     <>
@@ -43,37 +81,44 @@ export default function Product() {
           href="https://unpkg.com/carbon-components@10.18.0/css/carbon-components.min.css"
         />
       </Head>
-      <Header />
-      <Content className={styles.contentWraper}>
-        <Column lg={{ offset: 3 }} style={{ margin: '0 auto' }}>
-          <h1>Podstrona produktu</h1>
-          {data && data.data && (
-            <>
-              <Button kind="danger" onClick={handleDelete}>
-                Usuń produkt
-              </Button>
-              {isSuccess && (
-                <InlineNotification title="Produkt został pomyślnie usunięty" kind="success" />
-              )}
-              {isError && (
-                <InlineNotification title="Wystąpił błąd podczas usuwania produktu" kind="error" />
-              )}
-              <ProductsForm
-                mode="Edition"
-                initialValues={getInitialValues(data.data)}
-                mutation={memoizedUpdateProduct}
-              />
-            </>
-          )}
-        </Column>
-      </Content>
-      {(isLoading || isDeletionLoading) && <Loading />}
+      <AdminLayout>
+        <h1 className={styles.heading}>Podstrona produktu</h1>
+        {latestProductResponse && (
+          <>
+            <Button className={styles.deleteButton} kind="danger" onClick={handleDeleteProduct}>
+              Usuń produkt
+            </Button>
+            <ProductsForm
+              mode="EDITING"
+              initialValues={getInitialValues(latestProductResponse)}
+              mutation={memoizedUpdateProduct}
+            />
+          </>
+        )}
+        <DeleteProductConfirmationModal
+          isOpen={showDeletionModal}
+          product={latestProductResponse?.data}
+          handleDelete={deleteProduct}
+          handleClose={closeDeletionModal}
+          status={deletionStatus}
+        />
+        {isLoading && <Loading />}
+      </AdminLayout>
     </>
   );
 }
 
-// To change
-function getInitialValues(res: SklepTypes['Model1']): SklepTypes['postProductsRequestBody'] {
-  // To do
-  return {} as any;
+function getInitialValues(
+  response: SklepTypes['getProductsProductId200Response'],
+): SklepTypes['postProductsRequestBody'] {
+  const initialValues: SklepTypes['postProductsRequestBody'] = {
+    name: response.data.name,
+    description: response.data.description,
+    isPublic: response.data.isPublic,
+    regularPrice: response.data.regularPrice,
+    type: response.data.type,
+  };
+  initialValues.discountPrice = response.data.discountPrice;
+
+  return initialValues;
 }

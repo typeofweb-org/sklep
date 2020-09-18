@@ -38,21 +38,21 @@ const productSchema = Yup.object({
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
 }).required();
 
-type Mode = 'Normal' | 'Edition';
+type ProductFormMode = 'ADDING' | 'EDITING';
 
 type ProductsFormProps =
   | {
       readonly mutation: (values: SklepTypes['postProductsRequestBody']) => Promise<any>;
-      readonly mode: 'Normal';
+      readonly mode: 'ADDING';
       readonly initialValues?: undefined;
     }
   | {
       readonly mutation: (values: SklepTypes['putProductsProductIdRequestBody']) => Promise<any>;
-      readonly mode: 'Edition';
+      readonly mode: 'EDITING';
       readonly initialValues: SklepTypes['postProductsRequestBody'];
     };
 
-export const ProductsForm = ({ mutation, mode = 'Normal', initialValues }: ProductsFormProps) => {
+export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: ProductsFormProps) => {
   const [mutate, { isLoading, isSuccess, isError }] = useMutation(mutation);
 
   const handleSubmit = React.useCallback(
@@ -147,39 +147,25 @@ export const ProductsForm = ({ mutation, mode = 'Normal', initialValues }: Produ
           }}
         </Field>
         <Button kind="primary" type="submit" renderIcon={Add16} disabled={isLoading}>
-          {getFormSubmitText(mode)}
+          {formSubmitTextMap[mode]}
         </Button>
         {isLoading && <Loading />}
-        {isSuccess && <InlineNotification title={getFormSuccesMessage(mode)} kind="success" />}
-        {isError && <InlineNotification title={getFormErrorMessage(mode)} kind="error" />}
+        {isSuccess && <InlineNotification title={formSuccesTextMap[mode]} kind="success" />}
+        {isError && <InlineNotification title={formErrorTextMap[mode]} kind="error" />}
       </Grid>
     </ToWForm>
   );
 };
 
-function getFormSubmitText(mode: Mode) {
-  switch (mode) {
-    case 'Normal':
-      return 'Dodaj produkt';
-    case 'Edition':
-      return 'Zaaktualizuj produkt';
-  }
-}
-
-function getFormErrorMessage(mode: Mode) {
-  switch (mode) {
-    case 'Normal':
-      return 'Wystąpił błąd podczas dodawania produktu do bazy danych';
-    case 'Edition':
-      return 'Wystąpił błąd podczas aktualizowania produktu';
-  }
-}
-
-function getFormSuccesMessage(mode: Mode) {
-  switch (mode) {
-    case 'Normal':
-      return 'Dodałeś produkt do bazy danych';
-    case 'Edition':
-      return 'Produkt został pomyślnie edytowany';
-  }
-}
+const formSubmitTextMap: Record<ProductFormMode, string> = {
+  ADDING: 'Dodaj produkt',
+  EDITING: 'Zaaktualizuj produkt',
+};
+const formSuccesTextMap: Record<ProductFormMode, string> = {
+  ADDING: 'Dodałeś produkt do bazy danych',
+  EDITING: 'Produkt został pomyślnie edytowany',
+};
+const formErrorTextMap: Record<ProductFormMode, string> = {
+  ADDING: 'Wystąpił błąd podczas dodawania produktu do bazy danych',
+  EDITING: 'Wystąpił błąd podczas aktualizowania produktu',
+};

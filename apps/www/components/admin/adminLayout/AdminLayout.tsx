@@ -1,20 +1,17 @@
-import { Column, Content } from 'carbon-components-react';
+import { Column } from 'carbon-components-react';
 import React from 'react';
+import { ContentWrapper } from '../contentWrapper/ContentWrapper';
 
 import { Header } from '../Header';
 
-import styles from './AdminLayout.module.scss';
-
-type AdminLayoutProps = { readonly content: React.ReactNode };
-export const AdminLayout = React.memo<AdminLayoutProps>(({ content }) => {
+type AdminLayoutProps = { readonly children: React.ReactNode };
+export const AdminLayout = React.memo<AdminLayoutProps>(({ children }) => {
   return (
     <>
       <Header />
-      <Content className={styles.contentWraper}>
-        <Column lg={{ offset: 3 }} style={{ margin: '0 auto' }}>
-          {content}
-        </Column>
-      </Content>
+      <ContentWrapper>
+        <Column lg={{ offset: 3 }}>{children}</Column>
+      </ContentWrapper>
     </>
   );
 });
