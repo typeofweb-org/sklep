@@ -7,13 +7,14 @@ import { CheckoutSummary } from './components/addressForm/summary/CheckoutSummar
 
 type CheckoutProps = {
   order: Order;
+  products: SklepTypes['getProducts200Response']['data'];
 };
-export const Checkout = React.memo<CheckoutProps>(({ order }) => {
+export const Checkout = React.memo<CheckoutProps>(({ order, products }) => {
   return (
     <section className="bg-white worksans py-8">
       <div className="container mx-auto flex flex-col md:flex-row px-2 pt-4 pb-12">
         <AddressForm />
-        <CheckoutSummary />
+        <CheckoutSummary products={products} />
       </div>
     </section>
   );

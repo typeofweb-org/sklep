@@ -15,7 +15,7 @@ export const CartSummary = React.memo(() => {
       </div>
       <Link href="/platnosc">
         <a>
-          <SummaryButton />
+          <SummaryButton>Przejdź do płatności</SummaryButton>
         </a>
       </Link>
     </div>
