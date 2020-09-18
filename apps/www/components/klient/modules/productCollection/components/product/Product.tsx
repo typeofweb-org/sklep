@@ -17,21 +17,21 @@ type ProductItemProps = {
 
 export const ProductItem = React.memo<ProductItemProps>(
   ({ product: { name, regularPrice, discountPrice, id } }) => {
-    const queryCache = useQueryCache();
+    // const queryCache = useQueryCache();
     const [addToCartMutation] = useMutation(
-      () => {
+      (id: number) => {
         return addToCart({ productId: id, quantity: 1 });
       },
-      {
-        onSuccess: () => {
-          queryCache.invalidateQueries('cart');
-        },
-      },
+      // {
+      //   onSuccess: () => {
+      //     queryCache.refetchQueries('createCart');
+      //   },
+      // },
     );
 
     const onClickHandler = useCallback(() => {
-      addToCartMutation();
-    }, [addToCartMutation]);
+      addToCartMutation(id);
+    }, [addToCartMutation, id]);
 
     return (
       <section className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col self-start">
