@@ -1,9 +1,9 @@
 import type { QueryCache } from 'react-query';
 
-import { fetcher, useToWMutation, useToWQuery } from '../fetcher';
+import { fetcher, useToWQuery } from '../fetcher';
 
-export const useGetProducts = ({ take, skip }: { readonly take: number; readonly skip: number }) =>
-  useToWQuery(['/products', 'GET', { query: { take, skip } }] as const);
+export const useGetProducts = (query: { readonly take: number; readonly skip: number } | {} = {}) =>
+  useToWQuery(['/products', 'GET', { query }] as const);
 useGetProducts.prefetch = (queryCache: QueryCache) =>
   queryCache.prefetchQuery(['/products', 'GET', {}], () =>
     fetcher('/products', 'GET', { query: {} }),

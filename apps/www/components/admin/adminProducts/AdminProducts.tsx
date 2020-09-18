@@ -3,7 +3,7 @@ import { useMutation, useQueryCache } from 'react-query';
 
 import type { Nil } from '../../../../api/src/types';
 import { useGetProducts } from '../../../utils/api/queryHooks';
-import { fetcher } from '../../../utils/fetcher';
+import { fetcher, ResponseError } from '../../../utils/fetcher';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import type { Product } from '../productsList/ProductListUtils';
 import { ProductsList } from '../productsList/ProductsList';
@@ -19,17 +19,25 @@ export const AdminProducts = React.memo(() => {
   const { addToast } = useToasts();
   const cache = useQueryCache();
 
-  const [deleteProduct] = useMutation(
+  const [deleteProduct, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
     (productId: number) => fetcher('/products/{productId}', 'DELETE', { params: { productId } }),
     {
-      onSuccess() {
+      async onSuccess() {
         addToast({
           kind: 'success',
           title: 'Operacja udana',
           caption: 'Produkt został usunięty pomyślnie',
         });
-        cache.refetchQueries('/products');
+        await cache.refetchQueries('/products');
         closeDeletionModal();
+        resetDeletionStatus();
+      },
+      async onError(error?: Error) {
+        addToast({
+          kind: 'error',
+          title: 'Wystąpił błąd',
+          caption: `Nie udało się usunąć produktu: ${error?.message}`,
+        });
       },
     },
   );
@@ -44,12 +52,12 @@ export const AdminProducts = React.memo(() => {
 
   const handleDeleteProduct = React.useCallback((product: Product) => {
     setProductForDeletion(product);
+    setShowDeletionModal(true);
   }, []);
 
   // we need 2 states to avoid flash of "UNDEFINED" in the modal
   const [showDeletionModal, setShowDeletionModal] = React.useState(false);
   const [productForDeletion, setProductForDeletion] = React.useState<Nil<Product>>(null);
-  React.useEffect(() => setShowDeletionModal(!!productForDeletion), [productForDeletion]);
 
   const closeDeletionModal = React.useCallback(() => setShowDeletionModal(false), []);
 
@@ -70,6 +78,7 @@ export const AdminProducts = React.memo(() => {
         product={productForDeletion}
         handleDelete={deleteProduct}
         handleClose={closeDeletionModal}
+        status={deletionStatus}
       />
     </>
   );
