@@ -77,8 +77,8 @@ export const AddressForm = () => {
                 className="border border-gray-300 rounded-sm px-4 py-2"
               >
                 <option value="">Wybierz województwo</option>
-                {regions.map((region) => (
-                  <option className="bg-gray-600" value={region.value}>
+                {regions.map((region, index) => (
+                  <option key={index} className="bg-gray-600" value={region.value}>
                     {region.label}
                   </option>
                 ))}
@@ -144,7 +144,6 @@ export const AddressForm = () => {
                     {...input}
                     component="input"
                     id="city"
-                    labelText="Miasto"
                     placeholder="Miasto"
                     className={fieldStyles}
                   />
@@ -199,7 +198,6 @@ export const AddressForm = () => {
                 )}
               </Field>
             </div>
-            <button type="submit">Submit</button>
           </form>
         )}
       />

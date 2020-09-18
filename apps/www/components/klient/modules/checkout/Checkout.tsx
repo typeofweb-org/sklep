@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Order } from '../../../../types/order';
-import { Button } from '../../shared/button/Button';
 
 import { AddressForm } from './components/addressForm/AddressForm';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';

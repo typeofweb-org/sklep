@@ -39,7 +39,7 @@ export const CheckoutTotal = React.memo(() => {
           </div>
         </div>
         <div className="flex justify-between w-full p-4 text-2xl">
-          <span>Kwota</span>
+          <span>Do zapłaty</span>
           <span>2020 zł</span>
         </div>
       </div>
