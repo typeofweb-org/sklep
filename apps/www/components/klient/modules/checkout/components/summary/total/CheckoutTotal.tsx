@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SummaryButton } from '../../../../cart/components/summary/summaryButton/SummaryButton';
+import { SummaryButton } from '../../../../../cart/components/summary/summaryButton/SummaryButton';
 
 export const CheckoutTotal = React.memo(() => {
   return (

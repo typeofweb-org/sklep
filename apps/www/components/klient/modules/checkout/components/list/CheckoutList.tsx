@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { CartItem } from './CartItem';
+import { CartItem } from '../item/CheckoutItem';
 
 type CartListProps = {
   products: SklepTypes['getProducts200Response']['data'];
 };
 
-export const CartList = React.memo<CartListProps>(({ products }) => {
+export const CheckoutList = React.memo<CartListProps>(({ products }) => {
   return (
     <table className="table-fixed mb-6">
       <tbody>

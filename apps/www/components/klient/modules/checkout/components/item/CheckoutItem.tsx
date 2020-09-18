@@ -1,13 +1,13 @@
 import { SklepTypes } from '@sklep/types';
 import React from 'react';
 
-import { CartItemImage } from '../../../../cart/components/item/image/CartItemImage';
+import { CartItemImage } from '../../../cart/components/item/image/CartItemImage';
 
-type CartItemProps = {
+type CheckoutItemProps = {
   product: SklepTypes['getProducts200Response']['data'][number];
 };
 
-export const CartItem = React.memo<CartItemProps>(({ product }) => {
+export const CheckoutItem = React.memo<CheckoutItemProps>(({ product }) => {
   return (
     <tr>
       <td className="w-20 h-24 py-2">
