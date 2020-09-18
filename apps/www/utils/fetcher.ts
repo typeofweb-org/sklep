@@ -1,8 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
-import { QueryByText } from '@testing-library/dom';
 import { difference } from 'ramda';
-import type { MutationConfig, QueryConfig } from 'react-query';
-import { useMutation, usePaginatedQuery } from 'react-query';
+import type { QueryConfig } from 'react-query';
+import { usePaginatedQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';
 

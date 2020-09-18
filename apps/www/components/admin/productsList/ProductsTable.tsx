@@ -1,6 +1,5 @@
 import type { DataTableCustomRenderProps, DenormalizedRow } from 'carbon-components-react';
 import {
-  DataTableSkeleton,
   Table,
   TableHead,
   TableRow,

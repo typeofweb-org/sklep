@@ -13,14 +13,12 @@ export const LoadingIndicator = () => {
     }
   }, [isFetching]);
 
-  return (
-    isFetching && (
-      <Loading
-        small
-        description="Active loading indicator"
-        className={styles.loading}
-        withOverlay={false}
-      />
-    )
-  );
+  return isFetching ? (
+    <Loading
+      small
+      description="Active loading indicator"
+      className={styles.loading}
+      withOverlay={false}
+    />
+  ) : null;
 };

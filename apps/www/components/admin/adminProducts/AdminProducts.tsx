@@ -3,7 +3,7 @@ import { useMutation, useQueryCache } from 'react-query';
 
 import type { Nil } from '../../../../api/src/types';
 import { useGetProducts } from '../../../utils/api/queryHooks';
-import { fetcher, ResponseError } from '../../../utils/fetcher';
+import { fetcher } from '../../../utils/fetcher';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import type { Product } from '../productsList/ProductListUtils';
 import { ProductsList } from '../productsList/ProductsList';

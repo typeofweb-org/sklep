@@ -54,7 +54,7 @@ export const ToastsContextProvider = ({ children }: { readonly children: React.R
 export const useToasts = () => {
   const toastsContext = useContext(ToastsContext);
   if (!toastsContext) {
-    throw new Error('Missing ToastContextProvider!');
+    throw new Error('Missing ToastsContextProvider!');
   }
 
   const addToast = React.useCallback(
