@@ -47,4 +47,12 @@ export const getProductResponseSchema = Joi.object<SklepTypes['getProducts200Res
 
 export const getProductsResponseSchema = Joi.object<SklepTypes['getProducts200Response']>({
   data: Joi.array().items(productSchema.optional()).required(),
+  meta: Joi.object({
+    total: Joi.number().integer().required(),
+  }).required(),
 }).required();
+
+export const getProductsQuerySchema = Joi.object<SklepTypes['getProductsRequestQuery']>({
+  take: Joi.number().integer(),
+  skip: Joi.number().integer(),
+});

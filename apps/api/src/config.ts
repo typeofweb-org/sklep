@@ -1,6 +1,6 @@
 import { parse } from 'url';
 
-import type { Nil } from './types';
+import type { Nil } from '@sklep/types';
 
 type NameToType = {
   readonly ENV: 'production' | 'staging' | 'development' | 'test';

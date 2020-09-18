@@ -1,7 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
-import { QueryConfig, MutationConfig, useMutation } from 'react-query';
-import { useQuery } from 'react-query';
+import type { QueryConfig, MutationConfig } from 'react-query';
+import { useMutation, usePaginatedQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';
 
@@ -36,6 +36,16 @@ type ParamsType<
   ? R
   : undefined;
 
+type QueryType<
+  CurrentPath extends keyof SklepTypes['pathsDefinitions'],
+  CurrentMethod extends Method
+> = Get<
+  SklepTypes['pathsDefinitions'],
+  readonly [CurrentPath, CurrentMethod, 'requestQuery']
+> extends infer R
+  ? R
+  : undefined;
+
 type ResponseType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
   CurrentMethod extends Method
@@ -58,7 +68,10 @@ type FetcherConfig<
     : { readonly body?: never }) &
   (ParamsType<CurrentPath, CurrentMethod> extends object
     ? { readonly params: ParamsType<CurrentPath, CurrentMethod> }
-    : { readonly params?: never });
+    : { readonly params?: never }) &
+  (QueryType<CurrentPath, CurrentMethod> extends object
+    ? { readonly query: QueryType<CurrentPath, CurrentMethod> }
+    : { readonly query?: never });
 
 export function findMismatchingParams(requiredParams: readonly string[], params: object) {
   const providedParams = Object.keys(params);
@@ -75,9 +88,12 @@ const PARAMS_PATTERN = /{(\w+)}/g;
 export function compileUrl<CurrentPath extends keyof SklepTypes['pathsDefinitions']>(
   path: CurrentPath,
   params?: Record<string, any>,
+  query?: Record<string, any>,
 ): string {
+  const queryString = query ? '?' + new URLSearchParams(query).toString() : '';
+
   if (!params) {
-    return process.env.NEXT_PUBLIC_API_URL + path;
+    return process.env.NEXT_PUBLIC_API_URL + path + queryString;
   }
   const requiredParams = [...path.matchAll(PARAMS_PATTERN)].map((match) => match[1]);
   const { excessParams, missingParams } = findMismatchingParams(requiredParams, params);
@@ -90,7 +106,7 @@ export function compileUrl<CurrentPath extends keyof SklepTypes['pathsDefinition
   }
 
   const compiledPath = path.replace(PARAMS_PATTERN, (_, param) => params[param]);
-  return process.env.NEXT_PUBLIC_API_URL + compiledPath;
+  return process.env.NEXT_PUBLIC_API_URL + compiledPath + queryString;
 }
 
 export async function fetcher<
@@ -99,9 +115,9 @@ export async function fetcher<
 >(
   path: CurrentPath,
   method: CurrentMethod,
-  { body, params, config }: FetcherConfig<CurrentPath, CurrentMethod>,
+  { body, params, config, query }: FetcherConfig<CurrentPath, CurrentMethod>,
 ): Promise<ResponseType<CurrentPath, CurrentMethod>> {
-  const url = compileUrl(path, params);
+  const url = compileUrl(path, params, query);
   const response = await fetch(url, {
     method,
     headers: {
@@ -118,7 +134,7 @@ export async function fetcher<
   throw new ResponseError(response.statusText, response.status, data);
 }
 
-class ResponseError extends Error {
+export class ResponseError extends Error {
   constructor(message: string, public readonly status: number, public readonly data: unknown) {
     super(message);
     // eslint-disable-next-line functional/no-this-expression
@@ -146,4 +162,4 @@ export const useToWQuery = <
     FetcherConfig<CurrentPath, CurrentMethod>,
   ],
   queryConfig?: QueryConfig<ResponseType<CurrentPath, CurrentMethod>, unknown>,
-) => useQuery([path, method, config], () => fetcher(path, method, config), queryConfig);
+) => usePaginatedQuery([path, method, config], () => fetcher(path, method, config), queryConfig);
