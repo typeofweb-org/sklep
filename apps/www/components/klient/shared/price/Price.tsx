@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React from 'react';
 
 type PriceProps = {
-  regularPrice: number;
-  discountPrice?: number | null;
-  direction?: 'row' | 'column';
+  readonly regularPrice: number;
+  readonly discountPrice?: number | null;
+  readonly direction?: 'row' | 'column';
 };
 
 export const Price = React.memo<PriceProps>(
@@ -19,7 +19,7 @@ export const Price = React.memo<PriceProps>(
     return (
       <p className={priceClassName}>
         <del className="text-gray-600 text-sm">{regularPrice / 100}&nbsp;PLN</del>{' '}
-        <span className={discountClassName}>{discountPrice / 100}&nbsp;PLN</span>
+        <ins className={discountClassName}>{discountPrice / 100}&nbsp;PLN</ins>
       </p>
     );
   },

@@ -1,10 +1,6 @@
 import React from 'react';
 
-type HamburgerIconProps = {
-  className: string;
-};
-
-export const HamburgerIcon = ({ className }: HamburgerIconProps) => {
+export const HamburgerIcon = ({ className }: { readonly className: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -9,6 +9,8 @@
     "start": "next start",
     "test": "jest",
     "test:ci": "jest",
+    "tsc": "tsc --noEmit",
+    "eslint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "cy:open": "cypress open",
     "cy:run": "cypress run"
   },
@@ -25,7 +27,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-final-form": "6.5.1",
-    "react-query": "2.15.4",
+    "react-query": "2.21.2",
     "slugify": "1.4.5",
     "tailwindcss": "1.8.5",
     "yup": "0.29.3"
@@ -50,6 +52,7 @@
     "cypress": "5.1.0",
     "eslint": "7.9.0",
     "eslint-config-react-app": "5.2.1",
+    "eslint-plugin-css-modules": "2.11.0",
     "eslint-plugin-cypress": "2.11.1",
     "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-jsx-a11y": "6.3.1",

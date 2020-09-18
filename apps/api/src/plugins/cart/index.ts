@@ -1,4 +1,4 @@
-import Hapi from '@hapi/hapi';
+import type Hapi from '@hapi/hapi';
 import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
 
@@ -19,16 +19,16 @@ import {
 
 declare module '@hapi/hapi' {
   interface PluginsStates {
-    cart: {
-      findOrCreateCart: typeof findOrCreateCart;
-      addToCart: typeof addToCart;
-      removeFromCart: typeof removeFromCart;
-      clearCart: typeof clearCart;
+    readonly cart: {
+      readonly findOrCreateCart: typeof findOrCreateCart;
+      readonly addToCart: typeof addToCart;
+      readonly removeFromCart: typeof removeFromCart;
+      readonly clearCart: typeof clearCart;
     };
   }
 }
 
-export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
+export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
   multiple: false,
   name: 'Sklep Cart Plugin',
   version: '1.0.0',

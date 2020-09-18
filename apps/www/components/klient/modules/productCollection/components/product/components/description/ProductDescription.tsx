@@ -3,7 +3,7 @@ import React from 'react';
 import { HeartIcon } from '../../../../../../shared/icons/HeartIcon';
 
 type ProductDescriptionProps = {
-  name: string;
+  readonly name: string;
 };
 
 export const ProductDescription = React.memo(({ name }: ProductDescriptionProps) => {
@@ -18,3 +18,4 @@ export const ProductDescription = React.memo(({ name }: ProductDescriptionProps)
     </div>
   );
 });
+ProductDescription.displayName = 'ProductDescription';

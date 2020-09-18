@@ -16,3 +16,7 @@
 
 /* Your own custom utilities */
 @import './utils/utils.css';
+
+body.react-query-is-loading {
+  cursor: wait;
+}

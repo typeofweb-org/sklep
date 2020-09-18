@@ -1,10 +1,6 @@
 import React from 'react';
 
-type BagIconProps = {
-  className: string;
-};
-
-export const BagIcon = ({ className }: BagIconProps) => {
+export const BagIcon = ({ className }: { readonly className: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

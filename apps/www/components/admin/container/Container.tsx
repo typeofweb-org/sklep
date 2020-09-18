@@ -3,9 +3,9 @@ import React from 'react';
 import styles from './Container.module.scss';
 
 type ContainerProps = {
-  className?: string;
-  as?: 'div' | 'main' | 'section' | 'article' | 'footer' | 'header';
-  children: React.ReactNode;
+  readonly className?: string;
+  readonly as?: 'div' | 'main' | 'section' | 'article' | 'footer' | 'header';
+  readonly children: React.ReactNode;
 };
 
 export const Container = React.memo<ContainerProps>(

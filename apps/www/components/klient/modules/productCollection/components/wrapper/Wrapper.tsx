@@ -1,8 +1,9 @@
-import React, { ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import React from 'react';
 
 import { TopBar } from '../topBar/TopBar';
 type WrapperProps = {
-  children: ReactElement | ReactElement[];
+  readonly children: ReactElement | readonly ReactElement[];
 };
 
 export const Wrapper = React.memo<WrapperProps>(({ children }) => {

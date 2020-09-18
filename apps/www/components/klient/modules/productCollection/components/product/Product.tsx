@@ -1,4 +1,4 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import React, { useCallback } from 'react';
 import { useMutation, useQueryCache } from 'react-query';
 
@@ -9,8 +9,10 @@ import { AddToCartButton } from './components/addToCartButton/AddToCartButton';
 import { ProductDescription } from './components/description/ProductDescription';
 import { ProductImage } from './components/image/ProductImage';
 
+type Product = SklepTypes['getProducts200Response']['data'][number];
+
 type ProductItemProps = {
-  product: SklepTypes['getProducts200Response']['data'][number];
+  readonly product: Product;
 };
 
 export const ProductItem = React.memo<ProductItemProps>(

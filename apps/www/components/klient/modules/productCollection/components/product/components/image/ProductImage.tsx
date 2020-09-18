@@ -7,3 +7,4 @@ export const ProductImage = React.memo(() => {
     </div>
   );
 });
+ProductImage.displayName = 'ProductImage';
