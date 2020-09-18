@@ -1,10 +1,8 @@
 import React from 'react';
 
-import { SummaryButton } from '../../../../../cart/components/summary/summaryButton/SummaryButton';
-
 export const CheckoutTotal = React.memo(() => {
   return (
-    <div className="px-2">
+    <div>
       <div className="border border-gray-400 bg-gray-100">
         <div className="flex justify-between border-b border-gray-400 w-full p-4">
           <span>Kwota</span>
@@ -45,7 +43,6 @@ export const CheckoutTotal = React.memo(() => {
           <span>2020 zł</span>
         </div>
       </div>
-      <SummaryButton>Złóż zamówienie</SummaryButton>
     </div>
   );
 });

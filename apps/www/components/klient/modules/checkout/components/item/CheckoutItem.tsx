@@ -1,7 +1,7 @@
 import { SklepTypes } from '@sklep/types';
 import React from 'react';
 
-import { CartItemImage } from '../../../cart/components/item/image/CartItemImage';
+import { CartItemImage } from '../../../../shared/image/CartItemImage';
 
 type CheckoutItemProps = {
   product: SklepTypes['getProducts200Response']['data'][number];

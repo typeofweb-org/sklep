@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { SummaryButton } from './summaryButton/SummaryButton';
+import { Button } from '../../../../shared/button/Button';
 
 export const CartSummary = React.memo(() => {
   return (
@@ -15,7 +15,7 @@ export const CartSummary = React.memo(() => {
       </div>
       <Link href="/platnosc">
         <a>
-          <SummaryButton>Przejdź do płatności</SummaryButton>
+          <Button>Przejdź do płatności</Button>
         </a>
       </Link>
     </div>
