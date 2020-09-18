@@ -5,7 +5,16 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import React from 'react';
 
+import { ToastsContextProvider } from '../toasts/Toasts';
+
 import { LoginForm } from './LoginForm';
+
+const renderLoginForm = () =>
+  render(
+    <ToastsContextProvider>
+      <LoginForm />
+    </ToastsContextProvider>,
+  );
 
 const server = setupServer(
   rest.post(process.env.NEXT_PUBLIC_API_URL + '/auth/login', (_req, res, ctx) => {
@@ -20,7 +29,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test('shows error after confirming without required data', () => {
-  const { getByText } = render(<LoginForm />);
+  const { getByText } = renderLoginForm();
 
   userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
 
@@ -29,7 +38,7 @@ test('shows error after confirming without required data', () => {
 });
 
 test('unsuccesfull login', async () => {
-  const { getByLabelText, getByText, findByRole } = render(<LoginForm />);
+  const { getByLabelText, getByText, findByRole } = renderLoginForm();
 
   userEvent.type(getByLabelText('Adres email'), 'testowy@test.pl');
   userEvent.type(getByLabelText('Hasło'), 'niepoprawne');
@@ -47,7 +56,7 @@ test('succesfull login', async () => {
     }),
   );
 
-  const { getByLabelText, getByText, findByRole } = render(<LoginForm />);
+  const { getByLabelText, getByText, findByRole } = renderLoginForm();
 
   userEvent.type(getByLabelText('Adres email'), 'test@test1.pl');
   userEvent.type(getByLabelText('Hasło'), 'qwertyTESTOWY');
