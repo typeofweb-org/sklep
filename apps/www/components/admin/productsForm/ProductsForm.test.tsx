@@ -21,7 +21,7 @@ describe('form for adding products', () => {
   afterAll(() => server.close());
 
   it('shows error after confirming without required data', () => {
-    const { getByText } = render(<ProductsForm mode="Normal" mutation={createProduct} />);
+    const { getByText } = render(<ProductsForm mode="ADDING" mutation={createProduct} />);
 
     userEvent.click(getByText('Dodaj produkt'));
 
@@ -32,7 +32,7 @@ describe('form for adding products', () => {
 
   it('allows user to add product', async () => {
     const { getByLabelText, getByText, findByRole } = render(
-      <ProductsForm mode="Normal" mutation={createProduct} />,
+      <ProductsForm mode="ADDING" mutation={createProduct} />,
     );
 
     userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
@@ -53,7 +53,7 @@ describe('form for adding products', () => {
     );
 
     const { getByLabelText, getByText, findByRole } = render(
-      <ProductsForm mode="Normal" mutation={createProduct} />,
+      <ProductsForm mode="ADDING" mutation={createProduct} />,
     );
 
     userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
