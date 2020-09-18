@@ -1,8 +1,8 @@
+import type { Nil } from '@sklep/types';
 import { InlineLoading, Modal } from 'carbon-components-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import type { Nil } from '../../../../api/src/types';
 import type { Product } from '../productsList/ProductListUtils';
 
 type DeleteProductConfirmationModalProps = {

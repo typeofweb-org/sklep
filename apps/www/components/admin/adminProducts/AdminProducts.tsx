@@ -1,7 +1,7 @@
+import type { Nil } from '@sklep/types';
 import React from 'react';
 import { useMutation, useQueryCache } from 'react-query';
 
-import type { Nil } from '../../../../api/src/types';
 import { useGetProducts } from '../../../utils/api/queryHooks';
 import { fetcher } from '../../../utils/fetcher';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';

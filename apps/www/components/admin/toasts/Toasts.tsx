@@ -1,9 +1,8 @@
+import type { Nil } from '@sklep/types';
 import type { ToastNotificationProps } from 'carbon-components-react';
 import { ToastNotification } from 'carbon-components-react';
 import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
-
-import type { Nil } from '../../../../api/src/types';
 
 import styles from './toasts.module.scss';
 
