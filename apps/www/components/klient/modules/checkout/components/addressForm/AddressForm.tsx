@@ -17,8 +17,8 @@ export const AddressForm = () => {
         onSubmit={handleSubmit}
         render={({ handleSubmit, form, submitting, pristine, values }) => (
           <form onSubmit={handleSubmit}>
-            <div className="flex py-2">
-              <div className="flex flex-col w-1/2 mr-4">
+            <div className="flex flex-col sm:flex-row py-2">
+              <div className="flex flex-col sm:w-1/2 sm:pr-2">
                 <label htmlFor="firstName" className="py-2">
                   Imię
                 </label>
@@ -34,7 +34,7 @@ export const AddressForm = () => {
                   )}
                 </Field>
               </div>
-              <div className="flex flex-col w-1/2">
+              <div className="flex flex-col sm:w-1/2 sm:pl-2">
                 <label htmlFor="lastName" className="py-2">
                   Nazwisko
                 </label>
@@ -101,7 +101,7 @@ export const AddressForm = () => {
               </Field>
             </div>
             <div className="flex py-2">
-              <div className="flex flex-col w-1/2 mr-4">
+              <div className="flex flex-col w-1/2 pr-2">
                 <label htmlFor="houseNumber" className="py-2">
                   Numer domu
                 </label>
@@ -111,13 +111,13 @@ export const AddressForm = () => {
                       {...input}
                       component="input"
                       id="houseNumber"
-                      placeholder="Numer domu"
+                      placeholder="Nr domu"
                       className={fieldStyles}
                     />
                   )}
                 </Field>
               </div>
-              <div className="flex flex-col w-1/2">
+              <div className="flex flex-col w-1/2 pl-2">
                 <label htmlFor="apartmentNumber" className="py-2">
                   Numer lokalu
                 </label>
@@ -127,7 +127,7 @@ export const AddressForm = () => {
                       {...input}
                       component="input"
                       id="apartmentNumber"
-                      placeholder="Numer lokalu"
+                      placeholder="Nr lokalu"
                       className={fieldStyles}
                     />
                   )}

@@ -8,10 +8,12 @@ type CartListProps = {
 
 export const CartList = React.memo<CartListProps>(({ products }) => {
   return (
-    <div>
-      {products.map((product) => (
-        <CartItem key={product.id} product={product} />
-      ))}
-    </div>
+    <table className="table-fixed mb-6">
+      <tbody>
+        {products.map((product) => (
+          <CartItem key={product.id} product={product} />
+        ))}
+      </tbody>
+    </table>
   );
 });

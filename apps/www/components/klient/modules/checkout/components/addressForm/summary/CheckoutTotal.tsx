@@ -14,13 +14,7 @@ export const CheckoutTotal = React.memo(() => {
           <h4>Forma dostawy</h4>
           <div className="flex justify-between py-1">
             <div className="flex items-center">
-              <input
-                type="radio"
-                id="poczta"
-                name="shipping"
-                value="poczta"
-                className="mr-2 checked"
-              />
+              <input type="radio" id="poczta" name="shipping" value="poczta" className="mr-2" />
               <label htmlFor="poczta">Poczta polska</label>
             </div>
             <p>20 zł</p>

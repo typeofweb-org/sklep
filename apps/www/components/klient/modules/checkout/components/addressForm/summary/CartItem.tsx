@@ -9,16 +9,17 @@ type CartItemProps = {
 
 export const CartItem = React.memo<CartItemProps>(({ product }) => {
   return (
-    <div>
-      <div className="flex px-2">
-        <div className="w-20 h-24 mr-2">
-          <CartItemImage />
-        </div>
-        <div className="flex justify-between w-full">
-          <p className="w-2/3">{product.name}</p>
-          <p className="">{product.regularPrice}</p>
-        </div>
-      </div>
-    </div>
+    <tr>
+      <td className="w-20 h-24 py-2">
+        <CartItemImage />
+      </td>
+      <td className="px-2">
+        <p className="">{product.name}</p>
+      </td>
+      <td className="px-2">x1</td>
+      <td className="px-2">
+        <p className="">{product.regularPrice}</p>
+      </td>
+    </tr>
   );
 });
