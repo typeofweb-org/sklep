@@ -147,8 +147,6 @@ function getJSON(response: Response) {
   const emptyCodes = [204, 205];
   if (!emptyCodes.includes(response.status) && contentType?.includes('json')) {
     return response.json();
-  } else {
-    return undefined;
   }
 }
 
