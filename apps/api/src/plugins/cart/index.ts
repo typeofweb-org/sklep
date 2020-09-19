@@ -8,6 +8,7 @@ import {
   addToCart,
   calculateCartTotals,
   clearCart,
+  ensureCartExists,
   findOrCreateCart,
   removeFromCart,
 } from './cartFunctions';
@@ -60,8 +61,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
         },
       },
       async handler(request, h): Promise<SklepTypes['postCart200Response']> {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
+        const cart = await ensureCartExists(request, h);
 
         const { regularSubTotal, discountSubTotal } = calculateCartTotals(cart);
 
@@ -88,8 +88,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
         },
       },
       async handler(request, h) {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
+        const cart = await ensureCartExists(request, h);
 
         const { quantity, productId } = request.payload as SklepTypes['patchCartAddRequestBody'];
 
@@ -110,8 +109,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
         },
       },
       async handler(request, h) {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
+        const cart = await ensureCartExists(request, h);
 
         const { productId } = request.payload as SklepTypes['patchCartRemoveRequestBody'];
 
@@ -130,8 +128,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
         validate: {},
       },
       async handler(request, h) {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
+        const cart = await ensureCartExists(request, h);
 
         await clearCart(request, { cartId: cart.id });
 
