@@ -1,9 +1,10 @@
 import type { Server } from '@hapi/hapi';
 import Cookie from 'cookie';
 import Faker from 'faker';
+import { last } from 'ramda';
 
 import type { SklepTypes } from '../../../../types/index';
-import { createAndAuthRole, getServerForTest, repeatRequest } from '../../../jest-utils';
+import { createAndAuthRole, execute, getServerForTest, repeatRequest } from '../../../jest-utils';
 import { Enums } from '../../models';
 
 describe('/cart', () => {
@@ -104,128 +105,98 @@ describe('/cart', () => {
     });
   });
 
-  it(`adds products to the cart`, async () => {
+  it(`adds products to the cart complex`, async () => {
     const server = await getServerForTest();
     const products = await mockProducts(server);
 
-    const createCartInjection = await server.inject({
-      method: 'POST',
-      url: '/cart',
-    });
+    const results = await execute(server, [
+      {
+        method: 'POST',
+        url: '/cart',
+      },
 
-    const cookies = createCartInjection.headers['set-cookie'];
-    const parsedCookies = Cookie.parse(String(cookies ?? ''));
+      {
+        method: 'PATCH',
+        url: '/cart/add',
+        payload: {
+          quantity: 1,
+          productId: products[0].id,
+        },
+      },
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/add',
-      payload: {
-        quantity: 1,
-        productId: products[0].id,
+      {
+        method: 'PATCH',
+        url: '/cart/add',
+        payload: {
+          quantity: 2,
+          productId: products[0].id,
+        },
       },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/add',
-      payload: {
-        quantity: 2,
-        productId: products[0].id,
+      {
+        method: 'PATCH',
+        url: '/cart/add',
+        payload: {
+          quantity: 5,
+          productId: products[1].id,
+        },
       },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/add',
-      payload: {
-        quantity: 5,
-        productId: products[1].id,
+      {
+        method: 'PATCH',
+        url: '/cart/clear',
       },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/clear',
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
+      {
+        method: 'PATCH',
+        url: '/cart/add',
+        payload: {
+          quantity: 1,
+          productId: products[1].id,
+        },
       },
-    });
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/add',
-      payload: {
-        quantity: 1,
-        productId: products[1].id,
+      {
+        method: 'PATCH',
+        url: '/cart/add',
+        payload: {
+          quantity: 2,
+          productId: products[1].id,
+        },
       },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/add',
-      payload: {
-        quantity: 2,
-        productId: products[1].id,
+      {
+        method: 'PATCH',
+        url: '/cart/add',
+        payload: {
+          quantity: 2,
+          productId: products[2].id,
+        },
       },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/add',
-      payload: {
-        quantity: 2,
-        productId: products[2].id,
+      {
+        method: 'PATCH',
+        url: '/cart/add',
+        payload: {
+          quantity: 2,
+          productId: products[0].id,
+        },
       },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/add',
-      payload: {
-        quantity: 2,
-        productId: products[0].id,
+      {
+        method: 'PATCH',
+        url: '/cart/remove',
+        payload: {
+          productId: products[2].id,
+        },
       },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
+      {
+        method: 'POST',
+        url: '/cart',
       },
-    });
+    ]);
 
-    await server.inject({
-      method: 'PATCH',
-      url: '/cart/remove',
-      payload: {
-        productId: products[2].id,
-      },
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
-
-    const newCartInjection = await server.inject({
-      method: 'POST',
-      url: '/cart',
-      headers: {
-        Cookie: `cart=${parsedCookies.cart}`,
-      },
-    });
+    const newCartInjection = last(results)!;
     const result = newCartInjection.result as SklepTypes['postCart200Response'];
     expect(result.data).toMatchObject({
       id: expect.any(String),
