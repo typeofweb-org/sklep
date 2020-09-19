@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HeartIcon } from '../../../../../../shared/icons/HeartIcon';
+import { HeartIcon } from '../../../../../../shared/components/icons/HeartIcon';
 
 type ProductDescriptionProps = {
   readonly name: string;

@@ -2,8 +2,8 @@ import type { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
 import { FeaturedProduct } from '../../components/klient/modules/featuredProduct/FeaturedProduct';
-import { Header } from '../../components/klient/shared/header/Header';
-import { Layout } from '../../components/klient/shared/layout/Layout';
+import { Header } from '../../components/klient/shared/components/header/Header';
+import { Layout } from '../../components/klient/shared/components/layout/Layout';
 import type { Product } from '../../types/product';
 
 function ProductPage({ product }: InferGetStaticPropsType<typeof getStaticProps>) {

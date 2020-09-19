@@ -2,7 +2,7 @@ import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { Cart } from '../../components/klient/modules/cart/Cart';
-import { Layout } from '../../components/klient/shared/layout/Layout';
+import { Layout } from '../../components/klient/shared/components/layout/Layout';
 
 function CartPage() {
   // todo: change with api call result

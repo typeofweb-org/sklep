@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import { SearchIcon } from '../../../../shared/icons/SearchIcon';
+import { SearchIcon } from '../../../../shared/components/icons/SearchIcon';
 
 export const TopBar = React.memo(() => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
