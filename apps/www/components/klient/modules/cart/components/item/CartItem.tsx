@@ -1,5 +1,5 @@
 import type { SklepTypes } from '@sklep/types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Price } from '../../../../shared/price/Price';
 
@@ -14,8 +14,22 @@ type CartItemRowProps = {
 };
 
 export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
-  const increaseQuantity = useCallback(() => () => console.log('incr'), []);
-  const decreaseQuantity = useCallback(() => () => console.log('decr'), []);
+  const [quantity, setQuantity] = useState(1);
+
+  const increaseQuantity = useCallback(
+    () => (99 <= quantity ? null : setQuantity(parseInt(quantity) + 1)),
+    [quantity],
+  );
+  const decreaseQuantity = useCallback(
+    () => (1 >= quantity ? null : setQuantity(parseInt(quantity) - 1)),
+    [quantity],
+  );
+
+  const handleChangeQuantity = (event) =>
+    event.target.value > 99 || event.target.value < 1
+      ? setQuantity(parseInt(1))
+      : setQuantity(event.target.value);
+
   const removeItemFromCart = useCallback(() => () => console.log('remv'), []);
 
   return (
@@ -32,7 +46,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
               onClick={decreaseQuantity}
               ariaLabel="zwiększ liczbę sztuk"
             />
-            <CartQuantityInput />
+            <CartQuantityInput quantity={quantity} handleChangeQuantity={handleChangeQuantity} />
             <CartQuantityButton
               text="+"
               onClick={increaseQuantity}

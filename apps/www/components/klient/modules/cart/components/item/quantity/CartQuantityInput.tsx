@@ -1,17 +1,18 @@
 import React from 'react';
 
 // todo: to implement functionality of this input
-export const CartQuantityInput = React.memo(() => {
+export const CartQuantityInput = React.memo(({ quantity, handleChangeQuantity }) => {
   return (
     <input
       type="number"
       id=""
-      className="appearance-none w-8 text-center"
+      className="appearance-none w-11 text-center"
       step="1"
       min="0"
       max="99"
       name=""
-      defaultValue="1"
+      onChange={handleChangeQuantity}
+      value={quantity}
       placeholder=""
       pattern="[0-9]*"
     />
