@@ -1,6 +1,6 @@
 import type { SklepTypes } from '@sklep/types';
 
-import { fetcher } from '../fetcher';
+import { fetcher } from '../../../../utils/fetcher';
 
 type Cart = SklepTypes['postCart200Response']['data'];
 
