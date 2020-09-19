@@ -29,7 +29,7 @@ export const getStaticPaths = () => {
   };
 };
 
-export const getStaticProps = async () => {
+export const getStaticProps = () => {
   // const res = await fetch('https://.../product/${params.id}'
 
   // todo: change with api call result

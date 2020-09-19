@@ -142,7 +142,7 @@ export class ResponseError extends Error {
   }
 }
 
-async function getJSON(response: Response) {
+function getJSON(response: Response) {
   const contentType = response.headers.get('Content-Type');
   const emptyCodes = [204, 205];
   if (!emptyCodes.includes(response.status) && contentType?.includes('json')) {
