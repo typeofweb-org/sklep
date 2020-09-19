@@ -1,6 +1,9 @@
 import React from 'react';
+import { Form } from 'react-final-form';
+import * as Yup from 'yup';
 
 import type { Order } from '../../../../types/order';
+import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
@@ -9,14 +12,24 @@ type CheckoutProps = {
   readonly order: Order;
   products: SklepTypes['getProducts200Response']['data'];
 };
+
+const checkoutSchema = Yup.object({
+  firstName: Yup.string().required(),
+});
 export const Checkout = React.memo<CheckoutProps>(({ order, products }) => {
+  const handleSubmit = (values) => {
+    console.log(values);
+  };
+
   return (
-    <section className="bg-white worksans py-8">
-      <div className="container mx-auto flex flex-col md:flex-row px-2 pt-4 pb-12">
-        <AddressForm />
-        <CheckoutSummary products={products} />
-      </div>
-    </section>
+    <FinalFormWrapper
+      schema={checkoutSchema}
+      onSubmit={handleSubmit}
+      className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
+    >
+      <AddressForm />
+      <CheckoutSummary products={products} />
+    </FinalFormWrapper>
   );
 });
 Checkout.displayName = 'Checkout';

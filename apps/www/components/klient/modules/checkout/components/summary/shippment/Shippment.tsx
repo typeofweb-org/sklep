@@ -1,4 +1,5 @@
 import React from 'react';
+import { Field } from 'react-final-form';
 
 export const Shippment = React.memo(() => {
   return (
@@ -6,28 +7,40 @@ export const Shippment = React.memo(() => {
       <h4>Forma dostawy</h4>
       <div className="flex justify-between py-1">
         <div className="flex items-center">
-          <input type="radio" id="poczta" name="shipping" value="poczta" className="mr-2" />
-          <label htmlFor="poczta">Poczta polska</label>
+          <label className="pr-2">
+            <Field name="shippment" type="radio" value="poczta">
+              {({ input, meta }) => (
+                <input {...input} component="input" type="radio" id="poczta" className="mr-2" />
+              )}
+            </Field>
+            Poczta Polska
+          </label>
         </div>
         <p>20 zł</p>
       </div>
       <div className="flex justify-between py-1">
         <div className="flex items-center">
-          <input type="radio" id="kurier" name="shipping" value="kurier" className="mr-2" />
-          <label htmlFor="kurier">Kurier</label>
+          <label className="pr-2">
+            <Field name="shippment" type="radio" value="kurier">
+              {({ input, meta }) => (
+                <input {...input} component="input" type="radio" id="kurier" className="mr-2" />
+              )}
+            </Field>
+            Kurier
+          </label>
         </div>
         <p>30 zł</p>
       </div>
       <div className="flex justify-between py-1">
         <div className="flex items-center">
-          <input
-            type="radio"
-            id="paczkomatInpost"
-            name="shipping"
-            value="paczkomatInpost"
-            className="mr-2"
-          />
-          <label htmlFor="paczkomatInpost">Paczkomat Inpost</label>
+          <label className="pr-2">
+            <Field name="shippment" type="radio" value="paczkomat">
+              {({ input, meta }) => (
+                <input {...input} component="input" type="radio" id="paczkomat" className="mr-2" />
+              )}
+            </Field>
+            Paczkomat
+          </label>
         </div>
         <p>20 zł</p>
       </div>
