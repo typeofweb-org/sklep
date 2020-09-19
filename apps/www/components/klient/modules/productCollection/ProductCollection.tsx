@@ -2,7 +2,7 @@ import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { ProductItem } from './components/product/Product';
-import { Wrapper } from './components/wrapper/Wrapper';
+import { ProductCollectionWrapper } from './components/wrapper/ProductCollectionWrapper';
 
 type ProductCollectionProps = {
   readonly products: SklepTypes['getProducts200Response']['data'];
@@ -10,11 +10,11 @@ type ProductCollectionProps = {
 
 export const ProductCollection = React.memo<ProductCollectionProps>(({ products }) => {
   return (
-    <Wrapper>
+    <ProductCollectionWrapper>
       {products.map((product) => (
         <ProductItem key={product.id} product={product} />
       ))}
-    </Wrapper>
+    </ProductCollectionWrapper>
   );
 });
 ProductCollection.displayName = 'ProductCollection';
