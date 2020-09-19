@@ -368,11 +368,11 @@ describe('/products', () => {
         }),
       );
 
-      const allProductsInjection = await server.inject({
+      await server.inject({
         method: 'GET',
         url: '/products',
       });
-      const products = allProductsInjection.result as SklepTypes['getProducts200Response'];
+      // const _products = allProductsInjection.result as SklepTypes['getProducts200Response'];
 
       const paginatedInjection = await server.inject({
         method: 'GET',
