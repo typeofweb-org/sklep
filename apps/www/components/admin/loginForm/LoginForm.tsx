@@ -30,7 +30,7 @@ export const LoginForm = () => {
   });
 
   const handleSubmit = useCallback(
-    async (values: LoginType) => {
+    (values: LoginType) => {
       mutate(values);
     },
     [mutate],

@@ -142,6 +142,7 @@ export class ResponseError extends Error {
   }
 }
 
+// eslint-disable-next-line require-await
 async function getJSON(response: Response) {
   const contentType = response.headers.get('Content-Type');
   const emptyCodes = [204, 205];
