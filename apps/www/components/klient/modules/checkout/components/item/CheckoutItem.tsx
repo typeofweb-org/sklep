@@ -1,10 +1,10 @@
-import { SklepTypes } from '@sklep/types';
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { CartItemImage } from '../../../../shared/image/CartItemImage';
 
 type CheckoutItemProps = {
-  product: SklepTypes['getProducts200Response']['data'][number];
+  readonly product: SklepTypes['getProducts200Response']['data'][number];
 };
 
 export const CheckoutItem = React.memo<CheckoutItemProps>(({ product }) => {
@@ -23,3 +23,5 @@ export const CheckoutItem = React.memo<CheckoutItemProps>(({ product }) => {
     </tr>
   );
 });
+
+CheckoutItem.displayName = 'CheckoutItem';

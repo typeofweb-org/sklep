@@ -3,11 +3,11 @@ import React from 'react';
 import { Button } from '../../../../shared/button/Button';
 import { CheckoutList } from '../list/CheckoutList';
 
-import { Payment } from './payment/Payment';
+import { PaymentMethod } from './payment/PaymentMethod';
 import { CheckoutTotal } from './total/CheckoutTotal';
 
 export type CartProps = {
-  products: SklepTypes['getProducts200Response']['data'];
+  readonly products: SklepTypes['getProducts200Response']['data'];
 };
 
 export const CheckoutSummary = React.memo<CartProps>(({ products }) => {
@@ -16,10 +16,12 @@ export const CheckoutSummary = React.memo<CartProps>(({ products }) => {
       <h3 className="text-2xl mb-6">Twoje zamówienie</h3>
       <CheckoutList products={products} />
       <CheckoutTotal />
-      <Payment />
+      <PaymentMethod />
       <Button ariaLabel="Złóż zamówienie" type="submit">
         Złóż zamówienie
       </Button>
     </div>
   );
 });
+
+CheckoutSummary.displayName = 'CheckoutSummary';

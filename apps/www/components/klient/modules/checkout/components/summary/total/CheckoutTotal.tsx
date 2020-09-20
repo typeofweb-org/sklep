@@ -1,5 +1,6 @@
 import React from 'react';
-import { Shippment } from '../shippment/Shippment';
+
+import { ShippmentMethod } from '../shippment/ShippmentMethod';
 
 export const CheckoutTotal = React.memo(() => {
   return (
@@ -9,7 +10,7 @@ export const CheckoutTotal = React.memo(() => {
           <span>Kwota</span>
           <span>2020 zł</span>
         </div>
-        <Shippment />
+        <ShippmentMethod />
         <div className="flex justify-between w-full p-4 text-2xl">
           <span>Do zapłaty</span>
           <span>2020 zł</span>
@@ -18,3 +19,5 @@ export const CheckoutTotal = React.memo(() => {
     </div>
   );
 });
+
+CheckoutTotal.displayName = 'CheckoutTotal';

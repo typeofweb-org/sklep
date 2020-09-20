@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from '../../../../shared/button/Button';
-
 export const CartSummary = React.memo(() => {
   return (
     <div className="w-full md:w-1/3 mb-4">

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form } from 'react-final-form';
 import * as Yup from 'yup';
 
 import type { Order } from '../../../../types/order';
@@ -10,7 +9,7 @@ import { CheckoutSummary } from './components/summary/CheckoutSummary';
 
 type CheckoutProps = {
   readonly order: Order;
-  products: SklepTypes['getProducts200Response']['data'];
+  readonly products: SklepTypes['getProducts200Resporeadonly nse']['data'];
 };
 
 const checkoutSchema = Yup.object({

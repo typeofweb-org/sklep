@@ -3,7 +3,7 @@ import React from 'react';
 import { CheckoutItem } from '../item/CheckoutItem';
 
 type CartListProps = {
-  products: SklepTypes['getProducts200Response']['data'];
+  readonly products: SklepTypes['getProducts200Response']['data'];
 };
 
 export const CheckoutList = React.memo<CartListProps>(({ products }) => {
@@ -17,3 +17,5 @@ export const CheckoutList = React.memo<CartListProps>(({ products }) => {
     </table>
   );
 });
+
+CheckoutList.displayName = 'CheckoutList';

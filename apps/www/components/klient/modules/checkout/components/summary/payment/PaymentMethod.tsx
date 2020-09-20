@@ -5,7 +5,7 @@ import blik from '../../../../../../../assets/blik.png';
 import paypal from '../../../../../../../assets/paypal.png';
 import visa_master from '../../../../../../../assets/visa_master.png';
 
-export const Payment = React.memo(() => {
+export const PaymentMethod = React.memo(() => {
   return (
     <section className="my-8">
       <h4 className="py-2 text-xl">Metoda płatności</h4>
@@ -52,3 +52,5 @@ export const Payment = React.memo(() => {
     </section>
   );
 });
+
+PaymentMethod.displayName = 'PaymentMethod';

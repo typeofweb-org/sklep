@@ -1,9 +1,9 @@
 import React from 'react';
 
 type ButtonProps = {
-  onClick: React.FormEventHandler<HTMLButtonElement>;
-  type?: 'button' | 'submit' | 'reset';
-  ariaLabel?: string;
+  readonly onClick: React.FormEventHandler<HTMLButtonElement>;
+  readonly type?: 'button' | 'submit' | 'reset';
+  readonly ariaLabel?: string;
 };
 
 export const Button = React.memo<ButtonProps>(

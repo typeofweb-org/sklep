@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'react-final-form';
 
-export const Shippment = React.memo(() => {
+export const ShippmentMethod = React.memo(() => {
   return (
     <section className="p-4 border-b border-gray-400">
       <h4>Forma dostawy</h4>
@@ -47,3 +47,5 @@ export const Shippment = React.memo(() => {
     </section>
   );
 });
+
+ShippmentMethod.displayName = 'ShippmentMethod';
