@@ -14,9 +14,7 @@ export const PaymentMethod = React.memo(() => {
         <div className="flex items-center">
           <label className="pr-2">
             <Field name="payment" type="radio" value="karta">
-              {({ input, meta }) => (
-                <input {...input} component="input" type="radio" id="karta" className="mr-2" />
-              )}
+              {({ input }) => <input {...input} type="radio" id="karta" className="mr-2" />}
             </Field>
             Karta płatnicza
           </label>
@@ -27,9 +25,7 @@ export const PaymentMethod = React.memo(() => {
         <div className="flex items-center">
           <label className="pr-2">
             <Field name="payment" type="radio" value="blik">
-              {({ input, meta }) => (
-                <input {...input} component="input" type="radio" id="blik" className="mr-2" />
-              )}
+              {({ input }) => <input {...input} type="radio" id="blik" className="mr-2" />}
             </Field>
             Płatność BLIK
           </label>
@@ -40,9 +36,7 @@ export const PaymentMethod = React.memo(() => {
         <div className="flex items-center">
           <label className="pr-2">
             <Field name="payment" type="radio" value="paypal">
-              {({ input, meta }) => (
-                <input {...input} component="input" type="radio" id="paypal" className="mr-2" />
-              )}
+              {({ input }) => <input {...input} type="radio" id="paypal" className="mr-2" />}
             </Field>
             PayPal
           </label>

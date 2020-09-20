@@ -9,9 +9,7 @@ export const ShippmentMethod = React.memo(() => {
         <div className="flex items-center">
           <label className="pr-2">
             <Field name="shippment" type="radio" value="poczta">
-              {({ input, meta }) => (
-                <input {...input} component="input" type="radio" id="poczta" className="mr-2" />
-              )}
+              {({ input }) => <input {...input} type="radio" id="poczta" className="mr-2" />}
             </Field>
             Poczta Polska
           </label>
@@ -22,9 +20,7 @@ export const ShippmentMethod = React.memo(() => {
         <div className="flex items-center">
           <label className="pr-2">
             <Field name="shippment" type="radio" value="kurier">
-              {({ input, meta }) => (
-                <input {...input} component="input" type="radio" id="kurier" className="mr-2" />
-              )}
+              {({ input }) => <input {...input} type="radio" id="kurier" className="mr-2" />}
             </Field>
             Kurier
           </label>
@@ -35,9 +31,7 @@ export const ShippmentMethod = React.memo(() => {
         <div className="flex items-center">
           <label className="pr-2">
             <Field name="shippment" type="radio" value="paczkomat">
-              {({ input, meta }) => (
-                <input {...input} component="input" type="radio" id="paczkomat" className="mr-2" />
-              )}
+              {({ input }) => <input {...input} type="radio" id="paczkomat" className="mr-2" />}
             </Field>
             Paczkomat
           </label>
