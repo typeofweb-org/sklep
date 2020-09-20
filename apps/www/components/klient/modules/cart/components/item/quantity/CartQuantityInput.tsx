@@ -5,7 +5,6 @@ export const CartQuantityInput = React.memo(({ quantity, handleChangeQuantity })
   return (
     <input
       type="number"
-      id=""
       className="appearance-none w-11 text-center"
       step="1"
       min="0"

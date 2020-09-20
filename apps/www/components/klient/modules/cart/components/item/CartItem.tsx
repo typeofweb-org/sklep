@@ -14,20 +14,23 @@ type CartItemRowProps = {
 };
 
 export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
-  const [quantity, setQuantity] = useState(1);
+  const MAX_PRODUCT_QUANTITY: number = 99;
+  const MIN_PRODUCT_QUANTITY: number = 1;
+
+  const [quantity, setQuantity] = useState(MIN_PRODUCT_QUANTITY);
 
   const increaseQuantity = useCallback(
-    () => (99 <= quantity ? null : setQuantity((quantity) => quantity + 1)),
-    [quantity],
+    () => setQuantity((quantity) => (MAX_PRODUCT_QUANTITY <= quantity ? quantity : quantity + 1)),
+    [],
   );
   const decreaseQuantity = useCallback(
-    () => (1 >= quantity ? null : setQuantity((quantity) => quantity - 1)),
-    [quantity],
+    () => setQuantity((quantity) => (quantity <= MIN_PRODUCT_QUANTITY ? quantity : quantity - 1)),
+    [],
   );
 
   const handleChangeQuantity = (event) =>
-    event.target.value > 99 || event.target.value < 1
-      ? setQuantity(parseInt(1))
+    event.target.value > MAX_PRODUCT_QUANTITY || event.target.value < MIN_PRODUCT_QUANTITY
+      ? setQuantity(1)
       : setQuantity(Number.parseInt(event.target.value, 10));
 
   const removeItemFromCart = useCallback(() => () => console.log('rmv'), []);
