@@ -19,9 +19,12 @@ const checkoutSchema = Yup.object({
   city: Yup.string().required('Pole jest wymagane'),
   zipCode: Yup.string().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
-});
+}).required();
+
+export type CheckoutType = Yup.InferType<typeof checkoutSchema>;
+
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
-  const handleSubmit = (values) => {
+  const handleSubmit = (values: CheckoutType) => {
     console.log(values);
   };
 

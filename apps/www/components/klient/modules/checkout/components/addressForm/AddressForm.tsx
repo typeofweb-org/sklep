@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'react-final-form';
 
-import { FormErrorMessage } from '../FormErrorMessage/FormErrorMessage';
+import { FormErrorMessage } from '../formErrorMessage/FormErrorMessage';
 
 export const AddressForm = React.memo(() => {
   const fieldStyles = 'border border-gray-300 rounded-sm px-4 py-2';
@@ -42,9 +42,7 @@ export const AddressForm = React.memo(() => {
       <label className={labelStyles}>
         <span className={labelTitleStyles}> Nazwa firmy (opcjonalnie)</span>
         <Field name="companyName">
-          {({ input, meta }) => (
-            <input {...input} placeholder="Nazwa firmy" className={fieldStyles} />
-          )}
+          {({ input }) => <input {...input} placeholder="Nazwa firmy" className={fieldStyles} />}
         </Field>
       </label>
       <label className={labelStyles}>
@@ -76,7 +74,7 @@ export const AddressForm = React.memo(() => {
           <label className={labelStyles}>
             <span className={labelTitleStyles}>Numer lokalu</span>
             <Field name="apartmentNumber">
-              {({ input, meta }) => (
+              {({ input }) => (
                 <input {...input} type="number" placeholder="Nr lokalu" className={fieldStyles} />
               )}
             </Field>

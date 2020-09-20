@@ -1,3 +1,4 @@
+import type { FieldState } from 'final-form';
 import React from 'react';
 
 interface FormErrorMessageProps {

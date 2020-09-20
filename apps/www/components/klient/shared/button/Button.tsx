@@ -1,7 +1,8 @@
 import React from 'react';
 
 type ButtonProps = {
-  readonly onClick: React.FormEventHandler<HTMLButtonElement>;
+  readonly children: string;
+  readonly onClick?: React.FormEventHandler<HTMLButtonElement>;
   readonly type?: 'button' | 'submit' | 'reset';
   readonly ariaLabel?: string;
 };

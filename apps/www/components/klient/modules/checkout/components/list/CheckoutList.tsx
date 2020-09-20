@@ -8,13 +8,18 @@ type CartListProps = {
 };
 
 export const CheckoutList = React.memo<CartListProps>(({ cart }) => {
-  const products = cart.cartProducts;
+  if (!cart) {
+    return null;
+  }
+  const products = cart.data.cartProducts;
   return (
     <table className="table-fixed mb-6">
       <tbody>
-        {products.map((product) => (
-          <CheckoutItem key={product.id} cartItem={product} />
-        ))}
+        {products &&
+          products.map(
+            (product) =>
+              product.product && <CheckoutItem key={product.product.id} cartItem={product} />,
+          )}
       </tbody>
     </table>
   );
