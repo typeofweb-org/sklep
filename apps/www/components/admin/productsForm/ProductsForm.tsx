@@ -37,9 +37,8 @@ const productSchema = Yup.object({
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
 }).required();
-
-type ProductFormMode = 'ADDING' | 'EDITING';
-
+type ProductBody = Yup.InferType<typeof productSchema>;
+type ProductFormMode = ProductsFormProps['mode'];
 type ProductsFormProps =
   | {
       readonly mutation: (values: SklepTypes['postProductsRequestBody']) => Promise<any>;
@@ -56,7 +55,7 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
   const [mutate, { isLoading, isSuccess, isError }] = useMutation(mutation);
 
   const handleSubmit = React.useCallback(
-    async (body: SklepTypes['postProductsRequestBody']) => {
+    async (body: ProductBody) => {
       // @todo handle server errors
       await mutate({ ...body, type: 'SINGLE' }); // @todo
     },
