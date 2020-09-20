@@ -2,14 +2,12 @@ import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 import * as Yup from 'yup';
 
-import type { Order } from '../../../../types/order';
 import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
 
 type CheckoutProps = {
-  readonly order: Order;
   readonly cart: SklepTypes['postCart200Response'];
 };
 
@@ -20,7 +18,7 @@ const checkoutSchema = Yup.object({
   houseNumber: Yup.number().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
 });
-export const Checkout = React.memo<CheckoutProps>(({ order, cart }) => {
+export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
   const handleSubmit = (values) => {
     console.log(values);
   };

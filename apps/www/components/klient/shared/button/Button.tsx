@@ -13,6 +13,7 @@ export const Button = React.memo<ButtonProps>(
         className="bg-gray-900 text-white text-lg w-full rounded-sm mt-4 p-4 shadow-sm hover:bg-gray-800"
         onClick={onClick}
         aria-label={ariaLabel}
+        type={type}
       >
         {children}
       </button>
