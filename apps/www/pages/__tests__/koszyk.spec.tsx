@@ -4,7 +4,7 @@ import React from 'react';
 
 import CartPage from '../koszyk';
 
-test('tests works', async () => {
+test('tests works', () => {
   render(<CartPage />);
 
   expect(screen.getByText('Koszyk zakupowy')).toBeDefined();

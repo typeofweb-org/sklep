@@ -1,4 +1,4 @@
-import type { Request } from '@hapi/hapi';
+import type { Request, ResponseToolkit } from '@hapi/hapi';
 
 import type { Awaited } from '../../types';
 
@@ -26,6 +26,14 @@ const cartSelect = {
   },
 } as const;
 
+export async function ensureCartExists(request: Request, h: ResponseToolkit) {
+  const result = await findOrCreateCart(request);
+  if (result.created) {
+    h.state('cart', result.cart.id);
+  }
+  return result.cart;
+}
+
 export async function findOrCreateCart(request: Request) {
   const cartId = request.state['cart'];
 
@@ -36,14 +44,15 @@ export async function findOrCreateCart(request: Request) {
       take: 1,
     });
     if (cart) {
-      return cart;
+      return { cart, created: false };
     }
   }
 
-  return request.server.app.db.cart.create({
+  const cart = await request.server.app.db.cart.create({
     data: {},
     select: cartSelect,
   });
+  return { cart, created: true };
 }
 
 export function addToCart(
@@ -102,7 +111,7 @@ export function clearCart(request: Request, { cartId }: { readonly cartId: strin
   });
 }
 
-export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreateCart>>) {
+export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreateCart>>['cart']) {
   return cart.cartProducts.reduce(
     (acc, cartProduct) => {
       const regularSum = cartProduct.product.regularPrice * cartProduct.quantity;
