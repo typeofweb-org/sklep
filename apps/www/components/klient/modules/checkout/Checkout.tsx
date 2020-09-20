@@ -16,6 +16,8 @@ const checkoutSchema = Yup.object({
   lastName: Yup.string().required('Pole jest wymagane'),
   streetName: Yup.string().required('Pole jest wymagane'),
   houseNumber: Yup.number().required('Pole jest wymagane'),
+  city: Yup.string().required('Pole jest wymagane'),
+  zipCode: Yup.string().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
 });
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Field, Form } from 'react-final-form';
+import { Field } from 'react-final-form';
+
 import { FormErrorMessage } from '../FormErrorMessage/FormErrorMessage';
 
 export const AddressForm = ({ onSubmit }) => {
-  const regions = [{ value: 'mazowieckie', label: 'mazowieckie' }];
-
   const fieldStyles = 'border border-gray-300 rounded-sm px-4 py-2';
   const labelStyles = 'flex flex-col w-full';
   const labelTitleStyles = 'py-2';
