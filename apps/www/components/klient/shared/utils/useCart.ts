@@ -4,12 +4,8 @@ import { useMutation, useQuery, useQueryCache } from 'react-query';
 import { addToCart } from '../api/addToCart';
 import { createCart } from '../api/createCart';
 
-// this hook can be extended for the wider purpouse
-type UseCart = {
-  readonly itemsInCart: number;
-  readonly addToCart: (id: number) => void;
-};
-export const useCart = (): UseCart => {
+// this hook can be extended for the wider purpose
+export const useCart = () => {
   const { data } = useQuery('createCart', createCart);
 
   const queryCache = useQueryCache();
@@ -24,20 +20,18 @@ export const useCart = (): UseCart => {
     },
   );
 
-  const itemsInCart = React.useMemo(
-    () =>
-      data?.cartProducts.reduce((sum, product) => {
-        if (!data) {
-          return sum;
-        }
-        return sum + product.quantity;
-      }, 0),
-    [data],
-  );
+  const itemsInCart = React.useMemo(() => {
+    if (!data) {
+      return 0;
+    }
+    return data?.cartProducts.reduce((sum, product) => {
+      return sum + product.quantity;
+    }, 0);
+  }, [data]);
 
   return React.useMemo(
     () => ({
-      itemsInCart: itemsInCart || 0,
+      itemsInCart: itemsInCart,
       addToCart: addToCartMutation,
     }),
     [addToCartMutation, itemsInCart],
