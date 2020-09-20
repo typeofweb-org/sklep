@@ -7,7 +7,7 @@ const productSchema = Joi.object({
   id: Joi.number().required(),
   slug: Joi.string().required(),
   name: Joi.string().required(),
-  description: Joi.string().optional().allow(null, ''),
+  description: Joi.string().required(),
   isPublic: Joi.boolean().required(),
   regularPrice: Joi.number().required(),
   discountPrice: Joi.number().optional().allow(null),
@@ -47,4 +47,12 @@ export const getProductResponseSchema = Joi.object<SklepTypes['getProducts200Res
 
 export const getProductsResponseSchema = Joi.object<SklepTypes['getProducts200Response']>({
   data: Joi.array().items(productSchema.optional()).required(),
+  meta: Joi.object({
+    total: Joi.number().integer().required(),
+  }).required(),
 }).required();
+
+export const getProductsQuerySchema = Joi.object<SklepTypes['getProductsRequestQuery']>({
+  take: Joi.number().integer(),
+  skip: Joi.number().integer(),
+});

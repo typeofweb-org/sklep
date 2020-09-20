@@ -33,7 +33,7 @@ const productSchema = Yup.object({
   name: Yup.string().required().label('Nazwa produktu'),
   description: Yup.string().required().label('Opis produktu'),
   regularPrice: Yup.number().required().label('Cena produktu'),
-  discountPrice: Yup.number().optional(),
+  discountPrice: Yup.number().optional().nullable(),
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
 }).required();

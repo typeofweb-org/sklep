@@ -1,18 +1,12 @@
 import { User24 } from '@carbon/icons-react';
-import {
-  Button,
-  Grid,
-  InlineNotification,
-  Loading,
-  TextInput,
-  ToastNotification,
-} from 'carbon-components-react';
+import { Button, Grid, InlineNotification, Loading, TextInput } from 'carbon-components-react';
 import React, { useCallback } from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
+import { useToasts } from '../toasts/Toasts';
 
 import styles from './LoginForm.module.scss';
 import { login } from './loginFormUtils';
@@ -24,10 +18,19 @@ const loginSchema = Yup.object({
 export type LoginType = Yup.InferType<typeof loginSchema>;
 
 export const LoginForm = () => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(login);
+  const { addToast } = useToasts();
+  const [mutate, { isLoading, isError }] = useMutation(login, {
+    onSuccess() {
+      addToast({
+        kind: 'success',
+        title: 'Logowanie udane',
+        caption: '',
+      });
+    },
+  });
 
   const handleSubmit = useCallback(
-    async (values: LoginType) => {
+    (values: LoginType) => {
       mutate(values);
     },
     [mutate],
@@ -67,14 +70,6 @@ export const LoginForm = () => {
           Zaloguj się
         </Button>
         {isLoading && <Loading />}
-        {isSuccess && (
-          <ToastNotification
-            kind="success"
-            title="Logowanie udane"
-            caption=""
-            className={styles.toast}
-          />
-        )}
         {isError && <InlineNotification kind="error" title="Wprowadzone dane nie są poprawne" />}
       </Grid>
     </ToWForm>

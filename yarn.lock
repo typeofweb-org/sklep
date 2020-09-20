@@ -1002,7 +1002,7 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@7.11.2", "@babel/runtime@^7.10.0", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.3", "@babel/runtime@^7.10.5", "@babel/runtime@^7.11.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.1", "@babel/runtime@^7.9.2":
+"@babel/runtime@7.11.2", "@babel/runtime@^7.10.0", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.3", "@babel/runtime@^7.10.5", "@babel/runtime@^7.11.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.1", "@babel/runtime@^7.9.2":
   version "7.11.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
   integrity sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
@@ -2436,9 +2436,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@manifoldco/swagger-to-ts@github:mmiszy/swagger-to-ts#a19913e6b2a700c7ba1880f98fde718c9aedcde1":
-  version "2.0.0"
-  resolved "https://codeload.github.com/mmiszy/swagger-to-ts/tar.gz/a19913e6b2a700c7ba1880f98fde718c9aedcde1"
+"@manifoldco/swagger-to-ts@github:mmiszy/swagger-to-ts#586cefbcdb666cad8ec134530c1df61cb42aa3e4":
+  version "3.0.0"
+  resolved "https://codeload.github.com/mmiszy/swagger-to-ts/tar.gz/586cefbcdb666cad8ec134530c1df61cb42aa3e4"
   dependencies:
     chalk "^4.0.0"
     js-yaml "^3.13.1"
@@ -2784,6 +2784,11 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-3.0.0.tgz#851489a9065a067cb7f3c9cbe4ce9bed8bba0876"
   integrity sha512-nohgNyv+1ViVcubKBh0+XiNJ3dO8nYu///9aJ4cgSqv70gBL+94SNy/iC2NLzKPT2Zt/QavrOkBVbZRLZmw6NQ==
+
+"@types/bluebird@3.5.32":
+  version "3.5.32"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.32.tgz#381e7b59e39f010d20bbf7e044e48f5caf1ab620"
+  integrity sha512-dIOxFfI0C+jz89g6lQ+TqhGgPQ0MxSnh/E4xuC0blhFtyW269+mPG5QeLgbdwst/LvdP8o1y0o/Gz5EHXLec/g==
 
 "@types/carbon-components-react@7.10.9":
   version "7.10.9"
@@ -4036,7 +4041,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5, bluebird@^3.7.1, bluebird@^3.7.2:
+bluebird@3.7.2, bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5, bluebird@^3.7.1, bluebird@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
@@ -6043,6 +6048,14 @@ eslint-module-utils@^2.6.0:
     debug "^2.6.9"
     pkg-dir "^2.0.0"
 
+eslint-plugin-css-modules@2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-css-modules/-/eslint-plugin-css-modules-2.11.0.tgz#8de4d01d523a2d51c03043fa8004aab6b6cf3b1a"
+  integrity sha512-CLvQvJOMlCywZzaI4HVu7QH/ltgNXvCg7giJGiE+sA9wh5zQ+AqTgftAzrERV22wHe1p688wrU/Zwxt1Ry922w==
+  dependencies:
+    gonzales-pe "^4.0.3"
+    lodash "^4.17.2"
+
 eslint-plugin-cypress@2.11.1:
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-2.11.1.tgz#a945e2774b88211e2c706a059d431e262b5c2862"
@@ -7073,6 +7086,13 @@ globule@^1.0.0:
     glob "~7.1.1"
     lodash "~4.17.10"
     minimatch "~3.0.2"
+
+gonzales-pe@^4.0.3:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/gonzales-pe/-/gonzales-pe-4.3.0.tgz#fe9dec5f3c557eead09ff868c65826be54d067b3"
+  integrity sha512-otgSPpUmdWJ43VXyiNgEYE4luzHCL2pz4wQ0OnDluC6Eg4Ko3Vexy/SrSynglw/eR+OhkzmqFCZa/OFa/RgAOQ==
+  dependencies:
+    minimist "^1.2.5"
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.2, graceful-fs@^4.2.4:
   version "4.2.4"
@@ -8955,7 +8975,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.4, lodash@^4.2.1, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.2, lodash@^4.17.20, lodash@^4.17.4, lodash@^4.2.1, lodash@~4.17.10:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -11264,10 +11284,12 @@ react-query-devtools@2.4.7:
   dependencies:
     match-sorter "^4.1.0"
 
-react-query@2.15.4:
-  version "2.15.4"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.15.4.tgz#0447510fc30aebba5a4b99879ec4b7155d9b3f20"
-  integrity sha512-gEF2Ebe1MtiyLKEaVEIlRMl6rwvP/RVwP+Xf68vhXDfD91IeZkkW7plRjoaHa0/NeUPM1AgTHb1Z7NtqaYDXjA==
+react-query@2.21.2:
+  version "2.21.2"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.21.2.tgz#3683069049c64a8ea09e14015346f52481a31dcb"
+  integrity sha512-Yzyrsh8LtMog7NC0cam51eEO8oYSt8fpW7IRTv5BJHu6+jwtrNagJRRILNPw6wVTIzKLkb/Ane3iWxHXZBMe9w==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
 
 react-refresh@0.8.3:
   version "0.8.3"

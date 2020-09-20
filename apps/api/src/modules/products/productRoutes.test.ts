@@ -279,7 +279,7 @@ describe('/products', () => {
 
       const getInjection = await server.inject({
         method: 'GET',
-        url: `/products/69`,
+        url: `/products/6900000`,
         headers: auth.headers,
       });
 
@@ -346,6 +346,46 @@ describe('/products', () => {
       expect(injection.statusCode).toEqual(200);
       expect(result).toHaveProperty('data');
       expect(result.data.every((el) => el.isPublic === true)).toBe(true);
+    });
+
+    it(`should allow to paginate products`, async () => {
+      const server = await getServerForTest();
+      const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+      await repeatRequest(10, () =>
+        server.inject({
+          method: 'POST',
+          url: '/products',
+          headers: auth.headers,
+          payload: {
+            name: Faker.lorem.sentence(5),
+            description: Faker.lorem.sentences(5),
+            isPublic: Faker.random.arrayElement([true, false]),
+            regularPrice: parseInt(Faker.commerce.price(50, 100), 10),
+            discountPrice: parseInt(Faker.commerce.price(10, 49), 10),
+            type: Enums.ProductType.SINGLE,
+          },
+        }),
+      );
+
+      const allProductsInjection = await server.inject({
+        method: 'GET',
+        url: '/products',
+      });
+      const products = allProductsInjection.result as SklepTypes['getProducts200Response'];
+
+      const paginatedInjection = await server.inject({
+        method: 'GET',
+        url: '/products?take=3&skip=5',
+      });
+
+      const result = paginatedInjection.result as SklepTypes['getProducts200Response'];
+
+      expect(paginatedInjection.statusCode).toEqual(200);
+      expect(result).toHaveProperty('data');
+      expect(result.data.every((el) => el.isPublic === true)).toBe(true);
+      expect(result.data).toHaveLength(3);
+      expect(result.data).toEqual(products.data.slice(5, 8));
     });
   });
 });

@@ -205,7 +205,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
           schema: meAuthResponseSchema,
         },
       },
-      async handler(request) {
+      handler(request) {
         if (request.auth.credentials?.session) {
           return { data: request.auth.credentials.session };
         }
