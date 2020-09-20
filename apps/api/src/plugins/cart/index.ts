@@ -33,7 +33,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
   multiple: false,
   name: 'Sklep Cart Plugin',
   version: '1.0.0',
-  async register(server, options) {
+  register(server, options) {
     server.expose('findOrCreateCart', findOrCreateCart);
     server.expose('addToCart', addToCart);
     server.expose('removeFromCart', removeFromCart);

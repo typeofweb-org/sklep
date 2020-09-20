@@ -32,7 +32,7 @@ export const AdminProducts = React.memo(() => {
         closeDeletionModal();
         resetDeletionStatus();
       },
-      async onError(error?: Error) {
+      onError(error?: Error) {
         addToast({
           kind: 'error',
           title: 'Wystąpił błąd',

@@ -14,7 +14,7 @@ function CheckoutPage({ order }: InferGetStaticPropsType<typeof getStaticProps>)
     </Layout>
   );
 }
-export const getStaticProps = async () => {
+export const getStaticProps = () => {
   // const res = await fetch('https://.../')
 
   // todo: change with api call result
