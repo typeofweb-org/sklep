@@ -28,13 +28,13 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
     [],
   );
 
-  const handleChangeQuantity = (event: {
-    readonly currentTarget: { readonly value: React.SetStateAction<number> };
-  }) =>
-    event.currentTarget.value > MAX_PRODUCT_QUANTITY ||
-    event.currentTarget.value < MIN_PRODUCT_QUANTITY
+  const handleChangeQuantity = (event: React.FormEvent<HTMLInputElement>) => {
+    const currentValue = Number.parseInt(event.currentTarget.value, 10);
+
+    currentValue > MAX_PRODUCT_QUANTITY || currentValue < MIN_PRODUCT_QUANTITY
       ? setQuantity(1)
-      : setQuantity(event.currentTarget.value);
+      : setQuantity(currentValue);
+  };
 
   const removeItemFromCart = useCallback(() => () => console.log('rmv'), []);
 

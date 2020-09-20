@@ -2,7 +2,7 @@ import React from 'react';
 
 type CartQuantityInputProps = {
   readonly quantity: number;
-  readonly handleChangeQuantity: any;
+  readonly handleChangeQuantity: React.FormEventHandler<HTMLInputElement>;
 };
 
 // todo: to implement functionality of this input
