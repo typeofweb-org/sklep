@@ -29,7 +29,8 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
   );
 
   const handleChangeQuantity = (event) =>
-    event.target.value > MAX_PRODUCT_QUANTITY || event.target.value < MIN_PRODUCT_QUANTITY
+    event.currentTarget.value > MAX_PRODUCT_QUANTITY ||
+    event.currentTarget.value < MIN_PRODUCT_QUANTITY
       ? setQuantity(1)
       : setQuantity(Number.parseInt(event.target.value, 10));
 
