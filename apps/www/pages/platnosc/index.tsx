@@ -2,7 +2,7 @@ import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { Checkout } from '../../components/klient/modules/checkout/Checkout';
-import { Layout } from '../../components/klient/shared/layout/Layout';
+import { Layout } from '../../components/klient/shared/components/layout/Layout';
 
 function CheckoutPage() {
   const order = {
