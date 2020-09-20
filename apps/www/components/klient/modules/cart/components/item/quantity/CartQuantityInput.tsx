@@ -15,11 +15,8 @@ export const CartQuantityInput = React.memo<CartQuantityInputProps>(
         step="1"
         min="0"
         max="99"
-        name=""
         onChange={handleChangeQuantity}
         value={quantity}
-        placeholder=""
-        pattern="[0-9]*"
       />
     );
   },

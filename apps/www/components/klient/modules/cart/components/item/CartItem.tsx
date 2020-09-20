@@ -14,13 +14,13 @@ type CartItemRowProps = {
 };
 
 export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
-  const MAX_PRODUCT_QUANTITY: number = 99;
-  const MIN_PRODUCT_QUANTITY: number = 1;
+  const MAX_PRODUCT_QUANTITY = 99;
+  const MIN_PRODUCT_QUANTITY = 1;
 
   const [quantity, setQuantity] = useState(MIN_PRODUCT_QUANTITY);
 
   const increaseQuantity = useCallback(
-    () => setQuantity((quantity) => (MAX_PRODUCT_QUANTITY <= quantity ? quantity : quantity + 1)),
+    () => setQuantity((quantity) => (quantity >= MAX_PRODUCT_QUANTITY ? quantity : quantity + 1)),
     [],
   );
   const decreaseQuantity = useCallback(
@@ -28,13 +28,16 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
     [],
   );
 
-  const handleChangeQuantity = (event: React.FormEvent<HTMLInputElement>) => {
-    const currentValue = Number.parseInt(event.currentTarget.value, 10);
+  const handleChangeQuantity = React.useCallback<React.FormEventHandler<HTMLInputElement>>(
+    (event: React.FormEvent<HTMLInputElement>) => {
+      const currentValue = Number.parseInt(event.currentTarget.value, 10);
 
-    currentValue > MAX_PRODUCT_QUANTITY || currentValue < MIN_PRODUCT_QUANTITY
-      ? setQuantity(1)
-      : setQuantity(currentValue);
-  };
+      currentValue > MAX_PRODUCT_QUANTITY || currentValue < MIN_PRODUCT_QUANTITY
+        ? setQuantity(1)
+        : setQuantity(currentValue);
+    },
+    [],
+  );
 
   const removeItemFromCart = useCallback(() => () => console.log('rmv'), []);
 
