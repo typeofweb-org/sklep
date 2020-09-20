@@ -20,8 +20,11 @@ const checkoutSchema = Yup.object({
   zipCode: Yup.string().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
 });
+
+export type CheckoutType = Yup.InferType<typeof checkoutSchema>;
+
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
-  const handleSubmit = (values) => {
+  const handleSubmit = (values: CheckoutType) => {
     console.log(values);
   };
 
@@ -32,7 +35,7 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
       className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
     >
       <AddressForm />
-      <CheckoutSummary cart={cart} />
+      <CheckoutSummary cart={cart.data} />
     </FinalFormWrapper>
   );
 });

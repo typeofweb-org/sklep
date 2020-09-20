@@ -5,10 +5,6 @@ import { Checkout } from '../../components/klient/modules/checkout/Checkout';
 import { Layout } from '../../components/klient/shared/components/layout/Layout';
 
 function CheckoutPage() {
-  const order = {
-    id: '123',
-  };
-
   const cart = {
     id: '1',
     createdAt: '2020-01-01',
@@ -39,7 +35,7 @@ function CheckoutPage() {
 
   return (
     <Layout title="Płatność i realizacja">
-      <Checkout order={order} cart={cart} />
+      <Checkout cart={cart} />
     </Layout>
   );
 }
