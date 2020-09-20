@@ -1,5 +1,6 @@
 import React from 'react';
 import { Field, Form } from 'react-final-form';
+import { FormErrorMessage } from '../FormErrorMessage/FormErrorMessage';
 
 export const AddressForm = ({ onSubmit }) => {
   const regions = [{ value: 'mazowieckie', label: 'mazowieckie' }];
@@ -19,7 +20,7 @@ export const AddressForm = ({ onSubmit }) => {
               {({ input, meta }) => (
                 <div className="flex flex-col">
                   <input {...input} placeholder="Imię" className={fieldStyles} />
-                  {meta.error && meta.touched && <span>{meta.error}</span>}
+                  <FormErrorMessage meta={meta} />
                 </div>
               )}
             </Field>
@@ -30,7 +31,10 @@ export const AddressForm = ({ onSubmit }) => {
             <span className={labelTitleStyles}>Nazwisko</span>
             <Field name="lastName">
               {({ input, meta }) => (
-                <input {...input} placeholder="Nazwisko" className={fieldStyles} />
+                <div className="flex flex-col">
+                  <input {...input} placeholder="Nazwisko" className={fieldStyles} />
+                  <FormErrorMessage meta={meta} />
+                </div>
               )}
             </Field>
           </label>
@@ -48,7 +52,10 @@ export const AddressForm = ({ onSubmit }) => {
         <span className={labelTitleStyles}>Nazwa ulicy</span>
         <Field name="streetName">
           {({ input, meta }) => (
-            <input {...input} placeholder="Nazwa ulicy" className={fieldStyles} />
+            <div className="flex flex-col">
+              <input {...input} placeholder="Nazwa ulicy" className={fieldStyles} />
+              <FormErrorMessage meta={meta} />
+            </div>
           )}
         </Field>
       </label>
@@ -58,7 +65,10 @@ export const AddressForm = ({ onSubmit }) => {
             <span className={labelTitleStyles}>Numer domu</span>
             <Field name="houseNumber">
               {({ input, meta }) => (
-                <input {...input} placeholder="Nr domu" className={fieldStyles} />
+                <div className="flex flex-col">
+                  <input {...input} type="number" placeholder="Nr domu" className={fieldStyles} />
+                  <FormErrorMessage meta={meta} />
+                </div>
               )}
             </Field>
           </label>
@@ -68,7 +78,7 @@ export const AddressForm = ({ onSubmit }) => {
             <span className={labelTitleStyles}>Numer lokalu</span>
             <Field name="apartmentNumber">
               {({ input, meta }) => (
-                <input {...input} placeholder="Nr lokalu" className={fieldStyles} />
+                <input {...input} type="number" placeholder="Nr lokalu" className={fieldStyles} />
               )}
             </Field>
           </label>
@@ -77,14 +87,22 @@ export const AddressForm = ({ onSubmit }) => {
       <label className={labelStyles}>
         <span className={labelTitleStyles}>Miasto</span>
         <Field name="city">
-          {({ input, meta }) => <input {...input} placeholder="Miasto" className={fieldStyles} />}
+          {({ input, meta }) => (
+            <div className="flex flex-col">
+              <input {...input} placeholder="Miasto" className={fieldStyles} />
+              <FormErrorMessage meta={meta} />
+            </div>
+          )}
         </Field>
       </label>
       <label className={labelStyles}>
         <span className={labelTitleStyles}>Kod pocztowy</span>
         <Field name="zipCode">
           {({ input, meta }) => (
-            <input {...input} placeholder="Kod pocztowy" className={fieldStyles} />
+            <div className="flex flex-col">
+              <input {...input} placeholder="Kod pocztowy" className={fieldStyles} />
+              <FormErrorMessage meta={meta} />
+            </div>
           )}
         </Field>
       </label>
