@@ -1,3 +1,4 @@
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -9,7 +10,7 @@ import { CheckoutSummary } from './components/summary/CheckoutSummary';
 
 type CheckoutProps = {
   readonly order: Order;
-  readonly products: SklepTypes['getProducts200Resporeadonly nse']['data'];
+  readonly cart: SklepTypes['postCart200Response'];
 };
 
 const checkoutSchema = Yup.object({
@@ -19,7 +20,7 @@ const checkoutSchema = Yup.object({
   houseNumber: Yup.number().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
 });
-export const Checkout = React.memo<CheckoutProps>(({ order, products }) => {
+export const Checkout = React.memo<CheckoutProps>(({ order, cart }) => {
   const handleSubmit = (values) => {
     console.log(values);
   };
@@ -31,7 +32,7 @@ export const Checkout = React.memo<CheckoutProps>(({ order, products }) => {
       className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
     >
       <AddressForm />
-      <CheckoutSummary products={products} />
+      <CheckoutSummary cart={cart} />
     </FinalFormWrapper>
   );
 });

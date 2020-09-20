@@ -1,3 +1,4 @@
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { Checkout } from '../../components/klient/modules/checkout/Checkout';
@@ -8,48 +9,37 @@ function CheckoutPage() {
     id: '123',
   };
 
-  const products = [
-    {
-      id: 123,
-      name: 'Product Name',
-      description: 'desc',
-      slug: '123',
-      isPublic: true,
-      regularPrice: 1234,
-      productType: 'footwear',
-    },
-    {
-      id: 345,
-      name: 'To jest dłuższa prawdziwa nazwa bardzo bardzo duluga da',
-      description: 'desc',
-      slug: '345',
-      isPublic: true,
-      regularPrice: 3454,
-      discountPrice: 12,
-    },
-    {
-      id: 346,
-      name: 'Beautiful socks',
-      description: 'desc',
-      slug: '346',
-      isPublic: true,
-      regularPrice: 3454,
-      discountPrice: 1234,
-    },
-    {
-      id: 347,
-      name: 'Beautiful socks 2',
-      description: 'desc',
-      slug: '347',
-      isPublic: true,
-      regularPrice: 3454,
-      discountPrice: 12,
-    },
-  ] as SklepTypes['getProducts200Response']['data'];
+  const cart = {
+    id: '1',
+    createdAt: '2020-01-01',
+    updatedAt: '2020-01-01',
+    regularSubTotal: 2020,
+    discountSubTotal: 2020,
+    cartProducts: [
+      {
+        quantity: 1,
+        product: {
+          id: '1',
+          name: 'Pierwszy produkt w koszyku',
+          slug: 'Pierwszy produkt w koszyku',
+          regularPrice: 1245,
+        },
+      },
+      {
+        quantity: 2,
+        product: {
+          id: '2',
+          name: 'Skarpetki typu lux',
+          slug: 'Skarpetki typu lux',
+          regularPrice: 24,
+        },
+      },
+    ],
+  } as SklepTypes['postCart200Response'];
 
   return (
     <Layout title="Płatność i realizacja">
-      <Checkout order={order} products={products} />
+      <Checkout order={order} cart={cart} />
     </Layout>
   );
 }

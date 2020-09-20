@@ -1,17 +1,19 @@
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { CheckoutItem } from '../item/CheckoutItem';
 
 type CartListProps = {
-  readonly products: SklepTypes['getProducts200Response']['data'];
+  readonly cart: SklepTypes['postCart200Response'];
 };
 
-export const CheckoutList = React.memo<CartListProps>(({ products }) => {
+export const CheckoutList = React.memo<CartListProps>(({ cart }) => {
+  const products = cart.cartProducts;
   return (
     <table className="table-fixed mb-6">
       <tbody>
         {products.map((product) => (
-          <CheckoutItem key={product.id} product={product} />
+          <CheckoutItem key={product.id} cartItem={product} />
         ))}
       </tbody>
     </table>
