@@ -10,7 +10,7 @@ export const Payment = React.memo(() => {
     <section className="my-8">
       <h4 className="py-2 text-xl">Metoda płatności</h4>
       <p className="pb-2 text-sm">Wszystkie transakcje są bezpieczne i szyfrowane</p>
-      <div className="flex justify-between p-2 border border-gray-200 w-full">
+      <div className="flex justify-between p-2 border border-gray-200">
         <div className="flex items-center">
           <label className="pr-2">
             <Field name="payment" type="radio" value="karta">

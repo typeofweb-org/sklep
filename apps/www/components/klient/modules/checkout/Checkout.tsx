@@ -14,7 +14,10 @@ type CheckoutProps = {
 };
 
 const checkoutSchema = Yup.object({
-  firstName: Yup.string().required(),
+  firstName: Yup.string().required('Pole jest wymagane'),
+  lastName: Yup.string().required('Pole jest wymagane'),
+  streetName: Yup.string().required('Pole jest wymagane'),
+  houseNumber: Yup.number().required('Pole jest wymagane'),
 });
 export const Checkout = React.memo<CheckoutProps>(({ order, products }) => {
   const handleSubmit = (values) => {
