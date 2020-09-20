@@ -1,15 +1,20 @@
 import Link from 'next/link';
 import React from 'react';
 
+import { useCart } from '../../utils/useCart';
 import { ShoppingCartIcon } from '../icons/ShoppingCartIcon';
 
-export const IconLinks = React.memo(() => (
-  <div className="order-2 md:order-3 flex items-center px-4">
+export const CartStatus = React.memo(() => {
+  const { itemsInCart } = useCart();
+
+  return (
     <Link href="/koszyk">
       <a>
         <ShoppingCartIcon className="fill-current text-gray-600 hover:text-black text-6xl ml-3 cursor-pointer" />
+        items: {itemsInCart}
       </a>
     </Link>
-  </div>
-));
-IconLinks.displayName = 'IconLinks';
+  );
+});
+
+CartStatus.displayName = 'CartStatus';

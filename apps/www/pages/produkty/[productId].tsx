@@ -2,12 +2,14 @@ import type { SklepTypes } from '@sklep/types';
 import type { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
+import { Header } from '../../components/admin/Header';
 import { FeaturedProduct } from '../../components/klient/modules/featuredProduct/FeaturedProduct';
-import { Layout } from '../../components/klient/shared/layout/Layout';
+import { Layout } from '../../components/klient/shared/components/layout/Layout';
 
 function ProductPage({ product }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout title={product.name}>
+    <Layout title="Sklep strona główna">
+      <Header />
       <FeaturedProduct product={product} />
     </Layout>
   );
@@ -31,7 +33,7 @@ export const getStaticProps = () => {
   // const res = await fetch('https://.../product/${params.id}'
 
   // todo: change with api call result
-  const product: SklepTypes['getProducts200Response']['data'] = {
+  const product: SklepTypes['getProducts200Response']['data'][number] = {
     id: 345,
     name: 'Lorem ipsum dolor sit amet,',
     description:
@@ -40,7 +42,7 @@ export const getStaticProps = () => {
     isPublic: true,
     regularPrice: 3454,
     discountPrice: 12,
-    productType: 'footwear',
+    type: 'SINGLE',
   };
 
   return {
