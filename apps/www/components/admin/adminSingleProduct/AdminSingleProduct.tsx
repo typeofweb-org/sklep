@@ -18,7 +18,7 @@ export const AdminSingleProduct = React.memo(() => {
   const router = useRouter();
   const productId = Number(router.query.productId);
 
-  const { latestData: latestProductResponse, isLoading } = useGetProductById(productId, {
+  const { latestData: latestProductResponse, isLoading, isError } = useGetProductById(productId, {
     enabled: Boolean(productId),
   });
 
@@ -35,6 +35,7 @@ export const AdminSingleProduct = React.memo(() => {
         await cache.refetchQueries('/products');
         closeDeletionModal();
         resetDeletionStatus();
+        router.push('/admin/products');
       },
       onError(error?: Error) {
         addToast({
@@ -57,8 +58,8 @@ export const AdminSingleProduct = React.memo(() => {
   }, []);
 
   const [showDeletionModal, setShowDeletionModal] = React.useState(false);
-
   const closeDeletionModal = React.useCallback(() => setShowDeletionModal(false), []);
+
   if (!productId) {
     return null;
   }
@@ -86,6 +87,11 @@ export const AdminSingleProduct = React.memo(() => {
         status={deletionStatus}
       />
       {isLoading && <ProductsFormSkeleton />}
+      {isError && (
+        <span className={styles.errorMessage}>
+          Wystąpił błąd podczas pobierania danych produktu
+        </span>
+      )}
     </>
   );
 });

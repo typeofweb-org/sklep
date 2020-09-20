@@ -1,8 +1,8 @@
 import { Column } from 'carbon-components-react';
 import React from 'react';
-import { ContentWrapper } from '../contentWrapper/ContentWrapper';
 
 import { Header } from '../Header';
+import { ContentWrapper } from '../contentWrapper/ContentWrapper';
 
 type AdminLayoutProps = { readonly children: React.ReactNode };
 export const AdminLayout = React.memo<AdminLayoutProps>(({ children }) => {
