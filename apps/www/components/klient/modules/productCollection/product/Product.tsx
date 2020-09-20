@@ -1,10 +1,10 @@
 import type { SklepTypes } from '@sklep/types';
 import React, { useCallback } from 'react';
 
+import { AddToCartButton } from '../../../shared/addToCartButton/AddToCartButton';
 import { HeartIcon } from '../../../shared/icons/HeartIcon';
 import { Price } from '../../../shared/price/Price';
 
-import { AddToCartButton } from './addToCartButton/AddToCartButton';
 import { ProductImage } from './image/ProductImage';
 
 type ProductItemProps = {
