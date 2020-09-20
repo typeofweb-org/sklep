@@ -11,13 +11,12 @@ import { RemoveButton } from './removeButton/RemoveButton';
 // temporary type
 type CartItemRowProps = {
   readonly product: SklepTypes['getProducts200Response']['data'][number];
-  readonly handleRemoveProduct: any;
+  readonly handleRemoveProduct: React.EventHandler<any>;
 };
 
 export const CartItemRow = React.memo<CartItemRowProps>(({ product, handleRemoveProduct }) => {
   const increaseQuantity = useCallback(() => () => console.log('incr'), []);
   const decreaseQuantity = useCallback(() => () => console.log('decr'), []);
-  // const removeItemFromCart = useCallback(() => () => console.log('remv'), []);
 
   return (
     <tr className="border border-gray-300 border-t-0 border-r-0 border-l-0">

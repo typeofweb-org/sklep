@@ -11,7 +11,7 @@ export const CartList = React.memo<CartListProps>(({ products }) => {
   const [getProducts, setProducts] = useState(products);
 
   const removeProduct = useCallback(
-    (id) => {
+    (id: number) => {
       const products = getProducts.filter((x) => {
         return x.id !== id;
       });
