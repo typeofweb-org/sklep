@@ -4,5 +4,5 @@ module.exports = {
     '^.+\\.(t|j)sx?$': ['@swc-node/jest'],
   },
   setupFiles: ['./jest-setup.ts'],
-  setupFilesAfterEnv: ['./jest-after-all.ts'],
+  setupFilesAfterEnv: ['jest-extended', './jest-after-all.ts'],
 };

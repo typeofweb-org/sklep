@@ -1,5 +1,5 @@
 import type { SklepTypes } from '@sklep/types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Price } from '../../../../shared/components/price/Price';
 import { CartItemImage } from '../../../../shared/image/CartItemImage';
@@ -14,9 +14,32 @@ type CartItemRowProps = {
 };
 
 export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
-  const increaseQuantity = useCallback(() => () => console.log('incr'), []);
-  const decreaseQuantity = useCallback(() => () => console.log('decr'), []);
-  const removeItemFromCart = useCallback(() => () => console.log('remv'), []);
+  const MAX_PRODUCT_QUANTITY = 99;
+  const MIN_PRODUCT_QUANTITY = 1;
+
+  const [quantity, setQuantity] = useState(MIN_PRODUCT_QUANTITY);
+
+  const increaseQuantity = useCallback(
+    () => setQuantity((quantity) => (quantity >= MAX_PRODUCT_QUANTITY ? quantity : quantity + 1)),
+    [],
+  );
+  const decreaseQuantity = useCallback(
+    () => setQuantity((quantity) => (quantity <= MIN_PRODUCT_QUANTITY ? quantity : quantity - 1)),
+    [],
+  );
+
+  const handleChangeQuantity = React.useCallback<React.FormEventHandler<HTMLInputElement>>(
+    (event) => {
+      const currentValue = Number.parseInt(event.currentTarget.value, 10);
+
+      currentValue > MAX_PRODUCT_QUANTITY || currentValue < MIN_PRODUCT_QUANTITY
+        ? setQuantity(1)
+        : setQuantity(currentValue);
+    },
+    [],
+  );
+
+  const removeItemFromCart = useCallback(() => () => console.log('rmv'), []);
 
   return (
     <tr className="border border-gray-300 border-t-0 border-r-0 border-l-0">
@@ -32,7 +55,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
               onClick={decreaseQuantity}
               ariaLabel="zwiększ liczbę sztuk"
             />
-            <CartQuantityInput />
+            <CartQuantityInput quantity={quantity} handleChangeQuantity={handleChangeQuantity} />
             <CartQuantityButton
               text="+"
               onClick={increaseQuantity}

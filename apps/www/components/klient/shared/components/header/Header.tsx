@@ -27,7 +27,7 @@ export const Header = React.memo(() => {
             </a>
           </Link>
         </div>
-        <div className="order-2 md:order-3 flex items-center px-4">
+        <div className="order-2 md:order-3 flex items-center">
           <CartStatus />
         </div>
         <Menu isMenuOpen={isMenuOpen} />
