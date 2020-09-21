@@ -7,7 +7,7 @@ type CheckoutItemProps = {
   readonly cartProduct: SklepTypes['cartProducts'][number];
 };
 
-export const CheckoutItem = React.memo<CheckoutItemProps>(({ cartProduct }) => {
+export const CheckoutItemRow = React.memo<CheckoutItemProps>(({ cartProduct }) => {
   const { quantity, product } = cartProduct;
   return (
     <tr>
@@ -25,4 +25,4 @@ export const CheckoutItem = React.memo<CheckoutItemProps>(({ cartProduct }) => {
   );
 });
 
-CheckoutItem.displayName = 'CheckoutItem';
+CheckoutItemRow.displayName = 'CheckoutItemRow';

@@ -1,7 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
-import { CheckoutItem } from '../item/CheckoutItem';
+import { CheckoutItemRow } from '../item/CheckoutItemRow';
 
 type CartListProps = {
   readonly cart: SklepTypes['postCart200Response'];
@@ -17,7 +17,7 @@ export const CheckoutList = React.memo<CartListProps>(({ cart }) => {
         {cart.data.cartProducts?.map(
           (cartProduct) =>
             cartProduct.product && (
-              <CheckoutItem key={cartProduct.product.id} cartProduct={cartProduct} />
+              <CheckoutItemRow key={cartProduct.product.id} cartProduct={cartProduct} />
             ),
         )}
       </tbody>
