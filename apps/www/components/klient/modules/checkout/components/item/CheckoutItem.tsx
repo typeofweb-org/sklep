@@ -4,7 +4,7 @@ import React from 'react';
 import { CartItemImage } from '../../../../shared/image/CartItemImage';
 
 type CheckoutItemProps = {
-  readonly cartProduct: SklepTypes['Model6'];
+  readonly cartProduct: SklepTypes['cartProducts'][number];
 };
 
 export const CheckoutItem = React.memo<CheckoutItemProps>(({ cartProduct }) => {
