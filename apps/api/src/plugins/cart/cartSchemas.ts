@@ -17,6 +17,7 @@ export const createCartResponseSchema = Joi.object<SklepTypes['postCart200Respon
     updatedAt: Joi.date().iso().required(),
     regularSubTotal: Joi.number().integer().required(),
     discountSubTotal: Joi.number().integer().required(),
+    totalQuantity: Joi.number().integer().required(),
     cartProducts: Joi.array()
       .items(
         Joi.object({

@@ -63,13 +63,14 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
       async handler(request, h): Promise<SklepTypes['postCart200Response']> {
         const cart = await ensureCartExists(request, h);
 
-        const { regularSubTotal, discountSubTotal } = calculateCartTotals(cart);
+        const { regularSubTotal, discountSubTotal, totalQuantity } = calculateCartTotals(cart);
 
         return {
           data: {
             ...cart,
             regularSubTotal,
             discountSubTotal,
+            totalQuantity,
             createdAt: cart.createdAt.toISOString(),
             updatedAt: cart.updatedAt.toISOString(),
           },

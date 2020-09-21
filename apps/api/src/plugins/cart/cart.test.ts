@@ -47,6 +47,7 @@ describe('/cart', () => {
       cartProducts: [],
       regularSubTotal: 0,
       discountSubTotal: 0,
+      totalQuantity: 0,
     });
 
     const cookies = injection.headers['set-cookie'];
@@ -90,6 +91,7 @@ describe('/cart', () => {
       id: expect.any(String),
       regularSubTotal: products[0].regularPrice,
       discountSubTotal: products[0].discountPrice,
+      totalQuantity: 1,
       cartProducts: [
         {
           product: {
@@ -204,6 +206,7 @@ describe('/cart', () => {
       discountSubTotal:
         2 * (products[0].discountPrice ?? products[0].regularPrice) +
         3 * (products[1].discountPrice ?? products[1].regularPrice),
+      totalQuantity: 5,
       cartProducts: [
         {
           product: {

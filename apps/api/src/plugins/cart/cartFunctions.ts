@@ -121,11 +121,13 @@ export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreate
 
       acc.regularSubTotal += Math.trunc(regularSum);
       acc.discountSubTotal += Math.trunc(discountSum);
+      acc.totalQuantity += cartProduct.quantity;
       return acc;
     },
     {
       regularSubTotal: 0,
       discountSubTotal: 0,
+      totalQuantity: 0,
     },
   );
 }
