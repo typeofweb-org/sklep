@@ -4,8 +4,8 @@ import { useToWQuery } from '../../../utils/fetcher';
 
 type AuthProps = { readonly children: React.ReactNode };
 export const Auth = React.memo<AuthProps>(({ children }) => {
-  const { data } = useToWQuery(['/auth/me', 'GET', {}]);
-  if (data) {
+  const { resolvedData } = useToWQuery(['/auth/me', 'GET', {}]);
+  if (resolvedData) {
     return <>{children}</>;
   }
   return null;
