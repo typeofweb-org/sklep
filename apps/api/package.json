@@ -59,6 +59,7 @@
     "eslint": "7.8.1",
     "faker": "5.1.0",
     "jest": "26.4.2",
+    "jest-extended": "0.11.5",
     "ts-node-dev": "1.0.0-pre.62",
     "wait-on": "5.2.0"
   }

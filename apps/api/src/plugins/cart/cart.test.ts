@@ -348,38 +348,6 @@ describe('/cart', () => {
 
     expect(sortedData[1]).toMatchObject({
       id: expect.any(String),
-      cartProducts: [
-        {
-          product: {
-            discountPrice: products[1].discountPrice,
-            id: products[1].id,
-            name: products[1].name,
-            regularPrice: products[1].regularPrice,
-            slug: products[1].slug,
-          },
-          quantity: 1,
-        },
-        {
-          product: {
-            discountPrice: products[0].discountPrice,
-            id: products[0].id,
-            name: products[0].name,
-            regularPrice: products[0].regularPrice,
-            slug: products[0].slug,
-          },
-          quantity: 20,
-        },
-        {
-          product: {
-            discountPrice: products[2].discountPrice,
-            id: products[2].id,
-            name: products[2].name,
-            regularPrice: products[2].regularPrice,
-            slug: products[2].slug,
-          },
-          quantity: 6,
-        },
-      ],
       discountSubTotal:
         1 * products[1].discountPrice! +
         20 * products[0].discountPrice! +
@@ -390,34 +358,67 @@ describe('/cart', () => {
         6 * products[2].regularPrice!,
       totalQuantity: 27,
     });
+    expect(sortedData[1].cartProducts).toIncludeAllMembers([
+      {
+        product: {
+          discountPrice: products[1].discountPrice,
+          id: products[1].id,
+          name: products[1].name,
+          regularPrice: products[1].regularPrice,
+          slug: products[1].slug,
+        },
+        quantity: 1,
+      },
+      {
+        product: {
+          discountPrice: products[0].discountPrice,
+          id: products[0].id,
+          name: products[0].name,
+          regularPrice: products[0].regularPrice,
+          slug: products[0].slug,
+        },
+        quantity: 20,
+      },
+      {
+        product: {
+          discountPrice: products[2].discountPrice,
+          id: products[2].id,
+          name: products[2].name,
+          regularPrice: products[2].regularPrice,
+          slug: products[2].slug,
+        },
+        quantity: 6,
+      },
+    ]);
+
     expect(sortedData[0]).toMatchObject({
       id: expect.any(String),
-      cartProducts: [
-        {
-          product: {
-            discountPrice: products[1].discountPrice,
-            id: products[1].id,
-            name: products[1].name,
-            regularPrice: products[1].regularPrice,
-            slug: products[1].slug,
-          },
-          quantity: 3,
-        },
-        {
-          product: {
-            discountPrice: products[0].discountPrice,
-            id: products[0].id,
-            name: products[0].name,
-            regularPrice: products[0].regularPrice,
-            slug: products[0].slug,
-          },
-          quantity: 2,
-        },
-      ],
       discountSubTotal: 3 * products[1].discountPrice! + 2 * products[0].discountPrice!,
       regularSubTotal: 3 * products[1].regularPrice! + 2 * products[0].regularPrice!,
       totalQuantity: 5,
     });
+    expect(sortedData[0].cartProducts).toIncludeAllMembers([
+      {
+        product: {
+          discountPrice: products[1].discountPrice,
+          id: products[1].id,
+          name: products[1].name,
+          regularPrice: products[1].regularPrice,
+          slug: products[1].slug,
+        },
+        quantity: 3,
+      },
+      {
+        product: {
+          discountPrice: products[0].discountPrice,
+          id: products[0].id,
+          name: products[0].name,
+          regularPrice: products[0].regularPrice,
+          slug: products[0].slug,
+        },
+        quantity: 2,
+      },
+    ]);
   });
 
   it(`doesn't return anything for users who are not admins`, async () => {

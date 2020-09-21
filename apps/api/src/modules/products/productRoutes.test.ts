@@ -89,7 +89,7 @@ describe('/products', () => {
       const { data } = injection1.result as SklepTypes['postProducts200Response'];
 
       const newData = {
-        name: Faker.lorem.sentence(5),
+        name: Faker.lorem.sentence(10),
         description: Faker.lorem.sentences(5),
         isPublic: Faker.random.arrayElement([true, false]),
         regularPrice: parseInt(Faker.commerce.price(50, 100), 10),
