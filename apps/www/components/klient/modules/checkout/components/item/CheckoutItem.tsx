@@ -15,11 +15,11 @@ export const CheckoutItem = React.memo<CheckoutItemProps>(({ cartProduct }) => {
         <CartItemImage />
       </td>
       <td className="px-2 w-2/6 sm:w-1/2">
-        <p className="">{product && product.name}</p>
+        <p>{product && product.name}</p>
       </td>
       <td className="px-2">x{quantity}</td>
       <td className="pr-4 text-right w-20">
-        <p className="">{product && product.regularPrice} zł</p>
+        <p>{product && product.regularPrice} zł</p>
       </td>
     </tr>
   );
