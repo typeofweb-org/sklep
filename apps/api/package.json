@@ -15,7 +15,7 @@
     "test:server": "wait-on tcp:5432 --interval 5000 && (yarn ts-node-script ./jest-cleanup.ts || true) && yarn db:migrate:up && jest --detectOpenHandles",
     "test:lint": "wait-on tcp:5432 --interval 5000 && yarn run eslint && yarn run tsc",
     "tsc": "tsc --noEmit",
-    "test:ci": "docker-compose up -d && cross-env DATABASE_URL=\"postgresql://postgres:sklep@localhost:5432/sklep_test?schema=public\" yarn test:server && yarn test:lint"
+    "test_:ci": "docker-compose up -d && cross-env DATABASE_URL=\"postgresql://postgres:sklep@localhost:5432/sklep_test?schema=public\" yarn test:server && yarn test:lint"
   },
   "dependencies": {
     "@hapi/bell": "12.1.0",
@@ -59,6 +59,7 @@
     "eslint": "7.9.0",
     "faker": "5.1.0",
     "jest": "26.4.2",
+    "jest-extended": "0.11.5",
     "ts-node-dev": "1.0.0-pre.63",
     "wait-on": "5.2.0"
   }
