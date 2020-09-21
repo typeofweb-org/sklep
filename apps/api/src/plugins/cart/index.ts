@@ -7,7 +7,6 @@ import { Enums } from '../../models';
 
 import {
   addToCart,
-  calculateCartTotals,
   cartModelToResponse,
   clearCart,
   ensureCartExists,
