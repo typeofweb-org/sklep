@@ -7,6 +7,7 @@ import {
   TableToolbarContent,
   Button,
 } from 'carbon-components-react';
+import { useRouter } from 'next/dist/client/router';
 import React from 'react';
 
 import type { ProductsTableRow, ProductsTableHeader } from './ProductListUtils';
@@ -14,11 +15,17 @@ import type { ProductsTableRow, ProductsTableHeader } from './ProductListUtils';
 export const ProductsTableToolbar = React.memo<
   DataTableCustomRenderProps<ProductsTableRow, ProductsTableHeader>
 >(({ getBatchActionProps }) => {
+  const router = useRouter();
+  const handleRedirectToAddProduct = React.useCallback(() => {
+    router.push('/admin/add-product');
+  }, [router]);
+  const batchActionsProps = getBatchActionProps();
+
   return (
     <TableToolbar>
-      <TableBatchActions {...getBatchActionProps()}>
+      <TableBatchActions {...batchActionsProps}>
         <TableBatchAction
-          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+          tabIndex={batchActionsProps.shouldShowBatchActions ? 0 : -1}
           renderIcon={Delete16}
           onClick={() => console.log('clicked')}
         >
@@ -27,8 +34,8 @@ export const ProductsTableToolbar = React.memo<
       </TableBatchActions>
       <TableToolbarContent>
         <Button
-          tabIndex={getBatchActionProps().shouldShowBatchActions ? -1 : 0}
-          onClick={() => console.log('clicked')}
+          tabIndex={batchActionsProps.shouldShowBatchActions ? -1 : 0}
+          onClick={handleRedirectToAddProduct}
           size="small"
           kind="primary"
         >

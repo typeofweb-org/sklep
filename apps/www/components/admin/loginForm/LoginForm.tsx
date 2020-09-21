@@ -1,5 +1,6 @@
 import { User24 } from '@carbon/icons-react';
 import { Button, Grid, InlineNotification, Loading, TextInput } from 'carbon-components-react';
+import { useRouter } from 'next/dist/client/router';
 import React, { useCallback } from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
@@ -18,6 +19,7 @@ const loginSchema = Yup.object({
 export type LoginType = Yup.InferType<typeof loginSchema>;
 
 export const LoginForm = () => {
+  const router = useRouter();
   const { addToast } = useToasts();
   const [mutate, { isLoading, isError }] = useMutation(login, {
     onSuccess() {
@@ -26,6 +28,7 @@ export const LoginForm = () => {
         title: 'Logowanie udane',
         caption: '',
       });
+      router.push('/admin/products');
     },
   });
 
