@@ -44,6 +44,7 @@ export interface definitions {
     updatedAt: string;
     regularSubTotal: number;
     discountSubTotal: number;
+    totalQuantity: number;
     cartProducts: definitions['cartProducts'];
   };
   Model8: { data: definitions['Model7'] };
