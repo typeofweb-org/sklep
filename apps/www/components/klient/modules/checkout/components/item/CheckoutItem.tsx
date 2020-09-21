@@ -8,9 +8,6 @@ type CheckoutItemProps = {
 };
 
 export const CheckoutItem = React.memo<CheckoutItemProps>(({ cartProduct }) => {
-  if (!cartProduct) {
-    return null;
-  }
   const { quantity, product } = cartProduct;
   return (
     <tr>
