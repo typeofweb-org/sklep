@@ -1,5 +1,5 @@
 import type { SklepTypes } from '@sklep/types';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 import { CartItemRow } from '../item/CartItem';
 
@@ -10,7 +10,7 @@ type CartListProps = {
 export const CartList = React.memo<CartListProps>(({ products }) => {
   const [getProducts, setProducts] = useState(products);
 
-  const removeProduct = useCallback(
+  const removeProduct = React.useCallback(
     (id: number) => {
       const products = getProducts.filter((x) => {
         return x.id !== id;
