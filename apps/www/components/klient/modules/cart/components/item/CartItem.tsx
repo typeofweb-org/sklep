@@ -29,7 +29,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
   );
 
   const handleChangeQuantity = React.useCallback<React.FormEventHandler<HTMLInputElement>>(
-    (event: React.FormEvent<HTMLInputElement>) => {
+    (event) => {
       const currentValue = Number.parseInt(event.currentTarget.value, 10);
 
       currentValue > MAX_PRODUCT_QUANTITY || currentValue < MIN_PRODUCT_QUANTITY
