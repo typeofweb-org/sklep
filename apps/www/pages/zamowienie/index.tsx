@@ -10,8 +10,8 @@ function CheckoutPage() {
       id: '1',
       createdAt: '2020-01-01',
       updatedAt: '2020-01-01',
-      regularSubTotal: 2020,
-      discountSubTotal: 2020,
+      regularSubTotal: 2050,
+      discountSubTotal: 2010,
       cartProducts: [
         {
           quantity: 1,

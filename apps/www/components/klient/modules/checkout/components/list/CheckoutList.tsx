@@ -11,15 +11,15 @@ export const CheckoutList = React.memo<CartListProps>(({ cart }) => {
   if (!cart) {
     return null;
   }
-  const products = cart.data.cartProducts;
   return (
     <table className="table-fixed mb-6">
       <tbody>
-        {products &&
-          products.map(
-            (product) =>
-              product.product && <CheckoutItem key={product.product.id} cartItem={product} />,
-          )}
+        {cart.data.cartProducts?.map(
+          (cartProduct) =>
+            cartProduct.product && (
+              <CheckoutItem key={cartProduct.product.id} cartProduct={cartProduct} />
+            ),
+        )}
       </tbody>
     </table>
   );

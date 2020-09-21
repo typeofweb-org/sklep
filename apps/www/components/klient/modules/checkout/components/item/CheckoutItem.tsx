@@ -1,28 +1,17 @@
+import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
 import { CartItemImage } from '../../../../shared/image/CartItemImage';
 
 type CheckoutItemProps = {
-  readonly cartItem: {
-    readonly quantity: number;
-    readonly product?:
-      | {
-          readonly id: number;
-          readonly name: string;
-          readonly slug: string;
-          readonly regularPrice: number;
-          readonly discountPrice?: number | undefined | null;
-        }
-      | undefined
-      | null;
-  };
+  readonly cartProduct: SklepTypes['Model6'];
 };
 
-export const CheckoutItem = React.memo<CheckoutItemProps>(({ cartItem }) => {
-  if (!cartItem) {
+export const CheckoutItem = React.memo<CheckoutItemProps>(({ cartProduct }) => {
+  if (!cartProduct) {
     return null;
   }
-  const { quantity, product } = cartItem;
+  const { quantity, product } = cartProduct;
   return (
     <tr>
       <td className="w-20 h-24 py-2">

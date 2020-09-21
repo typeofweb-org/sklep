@@ -63,7 +63,7 @@ export const AddressForm = React.memo(() => {
             <Field name="houseNumber">
               {({ input, meta }) => (
                 <div className="flex flex-col">
-                  <input {...input} type="number" placeholder="Nr domu" className={fieldStyles} />
+                  <input {...input} placeholder="Nr domu" className={fieldStyles} />
                   <FormErrorMessage meta={meta} />
                 </div>
               )}
@@ -74,9 +74,7 @@ export const AddressForm = React.memo(() => {
           <label className={labelStyles}>
             <span className={labelTitleStyles}>Numer lokalu</span>
             <Field name="apartmentNumber">
-              {({ input }) => (
-                <input {...input} type="number" placeholder="Nr lokalu" className={fieldStyles} />
-              )}
+              {({ input }) => <input {...input} placeholder="Nr lokalu" className={fieldStyles} />}
             </Field>
           </label>
         </div>
