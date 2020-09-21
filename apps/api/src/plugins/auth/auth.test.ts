@@ -21,7 +21,7 @@ describe('/auth', () => {
       const server = await getServerForTest();
       const firstName = Faker.name.firstName();
       const lastName = Faker.name.lastName();
-      const email = Faker.internet.email(firstName, lastName, 'typeofweb.com');
+      const email = Faker.internet.email(firstName + Math.random(), lastName, 'typeofweb.com');
 
       const injection = await server.inject({
         method: 'POST',
