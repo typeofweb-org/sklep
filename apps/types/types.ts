@@ -35,7 +35,7 @@ export interface definitions {
   };
   Model4: { data: definitions['Model3'] };
   product: { id: number; name: string; slug: string; regularPrice: number; discountPrice?: number };
-  Model5: { quantity: number; product?: definitions['product'] };
+  Model5: { quantity: number; product: definitions['product'] };
   cartProducts: definitions['Model5'][];
   Model6: {
     id: string;
