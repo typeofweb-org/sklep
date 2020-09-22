@@ -1,10 +1,10 @@
-import { InferGetStaticPropsType } from 'next';
+import type { InferGetStaticPropsType } from 'next';
 import React from 'react';
 
 import { Checkout } from '../../components/klient/modules/checkout/Checkout';
-import { Header } from '../../components/klient/shared/header/Header';
-import { Layout } from '../../components/klient/shared/layout/Layout';
-import { Order } from '../../types/order';
+import { Header } from '../../components/klient/shared/components/header/Header';
+import { Layout } from '../../components/klient/shared/components/layout/Layout';
+import type { Order } from '../../types/order';
 
 function CheckoutPage({ order }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
@@ -14,7 +14,7 @@ function CheckoutPage({ order }: InferGetStaticPropsType<typeof getStaticProps>)
     </Layout>
   );
 }
-export const getStaticProps = async () => {
+export const getStaticProps = () => {
   // const res = await fetch('https://.../')
 
   // todo: change with api call result

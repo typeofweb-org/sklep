@@ -5,7 +5,7 @@ import { CartList } from './components/list/CartList';
 import { CartSummary } from './components/summary/CartSummary';
 
 export type CartProps = {
-  products: SklepTypes['getProducts200Response']['data'];
+  readonly products: SklepTypes['getProducts200Response']['data'];
 };
 
 export const Cart = React.memo<CartProps>(({ products }) => {

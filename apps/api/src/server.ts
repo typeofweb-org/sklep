@@ -35,7 +35,7 @@ const getServer = () => {
         },
       },
       validate: {
-        async failAction(_request, _h, err) {
+        failAction(_request, _h, err) {
           if (isProd()) {
             throw Boom.badRequest(`Invalid request payload input`);
           } else {

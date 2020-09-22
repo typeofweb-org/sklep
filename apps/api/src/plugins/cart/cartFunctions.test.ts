@@ -47,6 +47,7 @@ describe('cartFunctions', () => {
       expect(calculateCartTotals(cart)).toEqual({
         regularSubTotal: 408_20,
         discountSubTotal: 295_20,
+        totalQuantity: 5,
       });
     });
   });

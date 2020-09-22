@@ -1,6 +1,8 @@
-import Hapi from '@hapi/hapi';
+import type { Server, ServerInjectOptions, ServerInjectResponse } from '@hapi/hapi';
+import { reduce } from 'bluebird';
 import Cookie from 'cookie';
 import Faker from 'faker';
+import { join, chain, map, path, pipe, reject, toPairs, flatten, isNil } from 'ramda';
 
 import { prisma } from './src/db';
 import { Enums } from './src/models';
@@ -17,7 +19,7 @@ export const getServerForTest = async () => {
 };
 
 export const createAndAuthRole = async (
-  server: Hapi.Server,
+  server: Server,
   role: keyof Enums['UserRole'] = Enums.UserRole.ADMIN,
 ) => {
   const firstName = Faker.name.firstName();
@@ -55,7 +57,41 @@ export const createAndAuthRole = async (
   };
 };
 
-export const repeatRequest = <T>(n: number, fn: () => Promise<T>): Promise<T[]> => {
+export const repeatRequest = <T>(n: number, fn: () => Promise<T>): Promise<readonly T[]> => {
   const repetitions = Array.from({ length: n }, () => fn());
   return Promise.all(repetitions);
+};
+
+export const execute = (server: Server, injections: readonly ServerInjectOptions[]) => {
+  return reduce(
+    injections,
+    async (acc, injection) => {
+      const getCookieHeader = path<string | readonly string[] | undefined>([
+        'headers',
+        'set-cookie',
+      ]);
+      const allCookies = pipe(
+        map(getCookieHeader),
+        flatten,
+        reject(isNil),
+      )(acc) as readonly string[];
+
+      const parsedCookies = pipe(
+        map(Cookie.parse),
+        chain(toPairs),
+        map(join('=')),
+        join('; '),
+      )(allCookies);
+
+      const result = await server.inject({
+        ...injection,
+        headers: {
+          ...injection.headers,
+          Cookie: parsedCookies,
+        },
+      });
+      return [...acc, result];
+    },
+    [] as readonly ServerInjectResponse[],
+  );
 };

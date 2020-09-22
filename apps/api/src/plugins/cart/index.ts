@@ -1,38 +1,42 @@
-import Hapi from '@hapi/hapi';
+import type Hapi from '@hapi/hapi';
 import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
 
 import { isProd } from '../../config';
+import { Enums } from '../../models';
 
 import {
   addToCart,
-  calculateCartTotals,
+  cartModelToResponse,
   clearCart,
+  ensureCartExists,
+  findAllCarts,
   findOrCreateCart,
   removeFromCart,
 } from './cartFunctions';
 import {
   addToCartPayloadSchema,
   createCartResponseSchema,
+  getAllCartsResponseSchema,
   removeFromCartPayloadSchema,
 } from './cartSchemas';
 
 declare module '@hapi/hapi' {
   interface PluginsStates {
-    cart: {
-      findOrCreateCart: typeof findOrCreateCart;
-      addToCart: typeof addToCart;
-      removeFromCart: typeof removeFromCart;
-      clearCart: typeof clearCart;
+    readonly cart: {
+      readonly findOrCreateCart: typeof findOrCreateCart;
+      readonly addToCart: typeof addToCart;
+      readonly removeFromCart: typeof removeFromCart;
+      readonly clearCart: typeof clearCart;
     };
   }
 }
 
-export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
+export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
   multiple: false,
   name: 'Sklep Cart Plugin',
   version: '1.0.0',
-  async register(server, options) {
+  register(server, options) {
     server.expose('findOrCreateCart', findOrCreateCart);
     server.expose('addToCart', addToCart);
     server.expose('removeFromCart', removeFromCart);
@@ -60,19 +64,10 @@ export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
         },
       },
       async handler(request, h): Promise<SklepTypes['postCart200Response']> {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
-
-        const { regularSubTotal, discountSubTotal } = calculateCartTotals(cart);
+        const cart = await ensureCartExists(request, h);
 
         return {
-          data: {
-            ...cart,
-            regularSubTotal,
-            discountSubTotal,
-            createdAt: cart.createdAt.toISOString(),
-            updatedAt: cart.updatedAt.toISOString(),
-          },
+          data: cartModelToResponse(cart),
         };
       },
     });
@@ -88,8 +83,7 @@ export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
         },
       },
       async handler(request, h) {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
+        const cart = await ensureCartExists(request, h);
 
         const { quantity, productId } = request.payload as SklepTypes['patchCartAddRequestBody'];
 
@@ -110,8 +104,7 @@ export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
         },
       },
       async handler(request, h) {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
+        const cart = await ensureCartExists(request, h);
 
         const { productId } = request.payload as SklepTypes['patchCartRemoveRequestBody'];
 
@@ -130,12 +123,32 @@ export const CartPlugin: Hapi.Plugin<{ cookiePassword: string }> = {
         validate: {},
       },
       async handler(request, h) {
-        const cart = await findOrCreateCart(request);
-        h.state('cart', cart.id);
+        const cart = await ensureCartExists(request, h);
 
         await clearCart(request, { cartId: cart.id });
 
         return null;
+      },
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/all',
+      options: {
+        tags: ['api', 'cart'],
+        auth: {
+          scope: [Enums.UserRole.ADMIN],
+        },
+        response: {
+          schema: getAllCartsResponseSchema,
+        },
+      },
+      async handler(request) {
+        const carts = await findAllCarts(request);
+
+        return {
+          data: carts.map(cartModelToResponse),
+        };
       },
     });
   },

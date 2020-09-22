@@ -38,4 +38,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run tests
-        run: yarn test:ci
+        run: |
+          yarn tsc
+          yarn eslint
+          yarn test:ci

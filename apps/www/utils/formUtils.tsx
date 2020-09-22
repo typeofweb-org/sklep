@@ -1,7 +1,9 @@
 import { Form } from 'carbon-components-react';
-import { setIn, ValidationErrors } from 'final-form';
+import type { ValidationErrors } from 'final-form';
+import { setIn } from 'final-form';
 import React from 'react';
-import { FieldMetaState, Form as FinalForm, FormProps } from 'react-final-form';
+import type { FieldMetaState, FormProps } from 'react-final-form';
+import { Form as FinalForm } from 'react-final-form';
 import { ValidationError } from 'yup';
 import type { ObjectSchema } from 'yup';
 
@@ -10,8 +12,8 @@ export const ToWForm: <
   InitialFormValues = Partial<FormValues>
 >(
   props: Omit<FormProps<FormValues, InitialFormValues>, 'validate'> & {
-    schema: ObjectSchema<FormValues>;
-    className?: string;
+    readonly schema: ObjectSchema<FormValues>;
+    readonly className?: string;
   },
 ) => React.ReactElement = ({ schema, onSubmit, className, children, ...props }) => {
   const validate = React.useMemo(() => createFormValidator(schema), [schema]);

@@ -1,4 +1,4 @@
-import type { Request } from '@hapi/hapi';
+import type { Request, ResponseToolkit } from '@hapi/hapi';
 
 import type { Awaited } from '../../types';
 
@@ -26,6 +26,16 @@ const cartSelect = {
   },
 } as const;
 
+type CartFromDB = Awaited<ReturnType<typeof findOrCreateCart>>['cart'];
+
+export async function ensureCartExists(request: Request, h: ResponseToolkit) {
+  const result = await findOrCreateCart(request);
+  if (result.created) {
+    h.state('cart', result.cart.id);
+  }
+  return result.cart;
+}
+
 export async function findOrCreateCart(request: Request) {
   const cartId = request.state['cart'];
 
@@ -36,19 +46,24 @@ export async function findOrCreateCart(request: Request) {
       take: 1,
     });
     if (cart) {
-      return cart;
+      return { cart, created: false };
     }
   }
 
-  return request.server.app.db.cart.create({
+  const cart = await request.server.app.db.cart.create({
     data: {},
     select: cartSelect,
   });
+  return { cart, created: true };
 }
 
 export function addToCart(
   request: Request,
-  { cartId, quantity, productId }: { cartId: string; quantity: number; productId: number },
+  {
+    cartId,
+    quantity,
+    productId,
+  }: { readonly cartId: string; readonly quantity: number; readonly productId: number },
 ) {
   return request.server.app.db.cartToProduct.upsert({
     where: {
@@ -80,7 +95,7 @@ export function addToCart(
 
 export function removeFromCart(
   request: Request,
-  { cartId, productId }: { cartId: string; productId: number },
+  { cartId, productId }: { readonly cartId: string; readonly productId: number },
 ) {
   return request.server.app.db.cartToProduct.deleteMany({
     where: {
@@ -90,7 +105,7 @@ export function removeFromCart(
   });
 }
 
-export function clearCart(request: Request, { cartId }: { cartId: string }) {
+export function clearCart(request: Request, { cartId }: { readonly cartId: string }) {
   return request.server.app.db.cartToProduct.deleteMany({
     where: {
       cartId,
@@ -98,7 +113,13 @@ export function clearCart(request: Request, { cartId }: { cartId: string }) {
   });
 }
 
-export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreateCart>>) {
+export function findAllCarts(request: Request) {
+  return request.server.app.db.cart.findMany({
+    select: cartSelect,
+  });
+}
+
+export function calculateCartTotals(cart: CartFromDB) {
   return cart.cartProducts.reduce(
     (acc, cartProduct) => {
       const regularSum = cartProduct.product.regularPrice * cartProduct.quantity;
@@ -108,11 +129,26 @@ export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreate
 
       acc.regularSubTotal += Math.trunc(regularSum);
       acc.discountSubTotal += Math.trunc(discountSum);
+      acc.totalQuantity += cartProduct.quantity;
       return acc;
     },
     {
       regularSubTotal: 0,
       discountSubTotal: 0,
+      totalQuantity: 0,
     },
   );
 }
+
+export const cartModelToResponse = (cart: CartFromDB) => {
+  const { regularSubTotal, discountSubTotal, totalQuantity } = calculateCartTotals(cart);
+
+  return {
+    ...cart,
+    regularSubTotal,
+    discountSubTotal,
+    totalQuantity,
+    createdAt: cart.createdAt.toISOString(),
+    updatedAt: cart.updatedAt.toISOString(),
+  };
+};

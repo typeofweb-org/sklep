@@ -4,7 +4,7 @@ import React from 'react';
 import { CartItemRow } from '../item/CartItem';
 
 type CartListProps = {
-  products: SklepTypes['getProducts200Response']['data'];
+  readonly products: SklepTypes['getProducts200Response']['data'];
 };
 
 export const CartList = React.memo<CartListProps>(({ products }) => {

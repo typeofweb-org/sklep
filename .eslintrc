@@ -4,7 +4,7 @@
   "parserOptions": {
     "sourceType": "module"
   },
-  "plugins": [],
+  "plugins": ["functional", "@typescript-eslint"],
   "extends": ["prettier", "plugin:import/typescript"],
   "rules": {
     "no-const-assign": "error",
@@ -13,6 +13,18 @@
     "import/order": ["error", { "newlines-between": "always", "alphabetize": { "order": "asc" } }],
     "import/no-duplicates": "error",
     "import/no-cycle": "error",
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "functional/no-let": [
+      "error",
+      {
+        "allowLocalMutation": true,
+        "ignorePattern": "^mutable"
+      }
+    ],
+    "functional/prefer-readonly-type": "error",
+    "functional/no-this-expression": "error",
+    "functional/no-loop-statement": "error",
+    "require-await": "error"
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 type RemoveButtonProps = {
-  onClick: React.FormEventHandler<HTMLButtonElement>;
+  readonly onClick: React.FormEventHandler<HTMLButtonElement>;
 };
 
 export const RemoveButton = React.memo<RemoveButtonProps>(({ onClick }) => {

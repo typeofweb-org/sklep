@@ -12,7 +12,7 @@ export const CartSummary = React.memo(() => {
           <span>2020 zł</span>
         </div>
       </div>
-      <SummaryButton />
+      <SummaryButton onClick={() => {}} />
     </div>
   );
 });
