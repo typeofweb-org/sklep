@@ -12,11 +12,12 @@ import {
   Column,
   InlineNotification,
 } from 'carbon-components-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
+import { ResponseError } from '../../../utils/fetcher';
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 
 import { ProductSlug } from './ProductSlug';
@@ -40,7 +41,7 @@ const productSchema = Yup.object({
 export type ProductType = Yup.InferType<typeof productSchema>;
 
 export const ProductsForm = () => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(createProduct);
+  const [mutate, { isLoading, isSuccess, isError, error }] = useMutation(createProduct);
 
   const handleSubmit = React.useCallback(
     async (values: ProductType) => {
@@ -49,6 +50,20 @@ export const ProductsForm = () => {
     },
     [mutate],
   );
+
+  const errorMsg = useMemo(() => {
+    if (error instanceof ResponseError) {
+      if (error.status === 401) {
+        return 'Nie masz uprawnien do dodania tego produktu';
+      }
+
+      if (`${error.status}`[0] === '5') {
+        return 'Coś poszło nie tak, błąd serwera';
+      }
+    }
+
+    return '';
+  }, [error]);
 
   return (
     <ToWForm onSubmit={handleSubmit} schema={productSchema} className={styles.form}>
@@ -135,12 +150,7 @@ export const ProductsForm = () => {
         </Button>
         {isLoading && <Loading />}
         {isSuccess && <InlineNotification title="Dodałeś produkt do bazy danych" kind="success" />}
-        {isError && (
-          <InlineNotification
-            title="Wystąpił błąd podczas dodawania produktu do bazy danych"
-            kind="error"
-          />
-        )}
+        {isError && <InlineNotification title={errorMsg} kind="error" />}
       </Grid>
     </ToWForm>
   );
