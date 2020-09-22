@@ -20,6 +20,7 @@ function CheckoutPage() {
             name: 'Pierwszy produkt w koszyku',
             slug: 'Pierwszy produkt w koszyku',
             regularPrice: 1245,
+            discountPrice: 1122,
           },
         },
         {

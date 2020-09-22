@@ -1,6 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
+import { Price } from '../../../../shared/components/price/Price';
 import { CartItemImage } from '../../../../shared/image/CartItemImage';
 
 type CheckoutItemProps = {
@@ -15,11 +16,15 @@ export const CheckoutItemRow = React.memo<CheckoutItemProps>(({ cartProduct }) =
         <CartItemImage />
       </td>
       <td className="px-2 w-2/6 sm:w-1/2">
-        <p>{product && product.name}</p>
+        <p>{product.name}</p>
       </td>
       <td className="px-2">x{quantity}</td>
       <td className="pr-4 text-right w-20">
-        <p>{product && product.regularPrice} zł</p>
+        <Price
+          regularPrice={product.regularPrice}
+          discountPrice={product.discountPrice}
+          direction="column"
+        />
       </td>
     </tr>
   );
