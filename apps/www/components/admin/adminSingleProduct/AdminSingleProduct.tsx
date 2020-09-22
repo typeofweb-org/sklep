@@ -2,12 +2,12 @@ import type { SklepTypes } from '@sklep/types';
 import { Button } from 'carbon-components-react';
 import { useRouter } from 'next/dist/client/router';
 import React from 'react';
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation } from 'react-query';
 
 import styles from '../../../styles/components/AdminSingleProduct.module.scss';
+import { deleteProduct } from '../../../utils/api/deleteProduct';
 import { useGetProductById } from '../../../utils/api/queryHooks';
 import { updateProduct } from '../../../utils/api/updateProduct';
-import { fetcher } from '../../../utils/fetcher';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import { ProductsForm } from '../productsForm/ProductsForm';
 import { ProductsFormSkeleton } from '../productsForm/ProductsFormSkeleton';
@@ -23,19 +23,16 @@ export const AdminSingleProduct = React.memo(() => {
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
   });
-  console.log(isError);
 
-  const cache = useQueryCache();
-  const [deleteProduct, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
-    (productId: number) => fetcher('/products/{productId}', 'DELETE', { params: { productId } }),
+  const [mutate, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
+    deleteProduct,
     {
-      async onSuccess() {
+      onSuccess() {
         addToast({
           kind: 'success',
           title: 'Operacja udana',
           caption: 'Produkt został usunięty pomyślnie',
         });
-        await cache.refetchQueries('/products');
         closeDeletionModal();
         resetDeletionStatus();
         router.push('/admin/products');
@@ -49,18 +46,17 @@ export const AdminSingleProduct = React.memo(() => {
       },
     },
   );
-
   const memoizedUpdateProduct = React.useCallback(
     (body: SklepTypes['putProductsProductIdRequestBody']) => {
       return updateProduct(productId, body);
     },
     [productId],
   );
+
+  const [showDeletionModal, setShowDeletionModal] = React.useState(false);
   const handleDeleteProduct = React.useCallback(() => {
     setShowDeletionModal(true);
   }, []);
-
-  const [showDeletionModal, setShowDeletionModal] = React.useState(false);
   const closeDeletionModal = React.useCallback(() => setShowDeletionModal(false), []);
 
   if (!productId) {
@@ -85,7 +81,7 @@ export const AdminSingleProduct = React.memo(() => {
       <DeleteProductConfirmationModal
         isOpen={showDeletionModal}
         product={latestProductResponse?.data}
-        handleDelete={deleteProduct}
+        handleDelete={mutate}
         handleClose={closeDeletionModal}
         status={deletionStatus}
       />
