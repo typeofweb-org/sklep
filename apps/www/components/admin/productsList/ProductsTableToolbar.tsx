@@ -7,7 +7,7 @@ import {
   TableToolbarContent,
   Button,
 } from 'carbon-components-react';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useMutation } from 'react-query';
 
@@ -19,6 +19,7 @@ import type { ProductsTableRow, ProductsTableHeader } from './ProductListUtils';
 export const ProductsTableToolbar = React.memo<
   DataTableCustomRenderProps<ProductsTableRow, ProductsTableHeader>
 >(({ getBatchActionProps, selectedRows }) => {
+  const router = useRouter();
   const { addToast } = useToasts();
   const [mutate] = useMutation(deleteProducts, {
     onSuccess(settledPromises: readonly PromiseSettledResult<never>[]) {
@@ -39,9 +40,8 @@ export const ProductsTableToolbar = React.memo<
       });
     },
   });
-  const router = useRouter();
   const handleRedirectToAddProduct = React.useCallback(() => {
-    router.push('/admin/add-product');
+    router.replace('/admin/add-product');
   }, [router]);
 
   const handleDeleteProducts = React.useCallback(() => {

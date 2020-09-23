@@ -1,6 +1,6 @@
 import { User24 } from '@carbon/icons-react';
 import { Button, Grid, InlineNotification, Loading, TextInput } from 'carbon-components-react';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
@@ -28,7 +28,7 @@ export const LoginForm = () => {
         title: 'Logowanie udane',
         caption: '',
       });
-      router.push('/admin/products');
+      router.replace('/admin/products');
     },
   });
 

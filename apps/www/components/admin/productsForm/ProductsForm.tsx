@@ -156,15 +156,16 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
   );
 };
 
-const formSubmitTextMap: Record<ProductFormMode, string> = {
+type TextMap = Record<ProductFormMode, string>;
+const formSubmitTextMap: TextMap = {
   ADDING: 'Dodaj produkt',
   EDITING: 'Zaaktualizuj produkt',
 };
-const formSuccesTextMap: Record<ProductFormMode, string> = {
+const formSuccesTextMap: TextMap = {
   ADDING: 'Dodałeś produkt do bazy danych',
   EDITING: 'Produkt został pomyślnie edytowany',
 };
-const formErrorTextMap: Record<ProductFormMode, string> = {
+const formErrorTextMap: TextMap = {
   ADDING: 'Wystąpił błąd podczas dodawania produktu do bazy danych',
   EDITING: 'Wystąpił błąd podczas aktualizowania produktu',
 };

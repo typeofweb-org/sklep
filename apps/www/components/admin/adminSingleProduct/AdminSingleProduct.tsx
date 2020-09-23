@@ -1,6 +1,6 @@
 import type { SklepTypes } from '@sklep/types';
 import { Button } from 'carbon-components-react';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useMutation } from 'react-query';
 
@@ -35,13 +35,15 @@ export const AdminSingleProduct = React.memo(() => {
         });
         closeDeletionModal();
         resetDeletionStatus();
-        router.push('/admin/products');
+        router.replace('/admin/products');
       },
       onError(error?: Error) {
+        const message = 'Nie udało się usunąć produktu';
+        const caption = error ? `${message}: ${error.message}` : `${message}.`;
         addToast({
           kind: 'error',
           title: 'Wystąpił błąd',
-          caption: `Nie udało się usunąć produktu: ${error?.message}`,
+          caption,
         });
       },
     },
@@ -99,7 +101,7 @@ AdminSingleProduct.displayName = 'AdminSingleProduct';
 function getInitialValues(
   response: SklepTypes['getProductsProductId200Response'],
 ): SklepTypes['postProductsRequestBody'] {
-  const initialValues: SklepTypes['postProductsRequestBody'] = {
+  return {
     name: response.data.name,
     description: response.data.description,
     isPublic: response.data.isPublic,
@@ -107,6 +109,4 @@ function getInitialValues(
     discountPrice: response.data.discountPrice,
     type: response.data.type,
   };
-
-  return initialValues;
 }
