@@ -6,7 +6,7 @@ interface FormErrorMessageProps {
 }
 
 export const FormErrorMessage = React.memo<FormErrorMessageProps>(({ meta }) => {
-  if (!(meta.error && meta.touched)) {
+  if (!meta.error || !meta.touched) {
     return null;
   }
   return <span className="text-sm text-red-600">{meta.error}</span>;
