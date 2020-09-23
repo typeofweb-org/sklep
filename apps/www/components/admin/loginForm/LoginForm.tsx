@@ -28,7 +28,7 @@ export const LoginForm = () => {
         title: 'Logowanie udane',
         caption: '',
       });
-      router.replace('/admin/products');
+      void router.replace('/admin/products');
     },
     onError() {
       // @todo

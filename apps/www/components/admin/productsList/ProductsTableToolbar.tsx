@@ -41,12 +41,12 @@ export const ProductsTableToolbar = React.memo<
     },
   });
   const handleRedirectToAddProduct = React.useCallback(() => {
-    router.replace('/admin/add-product');
+    void router.replace('/admin/add-product');
   }, [router]);
 
   const handleDeleteProducts = React.useCallback(() => {
     const productsIdsArray = selectedRows.map(({ id }) => Number(id));
-    mutate(productsIdsArray);
+    void mutate(productsIdsArray);
   }, [mutate, selectedRows]);
   const batchActionsProps = getBatchActionProps();
 

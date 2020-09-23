@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
-import type { QueryConfig, MutationConfig } from 'react-query';
-import { useMutation, usePaginatedQuery } from 'react-query';
+import type { QueryConfig } from 'react-query';
+import { usePaginatedQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';
 

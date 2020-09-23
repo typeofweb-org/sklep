@@ -35,7 +35,7 @@ export const AdminSingleProduct = React.memo(() => {
         });
         closeDeletionModal();
         resetDeletionStatus();
-        router.replace('/admin/products');
+        void router.replace('/admin/products');
       },
       onError(error?: Error) {
         const message = 'Nie udało się usunąć produktu';
