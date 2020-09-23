@@ -25,7 +25,7 @@ import { createProduct } from './productsFormUtils';
 
 Yup.setLocale({
   mixed: {
-    required: ({ label }) => `${label} jest polem wymaganym`,
+    required: ({ label }) => (label ? `${label} jest polem wymaganym` : `To pole jest wymagane`),
   },
 });
 
@@ -53,7 +53,7 @@ export const ProductsForm = () => {
   return (
     <ToWForm onSubmit={handleSubmit} schema={productSchema} className={styles.form}>
       <Grid>
-        <Field name="name">
+        <Field<string> name="name">
           {({ input, meta }) => (
             <>
               <TextInput
@@ -78,7 +78,7 @@ export const ProductsForm = () => {
         </Field>
         <Row>
           <Column>
-            <Field name="regularPrice">
+            <Field<number> name="regularPrice">
               {({ input, meta }) => (
                 <NumberInput
                   {...input}
@@ -92,7 +92,7 @@ export const ProductsForm = () => {
             </Field>
           </Column>
           <Column>
-            <Field name="discountPrice">
+            <Field<number> name="discountPrice">
               {({ input, meta }) => (
                 <NumberInput
                   {...input}
@@ -116,7 +116,7 @@ export const ProductsForm = () => {
             />
           )}
         </Field>
-        <Field name="isPublic" defaultValue={false} type="checkbox">
+        <Field<boolean> name="isPublic" defaultValue={false} type="checkbox">
           {({ input: { value, checked, ...rest } }) => {
             return (
               <Toggle

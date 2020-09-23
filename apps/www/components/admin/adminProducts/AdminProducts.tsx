@@ -33,10 +33,11 @@ export const AdminProducts = React.memo(() => {
         resetDeletionStatus();
       },
       onError(error?: Error) {
+        const message = 'Nie udało się usunąć produktu';
         addToast({
           kind: 'error',
           title: 'Wystąpił błąd',
-          caption: `Nie udało się usunąć produktu: ${error?.message}`,
+          caption: error?.message ? `${message}: ${error.message}` : message,
         });
       },
     },

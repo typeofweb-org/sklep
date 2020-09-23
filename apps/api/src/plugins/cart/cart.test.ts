@@ -353,9 +353,7 @@ describe('/cart', () => {
         20 * products[0].discountPrice! +
         6 * products[2].discountPrice!,
       regularSubTotal:
-        1 * products[1].regularPrice! +
-        20 * products[0].regularPrice! +
-        6 * products[2].regularPrice!,
+        1 * products[1].regularPrice + 20 * products[0].regularPrice + 6 * products[2].regularPrice,
       totalQuantity: 27,
     });
     expect(sortedData[1].cartProducts).toIncludeAllMembers([
@@ -394,7 +392,7 @@ describe('/cart', () => {
     expect(sortedData[0]).toMatchObject({
       id: expect.any(String),
       discountSubTotal: 3 * products[1].discountPrice! + 2 * products[0].discountPrice!,
-      regularSubTotal: 3 * products[1].regularPrice! + 2 * products[0].regularPrice!,
+      regularSubTotal: 3 * products[1].regularPrice + 2 * products[0].regularPrice,
       totalQuantity: 5,
     });
     expect(sortedData[0].cartProducts).toIncludeAllMembers([

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
 import type { QueryConfig } from 'react-query';
@@ -87,8 +88,8 @@ export function findMismatchingParams(requiredParams: readonly string[], params:
 const PARAMS_PATTERN = /{(\w+)}/g;
 export function compileUrl<CurrentPath extends keyof SklepTypes['pathsDefinitions']>(
   path: CurrentPath,
-  params?: Record<string, any>,
-  query?: Record<string, any>,
+  params?: Record<string, string>,
+  query?: Record<string, string>,
 ): string {
   const queryString = query ? '?' + new URLSearchParams(query).toString() : '';
 
@@ -105,7 +106,7 @@ export function compileUrl<CurrentPath extends keyof SklepTypes['pathsDefinition
     );
   }
 
-  const compiledPath = path.replace(PARAMS_PATTERN, (_, param) => params[param]);
+  const compiledPath = path.replace(PARAMS_PATTERN, (_, param: string) => params[param]);
   return process.env.NEXT_PUBLIC_API_URL + compiledPath + queryString;
 }
 
@@ -117,7 +118,7 @@ export async function fetcher<
   method: CurrentMethod,
   { body, params, config, query }: FetcherConfig<CurrentPath, CurrentMethod>,
 ): Promise<ResponseType<CurrentPath, CurrentMethod>> {
-  const url = compileUrl(path, params, query);
+  const url = compileUrl(path, params as Record<string, string>, query as Record<string, string>);
   const response = await fetch(url, {
     method,
     headers: {
@@ -129,7 +130,7 @@ export async function fetcher<
   });
   const data = await getJSON(response);
   if (response.ok) {
-    return data;
+    return data as ResponseType<CurrentPath, CurrentMethod>;
   }
   throw new ResponseError(response.statusText, response.status, data);
 }
@@ -143,7 +144,7 @@ export class ResponseError extends Error {
 }
 
 // eslint-disable-next-line require-await
-async function getJSON(response: Response) {
+async function getJSON(response: Response): Promise<unknown | undefined> {
   const contentType = response.headers.get('Content-Type');
   const emptyCodes = [204, 205];
   if (!emptyCodes.includes(response.status) && contentType?.includes('json')) {

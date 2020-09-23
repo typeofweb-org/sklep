@@ -1,5 +1,8 @@
 {
   "root": false,
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
   "extends": ["react-app", "plugin:jsx-a11y/recommended", "plugin:css-modules/recommended"],
   "env": {
     "es6": true,
@@ -21,8 +24,7 @@
           { "target": "./components", "from": "./pages" },
           { "target": "./components/klient", "from": "./components/admin" },
           { "target": "./components/admin", "from": "./components/klient" },
-          { "target": "./pages/admin", "from": "./components/klient" },
-          { "target": "./", "from": "..", "except": ["www"] }
+          { "target": "./pages/admin", "from": "./components/klient" }
         ]
       }
     ]

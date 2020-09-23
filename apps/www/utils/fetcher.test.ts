@@ -65,13 +65,15 @@ describe('fetcher', () => {
 
     validCases.forEach(({ input: { path, params }, out }) => {
       it(`validCases: ${path} -> ${JSON.stringify(params)}`, () => {
-        expect(compileUrl(path as any, params)).toEqual(process.env.NEXT_PUBLIC_API_URL + out);
+        expect(compileUrl(path as any, params as any)).toEqual(
+          process.env.NEXT_PUBLIC_API_URL + out,
+        );
       });
     });
 
     invalidCases.forEach(({ input: { path, params } }) => {
       it(`invalidCases: ${path} -> ${JSON.stringify(params)}`, () => {
-        expect(() => compileUrl(path as any, params)).toThrow();
+        expect(() => compileUrl(path as any, params as any)).toThrow();
       });
     });
   });
@@ -141,7 +143,7 @@ describe('fetcher', () => {
     ];
 
     cases.forEach(({ input: { requiredParams, params }, out }) => {
-      it(`${requiredParams} -> ${JSON.stringify(params)}`, () => {
+      it(`${requiredParams.join(',')} -> ${JSON.stringify(params)}`, () => {
         expect(findMismatchingParams(requiredParams, params)).toEqual(out);
       });
     });

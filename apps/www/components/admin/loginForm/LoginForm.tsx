@@ -27,11 +27,14 @@ export const LoginForm = () => {
         caption: '',
       });
     },
+    onError() {
+      // @todo
+    },
   });
 
   const handleSubmit = useCallback(
     (values: LoginType) => {
-      mutate(values);
+      void mutate(values);
     },
     [mutate],
   );
