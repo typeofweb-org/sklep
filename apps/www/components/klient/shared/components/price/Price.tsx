@@ -13,7 +13,7 @@ export const Price = React.memo<PriceProps>(
     const discountClassName = direction === 'column' ? 'pl-0' : 'pl-2';
 
     if (!discountPrice) {
-      return <p className="pt-1 text-gray-900">{regularPrice / 100}&nbsp;PLN</p>;
+      return <p className="text-gray-900">{regularPrice / 100}&nbsp;PLN</p>;
     }
 
     return (

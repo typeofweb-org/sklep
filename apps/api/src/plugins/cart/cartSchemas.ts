@@ -27,7 +27,7 @@ const cartResponseSchema = Joi.object({
           slug: Joi.string().required(),
           regularPrice: Joi.number().integer().required(),
           discountPrice: Joi.number().integer().optional().allow(null),
-        }),
+        }).required(),
       }).optional(),
     )
     .required(),
