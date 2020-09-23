@@ -85,7 +85,7 @@ export interface definitions {
   };
   putProductsProductIdRequestBody: definitions['Model11'];
 
-  putProductsProductIdDefaultResponse: string;
+  putProductsProductId200Response: definitions['Model9'];
   deleteProductsProductIdRequestPathParams: {
     productId: number;
   };
@@ -150,7 +150,7 @@ export interface definitions {
         };
         requestBody: definitions['Model11'];
 
-        response: string;
+        response: definitions['Model9'];
       };
       DELETE: {
         requestPathParams: {

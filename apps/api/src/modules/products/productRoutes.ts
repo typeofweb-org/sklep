@@ -15,13 +15,8 @@ import {
   editProductPayloadSchema,
   getProductsResponseSchema,
   getProductsQuerySchema,
+  editProductResponseSchema,
 } from './productSchemas';
-
-function handlePrismaError(err: any) {
-  console.log(err);
-
-  throw err;
-}
 
 const productSelect = {
   id: true,
@@ -87,8 +82,11 @@ export const editProductRoute: Hapi.ServerRoute = {
       payload: editProductPayloadSchema,
       params: editProductParamsSchema,
     },
+    response: {
+      schema: editProductResponseSchema,
+    },
   },
-  async handler(request) {
+  async handler(request): Promise<SklepTypes['putProductsProductId200Response']> {
     const payload = request.payload as SklepTypes['putProductsProductIdRequestBody'];
     const params = request.params as SklepTypes['putProductsProductIdRequestPathParams'];
 
@@ -99,17 +97,16 @@ export const editProductRoute: Hapi.ServerRoute = {
 
     const slug = Slugify(payload.name);
 
-    const product = await request.server.app.db.product
-      .update({
-        where: {
-          id: params.productId,
-        },
-        data: {
-          ...payload,
-          slug,
-        },
-      })
-      .catch(handlePrismaError);
+    const product = await request.server.app.db.product.update({
+      where: {
+        id: params.productId,
+      },
+      data: {
+        ...payload,
+        slug,
+      },
+      select: productSelect,
+    });
 
     return { data: product };
   },
