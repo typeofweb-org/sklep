@@ -30,11 +30,14 @@ export const LoginForm = () => {
       });
       router.replace('/admin/products');
     },
+    onError() {
+      // @todo
+    },
   });
 
   const handleSubmit = useCallback(
     (values: LoginType) => {
-      mutate(values);
+      void mutate(values);
     },
     [mutate],
   );

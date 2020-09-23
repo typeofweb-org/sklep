@@ -4,6 +4,7 @@ import { fetcher, useToWQuery } from '../fetcher';
 
 export const useGetProducts = (query: { readonly take: number; readonly skip: number } | {} = {}) =>
   useToWQuery(['/products', 'GET', { query }] as const);
+
 useGetProducts.prefetch = (queryCache: QueryCache) =>
   queryCache.prefetchQuery(['/products', 'GET', {}], () =>
     fetcher('/products', 'GET', { query: {} }),

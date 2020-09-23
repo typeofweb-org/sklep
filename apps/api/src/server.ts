@@ -106,8 +106,10 @@ export const getServerWithPlugins = async () => {
 
   server.ext('onPreResponse', ({ response }, h) => {
     if (response instanceof Error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       switch ((response as any).code) {
         case 'P2002':
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           return Boom.conflict(JSON.stringify((response as any).meta));
       }
     }

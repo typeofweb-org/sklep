@@ -25,7 +25,7 @@ import styles from './ProductsForm.module.scss';
 
 Yup.setLocale({
   mixed: {
-    required: ({ label }) => `${label} jest polem wymaganym`,
+    required: ({ label }) => (label ? `${label} jest polem wymaganym` : `To pole jest wymagane`),
   },
 });
 
@@ -70,7 +70,7 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
       initialValues={initialValues}
     >
       <Grid>
-        <Field name="name">
+        <Field<string> name="name">
           {({ input, meta }) => (
             <TextInput
               {...input}
@@ -93,7 +93,7 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
         </Field>
         <Row>
           <Column>
-            <Field name="regularPrice">
+            <Field<number> name="regularPrice">
               {({ input, meta }) => (
                 <NumberInput
                   {...input}
@@ -107,7 +107,7 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
             </Field>
           </Column>
           <Column>
-            <Field name="discountPrice">
+            <Field<number> name="discountPrice">
               {({ input, meta }) => (
                 <NumberInput
                   {...input}
@@ -131,7 +131,7 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
             />
           )}
         </Field>
-        <Field name="isPublic" defaultValue={false} type="checkbox">
+        <Field<boolean> name="isPublic" defaultValue={false} type="checkbox">
           {({ input: { value, checked, ...rest } }) => {
             return (
               <Toggle

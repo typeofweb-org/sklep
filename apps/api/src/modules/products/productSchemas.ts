@@ -29,7 +29,11 @@ export const addProductPayloadSchema = Joi.object<SklepTypes['postProductsReques
 
 export const addProductResponseSchema = Joi.object<SklepTypes['postProducts200Response']>({
   data: productSchema.required(),
-});
+}).required();
+
+export const editProductResponseSchema = Joi.object<SklepTypes['putProductsProductId200Response']>({
+  data: productSchema.required(),
+}).required();
 
 export const editProductPayloadSchema = addProductPayloadSchema;
 

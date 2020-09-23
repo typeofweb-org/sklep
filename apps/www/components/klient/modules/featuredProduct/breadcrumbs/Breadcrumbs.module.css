@@ -1,0 +1,8 @@
+.breadcrumb {
+    @apply text-sm text-gray-900 transition duration-300 ease-in-out pr-2 relative;
+}
+
+.breadcrumb:after {
+    content: '/';
+    margin-left: 0.5rem;
+}

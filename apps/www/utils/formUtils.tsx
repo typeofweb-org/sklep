@@ -54,12 +54,13 @@ export const createFormValidator = <U extends object>(schema: ObjectSchema<U>) =
   return {};
 };
 
-export const getErrorProps = (meta: FieldMetaState<any>) => {
+export const getErrorProps = (meta: FieldMetaState<unknown>) => {
   const isInvalid =
     (meta.error || (meta.submitError && !meta.dirtySinceLastSubmit)) && meta.touched;
 
   return {
     invalid: isInvalid,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     invalidText: meta.error,
   };
 };

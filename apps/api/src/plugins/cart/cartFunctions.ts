@@ -26,6 +26,8 @@ const cartSelect = {
   },
 } as const;
 
+type CartFromDB = Awaited<ReturnType<typeof findOrCreateCart>>['cart'];
+
 export async function ensureCartExists(request: Request, h: ResponseToolkit) {
   const result = await findOrCreateCart(request);
   if (result.created) {
@@ -35,9 +37,9 @@ export async function ensureCartExists(request: Request, h: ResponseToolkit) {
 }
 
 export async function findOrCreateCart(request: Request) {
-  const cartId = request.state['cart'];
+  const cartId: unknown = request.state['cart'];
 
-  if (cartId) {
+  if (typeof cartId === 'string' && cartId.length > 0) {
     const [cart] = await request.server.app.db.cart.findMany({
       where: { id: cartId },
       select: cartSelect,
@@ -111,7 +113,13 @@ export function clearCart(request: Request, { cartId }: { readonly cartId: strin
   });
 }
 
-export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreateCart>>['cart']) {
+export function findAllCarts(request: Request) {
+  return request.server.app.db.cart.findMany({
+    select: cartSelect,
+  });
+}
+
+export function calculateCartTotals(cart: CartFromDB) {
   return cart.cartProducts.reduce(
     (acc, cartProduct) => {
       const regularSum = cartProduct.product.regularPrice * cartProduct.quantity;
@@ -121,11 +129,26 @@ export function calculateCartTotals(cart: Awaited<ReturnType<typeof findOrCreate
 
       acc.regularSubTotal += Math.trunc(regularSum);
       acc.discountSubTotal += Math.trunc(discountSum);
+      acc.totalQuantity += cartProduct.quantity;
       return acc;
     },
     {
       regularSubTotal: 0,
       discountSubTotal: 0,
+      totalQuantity: 0,
     },
   );
 }
+
+export const cartModelToResponse = (cart: CartFromDB) => {
+  const { regularSubTotal, discountSubTotal, totalQuantity } = calculateCartTotals(cart);
+
+  return {
+    ...cart,
+    regularSubTotal,
+    discountSubTotal,
+    totalQuantity,
+    createdAt: cart.createdAt.toISOString(),
+    updatedAt: cart.updatedAt.toISOString(),
+  };
+};

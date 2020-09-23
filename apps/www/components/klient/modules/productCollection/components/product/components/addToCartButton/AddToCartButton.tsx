@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ShoppingCartIcon } from '../../../../shared/icons/ShoppingCartIcon';
+import { ShoppingCartIcon } from '../../../../../../shared/components/icons/ShoppingCartIcon';
 
 type AddToCartButtonProps = {
   readonly onClick: React.MouseEventHandler<HTMLButtonElement>;
