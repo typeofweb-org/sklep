@@ -1,7 +1,9 @@
 {
   "root": false,
-  "extends": ["plugin:import/errors"],
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
   "rules": {
-    "@typescript-eslint/no-unused-vars": "off"
+    "import/no-default-export": "error"
   }
 }

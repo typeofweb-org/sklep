@@ -31,9 +31,9 @@ describe('form for adding products', () => {
   it('allows user to add product', async () => {
     const { getByLabelText, getByText, findByRole } = render(<ProductsForm />);
 
-    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    await userEvent.type(getByLabelText('Cena produktu'), '99.9');
+    await userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
 
     userEvent.click(getByText('Dodaj produkt'));
 
@@ -50,9 +50,9 @@ describe('form for adding products', () => {
 
     const { getByLabelText, getByText, findByRole } = render(<ProductsForm />);
 
-    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    await userEvent.type(getByLabelText('Cena produktu'), '99.9');
+    await userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
 
     userEvent.click(getByText('Dodaj produkt'));
 

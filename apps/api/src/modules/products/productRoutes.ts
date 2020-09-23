@@ -49,7 +49,7 @@ export const addProductRoute: Hapi.ServerRoute = {
   },
   async handler(request) {
     const payload = request.payload as SklepTypes['postProductsRequestBody'];
-    const user = request.auth.credentials!.session!.user;
+    const user = request.auth.credentials.session!.user;
 
     const slug = Slugify(payload.name);
 
