@@ -59,7 +59,6 @@ export const getErrorProps = (meta: FieldMetaState<unknown>) => {
     (meta.error || (meta.submitError && !meta.dirtySinceLastSubmit)) && meta.touched;
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     invalid: isInvalid,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     invalidText: meta.error,
