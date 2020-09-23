@@ -13,7 +13,19 @@
     "jsx-a11y/anchor-is-valid": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "import/no-default-export": "error",
-    "react/display-name": "error"
+    "react/display-name": "error",
+    "import/no-restricted-paths": [
+      "error",
+      {
+        "zones": [
+          { "target": "./components", "from": "./pages" },
+          { "target": "./components/klient", "from": "./components/admin" },
+          { "target": "./components/admin", "from": "./components/klient" },
+          { "target": "./pages/admin", "from": "./components/klient" },
+          { "target": "./", "from": "..", "except": ["www"] }
+        ]
+      }
+    ]
   },
   "overrides": [
     {

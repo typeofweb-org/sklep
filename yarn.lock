@@ -11448,6 +11448,11 @@ react-is@16.13.1, react-is@^16.12.0, react-is@^16.13.1, react-is@^16.8.1, react-
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-modal-promise@0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/react-modal-promise/-/react-modal-promise-0.5.3.tgz#63c437f49ce6b7e6af4d58dd06b589459995b796"
+  integrity sha512-WTAhJXLMTcBBtUtJq+ZQ3TTaAqE0U0u6tPREWEWwfEE+NLi+GhiBVxTAlIGwci9f75X4uVU6+QOv2+QFn/P55Q==
+
 react-query-devtools@2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-query-devtools/-/react-query-devtools-2.5.0.tgz#9f9da1a676365d527b87a76d797b9df3ea79a2a2"
