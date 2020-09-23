@@ -2,20 +2,20 @@ import Head from 'next/head';
 import React from 'react';
 
 import { AdminLayout } from '../../../components/admin/adminLayout/AdminLayout';
-import { AdminProducts } from '../../../components/admin/adminProducts/AdminProducts';
+import { AdminSingleProduct } from '../../../components/admin/adminSingleProduct/AdminSingleProduct';
 
-export default function ProductsPage() {
+export default function SingleProductPage() {
   return (
     <>
       <Head>
-        <title>Admin page</title>
+        <title>Panel admina, podstrona produktu</title>
         <link
           rel="stylesheet"
           href="https://unpkg.com/carbon-components@10.18.0/css/carbon-components.min.css"
         />
       </Head>
       <AdminLayout>
-        <AdminProducts />
+        <AdminSingleProduct />
       </AdminLayout>
     </>
   );

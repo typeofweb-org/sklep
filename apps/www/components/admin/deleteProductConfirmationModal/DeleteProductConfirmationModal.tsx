@@ -30,7 +30,7 @@ export const DeleteProductConfirmationModal = React.memo<DeleteProductConfirmati
   ({ isOpen, product, handleDelete, handleClose, status }) => {
     const submit = React.useCallback(() => {
       if (product) {
-        return handleDelete(Number(product.id));
+        return handleDelete(product.id);
       }
     }, [handleDelete, product]);
     const primaryButtonText = statusToPrimaryText(status);

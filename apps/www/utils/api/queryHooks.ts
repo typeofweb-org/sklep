@@ -1,4 +1,4 @@
-import type { QueryCache } from 'react-query';
+import type { QueryCache, QueryConfig } from 'react-query';
 
 import { fetcher, useToWQuery } from '../fetcher';
 
@@ -10,5 +10,5 @@ useGetProducts.prefetch = (queryCache: QueryCache) =>
     fetcher('/products', 'GET', { query: {} }),
   );
 
-export const useGetProductById = (productId: number) =>
-  useToWQuery(['/products/{productId}', 'GET', { params: { productId } }] as const);
+export const useGetProductById = (productId: number, queryConfig?: QueryConfig<any, unknown>) =>
+  useToWQuery(['/products/{productId}', 'GET', { params: { productId } }] as const, queryConfig);

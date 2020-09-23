@@ -2,8 +2,8 @@ import type { Nil } from '@sklep/types';
 import React from 'react';
 import { useMutation, useQueryCache } from 'react-query';
 
+import { deleteProduct } from '../../../utils/api/deleteProduct';
 import { useGetProducts } from '../../../utils/api/queryHooks';
-import { fetcher } from '../../../utils/fetcher';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import type { Product } from '../productsList/ProductListUtils';
 import { ProductsList } from '../productsList/ProductsList';
@@ -19,8 +19,8 @@ export const AdminProducts = React.memo(() => {
   const { addToast } = useToasts();
   const cache = useQueryCache();
 
-  const [deleteProduct, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
-    (productId: number) => fetcher('/products/{productId}', 'DELETE', { params: { productId } }),
+  const [mutate, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
+    deleteProduct,
     {
       async onSuccess() {
         addToast({
@@ -77,7 +77,7 @@ export const AdminProducts = React.memo(() => {
       <DeleteProductConfirmationModal
         isOpen={showDeletionModal}
         product={productForDeletion}
-        handleDelete={deleteProduct}
+        handleDelete={mutate}
         handleClose={closeDeletionModal}
         status={deletionStatus}
       />
