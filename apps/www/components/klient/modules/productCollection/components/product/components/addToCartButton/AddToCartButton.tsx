@@ -11,6 +11,7 @@ export const AddToCartButton = React.memo<AddToCartButtonProps>(({ onClick }) =>
     <button
       className="bg-gray-900 text-white w-full rounded-sm mt-2 p-2 shadow-sm hover:bg-gray-800"
       title="dodaj do koszyka"
+      aria-label="Do koszyka"
       onClick={onClick}
     >
       <div className="flex justify-center transform transition-transform">
