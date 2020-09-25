@@ -7,28 +7,64 @@ import {
   TableToolbarContent,
   Button,
 } from 'carbon-components-react';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { useMutation } from 'react-query';
+
+import { deleteProducts } from '../../../utils/api/deleteProducts';
+import { useToasts } from '../toasts/Toasts';
 
 import type { ProductsTableRow, ProductsTableHeader } from './ProductListUtils';
 
 export const ProductsTableToolbar = React.memo<
   DataTableCustomRenderProps<ProductsTableRow, ProductsTableHeader>
->(({ getBatchActionProps }) => {
+>(({ getBatchActionProps, selectedRows }) => {
+  const router = useRouter();
+  const { addToast } = useToasts();
+  const [mutate] = useMutation(deleteProducts, {
+    onSuccess(settledPromises: readonly PromiseSettledResult<never>[]) {
+      const totalNumberOfPromises = settledPromises.length;
+      const resolvedPromises = settledPromises.filter(({ status }) => status === 'fulfilled')
+        .length;
+      if (resolvedPromises === totalNumberOfPromises) {
+        addToast({
+          kind: 'success',
+          title: 'Operacja udana',
+          caption: 'Wszystkie produkty zostały usunięte pomyślnie',
+        });
+      }
+      addToast({
+        kind: 'warning',
+        title: 'Coś poszło nie tak',
+        caption: `Udało się usunąć ${resolvedPromises} z ${totalNumberOfPromises} przedmiotów`,
+      });
+    },
+  });
+  const handleRedirectToAddProduct = React.useCallback(() => {
+    void router.replace('/admin/add-product');
+  }, [router]);
+
+  const handleDeleteProducts = React.useCallback(() => {
+    const productsIdsArray = selectedRows.map(({ id }) => Number(id));
+    void mutate(productsIdsArray);
+  }, [mutate, selectedRows]);
+  const batchActionsProps = getBatchActionProps();
+
   return (
     <TableToolbar>
-      <TableBatchActions {...getBatchActionProps()}>
+      <TableBatchActions {...batchActionsProps}>
         <TableBatchAction
-          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+          tabIndex={batchActionsProps.shouldShowBatchActions ? 0 : -1}
           renderIcon={Delete16}
-          onClick={() => console.log('clicked')}
+          onClick={handleDeleteProducts}
         >
           Usuń produkt(y)
         </TableBatchAction>
       </TableBatchActions>
       <TableToolbarContent>
         <Button
-          tabIndex={getBatchActionProps().shouldShowBatchActions ? -1 : 0}
-          onClick={() => console.log('clicked')}
+          tabIndex={batchActionsProps.shouldShowBatchActions ? -1 : 0}
+          onClick={handleRedirectToAddProduct}
           size="small"
           kind="primary"
         >

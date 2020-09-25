@@ -10,11 +10,3 @@
   -webkit-appearance: none;
   margin: 0;
 }
-
-.visually-hidden {
-  @apply overflow-hidden absolute whitespace-no-wrap;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  width: 1px;
-}

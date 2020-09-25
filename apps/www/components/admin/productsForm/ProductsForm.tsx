@@ -1,4 +1,5 @@
 import { Add16 } from '@carbon/icons-react';
+import type { SklepTypes } from '@sklep/types';
 import {
   Button,
   TextInput,
@@ -21,7 +22,6 @@ import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 
 import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
-import { createProduct } from './productsFormUtils';
 
 Yup.setLocale({
   mixed: {
@@ -37,43 +37,58 @@ const productSchema = Yup.object({
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
 }).required();
-export type ProductType = Yup.InferType<typeof productSchema>;
+type ProductBody = Yup.InferType<typeof productSchema>;
+type ProductFormMode = ProductsFormProps['mode'];
+type ProductsFormProps =
+  | {
+      readonly mutation: (values: SklepTypes['postProductsRequestBody']) => Promise<any>;
+      readonly mode: 'ADDING';
+      readonly initialValues?: undefined;
+    }
+  | {
+      readonly mutation: (values: SklepTypes['putProductsProductIdRequestBody']) => Promise<any>;
+      readonly mode: 'EDITING';
+      readonly initialValues: SklepTypes['postProductsRequestBody'];
+    };
 
-export const ProductsForm = () => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(createProduct);
+export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: ProductsFormProps) => {
+  const [mutate, { isLoading, isSuccess, isError }] = useMutation(mutation);
 
   const handleSubmit = React.useCallback(
-    async (values: ProductType) => {
+    async (body: ProductBody) => {
       // @todo handle server errors
-      await mutate({ ...values, type: 'SINGLE' }); // @todo
+      await mutate({ ...body, type: 'SINGLE' }); // @todo
     },
     [mutate],
   );
 
   return (
-    <ToWForm onSubmit={handleSubmit} schema={productSchema} className={styles.form}>
+    <ToWForm
+      onSubmit={handleSubmit}
+      schema={productSchema}
+      className={styles.form}
+      initialValues={initialValues}
+    >
       <Grid>
         <Field<string> name="name">
           {({ input, meta }) => (
-            <>
-              <TextInput
-                {...input}
-                {...getErrorProps(meta)}
-                id="name"
-                labelText="Nazwa produktu"
-                placeholder="Wpisz nazwę produktu"
-                helperText={
-                  <>
-                    Adres produktu:{' '}
-                    <CarbonLink disabled>
-                      https://www.sklep.localhost:3000/produkt/
-                      <ProductSlug name={input.value} />
-                    </CarbonLink>
-                  </>
-                }
-                // helperText="Ta nazwa będzie widoczna dla Twoich klientów. Jej uproszczona wersja posłuży także jako adres strony."
-              />
-            </>
+            <TextInput
+              {...input}
+              {...getErrorProps(meta)}
+              id="name"
+              labelText="Nazwa produktu"
+              placeholder="Wpisz nazwę produktu"
+              helperText={
+                <>
+                  Adres produktu:{' '}
+                  <CarbonLink disabled>
+                    https://www.sklep.localhost:3000/produkt/
+                    <ProductSlug name={input.value} />
+                  </CarbonLink>
+                </>
+              }
+              // helperText="Ta nazwa będzie widoczna dla Twoich klientów. Jej uproszczona wersja posłuży także jako adres strony."
+            />
           )}
         </Field>
         <Row>
@@ -131,17 +146,26 @@ export const ProductsForm = () => {
           }}
         </Field>
         <Button kind="primary" type="submit" renderIcon={Add16} disabled={isLoading}>
-          Dodaj produkt
+          {formSubmitTextMap[mode]}
         </Button>
         {isLoading && <Loading />}
-        {isSuccess && <InlineNotification title="Dodałeś produkt do bazy danych" kind="success" />}
-        {isError && (
-          <InlineNotification
-            title="Wystąpił błąd podczas dodawania produktu do bazy danych"
-            kind="error"
-          />
-        )}
+        {isSuccess && <InlineNotification title={formSuccesTextMap[mode]} kind="success" />}
+        {isError && <InlineNotification title={formErrorTextMap[mode]} kind="error" />}
       </Grid>
     </ToWForm>
   );
+};
+
+type TextMap = Record<ProductFormMode, string>;
+const formSubmitTextMap: TextMap = {
+  ADDING: 'Dodaj produkt',
+  EDITING: 'Zaaktualizuj produkt',
+};
+const formSuccesTextMap: TextMap = {
+  ADDING: 'Dodałeś produkt do bazy danych',
+  EDITING: 'Produkt został pomyślnie edytowany',
+};
+const formErrorTextMap: TextMap = {
+  ADDING: 'Wystąpił błąd podczas dodawania produktu do bazy danych',
+  EDITING: 'Wystąpił błąd podczas aktualizowania produktu',
 };

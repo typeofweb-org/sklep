@@ -10,7 +10,7 @@ export const AddToCartButton = React.memo<AddToCartButtonProps>(({ onClick }) =>
   return (
     <button
       className="bg-gray-900 text-white w-full rounded-sm mt-2 p-2 shadow-sm hover:bg-gray-800"
-      title="dodaj do koszyka"
+      title="Dodaj do koszyka"
       aria-label="Do koszyka"
       onClick={onClick}
     >
