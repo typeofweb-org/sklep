@@ -18,7 +18,7 @@ export const CartStatus = React.memo(() => {
               data-testid="cartCounter"
             >
               <span className="visually-hidden">Liczba probuktów w koszyku: </span>
-              <span>{itemsInCart}</span>
+              {itemsInCart}
             </span>
           )}
         </a>

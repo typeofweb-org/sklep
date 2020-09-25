@@ -1,3 +1,4 @@
+import type { SklepTypes } from '@sklep/types';
 import '@testing-library/jest-dom';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -9,9 +10,7 @@ import { Hero } from '../../../modules/hero/Hero';
 import { ProductCollection } from '../../../modules/productCollection/ProductCollection';
 import { Layout } from '../../../shared/components/layout/Layout';
 
-const types = 'SINGLE' as const;
-
-const fakeProduct = [
+const fakeProducts: SklepTypes['getProducts200Response']['data'] = [
   {
     id: 1,
     slug: 'Przykładowy',
@@ -20,11 +19,11 @@ const fakeProduct = [
     isPublic: true,
     regularPrice: 123,
     discountPrice: 111,
-    type: types,
+    type: 'SINGLE',
   },
 ];
 
-const fakePostResponse = {
+const fakePostResponse: SklepTypes['postCart200Response'] = {
   data: {
     id: 'ckffunbdz0164slyojqwtc1qv',
     createdAt: '2020-09-23T20:38:05.927Z',
@@ -52,6 +51,14 @@ const server = setupServer(
   }),
 );
 
+const renderHomeWithProduct = () =>
+  render(
+    <Layout title="Sklep strona główna">
+      <Hero />
+      <ProductCollection products={fakeProducts} />
+    </Layout>,
+  );
+
 describe('adding products to card', () => {
   beforeAll(() => {
     server.listen();
@@ -59,18 +66,11 @@ describe('adding products to card', () => {
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
-  it('should CartStatus badge be visible after clicking dodaj do koszyka', async () => {
-    const renderHomeWithProduct = () =>
-      render(
-        <Layout title="Sklep strona główna">
-          <Hero />
-          <ProductCollection products={fakeProduct} />
-        </Layout>,
-      );
-
+  it('should CartStatus badge be visible after clicking Do koszyka', async () => {
     const { getByTestId, getByLabelText } = renderHomeWithProduct();
     userEvent.click(getByLabelText('Do koszyka'));
     const cartBadge = await waitFor(() => getByTestId('cartCounter'));
     expect(cartBadge).toBeInTheDocument();
+    expect(cartBadge).toHaveTextContent('1');
   });
 });
