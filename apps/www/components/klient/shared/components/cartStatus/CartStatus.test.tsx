@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import React from 'react';
+import { queryCache } from 'react-query';
 
 import { Hero } from '../../../modules/hero/Hero';
 import { ProductCollection } from '../../../modules/productCollection/ProductCollection';
@@ -45,25 +46,52 @@ const fakePostResponse: SklepTypes['postCart200Response'] = {
     totalQuantity: 1,
   },
 };
-const server = setupServer(
-  rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
-  }),
-);
 
-const renderHomeWithProduct = () =>
-  render(
-    <Layout title="Sklep strona główna">
-      <Hero />
-      <ProductCollection products={fakeProducts} />
-    </Layout>,
+const fakeTwoItemsResponse: SklepTypes['postCart200Response'] = {
+  data: {
+    id: 'ckffunbdz0164slyojqwtc1qv',
+    createdAt: '2020-09-23T20:38:05.927Z',
+    updatedAt: '2020-09-23T20:38:05.926Z',
+    cartProducts: [
+      {
+        quantity: 2,
+        product: {
+          id: 1,
+          slug: 'Przykładowy',
+          name: 'Przykładowy',
+          regularPrice: 123,
+          discountPrice: 111,
+        },
+      },
+    ],
+    regularSubTotal: 123,
+    discountSubTotal: 111,
+    totalQuantity: 2,
+  },
+};
+
+describe('adding products to cart', () => {
+  const server = setupServer(
+    rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
+      return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
+    }),
   );
 
-describe('adding products to card', () => {
+  const renderHomeWithProduct = () =>
+    render(
+      <Layout title="Sklep strona główna">
+        <Hero />
+        <ProductCollection products={fakeProducts} />
+      </Layout>,
+    );
+
   beforeAll(() => {
     server.listen();
   });
-  afterEach(() => server.resetHandlers());
+  afterEach(() => {
+    queryCache.clear();
+    server.resetHandlers();
+  });
   afterAll(() => server.close());
 
   it('should CartStatus badge be visible after clicking Do koszyka', async () => {
@@ -72,5 +100,18 @@ describe('adding products to card', () => {
     const cartBadge = await waitFor(() => getByTestId('cartCounter'));
     expect(cartBadge).toBeInTheDocument();
     expect(cartBadge).toHaveTextContent('1');
+  });
+
+  it('should be 2 items in CartStatus badge', async () => {
+    server.use(
+      rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
+        return res(ctx.status(200), ctx.json(fakeTwoItemsResponse), ctx.delay(300));
+      }),
+    );
+    const { getByTestId, getByLabelText } = renderHomeWithProduct();
+    userEvent.click(getByLabelText('Do koszyka'));
+    const cartBadge = await waitFor(() => getByTestId('cartCounter'));
+    expect(cartBadge).toBeInTheDocument();
+    expect(cartBadge).toHaveTextContent('2');
   });
 });
