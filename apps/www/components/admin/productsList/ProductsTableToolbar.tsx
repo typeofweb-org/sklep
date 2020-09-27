@@ -27,7 +27,7 @@ export const ProductsTableToolbar = React.memo<
       const resolvedPromises = settledPromises.filter(({ status }) => status === 'fulfilled')
         .length;
       if (resolvedPromises === totalNumberOfPromises) {
-        addToast({
+        return addToast({
           kind: 'success',
           title: 'Operacja udana',
           caption: 'Wszystkie produkty zostały usunięte pomyślnie',
@@ -41,7 +41,7 @@ export const ProductsTableToolbar = React.memo<
     },
   });
   const handleRedirectToAddProduct = React.useCallback(() => {
-    void router.replace('/admin/add-product');
+    void router.push('/admin/add-product');
   }, [router]);
 
   const handleDeleteProducts = React.useCallback(() => {

@@ -11,14 +11,15 @@ import {
   Grid,
   Row,
   Column,
-  InlineNotification,
 } from 'carbon-components-react';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
+import { useToasts } from '../toasts/Toasts';
 
 import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
@@ -41,18 +42,44 @@ type ProductBody = Yup.InferType<typeof productSchema>;
 type ProductFormMode = ProductsFormProps['mode'];
 type ProductsFormProps =
   | {
-      readonly mutation: (values: SklepTypes['postProductsRequestBody']) => Promise<any>;
+      readonly mutation: (
+        values: SklepTypes['postProductsRequestBody'],
+      ) => Promise<SklepTypes['postProducts200Response']>;
       readonly mode: 'ADDING';
       readonly initialValues?: undefined;
     }
   | {
-      readonly mutation: (values: SklepTypes['putProductsProductIdRequestBody']) => Promise<any>;
+      readonly mutation: (
+        values: SklepTypes['putProductsProductIdRequestBody'],
+      ) => Promise<SklepTypes['putProductsProductId200Response']>;
       readonly mode: 'EDITING';
       readonly initialValues: SklepTypes['postProductsRequestBody'];
     };
 
 export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: ProductsFormProps) => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(mutation);
+  const { addToast } = useToasts();
+  const router = useRouter();
+  const [mutate, { isLoading }] = useMutation(mutation, {
+    onSuccess(response) {
+      addToast({
+        kind: 'success',
+        title: 'Operacja udana',
+        caption: formSuccesTextMap[mode],
+      });
+      if (mode === 'ADDING') {
+        void router.replace(`/admin/products/${response.data.id}`);
+      } else {
+        void 0;
+      }
+    },
+    onError() {
+      addToast({
+        kind: 'error',
+        title: 'Coś się nie powiodło',
+        caption: formErrorTextMap[mode],
+      });
+    },
+  });
 
   const handleSubmit = React.useCallback(
     async (body: ProductBody) => {
@@ -149,8 +176,6 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
           {formSubmitTextMap[mode]}
         </Button>
         {isLoading && <Loading />}
-        {isSuccess && <InlineNotification title={formSuccesTextMap[mode]} kind="success" />}
-        {isError && <InlineNotification title={formErrorTextMap[mode]} kind="error" />}
       </Grid>
     </ToWForm>
   );
