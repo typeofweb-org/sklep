@@ -96,7 +96,7 @@ describe('adding products to cart', () => {
 
   it('should CartStatus badge be visible after clicking Do koszyka', async () => {
     const { getByTestId, getByLabelText } = renderHomeWithProduct();
-    userEvent.click(getByLabelText('Do koszyka'));
+    userEvent.click(getByLabelText('Dodaj do koszyka'));
     const cartBadge = await waitFor(() => getByTestId('cartCounter'));
     expect(cartBadge).toBeInTheDocument();
     expect(cartBadge).toHaveTextContent('1');
@@ -109,7 +109,7 @@ describe('adding products to cart', () => {
       }),
     );
     const { getByTestId, getByLabelText } = renderHomeWithProduct();
-    userEvent.click(getByLabelText('Do koszyka'));
+    userEvent.click(getByLabelText('Dodaj do koszyka'));
     const cartBadge = await waitFor(() => getByTestId('cartCounter'));
     expect(cartBadge).toBeInTheDocument();
     expect(cartBadge).toHaveTextContent('2');
