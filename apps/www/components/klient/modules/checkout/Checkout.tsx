@@ -1,4 +1,6 @@
 import type { SklepTypes } from '@sklep/types';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -6,6 +8,7 @@ import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
+import { CheckoutForm } from './components/summary/payment/StripePayment';
 
 type CheckoutProps = {
   readonly cart: SklepTypes['postCart200Response'];
@@ -23,20 +26,25 @@ const checkoutSchema = Yup.object({
 
 export type CheckoutType = Yup.InferType<typeof checkoutSchema>;
 
+const promise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
   const handleSubmit = (values: CheckoutType) => {
     console.log(values);
   };
 
   return (
-    <FinalFormWrapper
-      schema={checkoutSchema}
-      onSubmit={handleSubmit}
-      className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
-    >
-      <AddressForm />
-      <CheckoutSummary cart={cart} />
-    </FinalFormWrapper>
+    <Elements stripe={promise}>
+      <FinalFormWrapper
+        schema={checkoutSchema}
+        onSubmit={handleSubmit}
+        className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
+      >
+        <AddressForm />
+        <CheckoutSummary cart={cart} />
+      </FinalFormWrapper>
+      <CheckoutForm />
+    </Elements>
   );
 });
 Checkout.displayName = 'Checkout';
