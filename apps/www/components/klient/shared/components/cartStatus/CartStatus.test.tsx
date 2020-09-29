@@ -3,10 +3,9 @@ import '@testing-library/jest-dom';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 import React from 'react';
-import { queryCache } from 'react-query';
 
+import { mswMockServer } from '../../../../../jest-utils';
 import { Hero } from '../../../modules/hero/Hero';
 import { ProductCollection } from '../../../modules/productCollection/ProductCollection';
 import { Layout } from '../../../shared/components/layout/Layout';
@@ -69,9 +68,8 @@ const fakeTwoItemsResponse: SklepTypes['postCart200Response'] = {
     totalQuantity: 2,
   },
 };
-
 describe('adding products to cart', () => {
-  const server = setupServer(
+  mswMockServer.use(
     rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
       return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
     }),
@@ -85,15 +83,6 @@ describe('adding products to cart', () => {
       </Layout>,
     );
 
-  beforeAll(() => {
-    server.listen();
-  });
-  afterEach(() => {
-    queryCache.clear();
-    server.resetHandlers();
-  });
-  afterAll(() => server.close());
-
   it('should CartStatus badge be visible after clicking Do koszyka', async () => {
     const { getByTestId, getByLabelText } = renderHomeWithProduct();
     userEvent.click(getByLabelText('Dodaj do koszyka'));
@@ -103,7 +92,7 @@ describe('adding products to cart', () => {
   });
 
   it('should be 2 items in CartStatus badge', async () => {
-    server.use(
+    mswMockServer.use(
       rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
         return res(ctx.status(200), ctx.json(fakeTwoItemsResponse), ctx.delay(300));
       }),
