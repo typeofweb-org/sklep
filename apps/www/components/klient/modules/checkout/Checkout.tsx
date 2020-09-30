@@ -8,7 +8,6 @@ import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
-import { CheckoutForm } from './components/summary/payment/StripePayment';
 
 type CheckoutProps = {
   readonly cart: SklepTypes['postCart200Response'];
@@ -18,7 +17,7 @@ const checkoutSchema = Yup.object({
   firstName: Yup.string().required('Pole jest wymagane'),
   lastName: Yup.string().required('Pole jest wymagane'),
   streetName: Yup.string().required('Pole jest wymagane'),
-  houseNumber: Yup.number().required('Pole jest wymagane'),
+  houseNumber: Yup.string().required('Pole jest wymagane'),
   city: Yup.string().required('Pole jest wymagane'),
   zipCode: Yup.string().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
@@ -43,8 +42,8 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
         <AddressForm />
         <CheckoutSummary cart={cart} />
       </FinalFormWrapper>
-      <CheckoutForm />
     </Elements>
   );
 });
+
 Checkout.displayName = 'Checkout';

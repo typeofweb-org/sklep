@@ -18,6 +18,7 @@ export const CheckoutSummary = React.memo<CheckoutSummaryProps>(({ cart }) => {
       <CheckoutList cart={cart} />
       <CheckoutTotal cart={cart} />
       <PaymentMethod />
+      {/* <CheckoutForm /> */}
       <Button type="submit">Złóż zamówienie</Button>
     </div>
   );

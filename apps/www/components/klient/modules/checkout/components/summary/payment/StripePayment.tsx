@@ -29,6 +29,7 @@ export const CheckoutForm = React.memo(() => {
     //   });
   }, []);
   const cardStyle = {
+    placeholder: 'Dupa',
     style: {
       base: {
         color: '#32325d',
@@ -52,32 +53,42 @@ export const CheckoutForm = React.memo(() => {
     setError(event.error ? event.error.message : '');
   };
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
+    console.log(ev);
     ev.preventDefault();
+    if (!stripe) {
+      return;
+    }
     setProcessing(true);
-    if (stripe) {
-      const payload = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      });
-      if (payload.error) {
-        setError(`Payment failed ${payload.error.message}`);
-        setProcessing(false);
-      } else {
-        setError('');
-        setProcessing(false);
-        setSucceeded(true);
-      }
+    console.log(stripe);
+    const payload = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+      },
+    });
+    if (payload.error) {
+      setError(`Payment failed ${payload.error.message}`);
+      setProcessing(false);
+    } else {
+      setError('');
+      setProcessing(false);
+      setSucceeded(true);
     }
   };
+
+  console.log(processing);
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
-      <button disabled={processing || disabled || succeeded} id="submit">
+      {/* <button disabled={processing || disabled || succeeded} id="submit">
         <span id="button-text">
           {processing ? <div className="spinner" id="spinner"></div> : 'Zapłać'}
         </span>
-      </button>
+      </button> */}
+      {/* <Button type="submit" disabled={processing || disabled || succeeded} id="submit">
+        <span id="button-text">
+          {processing ? <div className="spinner" id="spinner"></div> : 'Zapłać'}
+        </span>
+      </Button> */}
       {/* Show any error that happens when processing the payment */}
       {error && (
         <div className="card-error" role="alert">
