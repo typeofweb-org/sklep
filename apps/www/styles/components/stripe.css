@@ -90,7 +90,7 @@ button:disabled {
 }
 .spinner:after {
   width: 10.4px;
-  height: 10.2px;
+  height: 20.2px;
   background: #5469d4;
   border-radius: 0 10.2px 10.2px 0;
   top: -0.1px;

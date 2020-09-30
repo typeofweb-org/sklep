@@ -1,15 +1,15 @@
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardElement, useStripe } from '@stripe/react-stripe-js';
 import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+
+import { useCheckoutDispatch, useCheckoutState } from '../../../utils/checkoutContext';
 
 export const CheckoutForm = React.memo(() => {
-  const [succeeded, setSucceeded] = useState(false);
-  const [error, setError] = useState<string>('');
-  const [processing, setProcessing] = useState(false);
-  const [disabled, setDisabled] = useState(true);
-  const [clientSecret, setClientSecret] = useState('');
   const stripe = useStripe();
-  const elements = useElements();
+
+  const state = useCheckoutState();
+  const dispatch = useCheckoutDispatch();
+  console.log(state.processing);
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
@@ -49,8 +49,9 @@ export const CheckoutForm = React.memo(() => {
   const handleChange = (event: StripeCardElementChangeEvent) => {
     // Listen for changes in the CardElement
     // and display any errors as the customer types their card details
-    setDisabled(event.empty);
-    setError(event.error ? event.error.message : '');
+    dispatch({ type: 'DISABLE', payload: event.empty });
+    dispatch({ type: 'ERROR', payload: event.error ? event.error.message : '' });
+    // setError(event.error ? event.error.message : '');
   };
   const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     console.log(ev);
@@ -58,45 +59,46 @@ export const CheckoutForm = React.memo(() => {
     if (!stripe) {
       return;
     }
-    setProcessing(true);
-    console.log(stripe);
-    const payload = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-      },
-    });
-    if (payload.error) {
-      setError(`Payment failed ${payload.error.message}`);
-      setProcessing(false);
-    } else {
-      setError('');
-      setProcessing(false);
-      setSucceeded(true);
-    }
+
+    dispatch({ type: 'PROCESS', payload: true });
+    // setProcessing(true);
+    // console.log(stripe);
+    // const payload = await stripe.confirmCardPayment(clientSecret, {
+    //   payment_method: {
+    //     card: elements.getElement(CardElement),
+    //   },
+    // });
+    // if (payload.error) {
+    //   setError(`Payment failed ${payload.error.message}`);
+    //   setProcessing(false);
+    // } else {
+    //   setError('');
+    //   setProcessing(false);
+    //   setSucceeded(true);
+    // }
   };
 
-  console.log(processing);
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
-      {/* <button disabled={processing || disabled || succeeded} id="submit">
+      <button disabled={state.processing || state.disabled || state.succeeded} id="submit">
         <span id="button-text">
-          {processing ? <div className="spinner" id="spinner"></div> : 'Zapłać'}
+          {state.processing ? <div className="spinner" id="spinner"></div> : 'Zapłać'}
         </span>
-      </button> */}
+      </button>
       {/* <Button type="submit" disabled={processing || disabled || succeeded} id="submit">
         <span id="button-text">
           {processing ? <div className="spinner" id="spinner"></div> : 'Zapłać'}
         </span>
       </Button> */}
       {/* Show any error that happens when processing the payment */}
-      {error && (
+      {/* {error && (
         <div className="card-error" role="alert">
           {error}
         </div>
       )}
       {/* Show a success message upon completion */}
-      <p className={succeeded ? 'result-message' : 'result-message hidden'}>
+      <p className={state.succeeded ? 'result-message' : 'result-message hidden'}>
         Payment succeeded, see the result in your
         <a href={`https://dashboard.stripe.com/test/payments`}> Stripe dashboard.</a> Refresh the
         page to pay again.

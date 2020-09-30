@@ -8,6 +8,7 @@ import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
+import { CheckoutProvider } from './utils/checkoutContext';
 
 type CheckoutProps = {
   readonly cart: SklepTypes['postCart200Response'];
@@ -34,14 +35,16 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
 
   return (
     <Elements stripe={promise}>
-      <FinalFormWrapper
-        schema={checkoutSchema}
-        onSubmit={handleSubmit}
-        className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
-      >
-        <AddressForm />
-        <CheckoutSummary cart={cart} />
-      </FinalFormWrapper>
+      <CheckoutProvider>
+        <FinalFormWrapper
+          schema={checkoutSchema}
+          onSubmit={handleSubmit}
+          className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
+        >
+          <AddressForm />
+          <CheckoutSummary cart={cart} />
+        </FinalFormWrapper>
+      </CheckoutProvider>
     </Elements>
   );
 });
