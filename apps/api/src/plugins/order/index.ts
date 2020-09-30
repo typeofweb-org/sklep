@@ -3,7 +3,6 @@ import type Hapi from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
 import Stripe from 'stripe';
 
-import { getConfig } from '../../config';
 import type { Models } from '../../models';
 
 import { createOrder, handleStripeEvent } from './orderFunctions';
@@ -24,7 +23,6 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
   multiple: false,
   name: 'Sklep Order Plugin',
   version: '1.0.0',
-  dependencies: ['Sklep Cart Plugin'],
   register(server, options) {
     const stripe = new Stripe(options.stripeApiKey, {
       apiVersion: '2020-08-27',
