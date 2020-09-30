@@ -182,44 +182,5 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
         };
       },
     });
-
-    server.route({
-      method: 'PATCH',
-      path: '/pay',
-      options: {
-        tags: ['api', 'cart', 'order'],
-      },
-      async handler(request) {
-        const cart = await findCart(request);
-        if (!cart) {
-          throw Boom.badRequest('INVALID_CART');
-        }
-
-        const totals = calculateCartTotals(cart);
-        const cartTotal = totals.discountSubTotal;
-
-        const cartJson = JSON.parse(JSON.stringify(cart)) as InputJsonObject;
-
-        const paymentIntent = await stripe.paymentIntents.create({
-          amount: cartTotal,
-          currency: 'pln',
-        });
-
-        const order = await request.server.app.db.order.create({
-          data: {
-            cart: cartJson,
-            total: cartTotal,
-            stripePaymentIntentId: paymentIntent.id,
-          },
-        });
-
-        return {
-          data: {
-            orderId: order.id,
-            stripeClientSecret: paymentIntent.client_secret,
-          },
-        };
-      },
-    });
   },
 };
