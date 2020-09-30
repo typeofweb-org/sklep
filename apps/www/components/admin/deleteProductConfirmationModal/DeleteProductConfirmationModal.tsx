@@ -30,13 +30,13 @@ export const DeleteProductConfirmationModal = React.memo<DeleteProductConfirmati
   ({ isOpen, product, handleDelete, handleClose, status }) => {
     const submit = React.useCallback(() => {
       if (product) {
-        return handleDelete(Number(product.id));
+        return handleDelete(product.id);
       }
     }, [handleDelete, product]);
     const primaryButtonText = statusToPrimaryText(status);
     const primaryButtonDisabled = status === 'loading' || status === 'success';
 
-    if (typeof document === 'undefined') {
+    if (typeof document === 'undefined' || !product) {
       return null;
     }
 
@@ -44,7 +44,7 @@ export const DeleteProductConfirmationModal = React.memo<DeleteProductConfirmati
       <Modal
         id="transactional-passive-modal"
         danger={true}
-        modalHeading={`Czy na pewno chcesz usunąć produkt ${product?.name}? Ta operacja jest nieodwracalna.`}
+        modalHeading={`Czy na pewno chcesz usunąć produkt ${product.name}? Ta operacja jest nieodwracalna.`}
         modalLabel="Usunięcie tego produktu z bazy nie będzie miało wpływu na już zrealizowane zamówienia."
         primaryButtonText={primaryButtonText}
         primaryButtonDisabled={primaryButtonDisabled}

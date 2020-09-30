@@ -15,7 +15,7 @@ export const useCart = () => {
     },
     {
       onSuccess: () => {
-        queryCache.refetchQueries('createCart');
+        void queryCache.refetchQueries('createCart');
       },
     },
   );

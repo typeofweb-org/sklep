@@ -1,10 +1,8 @@
-import { Column } from 'carbon-components-react';
 import Head from 'next/head';
 import React from 'react';
 
-import { Header } from '../../../components/admin/Header';
+import { AdminLayout } from '../../../components/admin/adminLayout/AdminLayout';
 import { AdminProducts } from '../../../components/admin/adminProducts/AdminProducts';
-import { ContentWrapper } from '../../../components/admin/contentWrapper/ContentWrapper';
 
 export default function ProductsPage() {
   return (
@@ -16,12 +14,9 @@ export default function ProductsPage() {
           href="https://unpkg.com/carbon-components@10.18.0/css/carbon-components.min.css"
         />
       </Head>
-      <Header />
-      <ContentWrapper>
-        <Column lg={{ offset: 3 }}>
-          <AdminProducts />
-        </Column>
-      </ContentWrapper>
+      <AdminLayout>
+        <AdminProducts />
+      </AdminLayout>
     </>
   );
 }

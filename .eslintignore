@@ -87,6 +87,4 @@ apps/www/.env.production
 
 # cypress
 
-apps/www/cypress/screenshots
-apps/www/cypress/videos
 apps/types/types.ts

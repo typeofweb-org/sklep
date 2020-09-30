@@ -40,13 +40,13 @@ test('shows error after confirming without required data', () => {
 test('unsuccesfull login', async () => {
   const { getByLabelText, getByText, findByRole } = renderLoginForm();
 
-  userEvent.type(getByLabelText('Adres email'), 'testowy@test.pl');
-  userEvent.type(getByLabelText('Hasło'), 'niepoprawne');
+  await userEvent.type(getByLabelText('Adres email'), 'testowy@test.pl');
+  await userEvent.type(getByLabelText('Hasło'), 'niepoprawne');
 
-  await userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
+  userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
 
   const notification = await findByRole('alert');
-  expect(notification).toHaveTextContent('Wprowadzone dane nie są poprawne');
+  expect(notification).toHaveTextContent('Podane dane są niepoprawne');
 });
 
 test('succesfull login', async () => {
@@ -58,10 +58,10 @@ test('succesfull login', async () => {
 
   const { getByLabelText, getByText, findByRole } = renderLoginForm();
 
-  userEvent.type(getByLabelText('Adres email'), 'test@test1.pl');
-  userEvent.type(getByLabelText('Hasło'), 'qwertyTESTOWY');
+  await userEvent.type(getByLabelText('Adres email'), 'test@test1.pl');
+  await userEvent.type(getByLabelText('Hasło'), 'qwertyTESTOWY');
 
-  await userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
+  userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
 
   const notification = await findByRole('alert');
   expect(notification).toHaveTextContent('Logowanie udane');

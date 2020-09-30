@@ -2,8 +2,8 @@ import type { SklepTypes } from '@sklep/types';
 import React, { useCallback, useState } from 'react';
 
 import { Price } from '../../../../shared/components/price/Price';
+import { CartItemImage } from '../../../../shared/image/CartItemImage';
 
-import { CartItemImage } from './image/CartItemImage';
 import { CartQuantityButton } from './quantity/CartQuantityButton';
 import { CartQuantityInput } from './quantity/CartQuantityInput';
 import { RemoveButton } from './removeButton/RemoveButton';

@@ -5,6 +5,8 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import React from 'react';
 
+import { createProduct } from '../../../utils/api/createProduct';
+
 import { ProductsForm } from './ProductsForm';
 
 const server = setupServer(
@@ -19,7 +21,7 @@ describe('form for adding products', () => {
   afterAll(() => server.close());
 
   it('shows error after confirming without required data', () => {
-    const { getByText } = render(<ProductsForm />);
+    const { getByText } = render(<ProductsForm mode="ADDING" mutation={createProduct} />);
 
     userEvent.click(getByText('Dodaj produkt'));
 
@@ -29,11 +31,13 @@ describe('form for adding products', () => {
   });
 
   it('allows user to add product', async () => {
-    const { getByLabelText, getByText, findByRole } = render(<ProductsForm />);
+    const { getByLabelText, getByText, findByRole } = render(
+      <ProductsForm mode="ADDING" mutation={createProduct} />,
+    );
 
-    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    await userEvent.type(getByLabelText('Cena produktu'), '99.9');
+    await userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
 
     userEvent.click(getByText('Dodaj produkt'));
 
@@ -48,17 +52,17 @@ describe('form for adding products', () => {
       }),
     );
 
-    const { getByLabelText, getByText, findByRole } = render(<ProductsForm />);
+    const { getByLabelText, getByText, findByRole } = render(
+      <ProductsForm mode="ADDING" mutation={createProduct} />,
+    );
 
-    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    await userEvent.type(getByLabelText('Cena produktu'), '99.9');
+    await userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
 
     userEvent.click(getByText('Dodaj produkt'));
 
     const notification = await findByRole('alert');
-    expect(notification).toHaveTextContent(
-      'Wystąpił błąd podczas dodawania produktu do bazy danych',
-    );
+    expect(notification).toHaveTextContent('Przesłane dane są niepoprawne');
   });
 });

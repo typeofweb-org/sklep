@@ -1,5 +1,6 @@
 import { User24 } from '@carbon/icons-react';
 import { Button, Grid, InlineNotification, Loading, TextInput } from 'carbon-components-react';
+import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
@@ -19,6 +20,7 @@ const loginSchema = Yup.object({
 export type LoginType = Yup.InferType<typeof loginSchema>;
 
 export const LoginForm = () => {
+  const router = useRouter();
   const { addToast } = useToasts();
   const [mutate, { isLoading, isError, error }] = useMutation(login, {
     onSuccess() {
@@ -27,12 +29,16 @@ export const LoginForm = () => {
         title: 'Logowanie udane',
         caption: '',
       });
+      void router.replace('/admin/products');
+    },
+    onError() {
+      // @todo
     },
   });
 
   const handleSubmit = useCallback(
     (values: LoginType) => {
-      mutate(values);
+      void mutate(values);
     },
     [mutate],
   );
@@ -43,12 +49,12 @@ export const LoginForm = () => {
         return 'Podane dane są niepoprawne';
       }
 
-      if (`${error.status}`[0] === '5') {
+      if (error.status === 500) {
         return 'Coś poszło nie tak, błąd serwera';
       }
     }
 
-    return '';
+    return 'Wystąpił błąd podczas logowania. Spróbuj ponownie.';
   }, [error]);
 
   return (

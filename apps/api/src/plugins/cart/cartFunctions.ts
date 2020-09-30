@@ -37,9 +37,9 @@ export async function ensureCartExists(request: Request, h: ResponseToolkit) {
 }
 
 export async function findOrCreateCart(request: Request) {
-  const cartId = request.state['cart'];
+  const cartId: unknown = request.state['cart'];
 
-  if (cartId) {
+  if (typeof cartId === 'string' && cartId.length > 0) {
     const [cart] = await request.server.app.db.cart.findMany({
       where: { id: cartId },
       select: cartSelect,
