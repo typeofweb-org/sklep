@@ -1,17 +1,9 @@
-import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
-import type { InputJsonObject } from '@prisma/client';
 import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
-import Stripe from 'stripe';
 
-import { isProd, getConfig } from '../../config';
+import { isProd } from '../../config';
 import { Enums } from '../../models';
-
-const stripe = new Stripe(getConfig('STRIPE_API_KEY'), {
-  apiVersion: '2020-08-27',
-  typescript: true,
-});
 
 import {
   calculateCartTotals,
