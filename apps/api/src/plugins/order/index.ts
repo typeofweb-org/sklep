@@ -20,13 +20,13 @@ declare module '@hapi/hapi' {
   }
 }
 
-export const OrderPlugin: Hapi.Plugin<{}> = {
+export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
   multiple: false,
   name: 'Sklep Order Plugin',
   version: '1.0.0',
   dependencies: ['Sklep Cart Plugin'],
-  register(server) {
-    const stripe = new Stripe(getConfig('STRIPE_API_KEY'), {
+  register(server, options) {
+    const stripe = new Stripe(options.stripeApiKey, {
       apiVersion: '2020-08-27',
       typescript: true,
     });
