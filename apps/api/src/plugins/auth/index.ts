@@ -27,7 +27,7 @@ declare module '@hapi/hapi' {
     };
   }
 
-  interface PluginsStates {
+  interface PluginProperties {
     readonly auth: {
       readonly loginUser: typeof loginUser;
       readonly createUser: typeof createUser;
