@@ -1,16 +1,26 @@
+import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
+import type { InputJsonObject } from '@prisma/client';
 import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
+import Stripe from 'stripe';
 
-import { isProd } from '../../config';
+import { isProd, getConfig } from '../../config';
 import { Enums } from '../../models';
 
+const stripe = new Stripe(getConfig('STRIPE_API_KEY'), {
+  apiVersion: '2020-08-27',
+  typescript: true,
+});
+
 import {
+  calculateCartTotals,
   addToCart,
   cartModelToResponse,
   clearCart,
   ensureCartExists,
   findAllCarts,
+  findCart,
   findOrCreateCart,
   removeFromCart,
 } from './cartFunctions';
@@ -22,12 +32,14 @@ import {
 } from './cartSchemas';
 
 declare module '@hapi/hapi' {
-  interface PluginsStates {
+  interface PluginProperties {
     readonly cart: {
       readonly findOrCreateCart: typeof findOrCreateCart;
       readonly addToCart: typeof addToCart;
       readonly removeFromCart: typeof removeFromCart;
       readonly clearCart: typeof clearCart;
+      readonly findCart: typeof findCart;
+      readonly calculateCartTotals: typeof calculateCartTotals;
     };
   }
 }
@@ -41,6 +53,25 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
     server.expose('addToCart', addToCart);
     server.expose('removeFromCart', removeFromCart);
     server.expose('clearCart', clearCart);
+    server.expose('findCart', findCart);
+    server.expose('calculateCartTotals', calculateCartTotals);
+
+    /**
+     * @description Delete cart when order is created
+     */
+    server.events.on('order:order:created', (order) => {
+      const cart = order.cart;
+      if (typeof cart === 'object' && cart && 'id' in cart) {
+        const { id: cartId } = cart as { readonly id: string };
+        server.app.db.cart
+          .deleteMany({
+            where: {
+              id: cartId,
+            },
+          })
+          .catch((err) => console.error(err));
+      }
+    });
 
     server.state('cart', {
       ttl: ms('3 months'),
@@ -148,6 +179,45 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
 
         return {
           data: carts.map(cartModelToResponse),
+        };
+      },
+    });
+
+    server.route({
+      method: 'PATCH',
+      path: '/pay',
+      options: {
+        tags: ['api', 'cart', 'order'],
+      },
+      async handler(request) {
+        const cart = await findCart(request);
+        if (!cart) {
+          throw Boom.badRequest('INVALID_CART');
+        }
+
+        const totals = calculateCartTotals(cart);
+        const cartTotal = totals.discountSubTotal;
+
+        const cartJson = JSON.parse(JSON.stringify(cart)) as InputJsonObject;
+
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: cartTotal,
+          currency: 'pln',
+        });
+
+        const order = await request.server.app.db.order.create({
+          data: {
+            cart: cartJson,
+            total: cartTotal,
+            stripePaymentIntentId: paymentIntent.id,
+          },
+        });
+
+        return {
+          data: {
+            orderId: order.id,
+            stripeClientSecret: paymentIntent.client_secret,
+          },
         };
       },
     });
