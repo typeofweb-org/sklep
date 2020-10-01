@@ -36,18 +36,22 @@ export async function ensureCartExists(request: Request, h: ResponseToolkit) {
   return result.cart;
 }
 
-export async function findOrCreateCart(request: Request) {
+export function findCart(request: Request) {
   const cartId: unknown = request.state['cart'];
-
   if (typeof cartId === 'string' && cartId.length > 0) {
-    const [cart] = await request.server.app.db.cart.findMany({
+    return request.server.app.db.cart.findFirst({
       where: { id: cartId },
       select: cartSelect,
-      take: 1,
     });
-    if (cart) {
-      return { cart, created: false };
-    }
+  }
+  return null;
+}
+
+export async function findOrCreateCart(request: Request) {
+  const existingCart = await findCart(request);
+
+  if (existingCart) {
+    return { cart: existingCart, created: false };
   }
 
   const cart = await request.server.app.db.cart.create({

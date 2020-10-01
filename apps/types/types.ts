@@ -106,6 +106,8 @@ export interface definitions {
   patchCartAddDefaultResponse: string;
 
   patchCartClearDefaultResponse: string;
+
+  patchCartPayDefaultResponse: string;
   patchCartRemoveRequestBody: definitions['Model14'];
 
   patchCartRemoveDefaultResponse: string;
@@ -192,6 +194,11 @@ export interface definitions {
       };
     };
     '/cart/clear': {
+      PATCH: {
+        response: string;
+      };
+    };
+    '/cart/pay': {
       PATCH: {
         response: string;
       };

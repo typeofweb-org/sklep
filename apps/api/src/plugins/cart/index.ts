@@ -6,11 +6,13 @@ import { isProd } from '../../config';
 import { Enums } from '../../models';
 
 import {
+  calculateCartTotals,
   addToCart,
   cartModelToResponse,
   clearCart,
   ensureCartExists,
   findAllCarts,
+  findCart,
   findOrCreateCart,
   removeFromCart,
 } from './cartFunctions';
@@ -22,12 +24,14 @@ import {
 } from './cartSchemas';
 
 declare module '@hapi/hapi' {
-  interface PluginsStates {
+  interface PluginProperties {
     readonly cart: {
       readonly findOrCreateCart: typeof findOrCreateCart;
       readonly addToCart: typeof addToCart;
       readonly removeFromCart: typeof removeFromCart;
       readonly clearCart: typeof clearCart;
+      readonly findCart: typeof findCart;
+      readonly calculateCartTotals: typeof calculateCartTotals;
     };
   }
 }
@@ -41,6 +45,25 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
     server.expose('addToCart', addToCart);
     server.expose('removeFromCart', removeFromCart);
     server.expose('clearCart', clearCart);
+    server.expose('findCart', findCart);
+    server.expose('calculateCartTotals', calculateCartTotals);
+
+    /**
+     * @description Delete cart when order is created
+     */
+    server.events.on('order:order:created', (order) => {
+      const cart = order.cart;
+      if (typeof cart === 'object' && cart && 'id' in cart) {
+        const { id: cartId } = cart as { readonly id: string };
+        server.app.db.cart
+          .deleteMany({
+            where: {
+              id: cartId,
+            },
+          })
+          .catch((err) => console.error(err));
+      }
+    });
 
     server.state('cart', {
       ttl: ms('3 months'),

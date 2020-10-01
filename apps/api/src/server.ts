@@ -16,7 +16,8 @@ import {
   getProductRoute,
 } from './modules/products/productRoutes';
 import { AuthPlugin } from './plugins/auth';
-import { CartPlugin } from './plugins/cart/index';
+import { CartPlugin } from './plugins/cart';
+import { OrderPlugin } from './plugins/order';
 
 const getServer = () => {
   return new Hapi.Server({
@@ -95,6 +96,20 @@ export const getServerWithPlugins = async () => {
     {
       routes: {
         prefix: '/cart',
+      },
+    },
+  );
+
+  await server.register(
+    {
+      plugin: OrderPlugin,
+      options: {
+        stripeApiKey: getConfig('STRIPE_API_KEY'),
+      },
+    },
+    {
+      routes: {
+        prefix: '/orders',
       },
     },
   );
