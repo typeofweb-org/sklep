@@ -88,20 +88,6 @@ export const getServerWithPlugins = async () => {
 
   await server.register(
     {
-      plugin: CartPlugin,
-      options: {
-        cookiePassword: getConfig('CART_COOKIE_PASSWORD'),
-      },
-    },
-    {
-      routes: {
-        prefix: '/cart',
-      },
-    },
-  );
-
-  await server.register(
-    {
       plugin: OrderPlugin,
       options: {
         stripeApiKey: getConfig('STRIPE_API_KEY'),
@@ -110,6 +96,20 @@ export const getServerWithPlugins = async () => {
     {
       routes: {
         prefix: '/orders',
+      },
+    },
+  );
+
+  await server.register(
+    {
+      plugin: CartPlugin,
+      options: {
+        cookiePassword: getConfig('CART_COOKIE_PASSWORD'),
+      },
+    },
+    {
+      routes: {
+        prefix: '/cart',
       },
     },
   );

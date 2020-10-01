@@ -61,6 +61,7 @@ export interface definitions {
   Model12: { email: string; password: string };
   Model13: { productId: number; quantity: number };
   Model14: { productId: number };
+  Model15: { orderId: string; stripeClientSecret: string };
 
   getProductsRequestQuery: {
     take?: number;
@@ -101,16 +102,18 @@ export interface definitions {
   postAuthRegisterRequestBody: definitions['Model12'];
 
   postAuthRegisterDefaultResponse: string;
+
+  postOrdersStripeWebhookDefaultResponse: string;
   patchCartAddRequestBody: definitions['Model13'];
 
   patchCartAddDefaultResponse: string;
 
   patchCartClearDefaultResponse: string;
-
-  patchCartPayDefaultResponse: string;
   patchCartRemoveRequestBody: definitions['Model14'];
 
   patchCartRemoveDefaultResponse: string;
+
+  patchOrdersInitiateStripePayment200Response: definitions['Model15'];
 
   pathsDefinitions: {
     '/products': {
@@ -186,6 +189,11 @@ export interface definitions {
         response: string;
       };
     };
+    '/orders/stripe/webhook': {
+      POST: {
+        response: string;
+      };
+    };
     '/cart/add': {
       PATCH: {
         requestBody: definitions['Model13'];
@@ -198,16 +206,16 @@ export interface definitions {
         response: string;
       };
     };
-    '/cart/pay': {
-      PATCH: {
-        response: string;
-      };
-    };
     '/cart/remove': {
       PATCH: {
         requestBody: definitions['Model14'];
 
         response: string;
+      };
+    };
+    '/orders/initiate-stripe-payment': {
+      PATCH: {
+        response: definitions['Model15'];
       };
     };
   };
