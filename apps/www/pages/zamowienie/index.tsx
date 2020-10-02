@@ -1,8 +1,15 @@
 import type { SklepTypes } from '@sklep/types';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import React from 'react';
 
 import { Checkout } from '../../components/klient/modules/checkout/Checkout';
+import { CheckoutProvider } from '../../components/klient/modules/checkout/utils/checkoutContext';
 import { Layout } from '../../components/klient/shared/components/layout/Layout';
+
+const promise = loadStripe(
+  'pk_test_51HXZFYFCiYl0PHOKhy4Qk2vJkOE4ij5TjOdmHcql1DSQxPULJuuDq2bRRgsVhvm2BkUhg4DvBCCPS7vuMzuZUh2x00X4AYgLw4',
+);
 
 function CheckoutPage() {
   const cart = {
@@ -38,7 +45,11 @@ function CheckoutPage() {
 
   return (
     <Layout title="Płatność i realizacja">
-      <Checkout cart={cart} />
+      <CheckoutProvider>
+        <Elements stripe={promise}>
+          <Checkout cart={cart} />
+        </Elements>
+      </CheckoutProvider>
     </Layout>
   );
 }

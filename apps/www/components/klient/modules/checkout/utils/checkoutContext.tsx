@@ -65,7 +65,7 @@ function CheckoutProvider({ children }: AuxProps) {
 function useCheckoutState() {
   const context = React.useContext(CheckoutContext);
   if (context === undefined) {
-    throw new Error('useCountState must be used within a CountProvider');
+    throw new Error('useCheckoutState must be used within a CheckoutProvider');
   }
   return context;
 }
@@ -73,7 +73,7 @@ function useCheckoutState() {
 function useCheckoutDispatch() {
   const context = React.useContext(CheckoutDispatchContext);
   if (context === undefined) {
-    throw new Error('useCountDispatch must be used within a CountProvider');
+    throw new Error('useCheckoutDispatch must be used within a CheckoutProvider');
   }
   return context;
 }

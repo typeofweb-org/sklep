@@ -5,7 +5,7 @@ import blik from '../../../../../../../assets/blik.png';
 import paypal from '../../../../../../../assets/paypal.png';
 import visa_master from '../../../../../../../assets/visa_master.png';
 
-import { CheckoutForm } from './StripePayment';
+import { StripeCard } from './StripeCard';
 
 export enum SelectedOption {
   Card = 'CARD',
@@ -43,7 +43,7 @@ export const PaymentMethod = React.memo(() => {
         </div>
         <img src={visa_master} alt="visa" className="w-20" />
       </div>
-      {selectedOption === SelectedOption.Card && <CheckoutForm />}
+      {selectedOption === SelectedOption.Card && <StripeCard />}
       <div className="flex justify-between p-2 border border-gray-200">
         <div className="flex items-center">
           <label className="pr-2">

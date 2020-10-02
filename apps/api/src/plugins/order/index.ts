@@ -41,6 +41,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         },
       },
       async handler(request) {
+        console.log(request);
         const cart = await request.server.plugins.cart.findCart(request);
         if (!cart) {
           throw Boom.badRequest('INVALID_CART');
