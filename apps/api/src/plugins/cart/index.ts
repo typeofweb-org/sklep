@@ -25,7 +25,7 @@ import {
 
 declare module '@hapi/hapi' {
   interface PluginProperties {
-    readonly cart: {
+    readonly sklepCart: {
       readonly findOrCreateCart: typeof findOrCreateCart;
       readonly addToCart: typeof addToCart;
       readonly removeFromCart: typeof removeFromCart;
@@ -38,7 +38,7 @@ declare module '@hapi/hapi' {
 
 export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
   multiple: false,
-  name: 'Sklep Cart Plugin',
+  name: 'sklepCart',
   version: '1.0.0',
   register(server, options) {
     server.expose('findOrCreateCart', findOrCreateCart);
