@@ -21,7 +21,7 @@ declare module '@hapi/hapi' {
 
 export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
   multiple: false,
-  name: 'Sklep Order Plugin',
+  name: 'sklepOrder',
   version: '1.0.0',
   register(server, options) {
     const stripe = new Stripe(options.stripeApiKey, {
@@ -41,13 +41,12 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         },
       },
       async handler(request) {
-        console.log(request);
-        const cart = await request.server.plugins.cart.findCart(request);
+        const cart = await request.server.plugins.sklepCart.findCart(request);
         if (!cart) {
           throw Boom.badRequest('INVALID_CART');
         }
 
-        const totals = request.server.plugins.cart.calculateCartTotals(cart);
+        const totals = request.server.plugins.sklepCart.calculateCartTotals(cart);
         const cartTotal = totals.discountSubTotal;
 
         const cartJson = JSON.parse(JSON.stringify(cart)) as InputJsonObject;
