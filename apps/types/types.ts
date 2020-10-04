@@ -62,6 +62,7 @@ export interface definitions {
   Model13: { productId: number; quantity: number };
   Model14: { productId: number };
   Model15: { orderId: string; stripeClientSecret: string };
+  Model16: { data: definitions['Model15'] };
 
   getProductsRequestQuery: {
     take?: number;
@@ -113,7 +114,7 @@ export interface definitions {
 
   patchCartRemoveDefaultResponse: string;
 
-  patchOrdersInitiateStripePayment200Response: definitions['Model15'];
+  patchOrdersInitiateStripePayment200Response: definitions['Model16'];
 
   pathsDefinitions: {
     '/products': {
@@ -215,7 +216,7 @@ export interface definitions {
     };
     '/orders/initiate-stripe-payment': {
       PATCH: {
-        response: definitions['Model15'];
+        response: definitions['Model16'];
       };
     };
   };

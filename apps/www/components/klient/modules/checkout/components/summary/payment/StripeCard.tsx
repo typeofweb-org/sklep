@@ -1,7 +1,8 @@
 import { CardElement } from '@stripe/react-stripe-js';
 import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import { initiateStripePayment } from '../../../../../../../utils/api/initiateStripePayment';
 import { useCheckoutDispatch } from '../../../utils/checkoutContext';
 
 export const StripeCard = React.memo(() => {
@@ -10,6 +11,10 @@ export const StripeCard = React.memo(() => {
     dispatch({ type: 'DISABLE', payload: event.empty });
     dispatch({ type: 'ERROR', payload: event.error ? event.error.message : '' });
   };
+
+  useEffect(() => {
+    void initiateStripePayment().then((res) => console.log(res));
+  }, []);
 
   const cardOptions = {
     style: {
