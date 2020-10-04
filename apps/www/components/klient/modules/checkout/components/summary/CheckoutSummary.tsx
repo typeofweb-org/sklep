@@ -13,14 +13,14 @@ export type CheckoutSummaryProps = {
 };
 
 export const CheckoutSummary = React.memo<CheckoutSummaryProps>(({ cart }) => {
-  const { processing } = useCheckoutState();
+  const { processing, disabled, succeeded } = useCheckoutState();
   return (
     <div className="w-full md:w-1/3 mb-4">
       <h3 className="text-2xl mb-6">Twoje zamówienie</h3>
       <CheckoutList cart={cart} />
       <CheckoutTotal cart={cart} />
       <PaymentMethod />
-      <Button type="submit" disabled={processing}>
+      <Button type="submit" disabled={processing || disabled || succeeded}>
         {processing ? <div className="spinner text-lg" id="spinner"></div> : 'Zapłać'}
       </Button>
     </div>

@@ -11,7 +11,7 @@ const defaultState = {
 
 type CheckoutState = {
   readonly succeeded: boolean;
-  readonly error: string;
+  readonly error: string | undefined;
   readonly processing: boolean;
   readonly disabled: boolean;
   readonly clientSecret: string;
@@ -22,7 +22,7 @@ const CheckoutDispatchContext = React.createContext<Dispatch | undefined>(undefi
 
 type Action =
   | { readonly type: 'SUCCESS'; readonly payload: boolean }
-  | { readonly type: 'ERROR'; readonly payload: string }
+  | { readonly type: 'ERROR'; readonly payload: string | undefined }
   | { readonly type: 'PROCESS'; readonly payload: boolean }
   | { readonly type: 'DISABLE'; readonly payload: boolean }
   | { readonly type: 'CLIENTSECRET'; readonly payload: string };
