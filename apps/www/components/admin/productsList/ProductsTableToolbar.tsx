@@ -9,7 +9,7 @@ import {
 } from 'carbon-components-react';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryCache } from 'react-query';
 
 import { deleteProducts } from '../../../utils/api/deleteProducts';
 import { useToasts } from '../toasts/Toasts';
@@ -20,14 +20,16 @@ export const ProductsTableToolbar = React.memo<
   DataTableCustomRenderProps<ProductsTableRow, ProductsTableHeader>
 >(({ getBatchActionProps, selectedRows }) => {
   const router = useRouter();
+  const cache = useQueryCache();
   const { addToast } = useToasts();
   const [mutate] = useMutation(deleteProducts, {
-    onSuccess(settledPromises: readonly PromiseSettledResult<never>[]) {
+    async onSuccess(settledPromises: readonly PromiseSettledResult<never>[]) {
       const totalNumberOfPromises = settledPromises.length;
       const resolvedPromises = settledPromises.filter(({ status }) => status === 'fulfilled')
         .length;
+      await cache.refetchQueries('/products');
       if (resolvedPromises === totalNumberOfPromises) {
-        addToast({
+        return addToast({
           kind: 'success',
           title: 'Operacja udana',
           caption: 'Wszystkie produkty zostały usunięte pomyślnie',
@@ -41,7 +43,7 @@ export const ProductsTableToolbar = React.memo<
     },
   });
   const handleRedirectToAddProduct = React.useCallback(() => {
-    void router.replace('/admin/add-product');
+    void router.push('/admin/add-product');
   }, [router]);
 
   const handleDeleteProducts = React.useCallback(() => {

@@ -5,20 +5,21 @@ import {
   TextInput,
   TextArea,
   NumberInput,
-  Loading,
   Toggle,
   Link as CarbonLink,
   Grid,
   Row,
   Column,
-  InlineNotification,
+  InlineLoading,
 } from 'carbon-components-react';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
+import { useToasts } from '../toasts/Toasts';
 
 import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
@@ -39,20 +40,44 @@ const productSchema = Yup.object({
 }).required();
 type ProductBody = Yup.InferType<typeof productSchema>;
 type ProductFormMode = ProductsFormProps['mode'];
-type ProductsFormProps =
+export type ProductsFormProps =
   | {
-      readonly mutation: (values: SklepTypes['postProductsRequestBody']) => Promise<any>;
+      readonly mutation: (
+        values: SklepTypes['postProductsRequestBody'],
+      ) => Promise<SklepTypes['postProducts200Response']>;
       readonly mode: 'ADDING';
       readonly initialValues?: undefined;
     }
   | {
-      readonly mutation: (values: SklepTypes['putProductsProductIdRequestBody']) => Promise<any>;
+      readonly mutation: (
+        values: SklepTypes['putProductsProductIdRequestBody'],
+      ) => Promise<SklepTypes['putProductsProductId200Response']>;
       readonly mode: 'EDITING';
       readonly initialValues: SklepTypes['postProductsRequestBody'];
     };
 
 export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: ProductsFormProps) => {
-  const [mutate, { isLoading, isSuccess, isError }] = useMutation(mutation);
+  const { addToast } = useToasts();
+  const router = useRouter();
+  const [mutate, { isLoading }] = useMutation(mutation, {
+    onSuccess(response) {
+      addToast({
+        kind: 'success',
+        title: 'Operacja udana',
+        caption: formSuccesTextMap[mode],
+      });
+      if (mode === 'ADDING') {
+        void router.replace(`/admin/products/${response.data.id}`);
+      }
+    },
+    onError() {
+      addToast({
+        kind: 'error',
+        title: 'Coś się nie powiodło',
+        caption: formErrorTextMap[mode],
+      });
+    },
+  });
 
   const handleSubmit = React.useCallback(
     async (body: ProductBody) => {
@@ -146,11 +171,9 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
           }}
         </Field>
         <Button kind="primary" type="submit" renderIcon={Add16} disabled={isLoading}>
-          {formSubmitTextMap[mode]}
+          {!isLoading && formSubmitTextMap[mode]}
+          {isLoading && <InlineLoading description={formLoadingDescription[mode]} />}
         </Button>
-        {isLoading && <Loading />}
-        {isSuccess && <InlineNotification title={formSuccesTextMap[mode]} kind="success" />}
-        {isError && <InlineNotification title={formErrorTextMap[mode]} kind="error" />}
       </Grid>
     </ToWForm>
   );
@@ -168,4 +191,8 @@ const formSuccesTextMap: TextMap = {
 const formErrorTextMap: TextMap = {
   ADDING: 'Wystąpił błąd podczas dodawania produktu do bazy danych',
   EDITING: 'Wystąpił błąd podczas aktualizowania produktu',
+};
+const formLoadingDescription: TextMap = {
+  ADDING: 'Dodawanie...',
+  EDITING: 'Aktualizowanie...',
 };

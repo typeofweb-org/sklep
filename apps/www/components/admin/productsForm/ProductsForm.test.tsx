@@ -6,7 +6,9 @@ import { setupServer } from 'msw/node';
 import React from 'react';
 
 import { createProduct } from '../../../utils/api/createProduct';
+import { ToastsContextProvider } from '../toasts/Toasts';
 
+import type { ProductsFormProps } from './ProductsForm';
 import { ProductsForm } from './ProductsForm';
 
 const server = setupServer(
@@ -15,13 +17,21 @@ const server = setupServer(
   }),
 );
 
+function renderProductsForm(productsFormProps: ProductsFormProps) {
+  return render(
+    <ToastsContextProvider>
+      <ProductsForm {...productsFormProps} />
+    </ToastsContextProvider>,
+  );
+}
+
 describe('form for adding products', () => {
   beforeAll(() => server.listen());
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
   it('shows error after confirming without required data', () => {
-    const { getByText } = render(<ProductsForm mode="ADDING" mutation={createProduct} />);
+    const { getByText } = renderProductsForm({ mode: 'ADDING', mutation: createProduct });
 
     userEvent.click(getByText('Dodaj produkt'));
 
@@ -31,9 +41,10 @@ describe('form for adding products', () => {
   });
 
   it('allows user to add product', async () => {
-    const { getByLabelText, getByText, findByRole } = render(
-      <ProductsForm mode="ADDING" mutation={createProduct} />,
-    );
+    const { getByLabelText, getByText, findByRole } = renderProductsForm({
+      mode: 'ADDING',
+      mutation: createProduct,
+    });
 
     await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
     await userEvent.type(getByLabelText('Cena produktu'), '99.9');
@@ -52,9 +63,10 @@ describe('form for adding products', () => {
       }),
     );
 
-    const { getByLabelText, getByText, findByRole } = render(
-      <ProductsForm mode="ADDING" mutation={createProduct} />,
-    );
+    const { getByLabelText, getByText, findByRole } = renderProductsForm({
+      mode: 'ADDING',
+      mutation: createProduct,
+    });
 
     await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
     await userEvent.type(getByLabelText('Cena produktu'), '99.9');
