@@ -27,8 +27,8 @@ declare module '@hapi/hapi' {
     };
   }
 
-  interface PluginsStates {
-    readonly auth: {
+  interface PluginProperties {
+    readonly sklepAuth: {
       readonly loginUser: typeof loginUser;
       readonly createUser: typeof createUser;
     };
@@ -44,7 +44,7 @@ declare module '@hapi/hapi' {
 
 export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
   multiple: false,
-  name: 'Sklep Auth Plugin',
+  name: 'sklepAuth',
   version: '1.0.0',
   async register(server, options) {
     server.expose('loginUser', loginUser);
