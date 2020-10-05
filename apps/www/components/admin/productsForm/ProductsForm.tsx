@@ -81,8 +81,11 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
 
   const handleSubmit = React.useCallback(
     async (body: ProductBody) => {
-      // @todo handle server errors
-      await mutate({ ...body, type: 'SINGLE' }); // @todo
+      try {
+        await mutate({ ...body, type: 'SINGLE' });
+      } catch (err) {
+        // @todo
+      }
     },
     [mutate],
   );

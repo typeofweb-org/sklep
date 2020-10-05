@@ -1,9 +1,15 @@
 import { User24 } from '@carbon/icons-react';
-import { Button, Grid, InlineNotification, Loading, TextInput } from 'carbon-components-react';
+import {
+  Button,
+  Grid,
+  InlineLoading,
+  InlineNotification,
+  TextInput,
+} from 'carbon-components-react';
 import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { Field } from 'react-final-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryCache } from 'react-query';
 import * as Yup from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
@@ -21,17 +27,17 @@ export type LoginType = Yup.InferType<typeof loginSchema>;
 export const LoginForm = () => {
   const router = useRouter();
   const { addToast } = useToasts();
-  const [mutate, { isLoading, isError }] = useMutation(login, {
-    onSuccess() {
+  const cache = useQueryCache();
+
+  const [mutate, { isLoading, isError, isSuccess, status }] = useMutation(login, {
+    async onSuccess() {
+      await cache.refetchQueries('/auth/me');
       addToast({
         kind: 'success',
         title: 'Logowanie udane',
         caption: '',
       });
-      void router.replace('/admin/products');
-    },
-    onError() {
-      // @todo
+      await router.replace('/admin/products');
     },
   });
 
@@ -41,6 +47,17 @@ export const LoginForm = () => {
     },
     [mutate],
   );
+
+  const loginButtonText = React.useMemo(() => {
+    switch (status) {
+      case 'success':
+        return <InlineLoading status="finished" description="Logowanie…" />;
+      case 'loading':
+        return <InlineLoading status="active" description="Logowanie…" />;
+      default:
+        return 'Zaloguj się';
+    }
+  }, [status]);
 
   return (
     <ToWForm className={styles.form} onSubmit={handleSubmit} schema={loginSchema}>
@@ -53,8 +70,8 @@ export const LoginForm = () => {
               {...getErrorProps(meta)}
               id="email"
               invalidText="Wpisz poprawny adres email"
-              labelText="Adres email"
-              placeholder="Wpisz nazwę użytkownika"
+              labelText="Adres e-mail"
+              placeholder="test@typeofweb.com"
             />
           )}
         </Field>
@@ -63,19 +80,18 @@ export const LoginForm = () => {
             <TextInput.PasswordInput
               {...input}
               {...getErrorProps(meta)}
-              hidePasswordLabel="Hide password"
               id="password"
               invalidText="Pole jest wymagane"
               labelText="Hasło"
-              placeholder="Podaj hasło użytkownika"
+              placeholder=""
               showPasswordLabel="Pokaż hasło"
+              hidePasswordLabel="Ukryj hasło"
             />
           )}
         </Field>
-        <Button kind="primary" type="submit" renderIcon={User24}>
-          Zaloguj się
+        <Button kind="primary" type="submit" disabled={isSuccess || isLoading} renderIcon={User24}>
+          {loginButtonText}
         </Button>
-        {isLoading && <Loading />}
         {isError && <InlineNotification kind="error" title="Wprowadzone dane nie są poprawne" />}
       </Grid>
     </ToWForm>
