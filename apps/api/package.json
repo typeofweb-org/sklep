@@ -26,6 +26,7 @@
     "@hapi/joi": "17.1.1",
     "@hapi/vision": "6.0.1",
     "@prisma/client": "2.8.0",
+    "@types/ramda": "0.27.18",
     "bcrypt": "5.0.0",
     "bluebird": "3.7.2",
     "dotenv": "8.2.0",
@@ -60,7 +61,7 @@
     "cross-env": "7.0.2",
     "eslint": "7.10.0",
     "faker": "5.1.0",
-    "jest": "26.4.2",
+    "jest": "26.5.0",
     "jest-extended": "0.11.5",
     "ts-node-dev": "1.0.0-pre.63",
     "wait-on": "5.2.0"

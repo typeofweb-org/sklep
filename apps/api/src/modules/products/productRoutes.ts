@@ -52,7 +52,6 @@ export const addProductRoute: Hapi.ServerRoute = {
     const user = request.auth.credentials.session!.user;
 
     const slug = Slugify(payload.name);
-
     const product = await request.server.app.db.product.create({
       data: {
         ...payload,

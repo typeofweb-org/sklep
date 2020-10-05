@@ -11,6 +11,7 @@ import {
   OverflowMenu,
   OverflowMenuItem,
 } from 'carbon-components-react';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { ProductsListCells } from './productsListCells/ProductsListCells';
@@ -20,6 +21,7 @@ export const ProductsTable = React.memo<
     readonly onDelete: (row: DenormalizedRow) => void;
   }
 >(({ rows, headers, getHeaderProps, getTableProps, getRowProps, getSelectionProps, onDelete }) => {
+  const router = useRouter();
   return (
     <Table {...getTableProps()} useZebraStyles={true}>
       <TableHead>
@@ -38,7 +40,10 @@ export const ProductsTable = React.memo<
               <ProductsListCells key={row.id} row={row} />
               <TableCell key="actions">
                 <OverflowMenu>
-                  <OverflowMenuItem itemText="Edit" />
+                  <OverflowMenuItem
+                    itemText="Edit"
+                    onClick={() => router.push(`/admin/products/${row.id}`)}
+                  />
                   <OverflowMenuItem
                     isDelete
                     itemText="Delete"
