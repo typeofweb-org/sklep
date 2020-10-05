@@ -5,12 +5,12 @@ import {
   TextInput,
   TextArea,
   NumberInput,
-  Loading,
   Toggle,
   Link as CarbonLink,
   Grid,
   Row,
   Column,
+  InlineLoading,
 } from 'carbon-components-react';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -40,7 +40,7 @@ const productSchema = Yup.object({
 }).required();
 type ProductBody = Yup.InferType<typeof productSchema>;
 type ProductFormMode = ProductsFormProps['mode'];
-type ProductsFormProps =
+export type ProductsFormProps =
   | {
       readonly mutation: (
         values: SklepTypes['postProductsRequestBody'],
@@ -68,8 +68,6 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
       });
       if (mode === 'ADDING') {
         void router.replace(`/admin/products/${response.data.id}`);
-      } else {
-        void 0;
       }
     },
     onError() {
@@ -173,9 +171,9 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
           }}
         </Field>
         <Button kind="primary" type="submit" renderIcon={Add16} disabled={isLoading}>
-          {formSubmitTextMap[mode]}
+          {!isLoading && formSubmitTextMap[mode]}
+          {isLoading && <InlineLoading description={formLoadingDescription[mode]} />}
         </Button>
-        {isLoading && <Loading />}
       </Grid>
     </ToWForm>
   );
@@ -193,4 +191,8 @@ const formSuccesTextMap: TextMap = {
 const formErrorTextMap: TextMap = {
   ADDING: 'Wystąpił błąd podczas dodawania produktu do bazy danych',
   EDITING: 'Wystąpił błąd podczas aktualizowania produktu',
+};
+const formLoadingDescription: TextMap = {
+  ADDING: 'Dodawanie...',
+  EDITING: 'Aktualizowanie...',
 };
