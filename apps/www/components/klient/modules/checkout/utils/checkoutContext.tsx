@@ -5,7 +5,7 @@ const defaultState = {
   succeeded: false,
   error: '',
   processing: false,
-  disabled: true,
+  disabled: false,
   clientSecret: '',
 };
 

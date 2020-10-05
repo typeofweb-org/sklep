@@ -38,10 +38,10 @@ export const StripeCard = React.memo(() => {
     },
   };
   return (
-    <>
+    <div className="border border-blue-700">
       <CardElement id="card-element" options={cardOptions} onChange={handleChange} />
-      {error && <p className="text-sm text-red-600">{error}</p>}
-    </>
+      {error && <p className="text-sm text-red-600 px-2">{error}</p>}
+    </div>
   );
 });
 

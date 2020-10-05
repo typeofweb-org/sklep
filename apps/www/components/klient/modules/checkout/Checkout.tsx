@@ -35,9 +35,10 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
 
   const handleSubmit = async (values: CheckoutType) => {
     console.log(values);
-
+    console.log(cardElement);
     dispatch({ type: 'PROCESS', payload: true });
     if (!stripe || !cardElement) {
+      dispatch({ type: 'PROCESS', payload: false });
       return;
     }
     const payload = await stripe.confirmCardPayment(state.clientSecret, {
@@ -59,6 +60,9 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
       <FinalFormWrapper
         schema={checkoutSchema}
         onSubmit={handleSubmit}
+        initialValues={{
+          shippment: 'poczta',
+        }}
         className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
       >
         <AddressForm />
