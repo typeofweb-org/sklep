@@ -4,7 +4,7 @@ import React from 'react';
 import { AdminLayout } from '../../components/admin/adminLayout/AdminLayout';
 import { LoginForm } from '../../components/admin/loginForm/LoginForm';
 
-export default function AdminLogin() {
+export default function AdminLoginPage() {
   return (
     <>
       <Head>

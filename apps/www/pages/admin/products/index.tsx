@@ -4,7 +4,7 @@ import React from 'react';
 import { AdminLayout } from '../../../components/admin/adminLayout/AdminLayout';
 import { AdminProducts } from '../../../components/admin/adminProducts/AdminProducts';
 
-export default function ProductsPage() {
+export default function AdminProductsPage() {
   return (
     <>
       <Head>

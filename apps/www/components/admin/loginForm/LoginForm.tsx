@@ -29,7 +29,7 @@ export const LoginForm = () => {
   const { addToast } = useToasts();
   const cache = useQueryCache();
 
-  const [mutate, { isLoading, isError, isSuccess }] = useMutation(login, {
+  const [mutate, { isLoading, isError, isSuccess, status }] = useMutation(login, {
     async onSuccess() {
       await cache.refetchQueries('/auth/me');
       addToast({
@@ -49,14 +49,15 @@ export const LoginForm = () => {
   );
 
   const loginButtonText = React.useMemo(() => {
-    if (isSuccess) {
-      return <InlineLoading status="finished" description="Logowanie…" />;
+    switch (status) {
+      case 'success':
+        return <InlineLoading status="finished" description="Logowanie…" />;
+      case 'loading':
+        return <InlineLoading status="active" description="Logowanie…" />;
+      default:
+        return 'Zaloguj się';
     }
-    if (isLoading) {
-      return <InlineLoading status="active" description="Logowanie…" />;
-    }
-    return 'Zaloguj się';
-  }, [isLoading, isSuccess]);
+  }, [status]);
 
   return (
     <ToWForm className={styles.form} onSubmit={handleSubmit} schema={loginSchema}>
@@ -69,8 +70,8 @@ export const LoginForm = () => {
               {...getErrorProps(meta)}
               id="email"
               invalidText="Wpisz poprawny adres email"
-              labelText="Adres email"
-              placeholder="Wpisz nazwę użytkownika"
+              labelText="Adres e-mail"
+              placeholder="test@typeofweb.com"
             />
           )}
         </Field>
@@ -79,12 +80,12 @@ export const LoginForm = () => {
             <TextInput.PasswordInput
               {...input}
               {...getErrorProps(meta)}
-              hidePasswordLabel="Hide password"
               id="password"
               invalidText="Pole jest wymagane"
               labelText="Hasło"
-              placeholder="Podaj hasło użytkownika"
+              placeholder=""
               showPasswordLabel="Pokaż hasło"
+              hidePasswordLabel="Ukryj hasło"
             />
           )}
         </Field>

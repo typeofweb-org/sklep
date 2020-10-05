@@ -7,8 +7,11 @@ type AuthProps = {
   readonly children: React.ReactNode;
   readonly allowUnauthorized: boolean;
 };
+
+export const useAuth = () => useToWQuery(['/auth/me', 'GET', {}]);
+
 export const Auth = React.memo<AuthProps>(({ children, allowUnauthorized }) => {
-  const { resolvedData, isLoading } = useToWQuery(['/auth/me', 'GET', {}]);
+  const { resolvedData, isLoading } = useAuth();
 
   const router = useRouter();
 
@@ -20,7 +23,7 @@ export const Auth = React.memo<AuthProps>(({ children, allowUnauthorized }) => {
     return null;
   }
 
-  if (!resolvedData?.data) {
+  if (!resolvedData?.data || resolvedData.data.user.role !== 'ADMIN') {
     void router.replace('/admin/login');
     return null;
   }

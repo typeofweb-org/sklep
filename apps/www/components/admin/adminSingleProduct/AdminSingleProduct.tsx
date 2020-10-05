@@ -1,5 +1,6 @@
 import type { SklepTypes } from '@sklep/types';
 import { Button } from 'carbon-components-react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useMutation } from 'react-query';
@@ -67,7 +68,10 @@ export const AdminSingleProduct = React.memo(() => {
 
   return (
     <>
-      <h1 className={styles.heading}>Podstrona produktu</h1>
+      <Head>
+        <title>{'Edytuj produkt ' + (latestProductResponse?.data.name ?? '')}</title>
+      </Head>
+      <h1 className={styles.heading}>Edytuj produkt</h1>
       {latestProductResponse && (
         <>
           <ProductsForm

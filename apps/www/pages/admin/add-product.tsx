@@ -5,7 +5,7 @@ import { AdminLayout } from '../../components/admin/adminLayout/AdminLayout';
 import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
 import { createProduct } from '../../utils/api/createProduct';
 
-export default function AdminHome() {
+export default function AdminAddProductPage() {
   return (
     <>
       <Head>
