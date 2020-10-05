@@ -1,9 +1,16 @@
 import { User24 } from '@carbon/icons-react';
-import { Button, Grid, InlineNotification, Loading, TextInput } from 'carbon-components-react';
+import {
+  Button,
+  Grid,
+  InlineLoading,
+  InlineNotification,
+  Loading,
+  TextInput,
+} from 'carbon-components-react';
 import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { Field } from 'react-final-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryCache } from 'react-query';
 import * as Yup from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
@@ -21,17 +28,17 @@ export type LoginType = Yup.InferType<typeof loginSchema>;
 export const LoginForm = () => {
   const router = useRouter();
   const { addToast } = useToasts();
-  const [mutate, { isLoading, isError }] = useMutation(login, {
-    onSuccess() {
+  const cache = useQueryCache();
+
+  const [mutate, { isLoading, isError, isSuccess }] = useMutation(login, {
+    async onSuccess() {
+      await cache.refetchQueries('/auth/me');
       addToast({
         kind: 'success',
         title: 'Logowanie udane',
         caption: '',
       });
-      void router.replace('/admin/products');
-    },
-    onError() {
-      // @todo
+      await router.replace('/admin/products');
     },
   });
 
@@ -41,6 +48,16 @@ export const LoginForm = () => {
     },
     [mutate],
   );
+
+  const loginButtonText = React.useMemo(() => {
+    if (isSuccess) {
+      return <InlineLoading status="finished" description="Logowanie…" />;
+    }
+    if (isLoading) {
+      return <InlineLoading status="active" description="Logowanie…" />;
+    }
+    return 'Zaloguj się';
+  }, [isLoading, isSuccess]);
 
   return (
     <ToWForm className={styles.form} onSubmit={handleSubmit} schema={loginSchema}>
@@ -72,10 +89,9 @@ export const LoginForm = () => {
             />
           )}
         </Field>
-        <Button kind="primary" type="submit" renderIcon={User24}>
-          Zaloguj się
+        <Button kind="primary" type="submit" disabled={isSuccess || isLoading} renderIcon={User24}>
+          {loginButtonText}
         </Button>
-        {isLoading && <Loading />}
         {isError && <InlineNotification kind="error" title="Wprowadzone dane nie są poprawne" />}
       </Grid>
     </ToWForm>
