@@ -4,7 +4,6 @@ import {
   Grid,
   InlineLoading,
   InlineNotification,
-  Loading,
   TextInput,
 } from 'carbon-components-react';
 import { useRouter } from 'next/router';
