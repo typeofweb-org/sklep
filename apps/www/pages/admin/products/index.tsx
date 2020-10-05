@@ -8,11 +8,7 @@ export default function ProductsPage() {
   return (
     <>
       <Head>
-        <title>Admin page</title>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/carbon-components@10.18.0/css/carbon-components.min.css"
-        />
+        <title>Produkty</title>
       </Head>
       <AdminLayout>
         <AdminProducts />
