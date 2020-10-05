@@ -34,8 +34,6 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
   const cardElement = elements?.getElement(CardElement);
 
   const handleSubmit = async (values: CheckoutType) => {
-    console.log(values);
-    console.log(cardElement);
     dispatch({ type: 'PROCESS', payload: true });
     if (!stripe || !cardElement) {
       dispatch({ type: 'PROCESS', payload: false });
