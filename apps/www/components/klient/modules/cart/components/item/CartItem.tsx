@@ -1,8 +1,10 @@
 import type { SklepTypes } from '@sklep/types';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { useDebounce } from '../../../../../../utils/hooks';
 import { Price } from '../../../../shared/components/price/Price';
 import { CartItemImage } from '../../../../shared/image/CartItemImage';
+import { useCart } from '../../../../shared/utils/useCart';
 
 import { CartQuantityButton } from './quantity/CartQuantityButton';
 import { CartQuantityInput } from './quantity/CartQuantityInput';
@@ -12,20 +14,47 @@ type CartItemRowProps = {
   readonly cartProduct: SklepTypes['postCart200Response']['data']['cartProducts'][number];
 };
 
+function handleError(err: unknown) {
+  console.error(err);
+}
+
+const MIN_PRODUCT_QUANTITY = 1;
+const MAX_PRODUCT_QUANTITY = 99;
+const CART_UPDATES_DEBOUNCE = 200;
+
 export const CartItemRow = React.memo<CartItemRowProps>(({ cartProduct }) => {
-  const MAX_PRODUCT_QUANTITY = 99;
-  const MIN_PRODUCT_QUANTITY = 1;
+  const { removeFromCart, setCartQuantity } = useCart();
 
   const [quantity, setQuantity] = useState(cartProduct.quantity);
+  useEffect(() => {
+    setQuantity(cartProduct.quantity);
+  }, [cartProduct]);
 
-  const increaseQuantity = useCallback(
-    () => setQuantity((quantity) => (quantity >= MAX_PRODUCT_QUANTITY ? quantity : quantity + 1)),
-    [],
+  const increaseQuantity = useCallback(() => {
+    if (cartProduct.quantity < MAX_PRODUCT_QUANTITY) {
+      setQuantity((quantity) => quantity + 1);
+    }
+  }, [cartProduct.quantity]);
+
+  const decreaseQuantity = useCallback(() => {
+    if (cartProduct.quantity > MIN_PRODUCT_QUANTITY) {
+      setQuantity((quantity) => quantity - 1);
+    }
+  }, [cartProduct.quantity]);
+
+  const debouncedQuantity = useDebounce(quantity, CART_UPDATES_DEBOUNCE);
+  const saveCartQuantity = useCallback(
+    (quantity: number) => setCartQuantity({ productId: cartProduct.product.id, quantity }),
+    [cartProduct.product.id, setCartQuantity],
   );
-  const decreaseQuantity = useCallback(
-    () => setQuantity((quantity) => (quantity <= MIN_PRODUCT_QUANTITY ? quantity : quantity - 1)),
-    [],
-  );
+  useEffect(() => {
+    saveCartQuantity(debouncedQuantity).catch(handleError);
+  }, [debouncedQuantity, saveCartQuantity]);
+
+  const removeItemFromCart = useCallback(() => removeFromCart(cartProduct.product.id), [
+    cartProduct.product.id,
+    removeFromCart,
+  ]);
 
   const handleChangeQuantity = React.useCallback<React.FormEventHandler<HTMLInputElement>>(
     (event) => {
@@ -39,8 +68,6 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ cartProduct }) => {
     },
     [],
   );
-
-  const removeItemFromCart = useCallback(() => () => console.log('rmv'), []);
 
   return (
     <tr className="border border-gray-300 border-t-0 border-r-0 border-l-0">

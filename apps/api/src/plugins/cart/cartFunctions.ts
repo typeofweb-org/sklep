@@ -97,6 +97,29 @@ export function addToCart(
   });
 }
 
+export function setQuantity(
+  request: Request,
+  {
+    cartId,
+    quantity,
+    productId,
+  }: { readonly cartId: string; readonly quantity: number; readonly productId: number },
+) {
+  return request.server.app.db.cartToProduct.update({
+    where: {
+      cartId_productId: {
+        cartId: cartId,
+        productId: productId,
+      },
+    },
+    data: {
+      quantity: {
+        set: quantity,
+      },
+    },
+  });
+}
+
 export function removeFromCart(
   request: Request,
   { cartId, productId }: { readonly cartId: string; readonly productId: number },

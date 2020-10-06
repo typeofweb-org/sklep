@@ -22,7 +22,6 @@ export const AdminSingleProduct = React.memo(() => {
   const { latestData: latestProductResponse, isLoading, isError } = useGetProductById(productId, {
     enabled: Boolean(productId),
     refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   });
 
   const [mutate, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(

@@ -15,6 +15,7 @@ import {
   findCart,
   findOrCreateCart,
   removeFromCart,
+  setQuantity,
 } from './cartFunctions';
 import {
   addToCartPayloadSchema,
@@ -132,6 +133,27 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
         const { productId } = request.payload as SklepTypes['patchCartRemoveRequestBody'];
 
         await removeFromCart(request, { productId, cartId: cart.id });
+
+        return null;
+      },
+    });
+
+    server.route({
+      method: 'PATCH',
+      path: '/set',
+      options: {
+        tags: ['api', 'cart'],
+        auth: false,
+        validate: {
+          payload: addToCartPayloadSchema,
+        },
+      },
+      async handler(request, h) {
+        const cart = await ensureCartExists(request, h);
+
+        const { quantity, productId } = request.payload as SklepTypes['patchCartAddRequestBody'];
+
+        await setQuantity(request, { quantity, productId, cartId: cart.id });
 
         return null;
       },
