@@ -8,16 +8,15 @@ import { CartQuantityButton } from './quantity/CartQuantityButton';
 import { CartQuantityInput } from './quantity/CartQuantityInput';
 import { RemoveButton } from './removeButton/RemoveButton';
 
-// temporary type
 type CartItemRowProps = {
-  readonly product: SklepTypes['getProducts200Response']['data'][number];
+  readonly cartProduct: SklepTypes['postCart200Response']['data']['cartProducts'][number];
 };
 
-export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
+export const CartItemRow = React.memo<CartItemRowProps>(({ cartProduct }) => {
   const MAX_PRODUCT_QUANTITY = 99;
   const MIN_PRODUCT_QUANTITY = 1;
 
-  const [quantity, setQuantity] = useState(MIN_PRODUCT_QUANTITY);
+  const [quantity, setQuantity] = useState(cartProduct.quantity);
 
   const increaseQuantity = useCallback(
     () => setQuantity((quantity) => (quantity >= MAX_PRODUCT_QUANTITY ? quantity : quantity + 1)),
@@ -32,9 +31,11 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
     (event) => {
       const currentValue = Number.parseInt(event.currentTarget.value, 10);
 
-      currentValue > MAX_PRODUCT_QUANTITY || currentValue < MIN_PRODUCT_QUANTITY
-        ? setQuantity(1)
-        : setQuantity(currentValue);
+      if (currentValue > MAX_PRODUCT_QUANTITY || currentValue < MIN_PRODUCT_QUANTITY) {
+        setQuantity(1);
+      } else {
+        setQuantity(currentValue);
+      }
     },
     [],
   );
@@ -48,7 +49,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
       </td>
       <td className="px-4 py-6">
         <div>
-          <h3 className="mb-2">{product.name}</h3>
+          <h3 className="mb-2">{cartProduct.product.name}</h3>
           <div className="">
             <CartQuantityButton
               text="-"
@@ -66,8 +67,8 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ product }) => {
       </td>
       <td className="px-4 py-6 relative">
         <Price
-          regularPrice={product.regularPrice}
-          discountPrice={product.discountPrice}
+          regularPrice={cartProduct.product.regularPrice}
+          discountPrice={cartProduct.product.discountPrice}
           direction="column"
         />
         <RemoveButton onClick={removeItemFromCart} />

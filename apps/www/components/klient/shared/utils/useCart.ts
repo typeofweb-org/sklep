@@ -4,15 +4,12 @@ import { useMutation, useQueryCache } from 'react-query';
 import { useToWQuery } from '../../../../utils/fetcher';
 import { addToCart } from '../api/addToCart';
 
-// this hook can be extended for the wider purpose
 export const useCart = () => {
-  const { latestData: cartResponse } = useToWQuery(['/cart', 'POST', {}]);
+  const { latestData: cartResponse, isLoading } = useToWQuery(['/cart', 'POST', {}]);
 
   const queryCache = useQueryCache();
   const [addToCartMutation] = useMutation(
-    (id: number) => {
-      return addToCart({ productId: id, quantity: 1 });
-    },
+    (id: number) => addToCart({ productId: id, quantity: 1 }),
     {
       onSuccess: () => {
         void queryCache.refetchQueries('/cart');
@@ -22,9 +19,11 @@ export const useCart = () => {
 
   return React.useMemo(
     () => ({
-      itemsInCart: cartResponse?.data.totalQuantity ?? 0,
+      numberOfItemsInCart: cartResponse?.data.totalQuantity ?? 0,
+      cartResponseData: cartResponse?.data,
       addToCart: addToCartMutation,
+      isLoading,
     }),
-    [addToCartMutation, cartResponse?.data.totalQuantity],
+    [addToCartMutation, cartResponse?.data, isLoading],
   );
 };

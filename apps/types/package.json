@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "chokidar \"../api/src/**/*.ts\" --initial -c \"yarn generate-api-types\"",
+    "dev": "chokidar \"../api/src/**/*.ts\" --ignore \"../api/src/**/*.test.ts\" --initial -c \"yarn generate-api-types\"",
     "generate-api-types": "wait-on tcp:3002 --interval 5000 && yarn swagger-to-ts http://localhost:3002/swagger.json --output types.ts --prettier-config ../../.prettierrc"
   },
   "dependencies": {
