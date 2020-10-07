@@ -113,6 +113,9 @@ export interface definitions {
   patchCartRemoveRequestBody: definitions['Model14'];
 
   patchCartRemoveDefaultResponse: string;
+  patchCartSetRequestBody: definitions['Model13'];
+
+  patchCartSetDefaultResponse: string;
 
   patchOrdersInitiateStripePayment200Response: definitions['Model16'];
 
@@ -210,6 +213,13 @@ export interface definitions {
     '/cart/remove': {
       PATCH: {
         requestBody: definitions['Model14'];
+
+        response: string;
+      };
+    };
+    '/cart/set': {
+      PATCH: {
+        requestBody: definitions['Model13'];
 
         response: string;
       };
