@@ -9,15 +9,19 @@ export const StripeCard = React.memo(() => {
   const dispatch = useCheckoutDispatch();
   const { error } = useCheckoutState();
   const handleChange = (event: StripeCardElementChangeEvent) => {
+    console.log(event);
     dispatch({ type: 'DISABLE', payload: event.empty });
-    dispatch({ type: 'ERROR', payload: event.error ? event.error.message : '' });
+    dispatch({
+      type: 'ERROR',
+      payload: event.error ? event.error.message : event.complete ? '' : 'Please complete',
+    });
   };
 
-  useEffect(() => {
-    void initiateStripePayment().then((data) =>
-      dispatch({ type: 'CLIENTSECRET', payload: data.data.stripeClientSecret }),
-    );
-  }, [dispatch]);
+  // useEffect(() => {
+  //   void initiateStripePayment().then((data) =>
+  //     dispatch({ type: 'CLIENTSECRET', payload: data.data.stripeClientSecret }),
+  //   );
+  // }, [dispatch]);
 
   const cardOptions = {
     hidePostalCode: true,

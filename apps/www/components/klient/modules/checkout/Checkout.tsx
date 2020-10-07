@@ -1,8 +1,10 @@
 import type { SklepTypes } from '@sklep/types';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
+import { fetcher } from '../../../../utils/fetcher';
 import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
@@ -33,26 +35,61 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
 
   const cardElement = elements?.getElement(CardElement);
 
-  const handleSubmit = async (values: CheckoutType) => {
-    console.log(values);
-    dispatch({ type: 'PROCESS', payload: true });
-    if (!stripe || !cardElement) {
-      dispatch({ type: 'PROCESS', payload: false });
-      return;
+  async function stripePayment() {
+    const { data } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {});
+    if (!stripe || !cardElement || !data.stripeClientSecret) {
+      throw new Error('Something went wrong');
     }
-    const payload = await stripe.confirmCardPayment(state.clientSecret, {
+    const payload = await stripe.confirmCardPayment(data.stripeClientSecret, {
       payment_method: {
         card: cardElement,
       },
     });
     if (payload.error) {
-      dispatch({ type: 'ERROR', payload: payload.error.message });
-      dispatch({ type: 'PROCESS', payload: false });
+      return new Error('Not supported!');
     } else {
-      dispatch({ type: 'SUCCESS', payload: true });
-      dispatch({ type: 'PROCESS', payload: false });
+      return payload;
     }
-  };
+  }
+
+  const [mutate, { isLoading, isError, data, isSuccess, status }] = useMutation(stripePayment, {
+    onSuccess() {
+      console.log(isLoading);
+      console.log('Logowanie udane');
+      console.log(data);
+    },
+    onError() {
+      console.log(isError);
+      console.log(status);
+    },
+  });
+
+  const handleSubmit = useCallback(() => {
+    if (!state.error) {
+      void mutate();
+    }
+  }, [mutate, state.error]);
+
+  // const handleSubmit = async (values: CheckoutType) => {
+  //   console.log(values);
+  //   dispatch({ type: 'PROCESS', payload: true });
+  //   if (!stripe || !cardElement) {
+  //     dispatch({ type: 'PROCESS', payload: false });
+  //     return;
+  //   }
+  //   const payload = await stripe.confirmCardPayment(state.clientSecret, {
+  //     payment_method: {
+  //       card: cardElement,
+  //     },
+  //   });
+  //   if (payload.error) {
+  //     dispatch({ type: 'ERROR', payload: payload.error.message });
+  //     dispatch({ type: 'PROCESS', payload: false });
+  //   } else {
+  //     dispatch({ type: 'SUCCESS', payload: true });
+  //     dispatch({ type: 'PROCESS', payload: false });
+  //   }
+  // };
 
   return (
     <>
@@ -65,11 +102,9 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
         className="container mx-auto flex flex-col md:flex-row px-2 pb-12 worksans py-8"
       >
         <AddressForm />
-        <CheckoutSummary cart={cart} />
+        <CheckoutSummary cart={cart} processing={isLoading} />
       </FinalFormWrapper>
-      {state.succeeded && <p className="w-screen text-center text-green-600 text-4xl">Udało się</p>}
+      {isSuccess && <p className="w-screen text-center text-green-600 text-4xl">Udało się</p>}
     </>
   );
 });
-
-Checkout.displayName = 'Checkout';

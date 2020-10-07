@@ -3,7 +3,7 @@ import React from 'react';
 
 const defaultState = {
   succeeded: false,
-  error: '',
+  error: undefined,
   processing: false,
   disabled: false,
   clientSecret: '',
@@ -22,7 +22,7 @@ const CheckoutDispatchContext = React.createContext<Dispatch | undefined>(undefi
 
 type Action =
   | { readonly type: 'SUCCESS'; readonly payload: boolean }
-  | { readonly type: 'ERROR'; readonly payload: string | undefined }
+  | { readonly type: 'ERROR'; readonly payload: string }
   | { readonly type: 'PROCESS'; readonly payload: boolean }
   | { readonly type: 'DISABLE'; readonly payload: boolean }
   | { readonly type: 'CLIENTSECRET'; readonly payload: string };

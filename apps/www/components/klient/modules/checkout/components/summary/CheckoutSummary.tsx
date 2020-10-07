@@ -10,10 +10,11 @@ import { CheckoutTotal } from './total/CheckoutTotal';
 
 export type CheckoutSummaryProps = {
   readonly cart: SklepTypes['postCart200Response'];
+  readonly processing: boolean;
 };
 
-export const CheckoutSummary = React.memo<CheckoutSummaryProps>(({ cart }) => {
-  const { processing, disabled, succeeded } = useCheckoutState();
+export const CheckoutSummary = React.memo<CheckoutSummaryProps>(({ cart, processing }) => {
+  const { disabled, succeeded } = useCheckoutState();
   return (
     <div className="w-full md:w-1/3 mb-4">
       <h3 className="text-2xl mb-6">Twoje zamówienie</h3>

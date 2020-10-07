@@ -7,9 +7,7 @@ import { Checkout } from '../../components/klient/modules/checkout/Checkout';
 import { CheckoutProvider } from '../../components/klient/modules/checkout/utils/checkoutContext';
 import { Layout } from '../../components/klient/shared/components/layout/Layout';
 
-const promise = loadStripe(
-  'pk_test_51HXZFYFCiYl0PHOKhy4Qk2vJkOE4ij5TjOdmHcql1DSQxPULJuuDq2bRRgsVhvm2BkUhg4DvBCCPS7vuMzuZUh2x00X4AYgLw4',
-);
+const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 function CheckoutPage() {
   const cart = {
