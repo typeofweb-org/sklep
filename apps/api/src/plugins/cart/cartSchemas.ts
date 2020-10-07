@@ -3,7 +3,7 @@ import Joi from 'joi';
 
 export const addToCartPayloadSchema = Joi.object<SklepTypes['patchCartAddRequestBody']>({
   productId: Joi.number().integer().required(),
-  quantity: Joi.number().integer().min(1).required(),
+  quantity: Joi.number().integer().required(),
 }).required();
 
 export const removeFromCartPayloadSchema = Joi.object<SklepTypes['patchCartRemoveRequestBody']>({

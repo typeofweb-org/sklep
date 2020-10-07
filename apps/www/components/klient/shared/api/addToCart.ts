@@ -1,12 +1,13 @@
-import type { SklepTypes } from '@sklep/types';
-
 import { fetcher } from '../../../../utils/fetcher';
 
-type Cart = SklepTypes['postCart200Response']['data'];
-
-export function addToCart(body: {
-  readonly productId: number;
-  readonly quantity: number;
-}): Promise<Cart> {
+export function addToCart(body: { readonly productId: number; readonly quantity: number }) {
   return fetcher('/cart/add', 'PATCH', { body });
+}
+
+export function removeFromCart(body: { readonly productId: number }) {
+  return fetcher('/cart/remove', 'PATCH', { body });
+}
+
+export function setCartQuantity(body: { readonly productId: number; readonly quantity: number }) {
+  return fetcher('/cart/set', 'PATCH', { body });
 }

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import type { ReactNode } from 'react';
 import React from 'react';
+import { useIsFetching } from 'react-query';
 
 import { Footer } from '../footer/Footer';
 import { Header } from '../header/Header';
@@ -8,6 +9,18 @@ import { Header } from '../header/Header';
 type LayoutProps = {
   readonly children: ReactNode;
   readonly title: string;
+};
+
+export const LoadingIndicator = () => {
+  const isFetching = useIsFetching() > 0;
+
+  React.useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.body.classList.toggle('react-query-is-loading', isFetching);
+    }
+  }, [isFetching]);
+
+  return null;
 };
 
 export const Layout = React.memo<LayoutProps>(({ children, title }) => {
@@ -23,6 +36,7 @@ export const Layout = React.memo<LayoutProps>(({ children, title }) => {
       <Header />
       <main className="leading-normal">{children}</main>
       <Footer />
+      <LoadingIndicator />
     </div>
   );
 });
