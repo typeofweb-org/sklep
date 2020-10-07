@@ -3,12 +3,16 @@ import React from 'react';
 import '../styles/index.css';
 import type { ReactQueryConfig } from 'react-query';
 import { ReactQueryCacheProvider, QueryCache, ReactQueryConfigProvider } from 'react-query';
-// import { ReactQueryDevtools } from 'react-query-devtools';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ReactQueryDevtools } from 'react-query-devtools';
 import type { DehydratedState } from 'react-query/hydration';
 import { Hydrate } from 'react-query/hydration';
 
 const queryCache = new QueryCache();
 const reactQueryConfigOverrides: ReactQueryConfig = {
+  queries: {
+    refetchOnWindowFocus: false,
+  },
   mutations: {
     throwOnError: true,
   },
@@ -21,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ReactQueryConfigProvider config={reactQueryConfigOverrides}>
         <Hydrate state={dehydratedState}>
           <Component {...pageProps} />
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
       </ReactQueryConfigProvider>
     </ReactQueryCacheProvider>
