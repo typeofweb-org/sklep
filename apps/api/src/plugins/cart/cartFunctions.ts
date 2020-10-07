@@ -97,7 +97,7 @@ export function addToCart(
   });
 }
 
-export function setQuantity(
+export function setProductQuantity(
   request: Request,
   {
     cartId,

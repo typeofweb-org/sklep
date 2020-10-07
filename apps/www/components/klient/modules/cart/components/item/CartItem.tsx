@@ -1,7 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { useDebounce } from '../../../../../../utils/hooks';
+import { useDebouncedValue } from '../../../../../../utils/hooks';
 import { Price } from '../../../../shared/components/price/Price';
 import { CartItemImage } from '../../../../shared/image/CartItemImage';
 import { useCart } from '../../../../shared/utils/useCart';
@@ -42,7 +42,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ cartProduct }) => {
     }
   }, [cartProduct.quantity]);
 
-  const debouncedQuantity = useDebounce(quantity, CART_UPDATES_DEBOUNCE);
+  const debouncedQuantity = useDebouncedValue(quantity, CART_UPDATES_DEBOUNCE);
   const saveCartQuantity = useCallback(
     (quantity: number) => setCartQuantity({ productId: cartProduct.product.id, quantity }),
     [cartProduct.product.id, setCartQuantity],

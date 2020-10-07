@@ -15,7 +15,7 @@ import {
   findCart,
   findOrCreateCart,
   removeFromCart,
-  setQuantity,
+  setProductQuantity,
 } from './cartFunctions';
 import {
   addToCartPayloadSchema,
@@ -153,7 +153,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
 
         const { quantity, productId } = request.payload as SklepTypes['patchCartAddRequestBody'];
 
-        await setQuantity(request, { quantity, productId, cartId: cart.id });
+        await setProductQuantity(request, { quantity, productId, cartId: cart.id });
 
         return null;
       },
