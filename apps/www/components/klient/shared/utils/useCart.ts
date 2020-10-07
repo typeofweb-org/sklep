@@ -2,29 +2,59 @@ import React from 'react';
 import { useMutation, useQueryCache } from 'react-query';
 
 import { useToWQuery } from '../../../../utils/fetcher';
-import { addToCart } from '../api/addToCart';
+import { addToCart, removeFromCart, setCartQuantity } from '../api/addToCart';
 
-// this hook can be extended for the wider purpose
+const CART_QUERY_KEY = ['/cart', 'POST', {}] as const;
+
 export const useCart = () => {
-  const { latestData: cartResponse } = useToWQuery(['/cart', 'POST', {}]);
+  const { latestData: cartResponse, isLoading } = useToWQuery(CART_QUERY_KEY);
 
   const queryCache = useQueryCache();
+
   const [addToCartMutation] = useMutation(
-    (id: number) => {
-      return addToCart({ productId: id, quantity: 1 });
-    },
-    {
-      onSuccess: () => {
-        void queryCache.refetchQueries('/cart');
-      },
-    },
+    ({ productId, quantity }: { readonly productId: number; readonly quantity: number }) =>
+      addToCart({ productId, quantity }),
+    { onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY) },
   );
+
+  const [setCartQuantityMutation] = useMutation(
+    ({ productId, quantity }: { readonly productId: number; readonly quantity: number }) =>
+      setCartQuantity({ productId, quantity }),
+    { onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY) },
+  );
+
+  const incrementQuantity = React.useCallback(
+    (productId: number) => addToCartMutation({ productId, quantity: 1 }),
+    [addToCartMutation],
+  );
+
+  const decrementQuantity = React.useCallback(
+    (productId: number) => addToCartMutation({ productId, quantity: -1 }),
+    [addToCartMutation],
+  );
+
+  const [removeFromCartMutation] = useMutation((id: number) => removeFromCart({ productId: id }), {
+    onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY),
+  });
 
   return React.useMemo(
     () => ({
-      itemsInCart: cartResponse?.data.totalQuantity ?? 0,
-      addToCart: addToCartMutation,
+      numberOfItemsInCart: cartResponse?.data.totalQuantity ?? 0,
+      cartResponseData: cartResponse?.data,
+      addToCart: incrementQuantity,
+      removeFromCart: removeFromCartMutation,
+      incrementQuantity: incrementQuantity,
+      decrementQuantity: decrementQuantity,
+      setCartQuantity: setCartQuantityMutation,
+      isLoading,
     }),
-    [addToCartMutation, cartResponse?.data.totalQuantity],
+    [
+      cartResponse?.data,
+      decrementQuantity,
+      incrementQuantity,
+      isLoading,
+      removeFromCartMutation,
+      setCartQuantityMutation,
+    ],
   );
 };
