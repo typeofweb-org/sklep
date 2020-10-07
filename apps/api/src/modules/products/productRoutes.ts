@@ -138,7 +138,7 @@ export const deleteProductRoute: Hapi.ServerRoute = {
 
 export const getProductRoute: Hapi.ServerRoute = {
   method: 'GET',
-  path: '/products/{productId}',
+  path: '/products/{productIdOrSlug}',
   options: {
     tags: ['api', 'products'],
     auth: {
@@ -151,14 +151,19 @@ export const getProductRoute: Hapi.ServerRoute = {
       params: getProductParamsSchema,
     },
   },
-  async handler(request): Promise<SklepTypes['getProductsProductId200Response']> {
+  async handler(request): Promise<SklepTypes['getProductsProductIdOrSlug200Response']> {
     const user = request.auth.credentials?.session?.user;
     const isAdmin = user?.role === Enums.UserRole.ADMIN;
-    const params = request.params as SklepTypes['getProductsProductIdRequestPathParams'];
+    const params = request.params as SklepTypes['getProductsProductIdOrSlugRequestPathParams'];
+
+    const maybeId = Number(params.productIdOrSlug);
+    const query = Number.isNaN(maybeId)
+      ? { slug: params.productIdOrSlug as string }
+      : { id: params.productIdOrSlug as number };
 
     const product = await request.server.app.db.product.findFirst({
       where: {
-        id: params.productId,
+        ...query,
         ...(!isAdmin && {
           isPublic: true,
         }),
