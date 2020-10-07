@@ -9,7 +9,11 @@ export enum SelectedOption {
   Card = 'CARD',
 }
 
-export const PaymentMethod = React.memo(() => {
+export interface PaymentMethodProps {
+  readonly setDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const PaymentMethod = React.memo<PaymentMethodProps>(({ setDisabled }) => {
   const [selectedOption, setSelectedOption] = useState<SelectedOption | null>(SelectedOption.Card);
 
   const handleChange = (value: SelectedOption): void => {
@@ -39,7 +43,7 @@ export const PaymentMethod = React.memo(() => {
         </div>
         <img src={visa_master} alt="visa" className="w-20" />
       </div>
-      {selectedOption === SelectedOption.Card && <StripeCard />}
+      {selectedOption === SelectedOption.Card && <StripeCard setDisabled={setDisabled} />}
     </section>
   );
 });

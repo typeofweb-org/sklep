@@ -1,27 +1,18 @@
 import { CardElement } from '@stripe/react-stripe-js';
 import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { initiateStripePayment } from '../../../../../../../utils/api/initiateStripePayment';
-import { useCheckoutDispatch, useCheckoutState } from '../../../utils/checkoutContext';
+import type { PaymentMethodProps } from './PaymentMethod';
 
-export const StripeCard = React.memo(() => {
-  const dispatch = useCheckoutDispatch();
-  const { error } = useCheckoutState();
+export const StripeCard = React.memo<PaymentMethodProps>(({ setDisabled }) => {
+  const [stripeError, setStripeError] = useState<string | undefined>(undefined);
+
   const handleChange = (event: StripeCardElementChangeEvent) => {
-    console.log(event);
-    dispatch({ type: 'DISABLE', payload: event.empty });
-    dispatch({
-      type: 'ERROR',
-      payload: event.error ? event.error.message : event.complete ? '' : 'Please complete',
-    });
+    setDisabled(event.empty || !event.complete);
+    if (event.error) {
+      setStripeError(event.error.message);
+    }
   };
-
-  // useEffect(() => {
-  //   void initiateStripePayment().then((data) =>
-  //     dispatch({ type: 'CLIENTSECRET', payload: data.data.stripeClientSecret }),
-  //   );
-  // }, [dispatch]);
 
   const cardOptions = {
     hidePostalCode: true,
@@ -44,7 +35,7 @@ export const StripeCard = React.memo(() => {
   return (
     <div className="border border-blue-700">
       <CardElement id="card-element" options={cardOptions} onChange={handleChange} />
-      {error && <p className="text-sm text-red-600 px-2">{error}</p>}
+      {stripeError && <p className="text-sm text-red-600 px-2">{stripeError}</p>}
     </div>
   );
 });

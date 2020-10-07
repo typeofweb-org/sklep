@@ -4,7 +4,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import React from 'react';
 
 import { Checkout } from '../../components/klient/modules/checkout/Checkout';
-import { CheckoutProvider } from '../../components/klient/modules/checkout/utils/checkoutContext';
 import { Layout } from '../../components/klient/shared/components/layout/Layout';
 
 const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
@@ -43,11 +42,9 @@ function CheckoutPage() {
 
   return (
     <Layout title="Płatność i realizacja">
-      <CheckoutProvider>
-        <Elements stripe={promise}>
-          <Checkout cart={cart} />
-        </Elements>
-      </CheckoutProvider>
+      <Elements stripe={promise}>
+        <Checkout cart={cart} />
+      </Elements>
     </Layout>
   );
 }
