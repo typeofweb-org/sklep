@@ -11,7 +11,7 @@ export const CartQuantityInput = React.memo<CartQuantityInputProps>(
     return (
       <input
         type="number"
-        className="appearance-none w-11 text-center"
+        className="w-6 text-center"
         step="1"
         min="0"
         max="99"

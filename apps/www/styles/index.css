@@ -29,3 +29,8 @@ body.react-query-is-loading * {
   height: 1px;
   width: 1px;
 }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

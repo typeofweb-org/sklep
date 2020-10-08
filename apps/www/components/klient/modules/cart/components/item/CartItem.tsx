@@ -77,7 +77,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ cartProduct }) => {
       <td className="px-4 py-6">
         <div>
           <h3 className="mb-2">{cartProduct.product.name}</h3>
-          <div className="">
+          <div className="cart">
             <CartQuantityButton
               text="-"
               onClick={decreaseQuantity}
@@ -92,7 +92,7 @@ export const CartItemRow = React.memo<CartItemRowProps>(({ cartProduct }) => {
           </div>
         </div>
       </td>
-      <td className="px-4 py-6 relative">
+      <td className="px-4 py-6 relative text-right pr-8">
         <Price
           regularPrice={cartProduct.product.regularPrice}
           discountPrice={cartProduct.product.discountPrice}
