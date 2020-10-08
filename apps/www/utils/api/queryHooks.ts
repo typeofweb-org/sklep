@@ -10,14 +10,14 @@ useGetProducts.prefetch = (queryCache: QueryCache) =>
   );
 
 export const useGetProductBySlug = (
-  productIdOrSlug: string,
+  productIdOrSlug: string | number,
   queryConfig?: QueryConfig<any, unknown>,
 ) =>
   useToWQuery(
     ['/products/{productIdOrSlug}', 'GET', { params: { productIdOrSlug } }] as const,
     queryConfig,
   );
-useGetProductBySlug.prefetch = (queryCache: QueryCache, productIdOrSlug: string) =>
+useGetProductBySlug.prefetch = (queryCache: QueryCache, productIdOrSlug: string | number) =>
   queryCache.prefetchQuery(
     ['/products/{productIdOrSlug}', 'GET', { params: { productIdOrSlug } }],
     () => fetcher('/products/{productIdOrSlug}', 'GET', { params: { productIdOrSlug } }),
