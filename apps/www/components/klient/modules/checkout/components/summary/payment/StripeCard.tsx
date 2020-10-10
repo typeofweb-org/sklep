@@ -1,19 +1,11 @@
 import { CardElement } from '@stripe/react-stripe-js';
 import type { StripeCardElementChangeEvent } from '@stripe/stripe-js';
-import React, { useState } from 'react';
+import React from 'react';
+import { Field } from 'react-final-form';
 
-import type { PaymentMethodProps } from './PaymentMethod';
+import { FormErrorMessage } from '../../formErrorMessage/FormErrorMessage';
 
-export const StripeCard = React.memo<PaymentMethodProps>(({ setDisabled }) => {
-  const [stripeError, setStripeError] = useState<string | undefined>(undefined);
-
-  const handleChange = (event: StripeCardElementChangeEvent) => {
-    setDisabled(event.empty || !event.complete);
-    if (event.error) {
-      setStripeError(event.error.message);
-    }
-  };
-
+export const StripeCard = React.memo(() => {
   const cardOptions = {
     hidePostalCode: true,
     style: {
@@ -32,11 +24,29 @@ export const StripeCard = React.memo<PaymentMethodProps>(({ setDisabled }) => {
       },
     },
   };
+
+  const emptyOrErrors = (value: StripeCardElementChangeEvent) => {
+    if (value) {
+      return value.error ? value.error.message : undefined;
+    }
+    return 'Pole jest wymagane';
+  };
+
   return (
-    <div className="border border-blue-700">
-      <CardElement id="card-element" options={cardOptions} onChange={handleChange} />
-      {stripeError && <p className="text-sm text-red-600 px-2">{stripeError}</p>}
-    </div>
+    <Field name="stripeCard" validate={emptyOrErrors}>
+      {({ input, meta }) => (
+        <div className="border border-blue-700 p-2">
+          <CardElement
+            id="card-element"
+            options={cardOptions}
+            onChange={input.onChange}
+            onBlur={input.onBlur}
+            onFocus={input.onFocus}
+          />
+          <FormErrorMessage meta={meta} />
+        </div>
+      )}
+    </Field>
   );
 });
 
