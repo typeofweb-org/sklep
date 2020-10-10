@@ -22,7 +22,7 @@ const statusToPrimaryText = (
     case 'success':
       return <InlineLoading status="finished" description="Usuwanie..." />;
     default:
-      return 'Usuń produkt';
+      return 'Usuń';
   }
 };
 
