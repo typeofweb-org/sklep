@@ -1,14 +1,13 @@
 import type { SklepTypes } from '@sklep/types';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useCallback, useState } from 'react';
-import { useMutation } from 'react-query';
+import React from 'react';
 import * as Yup from 'yup';
 
-import { fetcher } from '../../../../utils/fetcher';
 import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
+import { StripeAfterPaymentMessage } from './components/stripeAfterPaymentMessage/StripeAfterPaymentMessage';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
+import { useStripePayment } from './utils/useStripePayment';
 
 type CheckoutProps = {
   readonly cart: SklepTypes['postCart200Response'];
@@ -27,39 +26,11 @@ const checkoutSchema = Yup.object({
 export type CheckoutType = Yup.InferType<typeof checkoutSchema>;
 
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [error, setError] = useState<string | null>(null);
+  const { processPayment, isLoading, payloadError, isSuccess } = useStripePayment();
 
-  const cardElement = elements?.getElement(CardElement);
-
-  async function stripePayment() {
-    const { data } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {});
-    if (!stripe || !cardElement || !data.stripeClientSecret) {
-      throw new Error('Something went wrong');
-    }
-    const payload = await stripe.confirmCardPayment(data.stripeClientSecret, {
-      payment_method: {
-        card: cardElement,
-      },
-    });
-    if (payload.error?.message) {
-      setError(`Payment failed ${payload.error.message}`);
-    } else {
-      setError(null);
-    }
-  }
-
-  const [mutate, { isLoading, isSuccess, isError, status }] = useMutation(stripePayment, {
-    onError() {
-      console.log(status);
-      console.log(isError);
-    },
-  });
-
-  const handleSubmit = useCallback(() => {
-    void mutate();
-  }, [mutate]);
+  const handleSubmit = () => {
+    return processPayment();
+  };
 
   return (
     <>
@@ -74,10 +45,9 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
         <AddressForm />
         <CheckoutSummary cart={cart} processing={isLoading} />
       </FinalFormWrapper>
-      {isSuccess && !error && (
-        <p className="w-screen text-center text-green-600 text-4xl">Udało się</p>
-      )}
-      {error && <p className="w-screen text-center text-red-600 text-4xl">{error}</p>}
+      {isSuccess && <StripeAfterPaymentMessage payloadError={payloadError} />}
     </>
   );
 });
+
+Checkout.displayName = 'Checkout';

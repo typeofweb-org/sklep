@@ -14,8 +14,7 @@ export type CheckoutSummaryProps = {
 };
 
 export const CheckoutSummary = React.memo<CheckoutSummaryProps>(({ cart, processing }) => {
-  const state = useFormState();
-  console.log(state);
+  const { pristine, hasValidationErrors } = useFormState();
 
   return (
     <div className="w-full md:w-1/3 mb-4">
@@ -23,7 +22,7 @@ export const CheckoutSummary = React.memo<CheckoutSummaryProps>(({ cart, process
       <CheckoutList cart={cart} />
       <CheckoutTotal cart={cart} />
       <PaymentMethod />
-      <Button type="submit" disabled={state.invalid}>
+      <Button type="submit" disabled={pristine || hasValidationErrors}>
         {processing ? <div className="spinner text-lg" id="spinner"></div> : 'Zapłać'}
       </Button>
     </div>
