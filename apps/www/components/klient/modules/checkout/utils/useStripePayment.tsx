@@ -1,52 +1,42 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useEffect, useState } from 'react';
-import { useMutation } from 'react-query';
+import React from 'react';
+import { useMutation, useQueryCache } from 'react-query';
 
 import { fetcher } from '../../../../../utils/fetcher';
+import { CART_QUERY_KEY } from '../../../shared/utils/useCart';
 
 export function useStripePayment() {
   const stripe = useStripe();
   const elements = useElements();
+  const queryCache = useQueryCache();
 
-  const cardElement = elements?.getElement(CardElement);
-  const [clientSecret, setClientSecret] = useState<string | undefined>(undefined);
-  const [payloadError, setPayloadError] = useState<string | undefined>(undefined);
+  const pay = React.useCallback(async () => {
+    const cardElement = elements?.getElement(CardElement);
 
-  useEffect(() => {
-    async function fetchData() {
-      const { data } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {});
-      setClientSecret(data.stripeClientSecret);
+    if (!stripe || !cardElement) {
+      throw new Error('Missing Stripe elements');
     }
-    void fetchData();
-  }, []);
 
-  async function pay() {
-    if (!stripe || !cardElement || !clientSecret) {
-      throw new Error('Something went wrong');
+    const {
+      data: { stripeClientSecret },
+    } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {});
+
+    if (!stripeClientSecret) {
+      throw new Error(`Couldn't obtain stripe client secret`);
     }
-    const payload = await stripe.confirmCardPayment(clientSecret, {
+
+    const payload = await stripe.confirmCardPayment(stripeClientSecret, {
       payment_method: {
         card: cardElement,
       },
     });
     if (payload.error) {
-      setPayloadError(payload.error.message);
-    } else {
-      setPayloadError(undefined);
+      throw payload.error;
     }
-  }
+    return payload.paymentIntent;
+  }, [elements, stripe]);
 
-  const [stripePayMutation, { isLoading, isSuccess }] = useMutation(pay, {});
-
-  const processPayment = React.useCallback(() => stripePayMutation(), [stripePayMutation]);
-
-  return React.useMemo(
-    () => ({
-      processPayment: processPayment,
-      isLoading: isLoading,
-      isSuccess: isSuccess,
-      payloadError: payloadError,
-    }),
-    [isLoading, isSuccess, payloadError, processPayment],
-  );
+  return useMutation(pay, {
+    onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY),
+  });
 }

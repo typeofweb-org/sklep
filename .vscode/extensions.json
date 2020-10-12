@@ -6,6 +6,7 @@
     "pmneo.tsimporter",
     "prisma.prisma",
     "redhat.vscode-yaml",
-    "vscode-icons-team.vscode-icons"
+    "vscode-icons-team.vscode-icons",
+    "bradlc.vscode-tailwindcss"
   ]
 }

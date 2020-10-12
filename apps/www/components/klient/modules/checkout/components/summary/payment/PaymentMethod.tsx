@@ -12,9 +12,10 @@ export enum SelectedOption {
 export const PaymentMethod = React.memo(() => {
   const [selectedOption, setSelectedOption] = useState<SelectedOption | null>(SelectedOption.Card);
 
-  const handleChange = (value: SelectedOption): void => {
+  const handleChange = React.useCallback((value: SelectedOption) => {
     setSelectedOption(value);
-  };
+  }, []);
+
   return (
     <section className="my-8">
       <h4 className="py-2 text-xl">Metoda płatności</h4>

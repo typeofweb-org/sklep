@@ -56,12 +56,19 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
       const cart = order.cart;
       if (typeof cart === 'object' && cart && 'id' in cart) {
         const { id: cartId } = cart as { readonly id: string };
-        server.app.db.cart
+        server.app.db.cartToProduct
           .deleteMany({
             where: {
-              id: cartId,
+              cartId,
             },
           })
+          .then(() =>
+            server.app.db.cart.deleteMany({
+              where: {
+                id: cartId,
+              },
+            }),
+          )
           .catch((err) => console.error(err));
       }
     });

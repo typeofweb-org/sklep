@@ -10,7 +10,7 @@ import { CheckoutSummary } from './components/summary/CheckoutSummary';
 import { useStripePayment } from './utils/useStripePayment';
 
 type CheckoutProps = {
-  readonly cart: SklepTypes['postCart200Response'];
+  readonly cart: SklepTypes['postCart200Response']['data'];
 };
 
 const checkoutSchema = Yup.object({
@@ -26,11 +26,11 @@ const checkoutSchema = Yup.object({
 export type CheckoutType = Yup.InferType<typeof checkoutSchema>;
 
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
-  const { processPayment, isLoading, payloadError, isSuccess } = useStripePayment();
+  const [processPayment, { isLoading, isSuccess }] = useStripePayment();
 
-  const handleSubmit = () => {
+  const handleSubmit = React.useCallback(() => {
     return processPayment();
-  };
+  }, [processPayment]);
 
   return (
     <>
@@ -45,7 +45,8 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
         <AddressForm />
         <CheckoutSummary cart={cart} processing={isLoading} />
       </FinalFormWrapper>
-      {isSuccess && <StripeAfterPaymentMessage payloadError={payloadError} />}
+      {/* @todo */}
+      {isSuccess && <StripeAfterPaymentMessage />}
     </>
   );
 });

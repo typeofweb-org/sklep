@@ -9,7 +9,7 @@ import { PaymentMethod } from './payment/PaymentMethod';
 import { CheckoutTotal } from './total/CheckoutTotal';
 
 export type CheckoutSummaryProps = {
-  readonly cart: SklepTypes['postCart200Response'];
+  readonly cart: SklepTypes['postCart200Response']['data'];
   readonly processing: boolean;
 };
 
