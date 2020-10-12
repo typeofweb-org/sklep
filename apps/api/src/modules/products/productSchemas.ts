@@ -42,7 +42,7 @@ export const editProductParamsSchema = Joi.object({
 }).required();
 
 export const getProductParamsSchema = Joi.object({
-  productId: Joi.number().required(),
+  productIdOrSlug: Joi.alternatives().try(Joi.number(), Joi.string()).required(),
 }).required();
 
 export const getProductResponseSchema = Joi.object<SklepTypes['getProducts200Response']>({

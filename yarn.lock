@@ -2472,9 +2472,9 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@manifoldco/swagger-to-ts@github:mmiszy/swagger-to-ts#586cefbcdb666cad8ec134530c1df61cb42aa3e4":
-  version "3.0.0"
-  resolved "https://codeload.github.com/mmiszy/swagger-to-ts/tar.gz/586cefbcdb666cad8ec134530c1df61cb42aa3e4"
+"@manifoldco/swagger-to-ts@github:mmiszy/swagger-to-ts#fae0dceec79e17caa8d6bb013486d149b9927c5f":
+  version "2.0.0"
+  resolved "https://codeload.github.com/mmiszy/swagger-to-ts/tar.gz/fae0dceec79e17caa8d6bb013486d149b9927c5f"
   dependencies:
     chalk "^4.0.0"
     js-yaml "^3.13.1"

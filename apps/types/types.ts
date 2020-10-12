@@ -77,22 +77,11 @@ export interface definitions {
   getAuthMe200Response: definitions['Model4'];
 
   getCartAll200Response: definitions['Model8'];
-  getProductsProductIdRequestPathParams: {
-    productId: number;
+  getProductsProductIdOrSlugRequestPathParams: {
+    productIdOrSlug: number | string;
   };
 
-  getProductsProductId200Response: definitions['Model9'];
-  putProductsProductIdRequestPathParams: {
-    productId: number;
-  };
-  putProductsProductIdRequestBody: definitions['Model11'];
-
-  putProductsProductId200Response: definitions['Model9'];
-  deleteProductsProductIdRequestPathParams: {
-    productId: number;
-  };
-
-  deleteProductsProductIdDefaultResponse: string;
+  getProductsProductIdOrSlug200Response: definitions['Model9'];
 
   postCart200Response: definitions['Model10'];
   postAuthLoginRequestBody: definitions['Model12'];
@@ -118,6 +107,17 @@ export interface definitions {
   patchCartSetDefaultResponse: string;
 
   patchOrdersInitiateStripePayment200Response: definitions['Model16'];
+  putProductsProductIdRequestPathParams: {
+    productId: number;
+  };
+  putProductsProductIdRequestBody: definitions['Model11'];
+
+  putProductsProductId200Response: definitions['Model9'];
+  deleteProductsProductIdRequestPathParams: {
+    productId: number;
+  };
+
+  deleteProductsProductIdDefaultResponse: string;
 
   pathsDefinitions: {
     '/products': {
@@ -145,28 +145,13 @@ export interface definitions {
         response: definitions['Model8'];
       };
     };
-    '/products/{productId}': {
+    '/products/{productIdOrSlug}': {
       GET: {
         requestPathParams: {
-          productId: number;
+          productIdOrSlug: number | string;
         };
 
         response: definitions['Model9'];
-      };
-      PUT: {
-        requestPathParams: {
-          productId: number;
-        };
-        requestBody: definitions['Model11'];
-
-        response: definitions['Model9'];
-      };
-      DELETE: {
-        requestPathParams: {
-          productId: number;
-        };
-
-        response: string;
       };
     };
     '/cart': {
@@ -227,6 +212,23 @@ export interface definitions {
     '/orders/initiate-stripe-payment': {
       PATCH: {
         response: definitions['Model16'];
+      };
+    };
+    '/products/{productId}': {
+      PUT: {
+        requestPathParams: {
+          productId: number;
+        };
+        requestBody: definitions['Model11'];
+
+        response: definitions['Model9'];
+      };
+      DELETE: {
+        requestPathParams: {
+          productId: number;
+        };
+
+        response: string;
       };
     };
   };

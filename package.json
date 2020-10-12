@@ -4,7 +4,7 @@
   "main": "index.js",
   "private": "true",
   "scripts": {
-    "dev": "yarn --frozen-lockfile && lerna run dev --parallel",
+    "dev": "yarn --frozen-lockfile && lerna bootstrap && lerna run dev --parallel",
     "eslint": "yarn lerna run eslint --stream",
     "test": "yarn lerna run test --stream",
     "test:ci": "yarn lerna run test_:ci --stream",
