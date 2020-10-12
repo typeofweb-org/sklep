@@ -1,4 +1,5 @@
 import type { SklepTypes } from '@sklep/types';
+import Link from 'next/link';
 import React from 'react';
 
 import { Price } from '../../../../shared/components/price/Price';
@@ -15,13 +16,17 @@ type ProductItemProps = {
 };
 
 export const ProductItem = React.memo<ProductItemProps>(
-  ({ product: { name, regularPrice, discountPrice, id } }) => {
+  ({ product: { name, regularPrice, discountPrice, slug, id } }) => {
     const { addToCart } = useCart();
     const handleAddToCartClick = React.useCallback(() => addToCart(id), [addToCart, id]);
 
     return (
       <section className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col self-start">
-        <ProductImage />
+        <Link href={`/produkty/${slug}`}>
+          <a>
+            <ProductImage />
+          </a>
+        </Link>
         <AddToCartButton onClick={handleAddToCartClick} />
         <ProductDescription name={name} />
         <Price regularPrice={regularPrice} discountPrice={discountPrice} />

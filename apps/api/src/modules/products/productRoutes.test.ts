@@ -233,7 +233,7 @@ describe('/products', () => {
         headers: auth.headers,
       });
 
-      const result = getInjection.result as SklepTypes['getProductsProductId200Response'];
+      const result = getInjection.result as SklepTypes['getProductsProductIdOrSlug200Response'];
 
       expect(getInjection.statusCode).toEqual(200);
       expect(result).toHaveProperty('data');
@@ -266,7 +266,7 @@ describe('/products', () => {
         headers: auth.headers,
       });
 
-      const result = getInjection.result as SklepTypes['getProductsProductId200Response'];
+      const result = getInjection.result as SklepTypes['getProductsProductIdOrSlug200Response'];
 
       expect(getInjection.statusCode).toEqual(200);
       expect(result).toHaveProperty('data');

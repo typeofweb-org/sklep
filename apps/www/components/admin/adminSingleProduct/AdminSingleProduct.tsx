@@ -7,7 +7,7 @@ import { useMutation } from 'react-query';
 
 import styles from '../../../styles/components/AdminSingleProduct.module.scss';
 import { deleteProduct } from '../../../utils/api/deleteProduct';
-import { useGetProductById } from '../../../utils/api/queryHooks';
+import { useGetProductBySlug } from '../../../utils/api/queryHooks';
 import { updateProduct } from '../../../utils/api/updateProduct';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import { ProductsForm } from '../productsForm/ProductsForm';
@@ -19,7 +19,7 @@ export const AdminSingleProduct = React.memo(() => {
   const router = useRouter();
   const productId = Number(router.query.productId);
 
-  const { latestData: latestProductResponse, isLoading, isError } = useGetProductById(productId, {
+  const { latestData: latestProductResponse, isLoading, isError } = useGetProductBySlug(productId, {
     enabled: Boolean(productId),
     refetchOnReconnect: false,
   });
@@ -102,7 +102,7 @@ export const AdminSingleProduct = React.memo(() => {
 AdminSingleProduct.displayName = 'AdminSingleProduct';
 
 function getInitialValues(
-  response: SklepTypes['getProductsProductId200Response'],
+  response: SklepTypes['getProductsProductIdOrSlug200Response'],
 ): SklepTypes['postProductsRequestBody'] {
   return {
     name: response.data.name,

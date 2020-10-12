@@ -1,42 +1,22 @@
-import React from 'react';
-import { QueryCache } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-import { Hero } from '../components/klient/modules/hero/Hero';
-import { ProductCollection } from '../components/klient/modules/productCollection/ProductCollection';
-import { Layout } from '../components/klient/shared/components/layout/Layout';
-import { useGetProducts } from '../utils/api/queryHooks';
-
-function HomePage() {
-  const { data } = useGetProducts();
-
-  if (!data?.data) {
-    return (
-      <Layout title="Sklep strona główna">
-        <Hero />
-        Brak produktów.
-      </Layout>
-    );
+const HomePage: NextPage = function HomePage() {
+  // client-side rendering
+  const router = useRouter();
+  useEffect(() => {
+    void router.replace('/produkty');
+  }, [router]);
+  return null;
+};
+HomePage.getInitialProps = (appContext) => {
+  // server-side rendering
+  if (typeof window === 'undefined' && appContext.res) {
+    appContext.res.writeHead(302, { Location: '/produkty' });
+    appContext.res.end();
   }
-
-  return (
-    <Layout title="Sklep strona główna">
-      <Hero />
-      <ProductCollection products={data.data} />
-    </Layout>
-  );
-}
-
-export const getStaticProps = async () => {
-  const queryCache = new QueryCache();
-  await useGetProducts.prefetch(queryCache);
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryCache),
-    },
-    revalidate: 60, // In seconds
-  };
+  return {};
 };
 
 export default HomePage;

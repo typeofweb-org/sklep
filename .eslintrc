@@ -4,6 +4,7 @@
   "parserOptions": {
     "sourceType": "module"
   },
+  "ignorePatterns": "next.config.js",
   "plugins": ["functional", "@typescript-eslint"],
   "extends": [
     "prettier",
