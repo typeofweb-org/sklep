@@ -11,7 +11,7 @@ import { ToastsContextProvider } from '../toasts/Toasts';
 import { AdminSingleProduct } from './AdminSingleProduct';
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
-useRouter.mockImplementation(() => ({ query: { productId: '1' } }));
+useRouter.mockImplementation(() => ({ query: { productId: '1' }, replace() {} }));
 
 const TEST_USER_DB: Record<number, SklepTypes['getProductsProductId200Response']> = {
   1: {
@@ -42,6 +42,11 @@ const server = setupServer(
     const productData = TEST_USER_DB[productId] || {};
     return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
   }),
+  rest.delete(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (req, res, ctx) => {
+    const productId = Number(req.params.productId);
+    const productData = TEST_USER_DB[productId] || {};
+    return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
+  }),
 );
 
 describe('single product page', () => {
@@ -66,18 +71,6 @@ describe('single product page', () => {
     expect(discountPrice).toHaveDisplayValue('1599');
   });
 
-  // @to-do Doesn't work
-  // it('shows error message after it fails to load a product', async () => {
-  //   server.use(
-  //     rest.get(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (_req, res, ctx) => {
-  //       return res(ctx.status(400), ctx.delay(300), ctx.json({}));
-  //     }),
-  //   );
-  //   const { findByText } = renderAdminSingleProduct();
-  //   const errorMessage = await findByText('Wystąpił błąd podczas pobierania danych produktu');
-  //   expect(errorMessage).toBeInTheDocument();
-  // });
-
   it('deletes product', async () => {
     const { findByText, findByRole } = renderAdminSingleProduct();
     const deleteButton = await findByText('Usuń produkt');
@@ -93,5 +86,16 @@ describe('single product page', () => {
     const notification = await findByRole('alert');
 
     expect(notification).toHaveTextContent('Produkt został usunięty pomyślnie');
+  });
+
+  it('shows error message after it fails to load a product', async () => {
+    server.use(
+      rest.get(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (_req, res, ctx) => {
+        return res(ctx.status(400), ctx.delay(300), ctx.json({ message: 'Bad data' }));
+      }),
+    );
+    const { findByText } = renderAdminSingleProduct();
+    const errorMessage = await findByText('Wystąpił błąd podczas pobierania danych produktu');
+    expect(errorMessage).toBeInTheDocument();
   });
 });
