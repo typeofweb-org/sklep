@@ -9,7 +9,10 @@ import { ToastsContextProvider } from '../toasts/Toasts';
 
 import { LoginForm } from './LoginForm';
 
-describe('LoginForm', () => {
+const useRouter = jest.spyOn(require('next/router'), 'useRouter');
+useRouter.mockImplementation(() => ({ replace() {} }));
+
+describe('login form', () => {
   const renderLoginForm = () =>
     render(
       <ToastsContextProvider>
@@ -17,13 +20,15 @@ describe('LoginForm', () => {
       </ToastsContextProvider>,
     );
 
-  mswMockServer.use(
-    rest.post(process.env.NEXT_PUBLIC_API_URL + '/auth/login', (_req, res, ctx) => {
-      return res(ctx.status(401), ctx.json({}), ctx.delay(300));
-    }),
-  );
+  beforeEach(() => {
+    mswMockServer.use(
+      rest.post(process.env.NEXT_PUBLIC_API_URL + '/auth/login', (_req, res, ctx) => {
+        return res(ctx.status(401), ctx.json({}), ctx.delay(300));
+      }),
+    );
+  });
 
-  test('shows error after confirming without required data', () => {
+  it('shows error after confirming without required data', () => {
     const { getByText } = renderLoginForm();
 
     userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
@@ -32,7 +37,7 @@ describe('LoginForm', () => {
     expect(getByText('Pole jest wymagane')).toBeInTheDocument();
   });
 
-  test('unsuccesfull login', async () => {
+  it('shows error after confirming with improper data', async () => {
     const { getByLabelText, getByText, findByRole } = renderLoginForm();
 
     await userEvent.type(getByLabelText('Adres email'), 'testowy@test.pl');
@@ -44,7 +49,7 @@ describe('LoginForm', () => {
     expect(notification).toHaveTextContent('Wprowadzone dane nie są poprawne');
   });
 
-  test('succesfull login', async () => {
+  it('shows notification after successful login', async () => {
     mswMockServer.use(
       rest.post(process.env.NEXT_PUBLIC_API_URL + '/auth/login', (_req, res, ctx) => {
         return res(ctx.status(204), ctx.json({}), ctx.delay(300));

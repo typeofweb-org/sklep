@@ -69,11 +69,18 @@ const fakeTwoItemsResponse: SklepTypes['postCart200Response'] = {
   },
 };
 describe('adding products to cart', () => {
-  mswMockServer.use(
-    rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
-      return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
-    }),
-  );
+  beforeEach(() => {
+    mswMockServer.use(
+      rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
+        return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
+      }),
+    );
+    mswMockServer.use(
+      rest.patch(process.env.NEXT_PUBLIC_API_URL + '/cart/add', (_req, res, ctx) => {
+        return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
+      }),
+    );
+  });
 
   const renderHomeWithProduct = () =>
     render(

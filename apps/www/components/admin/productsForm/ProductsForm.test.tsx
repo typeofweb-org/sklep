@@ -8,12 +8,13 @@ import { mswMockServer } from '../../../jest-utils';
 import { createProduct } from '../../../utils/api/createProduct';
 
 import { ProductsForm } from './ProductsForm';
-
 describe('form for adding products', () => {
-  mswMockServer.use(
-    rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({}), ctx.delay(300));
-    }),
+  beforeEach(() =>
+    mswMockServer.use(
+      rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
+        return res(ctx.status(200), ctx.json({}), ctx.delay(300));
+      }),
+    ),
   );
 
   it('shows error after confirming without required data', () => {
@@ -41,7 +42,7 @@ describe('form for adding products', () => {
     expect(notification).toHaveTextContent('Dodałeś produkt do bazy danych');
   });
 
-  it('shows error notification after bad request server exception', async () => {
+  it('shows error notification after bad request mswMockServer exception', async () => {
     mswMockServer.use(
       rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
         return res(ctx.status(400), ctx.delay(300), ctx.json({}));
