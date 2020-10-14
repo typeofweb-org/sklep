@@ -40,7 +40,7 @@ describe('login form', () => {
   it('shows error after confirming with improper data', async () => {
     const { getByLabelText, getByText, findByRole } = renderLoginForm();
 
-    await userEvent.type(getByLabelText('Adres email'), 'testowy@test.pl');
+    await userEvent.type(getByLabelText('Adres e-mail'), 'testowy@test.pl');
     await userEvent.type(getByLabelText('Hasło'), 'niepoprawne');
 
     userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
@@ -58,7 +58,7 @@ describe('login form', () => {
 
     const { getByLabelText, getByText, findByRole } = renderLoginForm();
 
-    await userEvent.type(getByLabelText('Adres email'), 'test@test1.pl');
+    await userEvent.type(getByLabelText('Adres e-mail'), 'test@test1.pl');
     await userEvent.type(getByLabelText('Hasło'), 'qwertyTESTOWY');
 
     userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
