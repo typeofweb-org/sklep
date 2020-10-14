@@ -13951,7 +13951,6 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-<<<<<<< HEAD
 weak-napi@2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/weak-napi/-/weak-napi-2.0.2.tgz#40662d0931498397979edb38a571409f5afce6d3"
@@ -13961,16 +13960,10 @@ weak-napi@2.0.2:
     node-gyp-build "^4.2.1"
     setimmediate-napi "^1.0.3"
 
-web-vitals@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-0.2.1.tgz#60782fa690243fe35613759a0c26431f57ba7b2d"
-  integrity sha512-2pdRlp6gJpOCg0oMMqwFF0axjk5D9WInc09RSYtqFgPXQ15+YKNQ7YnBBEqAL5jvmfH9WvoXDMb8DHwux7pIew==
-=======
 web-vitals@0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-0.2.4.tgz#ec3df43c834a207fd7cdefd732b2987896e08511"
   integrity sha512-6BjspCO9VriYy12z356nL6JBS0GYeEcA457YyRzD+dD6XYCQ75NKhcOHUMHentOE7OcVCIXXDvOm0jKFfQG2Gg==
->>>>>>> f876206628828ee34976a72e3257f7b6bcc75c64
 
 webidl-conversions@^4.0.2:
   version "4.0.2"

@@ -72,10 +72,10 @@ describe('adding products to cart', () => {
   beforeEach(() => {
     mswMockServer.use(
       rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
-        return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
+        return res(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
       }),
       rest.patch(process.env.NEXT_PUBLIC_API_URL + '/cart/add', (_req, res, ctx) => {
-        return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
+        return res(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
       }),
     );
   });
@@ -89,11 +89,6 @@ describe('adding products to cart', () => {
     );
 
   it('should CartStatus badge be visible after clicking Do koszyka', async () => {
-    mswMockServer.use(
-      rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
-        return res.once(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
-      }),
-    );
     const { getByTestId, getByLabelText } = renderHomeWithProduct();
     userEvent.click(getByLabelText('Dodaj do koszyka'));
     const cartBadge = await waitFor(() => getByTestId('cartCounter'));
