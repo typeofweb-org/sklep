@@ -13,7 +13,7 @@ import { AdminSingleProduct } from './AdminSingleProduct';
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 useRouter.mockImplementation(() => ({ query: { productId: '1' }, replace() {} }));
 
-const TEST_USER_DB: Record<number, SklepTypes['getProductsProductId200Response']> = {
+const TEST_USER_DB: Record<number, SklepTypes['getProductsProductIdOrSlug200Response']> = {
   1: {
     data: {
       id: 1,
