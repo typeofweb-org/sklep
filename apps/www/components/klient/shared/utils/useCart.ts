@@ -1,39 +1,60 @@
 import React from 'react';
-import { useMutation, useQuery, useQueryCache } from 'react-query';
+import { useMutation, useQueryCache } from 'react-query';
 
-import { addToCart } from '../api/addToCart';
-import { createCart } from '../api/createCart';
+import { useToWQuery } from '../../../../utils/fetcher';
+import { addToCart, removeFromCart, setCartQuantity } from '../api/addToCart';
 
-// this hook can be extended for the wider purpose
+export const CART_QUERY_KEY = ['/cart', 'POST', {}] as const;
+
 export const useCart = () => {
-  const { data } = useQuery('createCart', createCart);
+  const { latestData: cartResponse, isLoading } = useToWQuery(CART_QUERY_KEY);
 
   const queryCache = useQueryCache();
+
   const [addToCartMutation] = useMutation(
-    (id: number) => {
-      return addToCart({ productId: id, quantity: 1 });
-    },
-    {
-      onSuccess: () => {
-        void queryCache.refetchQueries('createCart');
-      },
-    },
+    ({ productId, quantity }: { readonly productId: number; readonly quantity: number }) =>
+      addToCart({ productId, quantity }),
+    { onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY) },
   );
 
-  const itemsInCart = React.useMemo(() => {
-    if (!data) {
-      return 0;
-    }
-    return data?.cartProducts.reduce((sum, product) => {
-      return sum + product.quantity;
-    }, 0);
-  }, [data]);
+  const [setCartQuantityMutation] = useMutation(
+    ({ productId, quantity }: { readonly productId: number; readonly quantity: number }) =>
+      setCartQuantity({ productId, quantity }),
+    { onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY) },
+  );
+
+  const incrementQuantity = React.useCallback(
+    (productId: number) => addToCartMutation({ productId, quantity: 1 }),
+    [addToCartMutation],
+  );
+
+  const decrementQuantity = React.useCallback(
+    (productId: number) => addToCartMutation({ productId, quantity: -1 }),
+    [addToCartMutation],
+  );
+
+  const [removeFromCartMutation] = useMutation((id: number) => removeFromCart({ productId: id }), {
+    onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY),
+  });
 
   return React.useMemo(
     () => ({
-      itemsInCart: itemsInCart,
-      addToCart: addToCartMutation,
+      numberOfItemsInCart: cartResponse?.data.totalQuantity ?? 0,
+      cartResponseData: cartResponse?.data,
+      addToCart: incrementQuantity,
+      removeFromCart: removeFromCartMutation,
+      incrementQuantity: incrementQuantity,
+      decrementQuantity: decrementQuantity,
+      setCartQuantity: setCartQuantityMutation,
+      isLoading,
     }),
-    [addToCartMutation, itemsInCart],
+    [
+      cartResponse?.data,
+      decrementQuantity,
+      incrementQuantity,
+      isLoading,
+      removeFromCartMutation,
+      setCartQuantityMutation,
+    ],
   );
 };

@@ -1,12 +1,13 @@
 import type { SklepTypes } from '@sklep/types';
 import { Button } from 'carbon-components-react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useMutation } from 'react-query';
 
 import styles from '../../../styles/components/AdminSingleProduct.module.scss';
 import { deleteProduct } from '../../../utils/api/deleteProduct';
-import { useGetProductById } from '../../../utils/api/queryHooks';
+import { useGetProductBySlug } from '../../../utils/api/queryHooks';
 import { updateProduct } from '../../../utils/api/updateProduct';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import { ProductsForm } from '../productsForm/ProductsForm';
@@ -18,10 +19,9 @@ export const AdminSingleProduct = React.memo(() => {
   const router = useRouter();
   const productId = Number(router.query.productId);
 
-  const { latestData: latestProductResponse, isLoading, isError } = useGetProductById(productId, {
+  const { latestData: latestProductResponse, isLoading, isError } = useGetProductBySlug(productId, {
     enabled: Boolean(productId),
     refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   });
 
   const [mutate, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
@@ -67,7 +67,10 @@ export const AdminSingleProduct = React.memo(() => {
 
   return (
     <>
-      <h1 className={styles.heading}>Podstrona produktu</h1>
+      <Head>
+        <title>{'Edytuj produkt ' + (latestProductResponse?.data.name ?? '')}</title>
+      </Head>
+      <h1 className={styles.heading}>Edytuj produkt</h1>
       {latestProductResponse && (
         <>
           <ProductsForm
@@ -99,7 +102,7 @@ export const AdminSingleProduct = React.memo(() => {
 AdminSingleProduct.displayName = 'AdminSingleProduct';
 
 function getInitialValues(
-  response: SklepTypes['getProductsProductId200Response'],
+  response: SklepTypes['getProductsProductIdOrSlug200Response'],
 ): SklepTypes['postProductsRequestBody'] {
   return {
     name: response.data.name,

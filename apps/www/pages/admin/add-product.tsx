@@ -5,15 +5,11 @@ import { AdminLayout } from '../../components/admin/adminLayout/AdminLayout';
 import { ProductsForm } from '../../components/admin/productsForm/ProductsForm';
 import { createProduct } from '../../utils/api/createProduct';
 
-export default function AdminHome() {
+export default function AdminAddProductPage() {
   return (
     <>
       <Head>
-        <title>Panel admina - Dodawanie produktu</title>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/carbon-components@10.18.0/css/carbon-components.min.css"
-        />
+        <title>Dodawanie produktów</title>
       </Head>
       <AdminLayout>
         <ProductsForm mode="ADDING" mutation={createProduct} />

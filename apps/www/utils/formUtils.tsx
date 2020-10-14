@@ -61,6 +61,6 @@ export const getErrorProps = (meta: FieldMetaState<unknown>) => {
   return {
     invalid: isInvalid,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    invalidText: meta.error,
+    invalidText: meta.error || meta.submitError,
   };
 };

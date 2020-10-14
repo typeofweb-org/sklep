@@ -9,6 +9,7 @@
 /* Write you own custom component styles here */
 @import './components/hero.css';
 @import './components/cart.css';
+@import './components/stripe.css';
 
 /* Start purging... */
 @tailwind utilities;
@@ -17,7 +18,7 @@
 /* Your own custom utilities */
 @import './utils/utils.css';
 
-body.react-query-is-loading {
+body.react-query-is-loading * {
   cursor: wait;
 }
 
@@ -27,4 +28,9 @@ body.react-query-is-loading {
   clip-path: inset(50%);
   height: 1px;
   width: 1px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
 }

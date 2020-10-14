@@ -6,13 +6,16 @@ import { isProd } from '../../config';
 import { Enums } from '../../models';
 
 import {
+  calculateCartTotals,
   addToCart,
   cartModelToResponse,
   clearCart,
   ensureCartExists,
   findAllCarts,
+  findCart,
   findOrCreateCart,
   removeFromCart,
+  setProductQuantity,
 } from './cartFunctions';
 import {
   addToCartPayloadSchema,
@@ -22,25 +25,53 @@ import {
 } from './cartSchemas';
 
 declare module '@hapi/hapi' {
-  interface PluginsStates {
-    readonly cart: {
+  interface PluginProperties {
+    readonly sklepCart: {
       readonly findOrCreateCart: typeof findOrCreateCart;
       readonly addToCart: typeof addToCart;
       readonly removeFromCart: typeof removeFromCart;
       readonly clearCart: typeof clearCart;
+      readonly findCart: typeof findCart;
+      readonly calculateCartTotals: typeof calculateCartTotals;
     };
   }
 }
 
 export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
   multiple: false,
-  name: 'Sklep Cart Plugin',
+  name: 'sklepCart',
   version: '1.0.0',
   register(server, options) {
     server.expose('findOrCreateCart', findOrCreateCart);
     server.expose('addToCart', addToCart);
     server.expose('removeFromCart', removeFromCart);
     server.expose('clearCart', clearCart);
+    server.expose('findCart', findCart);
+    server.expose('calculateCartTotals', calculateCartTotals);
+
+    /**
+     * @description Delete cart when order is created
+     */
+    server.events.on('order:order:created', (order) => {
+      const cart = order.cart;
+      if (typeof cart === 'object' && cart && 'id' in cart) {
+        const { id: cartId } = cart as { readonly id: string };
+        server.app.db.cartToProduct
+          .deleteMany({
+            where: {
+              cartId,
+            },
+          })
+          .then(() =>
+            server.app.db.cart.deleteMany({
+              where: {
+                id: cartId,
+              },
+            }),
+          )
+          .catch((err) => console.error(err));
+      }
+    });
 
     server.state('cart', {
       ttl: ms('3 months'),
@@ -109,6 +140,27 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
         const { productId } = request.payload as SklepTypes['patchCartRemoveRequestBody'];
 
         await removeFromCart(request, { productId, cartId: cart.id });
+
+        return null;
+      },
+    });
+
+    server.route({
+      method: 'PATCH',
+      path: '/set',
+      options: {
+        tags: ['api', 'cart'],
+        auth: false,
+        validate: {
+          payload: addToCartPayloadSchema,
+        },
+      },
+      async handler(request, h) {
+        const cart = await ensureCartExists(request, h);
+
+        const { quantity, productId } = request.payload as SklepTypes['patchCartAddRequestBody'];
+
+        await setProductQuantity(request, { quantity, productId, cartId: cart.id });
 
         return null;
       },

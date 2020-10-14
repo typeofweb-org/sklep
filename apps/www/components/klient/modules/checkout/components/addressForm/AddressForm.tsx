@@ -108,9 +108,9 @@ export const AddressForm = React.memo(() => {
         </Field>
       </label>
       <label className={labelStyles}>
-        <span className={labelTitleStyles}>Adres email</span>
+        <span className={labelTitleStyles}>Adres e-mail</span>
         <Field name="email" type="email">
-          {({ input }) => <input {...input} placeholder="Adres email" className={fieldStyles} />}
+          {({ input }) => <input {...input} placeholder="Adres e-mail" className={fieldStyles} />}
         </Field>
       </label>
     </div>

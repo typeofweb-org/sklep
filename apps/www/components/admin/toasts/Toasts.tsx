@@ -1,7 +1,7 @@
 import type { Nil } from '@sklep/types';
 import type { ToastNotificationProps } from 'carbon-components-react';
 import { ToastNotification } from 'carbon-components-react';
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 import styles from './toasts.module.scss';
@@ -52,13 +52,17 @@ export const ToastsContextProvider = ({ children }: { readonly children: React.R
 
 export const useToasts = () => {
   const toastsContext = useContext(ToastsContext);
+  const nextToastId = useRef(0);
   if (!toastsContext) {
     throw new Error('Missing ToastsContextProvider!');
   }
 
   const addToast = React.useCallback(
     (props: ToastNotificationProps) => {
-      toastsContext.setToasts((toasts) => [...toasts, { id: String(toasts.length + 1), ...props }]);
+      toastsContext.setToasts((toasts) => [
+        ...toasts,
+        { id: String(nextToastId.current++), ...props },
+      ]);
     },
     [toastsContext],
   );

@@ -84,3 +84,25 @@ model CartToProduct {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
+
+model Order {
+  id String @default(uuid()) @id
+  cart Json
+  
+  total Int
+  stripePaymentIntentId String? @unique
+
+  // @todo add address
+
+  status OrderStatus @default(PENDING)
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+  REFUNDED
+  FAILED
+}

@@ -61,6 +61,8 @@ export interface definitions {
   Model12: { email: string; password: string };
   Model13: { productId: number; quantity: number };
   Model14: { productId: number };
+  Model15: { orderId: string; stripeClientSecret: string };
+  Model16: { data: definitions['Model15'] };
 
   getProductsRequestQuery: {
     take?: number;
@@ -75,11 +77,36 @@ export interface definitions {
   getAuthMe200Response: definitions['Model4'];
 
   getCartAll200Response: definitions['Model8'];
-  getProductsProductIdRequestPathParams: {
-    productId: number;
+  getProductsProductIdOrSlugRequestPathParams: {
+    productIdOrSlug: number | string;
   };
 
-  getProductsProductId200Response: definitions['Model9'];
+  getProductsProductIdOrSlug200Response: definitions['Model9'];
+
+  postCart200Response: definitions['Model10'];
+  postAuthLoginRequestBody: definitions['Model12'];
+
+  postAuthLoginDefaultResponse: string;
+
+  postAuthLogoutDefaultResponse: string;
+  postAuthRegisterRequestBody: definitions['Model12'];
+
+  postAuthRegisterDefaultResponse: string;
+
+  postOrdersStripeWebhookDefaultResponse: string;
+  patchCartAddRequestBody: definitions['Model13'];
+
+  patchCartAddDefaultResponse: string;
+
+  patchCartClearDefaultResponse: string;
+  patchCartRemoveRequestBody: definitions['Model14'];
+
+  patchCartRemoveDefaultResponse: string;
+  patchCartSetRequestBody: definitions['Model13'];
+
+  patchCartSetDefaultResponse: string;
+
+  patchOrdersInitiateStripePayment200Response: definitions['Model16'];
   putProductsProductIdRequestPathParams: {
     productId: number;
   };
@@ -91,24 +118,6 @@ export interface definitions {
   };
 
   deleteProductsProductIdDefaultResponse: string;
-
-  postCart200Response: definitions['Model10'];
-  postAuthLoginRequestBody: definitions['Model12'];
-
-  postAuthLoginDefaultResponse: string;
-
-  postAuthLogoutDefaultResponse: string;
-  postAuthRegisterRequestBody: definitions['Model12'];
-
-  postAuthRegisterDefaultResponse: string;
-  patchCartAddRequestBody: definitions['Model13'];
-
-  patchCartAddDefaultResponse: string;
-
-  patchCartClearDefaultResponse: string;
-  patchCartRemoveRequestBody: definitions['Model14'];
-
-  patchCartRemoveDefaultResponse: string;
 
   pathsDefinitions: {
     '/products': {
@@ -136,28 +145,13 @@ export interface definitions {
         response: definitions['Model8'];
       };
     };
-    '/products/{productId}': {
+    '/products/{productIdOrSlug}': {
       GET: {
         requestPathParams: {
-          productId: number;
+          productIdOrSlug: number | string;
         };
 
         response: definitions['Model9'];
-      };
-      PUT: {
-        requestPathParams: {
-          productId: number;
-        };
-        requestBody: definitions['Model11'];
-
-        response: definitions['Model9'];
-      };
-      DELETE: {
-        requestPathParams: {
-          productId: number;
-        };
-
-        response: string;
       };
     };
     '/cart': {
@@ -184,6 +178,11 @@ export interface definitions {
         response: string;
       };
     };
+    '/orders/stripe/webhook': {
+      POST: {
+        response: string;
+      };
+    };
     '/cart/add': {
       PATCH: {
         requestBody: definitions['Model13'];
@@ -199,6 +198,35 @@ export interface definitions {
     '/cart/remove': {
       PATCH: {
         requestBody: definitions['Model14'];
+
+        response: string;
+      };
+    };
+    '/cart/set': {
+      PATCH: {
+        requestBody: definitions['Model13'];
+
+        response: string;
+      };
+    };
+    '/orders/initiate-stripe-payment': {
+      PATCH: {
+        response: definitions['Model16'];
+      };
+    };
+    '/products/{productId}': {
+      PUT: {
+        requestPathParams: {
+          productId: number;
+        };
+        requestBody: definitions['Model11'];
+
+        response: definitions['Model9'];
+      };
+      DELETE: {
+        requestPathParams: {
+          productId: number;
+        };
 
         response: string;
       };

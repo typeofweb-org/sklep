@@ -3,17 +3,18 @@ import { parse } from 'url';
 import type { Nil } from '@sklep/types';
 
 type NameToType = {
+  readonly CART_COOKIE_PASSWORD: string;
+  readonly COOKIE_DOMAIN: string;
+  readonly COOKIE_PASSWORD: string;
+  readonly DATABASE_URL: string;
+  readonly DB_HOSTNAME: string;
+  readonly DB_NAME: string;
+  readonly DB_PASSWORD: string;
+  readonly DB_USERNAME: string;
   readonly ENV: 'production' | 'staging' | 'development' | 'test';
   readonly NODE_ENV: 'production' | 'development';
   readonly PORT: number;
-  readonly COOKIE_DOMAIN: string;
-  readonly COOKIE_PASSWORD: string;
-  readonly CART_COOKIE_PASSWORD: string;
-  readonly DB_USERNAME: string;
-  readonly DB_PASSWORD: string;
-  readonly DB_NAME: string;
-  readonly DB_HOSTNAME: string;
-  readonly DATABASE_URL: string;
+  readonly STRIPE_API_KEY: string;
 };
 
 function getConfigForName<T extends keyof NameToType>(name: T): Nil<NameToType[T]>;
