@@ -51,7 +51,7 @@ export const ToastContextProvider = ({ children }: { readonly children: React.Re
 export const useToast = () => {
   const context = React.useContext(ToastContext);
   if (context === undefined) {
-    throw new Error('useCountState must be used within a ToastContextProvider');
+    throw new Error('useToast must be used within a ToastContextProvider');
   }
   return context;
 };
