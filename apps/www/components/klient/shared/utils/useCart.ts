@@ -11,14 +11,14 @@ export const useCart = () => {
   const { latestData: cartResponse, isLoading } = useToWQuery(CART_QUERY_KEY);
 
   const queryCache = useQueryCache();
-  const context = useToast();
+  const toast = useToast();
 
   const [addToCartMutation] = useMutation(
     ({ productId, quantity }: { readonly productId: number; readonly quantity: number }) =>
       addToCart({ productId, quantity }),
     {
       onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY),
-      onSuccess: () => context?.setIsVisible(true),
+      onSuccess: () => toast?.setIsVisible(true),
     },
   );
 
