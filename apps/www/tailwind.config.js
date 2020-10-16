@@ -9,6 +9,9 @@ module.exports = {
       colors: {
         'accent-1': '#333',
       },
+      minHeight: {
+        14: '3rem',
+      },
     },
   },
   variants: {},

@@ -11,7 +11,7 @@ export const ProductDescription = React.memo<ProductDescriptionProps>(({ name })
     <div className="flex justify-between items-center pt-2">
       <p className="text-gray-600 pr-2">{name}</p>
       <div className="flex self-start">
-        <button aria-label="Ulubione" className="pl-3 inline-block" title="Dodaj do ulubionych">
+        <button aria-label="Ulubione" className="" title="Dodaj do ulubionych">
           <HeartIcon />
         </button>
       </div>

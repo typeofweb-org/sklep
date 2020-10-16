@@ -4,7 +4,7 @@ import { useMutation, useQueryCache } from 'react-query';
 import { useToWQuery } from '../../../../utils/fetcher';
 import { addToCart, removeFromCart, setCartQuantity } from '../api/addToCart';
 
-const CART_QUERY_KEY = ['/cart', 'POST', {}] as const;
+export const CART_QUERY_KEY = ['/cart', 'POST', {}] as const;
 
 export const useCart = () => {
   const { latestData: cartResponse, isLoading } = useToWQuery(CART_QUERY_KEY);
