@@ -18,7 +18,7 @@ export const useCart = () => {
       addToCart({ productId, quantity }),
     {
       onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY),
-      onSuccess: () => toast?.setIsVisible(true),
+      onSuccess: () => toast.setIsVisible(true),
     },
   );
 

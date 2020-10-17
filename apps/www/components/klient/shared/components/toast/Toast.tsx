@@ -1,5 +1,5 @@
 import type { Nil } from '@sklep/types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 import { SuccessIcon } from '../icons/SuccessIcon';
@@ -17,12 +17,17 @@ interface ToastProps {
 }
 
 export const Toast = ({ isVisible, hideToast }: ToastProps) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      hideToast();
+    }, 2000);
+    return () => clearTimeout(timeout);
+  });
+
   if (!isVisible) {
     return null;
   }
-  setTimeout(() => {
-    hideToast();
-  }, 2000);
+
   return ReactDOM.createPortal(
     <div className="fixed top-0 right-0 px-2 h-12 mr-2 mt-2 bg-white flex items-center justify-center rounded slide-left border-l-4 border-green-600 shadow z-50">
       <div className="flex justify-center items-center">
@@ -36,9 +41,9 @@ export const Toast = ({ isVisible, hideToast }: ToastProps) => {
 
 export const ToastContextProvider = ({ children }: { readonly children: React.ReactNode }) => {
   const [isVisible, setIsVisible] = React.useState(false);
-  const hideToast = () => {
+  const hideToast = React.useCallback(() => {
     setIsVisible(false);
-  };
+  }, []);
 
   return (
     <ToastContext.Provider value={{ isVisible, setIsVisible }}>
@@ -50,7 +55,7 @@ export const ToastContextProvider = ({ children }: { readonly children: React.Re
 
 export const useToast = () => {
   const context = React.useContext(ToastContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useToast must be used within a ToastContextProvider');
   }
   return context;
