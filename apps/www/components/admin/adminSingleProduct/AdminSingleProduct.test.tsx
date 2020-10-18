@@ -3,9 +3,9 @@ import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 import React from 'react';
 
+import { mswMockServer } from '../../../jest-utils';
 import { ToastsContextProvider } from '../toasts/Toasts';
 
 import { AdminSingleProduct } from './AdminSingleProduct';
@@ -36,23 +36,16 @@ function renderAdminSingleProduct() {
   );
 }
 
-const server = setupServer(
-  rest.get(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (req, res, ctx) => {
-    const productId = Number(req.params.productId);
-    const productData = TEST_USER_DB[productId] || {};
-    return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
-  }),
-  rest.delete(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (req, res, ctx) => {
-    const productId = Number(req.params.productId);
-    const productData = TEST_USER_DB[productId] || {};
-    return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
-  }),
-);
-
 describe('single product page', () => {
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  beforeEach(() =>
+    mswMockServer.use(
+      rest.get(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (req, res, ctx) => {
+        const productId = Number(req.params.productId);
+        const productData = TEST_USER_DB[productId] || {};
+        return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
+      }),
+    ),
+  );
 
   it('loads product data', async () => {
     const { findByLabelText } = renderAdminSingleProduct();
@@ -72,30 +65,40 @@ describe('single product page', () => {
   });
 
   it('deletes product', async () => {
+    mswMockServer.use(
+      rest.delete(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (req, res, ctx) => {
+        const productId = Number(req.params.productId);
+        const productData = TEST_USER_DB[productId] || {};
+        return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
+      }),
+    );
+
     const { findByText, findByRole } = renderAdminSingleProduct();
     const deleteButton = await findByText('Usuń produkt');
 
     userEvent.click(deleteButton);
 
-    const confirmDeletetionButton = await findByText('Usuń');
+    const confirmDeleteButton = await findByText('Usuń');
+    expect(confirmDeleteButton).toBeInTheDocument();
 
-    expect(confirmDeletetionButton).toBeInTheDocument();
-
-    userEvent.click(confirmDeletetionButton);
+    userEvent.click(confirmDeleteButton);
 
     const notification = await findByRole('alert');
-
     expect(notification).toHaveTextContent('Produkt został usunięty pomyślnie');
   });
 
   it('shows error message after it fails to load a product', async () => {
-    server.use(
+    mswMockServer.use(
       rest.get(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (_req, res, ctx) => {
         return res(ctx.status(400), ctx.delay(300), ctx.json({ message: 'Bad data' }));
       }),
     );
     const { findByText } = renderAdminSingleProduct();
-    const errorMessage = await findByText('Wystąpił błąd podczas pobierania danych produktu');
+    const errorMessage = await findByText(
+      'Wystąpił błąd podczas pobierania danych produktu',
+      {},
+      { timeout: 10000 }, // React query will try to refetch several times
+    );
     expect(errorMessage).toBeInTheDocument();
   });
 });
