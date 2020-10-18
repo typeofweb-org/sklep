@@ -18,11 +18,14 @@ interface ToastProps {
 
 export const Toast = ({ isVisible, hideToast }: ToastProps) => {
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      hideToast();
-    }, 2000);
-    return () => clearTimeout(timeout);
-  });
+    if (isVisible) {
+      const timeout = setTimeout(() => {
+        hideToast();
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+    return;
+  }, [isVisible, hideToast]);
 
   if (!isVisible) {
     return null;
