@@ -4,10 +4,6 @@ export const PRODUCT_FIELDS = [
     label: 'Name',
   },
   {
-    name: 'description',
-    label: 'Description',
-  },
-  {
     name: 'isPublic',
     label: 'Public',
   },
