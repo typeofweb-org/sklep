@@ -9,6 +9,7 @@ import { mswMockServer } from '../../../../../jest-utils';
 import { Hero } from '../../../modules/hero/Hero';
 import { ProductCollection } from '../../../modules/productCollection/ProductCollection';
 import { Layout } from '../../../shared/components/layout/Layout';
+import { ToastContextProvider } from '../toast/Toast';
 
 const fakeProducts: SklepTypes['getProducts200Response']['data'] = [
   {
@@ -68,6 +69,17 @@ const fakeTwoItemsResponse: SklepTypes['postCart200Response'] = {
     totalQuantity: 2,
   },
 };
+
+const renderHomeWithProduct = () =>
+  render(
+    <ToastContextProvider>
+      <Layout title="Sklep strona główna">
+        <Hero />
+        <ProductCollection products={fakeProducts} />
+      </Layout>
+    </ToastContextProvider>,
+  );
+
 describe('adding products to cart', () => {
   beforeEach(() => {
     mswMockServer.use(
@@ -79,14 +91,6 @@ describe('adding products to cart', () => {
       }),
     );
   });
-
-  const renderHomeWithProduct = () =>
-    render(
-      <Layout title="Sklep strona główna">
-        <Hero />
-        <ProductCollection products={fakeProducts} />
-      </Layout>,
-    );
 
   it('should CartStatus badge be visible after clicking Do koszyka', async () => {
     const { getByTestId, getByLabelText } = renderHomeWithProduct();
