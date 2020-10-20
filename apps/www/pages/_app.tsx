@@ -8,6 +8,8 @@ import { ReactQueryDevtools } from 'react-query-devtools';
 import type { DehydratedState } from 'react-query/hydration';
 import { Hydrate } from 'react-query/hydration';
 
+import { ToastContextProvider } from '../components/klient/shared/components/toast/Toast';
+
 const queryCache = new QueryCache();
 const reactQueryConfigOverrides: ReactQueryConfig = {
   queries: {
@@ -23,10 +25,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ReactQueryCacheProvider queryCache={queryCache}>
       <ReactQueryConfigProvider config={reactQueryConfigOverrides}>
-        <Hydrate state={dehydratedState}>
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Hydrate>
+        <ToastContextProvider>
+          <Hydrate state={dehydratedState}>
+            <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Hydrate>
+        </ToastContextProvider>
       </ReactQueryConfigProvider>
     </ReactQueryCacheProvider>
   );
