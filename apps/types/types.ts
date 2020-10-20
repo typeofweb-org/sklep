@@ -48,9 +48,24 @@ export interface definitions {
   };
   Model7: definitions['Model6'][];
   Model8: { data: definitions['Model7'] };
-  Model9: { data: definitions['Model1'] };
-  Model10: { data: definitions['Model6'] };
-  Model11: {
+  cart: { [key: string]: any };
+  Model9: {
+    id: string;
+    cart: definitions['cart'];
+    total: number;
+    status:
+      | 'PENDING'
+      | 'PROCESSING'
+      | 'ON_HOLD'
+      | 'COMPLETED'
+      | 'CANCELLED'
+      | 'REFUNDED'
+      | 'FAILED';
+  };
+  Model10: { data: definitions['Model9'] };
+  Model11: { data: definitions['Model1'] };
+  Model12: { data: definitions['Model6'] };
+  Model13: {
     name: string;
     description: string;
     isPublic: boolean;
@@ -58,11 +73,11 @@ export interface definitions {
     discountPrice?: number;
     type: 'SINGLE' | 'BUNDLE';
   };
-  Model12: { email: string; password: string };
-  Model13: { productId: number; quantity: number };
-  Model14: { productId: number };
-  Model15: { orderId: string; stripeClientSecret: string };
-  Model16: { data: definitions['Model15'] };
+  Model14: { email: string; password: string };
+  Model15: { productId: number; quantity: number };
+  Model16: { productId: number };
+  Model17: { orderId: string; stripeClientSecret: string };
+  Model18: { data: definitions['Model17'] };
 
   getProductsRequestQuery: {
     take?: number;
@@ -70,49 +85,54 @@ export interface definitions {
   };
 
   getProducts200Response: definitions['Model2'];
-  postProductsRequestBody: definitions['Model11'];
+  postProductsRequestBody: definitions['Model13'];
 
-  postProducts200Response: definitions['Model9'];
+  postProducts200Response: definitions['Model11'];
 
   getAuthMe200Response: definitions['Model4'];
 
   getCartAll200Response: definitions['Model8'];
+  getOrdersOrderIdRequestPathParams: {
+    orderId: string;
+  };
+
+  getOrdersOrderId200Response: definitions['Model10'];
   getProductsProductIdOrSlugRequestPathParams: {
     productIdOrSlug: number | string;
   };
 
-  getProductsProductIdOrSlug200Response: definitions['Model9'];
+  getProductsProductIdOrSlug200Response: definitions['Model11'];
 
-  postCart200Response: definitions['Model10'];
-  postAuthLoginRequestBody: definitions['Model12'];
+  postCart200Response: definitions['Model12'];
+  postAuthLoginRequestBody: definitions['Model14'];
 
   postAuthLoginDefaultResponse: string;
 
   postAuthLogoutDefaultResponse: string;
-  postAuthRegisterRequestBody: definitions['Model12'];
+  postAuthRegisterRequestBody: definitions['Model14'];
 
   postAuthRegisterDefaultResponse: string;
 
   postOrdersStripeWebhookDefaultResponse: string;
-  patchCartAddRequestBody: definitions['Model13'];
+  patchCartAddRequestBody: definitions['Model15'];
 
   patchCartAddDefaultResponse: string;
 
   patchCartClearDefaultResponse: string;
-  patchCartRemoveRequestBody: definitions['Model14'];
+  patchCartRemoveRequestBody: definitions['Model16'];
 
   patchCartRemoveDefaultResponse: string;
-  patchCartSetRequestBody: definitions['Model13'];
+  patchCartSetRequestBody: definitions['Model15'];
 
   patchCartSetDefaultResponse: string;
 
-  patchOrdersInitiateStripePayment200Response: definitions['Model16'];
+  patchOrdersInitiateStripePayment200Response: definitions['Model18'];
   putProductsProductIdRequestPathParams: {
     productId: number;
   };
-  putProductsProductIdRequestBody: definitions['Model11'];
+  putProductsProductIdRequestBody: definitions['Model13'];
 
-  putProductsProductId200Response: definitions['Model9'];
+  putProductsProductId200Response: definitions['Model11'];
   deleteProductsProductIdRequestPathParams: {
     productId: number;
   };
@@ -130,9 +150,9 @@ export interface definitions {
         response: definitions['Model2'];
       };
       POST: {
-        requestBody: definitions['Model11'];
+        requestBody: definitions['Model13'];
 
-        response: definitions['Model9'];
+        response: definitions['Model11'];
       };
     };
     '/auth/me': {
@@ -145,23 +165,32 @@ export interface definitions {
         response: definitions['Model8'];
       };
     };
+    '/orders/{orderId}': {
+      GET: {
+        requestPathParams: {
+          orderId: string;
+        };
+
+        response: definitions['Model10'];
+      };
+    };
     '/products/{productIdOrSlug}': {
       GET: {
         requestPathParams: {
           productIdOrSlug: number | string;
         };
 
-        response: definitions['Model9'];
+        response: definitions['Model11'];
       };
     };
     '/cart': {
       POST: {
-        response: definitions['Model10'];
+        response: definitions['Model12'];
       };
     };
     '/auth/login': {
       POST: {
-        requestBody: definitions['Model12'];
+        requestBody: definitions['Model14'];
 
         response: string;
       };
@@ -173,7 +202,7 @@ export interface definitions {
     };
     '/auth/register': {
       POST: {
-        requestBody: definitions['Model12'];
+        requestBody: definitions['Model14'];
 
         response: string;
       };
@@ -185,7 +214,7 @@ export interface definitions {
     };
     '/cart/add': {
       PATCH: {
-        requestBody: definitions['Model13'];
+        requestBody: definitions['Model15'];
 
         response: string;
       };
@@ -197,21 +226,21 @@ export interface definitions {
     };
     '/cart/remove': {
       PATCH: {
-        requestBody: definitions['Model14'];
+        requestBody: definitions['Model16'];
 
         response: string;
       };
     };
     '/cart/set': {
       PATCH: {
-        requestBody: definitions['Model13'];
+        requestBody: definitions['Model15'];
 
         response: string;
       };
     };
     '/orders/initiate-stripe-payment': {
       PATCH: {
-        response: definitions['Model16'];
+        response: definitions['Model18'];
       };
     };
     '/products/{productId}': {
@@ -219,9 +248,9 @@ export interface definitions {
         requestPathParams: {
           productId: number;
         };
-        requestBody: definitions['Model11'];
+        requestBody: definitions['Model13'];
 
-        response: definitions['Model9'];
+        response: definitions['Model11'];
       };
       DELETE: {
         requestPathParams: {

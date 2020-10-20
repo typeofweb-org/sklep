@@ -1,12 +1,18 @@
 import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
+import type { SklepTypes } from '@sklep/types';
 import Stripe from 'stripe';
 
 import type { Models } from '../../models';
+import { cartModelToResponse } from '../cart/cartFunctions';
 
-import { createOrder, handleStripeEvent } from './orderFunctions';
-import { initiateStripePaymentResponse } from './orderSchemas';
+import { createOrder, findOrderById, handleStripeEvent } from './orderFunctions';
+import {
+  getOrderByIdParamsSchema,
+  getOrderByIdResponseSchema,
+  initiateStripePaymentResponse,
+} from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
 
@@ -32,6 +38,31 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
     server.event(ORDER_CREATED_EVENT);
 
     server.route({
+      method: 'GET',
+      path: '/{orderId}',
+      options: {
+        tags: ['api', 'order'],
+        validate: {
+          params: getOrderByIdParamsSchema,
+        },
+        response: {
+          schema: getOrderByIdResponseSchema,
+        },
+        auth: false,
+      },
+      async handler(request) {
+        const { orderId } = request.params as SklepTypes['getOrdersOrderIdRequestPathParams'];
+
+        const order = await findOrderById(request, { orderId });
+
+        if (!order) {
+          throw Boom.notFound('Order not found');
+        }
+        return { data: order };
+      },
+    });
+
+    server.route({
       method: 'PATCH',
       path: '/initiate-stripe-payment',
       options: {
@@ -39,6 +70,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         response: {
           schema: initiateStripePaymentResponse,
         },
+        auth: false,
       },
       async handler(request) {
         const cart = await request.server.plugins.sklepCart.findCart(request);
@@ -49,7 +81,9 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         const totals = request.server.plugins.sklepCart.calculateCartTotals(cart);
         const cartTotal = totals.discountSubTotal;
 
-        const cartJson = JSON.parse(JSON.stringify(cart)) as InputJsonObject;
+        const cartJson = JSON.parse(
+          JSON.stringify(request.server.plugins.sklepCart.cartModelToResponse(cart)),
+        ) as InputJsonObject;
 
         const paymentIntent = await stripe.paymentIntents.create({
           amount: cartTotal,
