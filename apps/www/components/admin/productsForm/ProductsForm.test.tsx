@@ -2,20 +2,14 @@ import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 import React from 'react';
 
+import { mswMockServer } from '../../../jest-utils';
 import { createProduct } from '../../../utils/api/createProduct';
 import { ToastsContextProvider } from '../toasts/Toasts';
 
 import type { ProductsFormProps } from './ProductsForm';
 import { ProductsForm } from './ProductsForm';
-
-const server = setupServer(
-  rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({}), ctx.delay(300));
-  }),
-);
 
 function renderProductsForm(productsFormProps: ProductsFormProps) {
   return render(
@@ -26,9 +20,13 @@ function renderProductsForm(productsFormProps: ProductsFormProps) {
 }
 
 describe('form for adding products', () => {
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  beforeEach(() =>
+    mswMockServer.use(
+      rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
+        return res(ctx.status(200), ctx.json({}), ctx.delay(300));
+      }),
+    ),
+  );
 
   it('shows error after confirming without required data', () => {
     const { getByText } = renderProductsForm({ mode: 'ADDING', mutation: createProduct });
@@ -56,8 +54,8 @@ describe('form for adding products', () => {
     expect(notification).toHaveTextContent('Dodałeś produkt do bazy danych');
   });
 
-  it('shows error notification after bad request server exception', async () => {
-    server.use(
+  it('shows error notification after bad request mswMockServer exception', async () => {
+    mswMockServer.use(
       rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
         return res(ctx.status(400), ctx.delay(300), ctx.json({}));
       }),
