@@ -5,7 +5,6 @@ import type { SklepTypes } from '@sklep/types';
 import Stripe from 'stripe';
 
 import type { Models } from '../../models';
-import { cartModelToResponse } from '../cart/cartFunctions';
 
 import { createOrder, findOrderById, handleStripeEvent } from './orderFunctions';
 import {
