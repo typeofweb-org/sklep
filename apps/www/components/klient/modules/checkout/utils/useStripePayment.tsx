@@ -18,22 +18,22 @@ export function useStripePayment() {
     }
 
     const {
-      data: { stripeClientSecret },
+      data: { stripeClientSecret, orderId },
     } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {});
 
     if (!stripeClientSecret) {
       throw new Error(`Couldn't obtain stripe client secret`);
     }
 
-    const payload = await stripe.confirmCardPayment(stripeClientSecret, {
+    const stripeResponse = await stripe.confirmCardPayment(stripeClientSecret, {
       payment_method: {
         card: cardElement,
       },
     });
-    if (payload.error) {
-      throw payload.error;
+    if (stripeResponse.error) {
+      throw stripeResponse.error;
     }
-    return payload.paymentIntent;
+    return { paymentIntent: stripeResponse.paymentIntent, orderId };
   }, [elements, stripe]);
 
   return useMutation(pay, {

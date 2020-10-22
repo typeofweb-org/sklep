@@ -30,6 +30,20 @@ export async function createOrder(
   return order;
 }
 
+export function findOrderById(request: Request, { orderId }: { readonly orderId: string }) {
+  return request.server.app.db.order.findFirst({
+    where: {
+      id: orderId,
+    },
+    select: {
+      id: true,
+      cart: true,
+      total: true,
+      status: true,
+    },
+  });
+}
+
 const stripeWebhookEventToOrderStatus = {
   'payment_intent.created': Enums.OrderStatus.PENDING,
   'payment_intent.processing': Enums.OrderStatus.PROCESSING,
