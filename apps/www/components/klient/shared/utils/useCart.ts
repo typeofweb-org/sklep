@@ -3,6 +3,7 @@ import { useMutation, useQueryCache } from 'react-query';
 
 import { useToWQuery } from '../../../../utils/fetcher';
 import { addToCart, removeFromCart, setCartQuantity } from '../api/addToCart';
+import { useToast } from '../components/toast/Toast';
 
 export const CART_QUERY_KEY = ['/cart', 'POST', {}] as const;
 
@@ -10,11 +11,15 @@ export const useCart = () => {
   const { latestData: cartResponse, isLoading } = useToWQuery(CART_QUERY_KEY);
 
   const queryCache = useQueryCache();
+  const toast = useToast();
 
   const [addToCartMutation] = useMutation(
     ({ productId, quantity }: { readonly productId: number; readonly quantity: number }) =>
       addToCart({ productId, quantity }),
-    { onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY) },
+    {
+      onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY),
+      onSuccess: () => toast.setIsVisible(true),
+    },
   );
 
   const [setCartQuantityMutation] = useMutation(

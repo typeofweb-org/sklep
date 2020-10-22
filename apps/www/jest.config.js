@@ -13,4 +13,5 @@ module.exports = {
   },
   setupFiles: ['./jest-setup.ts'],
   setupFilesAfterEnv: ['next', 'jest-extended', './jest-setup-after.ts'],
+  testTimeout: 10000,
 };

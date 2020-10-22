@@ -33,6 +33,7 @@ declare module '@hapi/hapi' {
       readonly clearCart: typeof clearCart;
       readonly findCart: typeof findCart;
       readonly calculateCartTotals: typeof calculateCartTotals;
+      readonly cartModelToResponse: typeof cartModelToResponse;
     };
   }
 }
@@ -48,6 +49,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
     server.expose('clearCart', clearCart);
     server.expose('findCart', findCart);
     server.expose('calculateCartTotals', calculateCartTotals);
+    server.expose('cartModelToResponse', cartModelToResponse);
 
     /**
      * @description Delete cart when order is created

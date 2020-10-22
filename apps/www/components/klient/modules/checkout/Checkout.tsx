@@ -1,11 +1,11 @@
 import type { SklepTypes } from '@sklep/types';
+import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
 
 import { FinalFormWrapper } from '../../utils/formUtils';
 
 import { AddressForm } from './components/addressForm/AddressForm';
-import { StripeAfterPaymentMessage } from './components/stripeAfterPaymentMessage/StripeAfterPaymentMessage';
 import { CheckoutSummary } from './components/summary/CheckoutSummary';
 import { useStripePayment } from './utils/useStripePayment';
 
@@ -26,11 +26,15 @@ const checkoutSchema = Yup.object({
 export type CheckoutType = Yup.InferType<typeof checkoutSchema>;
 
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
-  const [processPayment, { isLoading, isSuccess }] = useStripePayment();
+  const router = useRouter();
+  const [processPayment, { isLoading }] = useStripePayment();
 
-  const handleSubmit = React.useCallback(() => {
-    return processPayment();
-  }, [processPayment]);
+  const handleSubmit = React.useCallback(async () => {
+    const response = await processPayment();
+    if (response?.orderId) {
+      await router.replace(`/zamowienie/${response.orderId}`);
+    }
+  }, [processPayment, router]);
 
   return (
     <>
@@ -45,8 +49,7 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
         <AddressForm />
         <CheckoutSummary cart={cart} processing={isLoading} />
       </FinalFormWrapper>
-      {/* @todo */}
-      {isSuccess && <StripeAfterPaymentMessage />}
+      {/* @todo błędy płatności */}
     </>
   );
 });

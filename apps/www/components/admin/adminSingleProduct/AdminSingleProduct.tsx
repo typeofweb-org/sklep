@@ -20,7 +20,6 @@ export const AdminSingleProduct = React.memo(() => {
   const productId = Number(router.query.productId);
 
   const { latestData: latestProductResponse, isLoading, isError } = useGetProductBySlug(productId, {
-    enabled: Boolean(productId),
     refetchOnReconnect: false,
   });
 
