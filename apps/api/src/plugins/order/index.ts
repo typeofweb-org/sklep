@@ -1,12 +1,13 @@
 import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 
 import type { Models } from '../../models';
+import { Enums } from '../../models';
 
-import { createOrder, handleStripeEvent } from './orderFunctions';
-import { initiateStripePaymentResponse } from './orderSchemas';
+import { createOrder, getAllOrders, handleStripeEvent } from './orderFunctions';
+import { getAllOrdersResponseSchema, initiateStripePaymentResponse } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
 
@@ -86,6 +87,27 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         await handleStripeEvent(request, event);
 
         return null;
+      },
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/',
+      options: {
+        tags: ['api', 'orders'],
+        auth: {
+          scope: [Enums.UserRole.ADMIN],
+        },
+        response: {
+          schema: getAllOrdersResponseSchema,
+        },
+      },
+      async handler(request) {
+        const orders = await getAllOrders(request);
+
+        return {
+          data: orders,
+        };
       },
     });
   },

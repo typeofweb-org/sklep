@@ -10,7 +10,7 @@ export const removeFromCartPayloadSchema = Joi.object<SklepTypes['patchCartRemov
   productId: Joi.number().integer().required(),
 }).required();
 
-const cartResponseSchema = Joi.object({
+export const cartResponseSchema = Joi.object({
   id: Joi.string().required(),
   createdAt: Joi.date().iso().required(),
   updatedAt: Joi.date().iso().required(),
