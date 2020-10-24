@@ -47,6 +47,7 @@ export const useCart = () => {
       numberOfItemsInCart: cartResponse?.data.totalQuantity ?? 0,
       cartResponseData: cartResponse?.data,
       addToCart: incrementQuantity,
+      addToCartByQuantity: addToCartMutation,
       removeFromCart: removeFromCartMutation,
       incrementQuantity: incrementQuantity,
       decrementQuantity: decrementQuantity,
@@ -60,6 +61,7 @@ export const useCart = () => {
       isLoading,
       removeFromCartMutation,
       setCartQuantityMutation,
+      addToCartMutation,
     ],
   );
 };
