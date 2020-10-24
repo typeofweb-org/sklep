@@ -31,6 +31,7 @@
     "react-dom": "16.14.0",
     "react-final-form": "6.5.1",
     "react-modal-promise": "0.5.3",
+    "react-number-format": "4.4.1",
     "react-query": "2.23.1",
     "slugify": "1.4.5",
     "tailwindcss": "1.9.5",
