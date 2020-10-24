@@ -14,11 +14,12 @@ export const initiateStripePaymentResponse = Joi.object<
 }).required();
 
 export const orderResponseSchema = Joi.object({
-  id: Joi.number().required(),
+  id: Joi.string().required(),
   cart: cartResponseSchema.required(),
   total: Joi.number().required(),
-  stripePaymentIntentId: Joi.string().required(),
-  status: Joi.string().required(),
+  status: Joi.string()
+    .valid(...Object.keys(Enums.OrderStatus))
+    .required(),
 }).required();
 
 export const getAllOrdersResponseSchema = Joi.object({
@@ -31,12 +32,5 @@ export const getOrderByIdParamsSchema = Joi.object<SklepTypes['getOrdersOrderIdR
   },
 );
 export const getOrderByIdResponseSchema = Joi.object<SklepTypes['getOrdersOrderId200Response']>({
-  data: Joi.object({
-    id: Joi.string().required(),
-    cart: Joi.object().unknown(true).required(),
-    total: Joi.number().required(),
-    status: Joi.string()
-      .valid(...Object.keys(Enums.OrderStatus))
-      .required(),
-  }).required(),
+  data: orderResponseSchema.required(),
 }).required();
