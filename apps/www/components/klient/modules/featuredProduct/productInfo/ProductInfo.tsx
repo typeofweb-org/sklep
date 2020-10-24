@@ -24,9 +24,10 @@ type FormData = {
   readonly quantity: number;
 };
 
+const validate = createFormValidator(quantitySchema);
+
 export const ProductInfo = React.memo<ContentProps>(({ product }) => {
   const { addToCartByQuantity } = useCart();
-  const validate = React.useMemo(() => createFormValidator(quantitySchema), []);
 
   const handleSubmit = useCallback(
     async ({ quantity }: FormData) => {
@@ -61,7 +62,7 @@ export const ProductInfo = React.memo<ContentProps>(({ product }) => {
                   increaseAmount={form.mutators.increment}
                   decreaseAmount={form.mutators.decrement}
                 />
-                <AddToCartButton buttonType="submit" />
+                <AddToCartButton type="submit" />
               </form>
             );
           }}
