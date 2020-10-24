@@ -9,7 +9,10 @@ type PriceProps = {
 
 export const Price = React.memo<PriceProps>(
   ({ regularPrice, discountPrice, direction = 'row' }) => {
-    const priceClassName = clsx('pt-1 text-gray-900 flex', direction === 'column' && 'flex-col');
+    const priceClassName = clsx(
+      'pt-1 text-gray-900 flex items-end',
+      direction === 'column' && 'flex-col',
+    );
     const discountClassName = direction === 'column' ? 'pl-0' : 'pl-2';
 
     if (!discountPrice) {
