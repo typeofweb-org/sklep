@@ -10,15 +10,7 @@ describe('/orders', () => {
     await repeatRequest(10, () =>
       server.app.db.order.create({
         data: {
-          status: Faker.random.arrayElement([
-            'PENDING',
-            'PROCESSING',
-            'ON_HOLD',
-            'COMPLETED',
-            'CANCELLED',
-            'REFUNDED',
-            'FAILED',
-          ]),
+          status: Faker.random.arrayElement(Object.values(Enums.OrderStatus)),
           total: parseInt(Faker.commerce.price(100, 200), 10),
           cart: {
             id: Faker.random.uuid(),
