@@ -31,10 +31,10 @@ export const cartResponseSchema = Joi.object({
       }).optional(),
     )
     .required(),
-}).required();
+});
 
 export const createCartResponseSchema = Joi.object<SklepTypes['postCart200Response']>({
-  data: cartResponseSchema,
+  data: cartResponseSchema.required(),
 }).required();
 
 export const getAllCartsResponseSchema = Joi.object<SklepTypes['getCartAll200Response']>({
