@@ -4,6 +4,13 @@ import type Stripe from 'stripe';
 
 import { Enums } from '../../models';
 
+const orderSelect = {
+  id: true,
+  cart: true,
+  total: true,
+  status: true,
+};
+
 export async function createOrder(
   request: Request,
   {
@@ -35,12 +42,7 @@ export function findOrderById(request: Request, { orderId }: { readonly orderId:
     where: {
       id: orderId,
     },
-    select: {
-      id: true,
-      cart: true,
-      total: true,
-      status: true,
-    },
+    select: orderSelect,
   });
 }
 
@@ -89,4 +91,10 @@ export function handleStripeEvent(request: Request, event: Stripe.Event) {
       );
   }
   return null;
+}
+
+export function getAllOrders(request: Request) {
+  return request.server.app.db.order.findMany({
+    select: orderSelect,
+  });
 }
