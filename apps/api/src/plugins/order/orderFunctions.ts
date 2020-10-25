@@ -8,7 +8,6 @@ const orderSelect = {
   id: true,
   cart: true,
   total: true,
-  stripePaymentIntentId: true,
   status: true,
 };
 
@@ -43,12 +42,7 @@ export function findOrderById(request: Request, { orderId }: { readonly orderId:
     where: {
       id: orderId,
     },
-    select: {
-      id: true,
-      cart: true,
-      total: true,
-      status: true,
-    },
+    select: orderSelect,
   });
 }
 
