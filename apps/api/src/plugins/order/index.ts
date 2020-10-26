@@ -135,7 +135,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
 
     server.route({
       method: 'PUT',
-      path: '/orders/{orderId}',
+      path: '/{orderId}',
       options: {
         tags: ['api', 'orders'],
         auth: {
@@ -151,8 +151,8 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
       },
 
       async handler(request) {
-        const { orderId } = request.params as SklepTypes['putOrdersOrdersOrderIdRequestPathParams'];
-        const payload = request.payload as SklepTypes['putOrdersOrdersOrderIdRequestBody'];
+        const { orderId } = request.params as SklepTypes['putOrdersOrderIdRequestPathParams'];
+        const payload = request.payload as SklepTypes['putOrdersOrderIdRequestBody'];
 
         const order = await findOrderById(request, { orderId });
 

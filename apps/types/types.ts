@@ -122,6 +122,12 @@ export interface definitions {
   };
 
   getOrdersOrderId200Response: definitions['Model12'];
+  putOrdersOrderIdRequestPathParams: {
+    orderId: string;
+  };
+  putOrdersOrderIdRequestBody: definitions['Model21'];
+
+  putOrdersOrderId200Response: definitions['Model12'];
   getProductsProductIdOrSlugRequestPathParams: {
     productIdOrSlug: number | string;
   };
@@ -163,12 +169,6 @@ export interface definitions {
   };
 
   deleteProductsProductIdDefaultResponse: string;
-  putOrdersOrdersOrderIdRequestPathParams: {
-    orderId: string;
-  };
-  putOrdersOrdersOrderIdRequestBody: definitions['Model21'];
-
-  putOrdersOrdersOrderId200Response: definitions['Model12'];
 
   pathsDefinitions: {
     '/orders': {
@@ -206,6 +206,14 @@ export interface definitions {
         requestPathParams: {
           orderId: string;
         };
+
+        response: definitions['Model12'];
+      };
+      PUT: {
+        requestPathParams: {
+          orderId: string;
+        };
+        requestBody: definitions['Model21'];
 
         response: definitions['Model12'];
       };
@@ -294,16 +302,6 @@ export interface definitions {
         };
 
         response: string;
-      };
-    };
-    '/orders/orders/{orderId}': {
-      PUT: {
-        requestPathParams: {
-          orderId: string;
-        };
-        requestBody: definitions['Model21'];
-
-        response: definitions['Model12'];
       };
     };
   };
