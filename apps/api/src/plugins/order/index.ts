@@ -7,11 +7,18 @@ import Stripe from 'stripe';
 import type { Models } from '../../models';
 import { Enums } from '../../models';
 
-import { createOrder, findOrderById, handleStripeEvent, updateOrder } from './orderFunctions';
+import {
+  createOrder,
+  findOrderById,
+  handleStripeEvent,
+  getAllOrders,
+  updateOrder,
+} from './orderFunctions';
 import {
   updateOrderParamsSchema,
   updateOrderPayloadSchema,
   updateOrderResponseSchema,
+  getAllOrdersResponseSchema,
   getOrderByIdParamsSchema,
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
@@ -159,6 +166,27 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         });
 
         return { data: updatedOrder };
+      },
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/',
+      options: {
+        tags: ['api', 'orders'],
+        auth: {
+          scope: [Enums.UserRole.ADMIN],
+        },
+        response: {
+          schema: getAllOrdersResponseSchema,
+        },
+      },
+      async handler(request) {
+        const orders = await getAllOrders(request);
+
+        return {
+          data: orders,
+        };
       },
     });
   },

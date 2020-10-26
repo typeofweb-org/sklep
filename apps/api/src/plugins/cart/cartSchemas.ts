@@ -10,7 +10,7 @@ export const removeFromCartPayloadSchema = Joi.object<SklepTypes['patchCartRemov
   productId: Joi.number().integer().required(),
 }).required();
 
-const cartResponseSchema = Joi.object({
+export const cartResponseSchema = Joi.object({
   id: Joi.string().required(),
   createdAt: Joi.date().iso().required(),
   updatedAt: Joi.date().iso().required(),
@@ -31,10 +31,10 @@ const cartResponseSchema = Joi.object({
       }).optional(),
     )
     .required(),
-}).required();
+});
 
 export const createCartResponseSchema = Joi.object<SklepTypes['postCart200Response']>({
-  data: cartResponseSchema,
+  data: cartResponseSchema.required(),
 }).required();
 
 export const getAllCartsResponseSchema = Joi.object<SklepTypes['getCartAll200Response']>({
