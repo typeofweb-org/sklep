@@ -28,3 +28,19 @@ export const getOrderByIdResponseSchema = Joi.object<SklepTypes['getOrdersOrderI
       .required(),
   }).required(),
 }).required();
+
+export const updateOrderResponseSchema = getOrderByIdResponseSchema;
+
+export const updateOrderPayloadSchema = Joi.object<SklepTypes['putOrdersOrdersOrderIdRequestBody']>(
+  {
+    status: Joi.string()
+      .valid(...Object.keys(Enums.OrderStatus))
+      .required(),
+  },
+).required();
+
+export const updateOrderParamsSchema = Joi.object<
+  SklepTypes['putOrdersOrdersOrderIdRequestPathParams']
+>({
+  orderId: Joi.string().required(),
+}).required();

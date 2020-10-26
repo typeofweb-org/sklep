@@ -78,6 +78,16 @@ export interface definitions {
   Model16: { productId: number };
   Model17: { orderId: string; stripeClientSecret: string };
   Model18: { data: definitions['Model17'] };
+  Model19: {
+    status:
+      | 'PENDING'
+      | 'PROCESSING'
+      | 'ON_HOLD'
+      | 'COMPLETED'
+      | 'CANCELLED'
+      | 'REFUNDED'
+      | 'FAILED';
+  };
 
   getProductsRequestQuery: {
     take?: number;
@@ -138,6 +148,12 @@ export interface definitions {
   };
 
   deleteProductsProductIdDefaultResponse: string;
+  putOrdersOrdersOrderIdRequestPathParams: {
+    orderId: string;
+  };
+  putOrdersOrdersOrderIdRequestBody: definitions['Model19'];
+
+  putOrdersOrdersOrderId200Response: definitions['Model10'];
 
   pathsDefinitions: {
     '/products': {
@@ -258,6 +274,16 @@ export interface definitions {
         };
 
         response: string;
+      };
+    };
+    '/orders/orders/{orderId}': {
+      PUT: {
+        requestPathParams: {
+          orderId: string;
+        };
+        requestBody: definitions['Model19'];
+
+        response: definitions['Model10'];
       };
     };
   };

@@ -5,9 +5,13 @@ import type { SklepTypes } from '@sklep/types';
 import Stripe from 'stripe';
 
 import type { Models } from '../../models';
+import { Enums } from '../../models';
 
-import { createOrder, findOrderById, handleStripeEvent } from './orderFunctions';
+import { createOrder, findOrderById, handleStripeEvent, updateOrder } from './orderFunctions';
 import {
+  updateOrderParamsSchema,
+  updateOrderPayloadSchema,
+  updateOrderResponseSchema,
   getOrderByIdParamsSchema,
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
@@ -119,6 +123,42 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         await handleStripeEvent(request, event);
 
         return null;
+      },
+    });
+
+    server.route({
+      method: 'PUT',
+      path: '/orders/{orderId}',
+      options: {
+        tags: ['api', 'orders'],
+        auth: {
+          scope: [Enums.UserRole.ADMIN],
+        },
+        validate: {
+          payload: updateOrderPayloadSchema,
+          params: updateOrderParamsSchema,
+        },
+        response: {
+          schema: updateOrderResponseSchema,
+        },
+      },
+
+      async handler(request) {
+        const { orderId } = request.params as SklepTypes['putOrdersOrdersOrderIdRequestPathParams'];
+        const payload = request.payload as SklepTypes['putOrdersOrdersOrderIdRequestBody'];
+
+        const order = await findOrderById(request, { orderId });
+
+        if (!order) {
+          throw Boom.notFound('Order not found');
+        }
+
+        const updatedOrder = await updateOrder(request, {
+          id: orderId,
+          status: payload.status,
+        });
+
+        return { data: updatedOrder };
       },
     });
   },
