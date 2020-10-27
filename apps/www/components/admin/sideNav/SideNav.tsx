@@ -28,6 +28,10 @@ const adminSidebarMenuItems: readonly AdminSidebarMenuItem[] = [
         href: '/admin/products',
       },
       {
+        label: 'Zamówienia',
+        href: '/admin/orders',
+      },
+      {
         label: 'Dodaj produkt',
         href: '/admin/add-product',
       },
