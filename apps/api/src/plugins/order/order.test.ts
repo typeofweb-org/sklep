@@ -66,4 +66,60 @@ describe('/orders', () => {
     const result = injection.result as SklepTypes['getOrders200Response'];
     expect(orders).toMatchObject(result.data);
   });
+
+  describe('PUT', () => {
+    it('should update a order', async () => {
+      const server = await getServerForTest();
+      const orders = await mockOrders(server);
+      const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+      const newData = {
+        status: Enums.OrderStatus.CANCELLED,
+      };
+
+      const injection = await server.inject({
+        method: 'PUT',
+        url: `/orders/${orders[0].id}`,
+        headers: auth.headers,
+        payload: newData,
+      });
+
+      expect(injection.statusCode).toEqual(200);
+      const orderInDb = await server.app.db.order.findOne({ where: { id: orders[0].id } });
+      expect(orderInDb).toMatchObject(newData);
+    });
+
+    it('should not update a order with invalid data', async () => {
+      const server = await getServerForTest();
+      const orders = await mockOrders(server);
+      const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+      const injection = await server.inject({
+        method: 'PUT',
+        url: `/orders/${orders[0].id}`,
+        headers: auth.headers,
+        payload: {
+          status: 'dupa',
+        },
+      });
+
+      expect(injection.statusCode).toEqual(400);
+    });
+
+    it('should not update a order with invalid order id', async () => {
+      const server = await getServerForTest();
+      const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+      const injection = await server.inject({
+        method: 'PUT',
+        url: `/orders/12312312kszkerkumyszke`,
+        headers: auth.headers,
+        payload: {
+          status: Enums.OrderStatus.PROCESSING,
+        },
+      });
+
+      expect(injection.statusCode).toEqual(404);
+    });
+  });
 });
