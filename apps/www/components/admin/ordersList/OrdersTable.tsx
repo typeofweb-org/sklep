@@ -24,28 +24,26 @@ export const OrdersTable = React.memo<DataTableCustomRenderProps>(
         <TableHead>
           <TableRow>
             <TableSelectAll {...getSelectionProps()} />
-            {headers.map((header) => {
-              return <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>;
-            })}
+            {headers.map((header) => (
+              <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => {
-            return (
-              <TableRow {...getRowProps({ row })}>
-                <TableSelectRow {...getSelectionProps({ row })} />
-                <OrdersListCells key={row.id} row={row} />
-                <TableCell key="actions">
-                  <OverflowMenu>
-                    <OverflowMenuItem
-                      itemText="Edit"
-                      onClick={() => router.push(`/admin/orders/${row.id}`)}
-                    />
-                  </OverflowMenu>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {rows.map((row) => (
+            <TableRow {...getRowProps({ row })}>
+              <TableSelectRow {...getSelectionProps({ row })} />
+              <OrdersListCells key={row.id} row={row} />
+              <TableCell key="actions">
+                <OverflowMenu>
+                  <OverflowMenuItem
+                    itemText="Edit"
+                    onClick={() => router.push(`/admin/orders/${row.id}`)}
+                  />
+                </OverflowMenu>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     );
