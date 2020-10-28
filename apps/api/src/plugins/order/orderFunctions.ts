@@ -48,18 +48,9 @@ export async function updateOrder(
   },
 ) {
   return await request.server.app.db.order.update({
-    where: {
-      id,
-    },
-    data: {
-      status,
-    },
-    select: {
-      status: true,
-      id: true,
-      cart: true,
-      total: true,
-    },
+    where: { id },
+    data: { status },
+    select: orderSelect,
   });
 }
 
