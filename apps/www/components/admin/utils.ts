@@ -1,13 +1,11 @@
 import type { DenormalizedRow } from 'carbon-components-react';
 
-import type { OrdersTableRow } from './ordersList/utils';
-
-export const getCellValue = ({
+export const getCellValue = <T extends string>({
   row,
   name,
 }: {
   readonly row: DenormalizedRow;
-  readonly name: keyof OrdersTableRow;
+  readonly name: T;
 }) => {
   const cell = row.cells.find((c) => c.info.header === name);
   switch (typeof cell?.value) {
