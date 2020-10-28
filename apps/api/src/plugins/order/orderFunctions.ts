@@ -48,8 +48,12 @@ export async function updateOrder(
   },
 ) {
   return await request.server.app.db.order.update({
-    where: { id },
-    data: { status },
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
     select: orderSelect,
   });
 }
