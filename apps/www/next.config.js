@@ -11,4 +11,7 @@ config.redirects = async () => {
   ];
 };
 
+config.reactStrictMode = true;
+config.poweredByHeader = false;
+
 module.exports = config;

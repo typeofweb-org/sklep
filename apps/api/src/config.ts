@@ -12,6 +12,7 @@ type NameToType = {
   readonly DB_PASSWORD: string;
   readonly DB_USERNAME: string;
   readonly ENV: 'production' | 'staging' | 'development' | 'test';
+  readonly HOST: string;
   readonly NODE_ENV: 'production' | 'development';
   readonly PORT: number;
   readonly STRIPE_API_KEY: string;

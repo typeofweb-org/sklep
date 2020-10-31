@@ -37,6 +37,27 @@ export async function createOrder(
   return order;
 }
 
+export async function updateOrder(
+  request: Request,
+  {
+    id,
+    status,
+  }: {
+    readonly id: string;
+    readonly status: keyof typeof Enums.OrderStatus;
+  },
+) {
+  return await request.server.app.db.order.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+    select: orderSelect,
+  });
+}
+
 export function findOrderById(request: Request, { orderId }: { readonly orderId: string }) {
   return request.server.app.db.order.findFirst({
     where: {
