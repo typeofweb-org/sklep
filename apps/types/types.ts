@@ -92,6 +92,21 @@ export interface definitions {
   Model18: { productId: number };
   Model19: { orderId: string; stripeClientSecret: string };
   Model20: { data: definitions['Model19'] };
+  Model21: {
+    status:
+      | 'PENDING'
+      | 'PROCESSING'
+      | 'ON_HOLD'
+      | 'COMPLETED'
+      | 'CANCELLED'
+      | 'REFUNDED'
+      | 'FAILED';
+  };
+
+  getOrdersRequestQuery: {
+    take?: number;
+    skip?: number;
+  };
 
   getOrders200Response: definitions['Model3'];
   getProductsRequestQuery: {
@@ -112,6 +127,12 @@ export interface definitions {
   };
 
   getOrdersOrderId200Response: definitions['Model12'];
+  putOrdersOrderIdRequestPathParams: {
+    orderId: string;
+  };
+  putOrdersOrderIdRequestBody: definitions['Model21'];
+
+  putOrdersOrderId200Response: definitions['Model12'];
   getProductsProductIdOrSlugRequestPathParams: {
     productIdOrSlug: number | string;
   };
@@ -157,6 +178,11 @@ export interface definitions {
   pathsDefinitions: {
     '/orders': {
       GET: {
+        requestQuery: {
+          take?: number;
+          skip?: number;
+        };
+
         response: definitions['Model3'];
       };
     };
@@ -190,6 +216,14 @@ export interface definitions {
         requestPathParams: {
           orderId: string;
         };
+
+        response: definitions['Model12'];
+      };
+      PUT: {
+        requestPathParams: {
+          orderId: string;
+        };
+        requestBody: definitions['Model21'];
 
         response: definitions['Model12'];
       };

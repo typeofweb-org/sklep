@@ -2,17 +2,28 @@ import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
 import type { SklepTypes } from '@sklep/types';
+import { isNil } from 'ramda';
 import Stripe from 'stripe';
 
 import type { Models } from '../../models';
 import { Enums } from '../../models';
 
-import { createOrder, findOrderById, handleStripeEvent, getAllOrders } from './orderFunctions';
 import {
+  createOrder,
+  findOrderById,
+  handleStripeEvent,
+  getAllOrders,
+  updateOrder,
+} from './orderFunctions';
+import {
+  updateOrderParamsSchema,
+  updateOrderPayloadSchema,
+  updateOrderResponseSchema,
   getAllOrdersResponseSchema,
   getOrderByIdParamsSchema,
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
+  getAllOrdersRequestSchema,
 } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
@@ -125,6 +136,42 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
     });
 
     server.route({
+      method: 'PUT',
+      path: '/{orderId}',
+      options: {
+        tags: ['api', 'orders'],
+        auth: {
+          scope: [Enums.UserRole.ADMIN],
+        },
+        validate: {
+          payload: updateOrderPayloadSchema,
+          params: updateOrderParamsSchema,
+        },
+        response: {
+          schema: updateOrderResponseSchema,
+        },
+      },
+
+      async handler(request) {
+        const { orderId } = request.params as SklepTypes['putOrdersOrderIdRequestPathParams'];
+        const payload = request.payload as SklepTypes['putOrdersOrderIdRequestBody'];
+
+        const order = await findOrderById(request, { orderId });
+
+        if (!order) {
+          throw Boom.notFound('Order not found');
+        }
+
+        const updatedOrder = await updateOrder(request, {
+          id: orderId,
+          status: payload.status,
+        });
+
+        return { data: updatedOrder };
+      },
+    });
+
+    server.route({
       method: 'GET',
       path: '/',
       options: {
@@ -135,12 +182,23 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         response: {
           schema: getAllOrdersResponseSchema,
         },
+        validate: {
+          query: getAllOrdersRequestSchema,
+        },
       },
       async handler(request) {
-        const orders = await getAllOrders(request);
+        const { take, skip } = request.query as SklepTypes['getOrdersRequestQuery'];
+
+        if (isNil(take) !== isNil(skip)) {
+          throw Boom.badRequest();
+        }
+
+        const orders = await getAllOrders(request, { take, skip });
+        const total = await request.server.app.db.order.count();
 
         return {
           data: orders,
+          meta: { total },
         };
       },
     });

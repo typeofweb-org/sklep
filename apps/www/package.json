@@ -38,8 +38,6 @@
     "yup": "0.29.3"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "5.4.8",
-    "@testing-library/cypress": "7.0.1",
     "@testing-library/dom": "7.26.3",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.1.0",
@@ -54,7 +52,6 @@
     "@types/yup": "0.29.8",
     "babel-eslint": "10.1.0",
     "babel-jest": "26.6.0",
-    "cypress": "5.4.0",
     "dotenv": "8.2.0",
     "eslint": "7.11.0",
     "eslint-config-react-app": "5.2.1",
@@ -75,5 +72,10 @@
     "react-query-devtools": "2.6.0",
     "ts-loader": "8.0.6",
     "typescript-plugin-css-modules": "2.7.0"
+  },
+  "optionalDependencies": {
+    "@cypress/webpack-preprocessor": "5.4.8",
+    "@testing-library/cypress": "7.0.1",
+    "cypress": "5.4.0"
   }
 }

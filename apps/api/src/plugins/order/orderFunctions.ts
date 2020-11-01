@@ -1,5 +1,6 @@
 import type { Request } from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
+import type { SklepTypes } from '@sklep/types';
 import type Stripe from 'stripe';
 
 import { Enums } from '../../models';
@@ -35,6 +36,27 @@ export async function createOrder(
   request.server.events.emit('order:order:created', order);
 
   return order;
+}
+
+export async function updateOrder(
+  request: Request,
+  {
+    id,
+    status,
+  }: {
+    readonly id: string;
+    readonly status: keyof typeof Enums.OrderStatus;
+  },
+) {
+  return await request.server.app.db.order.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+    select: orderSelect,
+  });
 }
 
 export function findOrderById(request: Request, { orderId }: { readonly orderId: string }) {
@@ -93,8 +115,12 @@ export function handleStripeEvent(request: Request, event: Stripe.Event) {
   return null;
 }
 
-export function getAllOrders(request: Request) {
+export function getAllOrders(
+  request: Request,
+  { take, skip }: SklepTypes['getOrdersRequestQuery'],
+) {
   return request.server.app.db.order.findMany({
     select: orderSelect,
+    ...(take && { take, skip }),
   });
 }

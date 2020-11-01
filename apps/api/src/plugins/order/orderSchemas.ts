@@ -22,8 +22,16 @@ export const orderResponseSchema = Joi.object({
     .required(),
 }).required();
 
+export const getAllOrdersRequestSchema = Joi.object({
+  take: Joi.number().integer(),
+  skip: Joi.number().integer(),
+});
+
 export const getAllOrdersResponseSchema = Joi.object({
   data: Joi.array().items(orderResponseSchema.optional()).required(),
+  meta: Joi.object({
+    total: Joi.number().integer().required(),
+  }).required(),
 }).required();
 
 export const getOrderByIdParamsSchema = Joi.object<SklepTypes['getOrdersOrderIdRequestPathParams']>(
@@ -33,4 +41,16 @@ export const getOrderByIdParamsSchema = Joi.object<SklepTypes['getOrdersOrderIdR
 );
 export const getOrderByIdResponseSchema = Joi.object<SklepTypes['getOrdersOrderId200Response']>({
   data: orderResponseSchema.required(),
+}).required();
+
+export const updateOrderResponseSchema = getOrderByIdResponseSchema;
+
+export const updateOrderPayloadSchema = Joi.object<SklepTypes['putOrdersOrderIdRequestBody']>({
+  status: Joi.string()
+    .valid(...Object.keys(Enums.OrderStatus))
+    .required(),
+}).required();
+
+export const updateOrderParamsSchema = Joi.object<SklepTypes['putOrdersOrderIdRequestPathParams']>({
+  orderId: Joi.string().required(),
 }).required();
