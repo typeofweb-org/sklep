@@ -5,8 +5,9 @@ Projekt edukacyjny. Licencja: [AGPL](./LICENSE)
 ## Uruchomienie
 
 1. Aby uruchomić API będziesz potrzebować dockera (polecenie `docker-compose` musi być dostępne, port 5432 musi być wolny).
-2. Uruchom frontend i backend jedną komendą `yarn dev`. Automatycznie zostaną zainstalowane też potrzebne zależności.
-3. Do pliku `/etc/hosts` (lub `c:\Windows\System32\Drivers\etc\hosts`) dodaj dwie linijki:
+2. Skopiuj plik `apps/api/.env-sample` do `apps/api/.env`.
+3. Uruchom frontend i backend jedną komendą `yarn dev`. Automatycznie zostaną zainstalowane też potrzebne zależności.
+4. Do pliku `/etc/hosts` (lub `c:\Windows\System32\Drivers\etc\hosts`) dodaj dwie linijki:
 
 ```
 127.0.0.1 api.sklep.localhost
@@ -35,7 +36,6 @@ Aplikacja dzieli się na 2 części:
     - TypeScript
   - WWW:
     - [Next.js](https://nextjs.org) bez SSG ani SSR (nie potrzebujemy tego w Adminie)
-~
     - ~[React Hook Form](https://react-hook-form.com) do obsługi formularzy~ nie działało to zbyt dobrze z Carbon
     - [React Final Form](https://final-form.org/react) do obsługi formularzy
     - [Carbon Design System](https://www.carbondesignsystem.com/components/overview) (gotowe komponenty)

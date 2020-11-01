@@ -1,7 +1,5 @@
 {
   "name": "sklep.typeofweb",
-  "version": "1.0.0",
-  "main": "index.js",
   "private": "true",
   "scripts": {
     "dev": "yarn --frozen-lockfile && lerna bootstrap && lerna run dev --parallel",

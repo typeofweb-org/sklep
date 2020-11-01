@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Copy .env
+        run: cp apps/api/.env-sample apps/api/.env
+
       - name: Run tests
         run: |
           yarn tsc
