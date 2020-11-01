@@ -103,6 +103,11 @@ export interface definitions {
       | 'FAILED';
   };
 
+  getOrdersRequestQuery: {
+    take?: number;
+    skip?: number;
+  };
+
   getOrders200Response: definitions['Model3'];
   getProductsRequestQuery: {
     take?: number;
@@ -173,6 +178,11 @@ export interface definitions {
   pathsDefinitions: {
     '/orders': {
       GET: {
+        requestQuery: {
+          take?: number;
+          skip?: number;
+        };
+
         response: definitions['Model3'];
       };
     };

@@ -2,6 +2,7 @@ import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
 import type { SklepTypes } from '@sklep/types';
+import { isNil } from 'ramda';
 import Stripe from 'stripe';
 
 import type { Models } from '../../models';
@@ -22,6 +23,7 @@ import {
   getOrderByIdParamsSchema,
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
+  getAllOrdersRequestSchema,
 } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
@@ -180,12 +182,23 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         response: {
           schema: getAllOrdersResponseSchema,
         },
+        validate: {
+          query: getAllOrdersRequestSchema,
+        },
       },
       async handler(request) {
-        const orders = await getAllOrders(request);
+        const { take, skip } = request.query as SklepTypes['getOrdersRequestQuery'];
+
+        if (isNil(take) !== isNil(skip)) {
+          throw Boom.badRequest();
+        }
+
+        const orders = await getAllOrders(request, { take, skip });
+        const total = await request.server.app.db.order.count();
 
         return {
           data: orders,
+          meta: { total },
         };
       },
     });

@@ -22,8 +22,16 @@ export const orderResponseSchema = Joi.object({
     .required(),
 }).required();
 
+export const getAllOrdersRequestSchema = Joi.object({
+  take: Joi.number().integer(),
+  skip: Joi.number().integer(),
+});
+
 export const getAllOrdersResponseSchema = Joi.object({
   data: Joi.array().items(orderResponseSchema.optional()).required(),
+  meta: Joi.object({
+    total: Joi.number().integer().required(),
+  }).required(),
 }).required();
 
 export const getOrderByIdParamsSchema = Joi.object<SklepTypes['getOrdersOrderIdRequestPathParams']>(
