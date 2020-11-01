@@ -30,7 +30,8 @@ export interface definitions {
       | 'FAILED';
   };
   data: definitions['Model2'][];
-  Model3: { data: definitions['data'] };
+  meta: { total: number };
+  Model3: { data: definitions['data']; meta: definitions['meta'] };
   Model4: {
     id: number;
     slug: string;
@@ -42,7 +43,6 @@ export interface definitions {
     type: 'SINGLE' | 'BUNDLE';
   };
   Model5: definitions['Model4'][];
-  meta: { total: number };
   Model6: { data: definitions['Model5']; meta: definitions['meta'] };
   user: {
     id: number;
@@ -101,6 +101,11 @@ export interface definitions {
       | 'CANCELLED'
       | 'REFUNDED'
       | 'FAILED';
+  };
+
+  getOrdersRequestQuery: {
+    take?: number;
+    skip?: number;
   };
 
   getOrders200Response: definitions['Model3'];
@@ -173,6 +178,11 @@ export interface definitions {
   pathsDefinitions: {
     '/orders': {
       GET: {
+        requestQuery: {
+          take?: number;
+          skip?: number;
+        };
+
         response: definitions['Model3'];
       };
     };

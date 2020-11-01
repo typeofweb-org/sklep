@@ -1,5 +1,6 @@
 import type { Request } from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
+import type { SklepTypes } from '@sklep/types';
 import type Stripe from 'stripe';
 
 import { Enums } from '../../models';
@@ -9,6 +10,8 @@ const orderSelect = {
   cart: true,
   total: true,
   status: true,
+  createdAt: true,
+  updatedAt: true,
 };
 
 export async function createOrder(
@@ -114,8 +117,13 @@ export function handleStripeEvent(request: Request, event: Stripe.Event) {
   return null;
 }
 
-export function getAllOrders(request: Request) {
+export function getAllOrders(
+  request: Request,
+  { take, skip }: SklepTypes['getOrdersRequestQuery'],
+) {
   return request.server.app.db.order.findMany({
+    orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
     select: orderSelect,
+    ...(take && { take, skip }),
   });
 }

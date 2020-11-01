@@ -64,7 +64,41 @@ describe('/orders', () => {
       headers: auth.headers,
     });
     const result = injection.result as SklepTypes['getOrders200Response'];
-    expect(orders).toMatchObject(result.data);
+    expect(result.data).toMatchObject(orders);
+  });
+
+  it('should get specific number of orders', async () => {
+    const TAKE = 5;
+    const SKIP = 0;
+
+    const server = await getServerForTest();
+    const orders = await mockOrders(server);
+    const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+    const injection = await server.inject({
+      method: 'GET',
+      url: `/orders?take=${TAKE}&skip=${SKIP}`,
+      headers: auth.headers,
+    });
+    const result = injection.result as SklepTypes['getOrders200Response'];
+    expect(result.data).toMatchObject(orders.slice(0, TAKE));
+  });
+
+  it('should skip specific number of orders and get the following', async () => {
+    const TAKE = 5;
+    const SKIP = 5;
+
+    const server = await getServerForTest();
+    const orders = await mockOrders(server);
+    const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
+
+    const injection = await server.inject({
+      method: 'GET',
+      url: `/orders?take=${TAKE}&skip=${SKIP}`,
+      headers: auth.headers,
+    });
+    const result = injection.result as SklepTypes['getOrders200Response'];
+    expect(result.data).toMatchObject(orders.slice(SKIP, SKIP + TAKE));
   });
 
   describe('PUT', () => {
