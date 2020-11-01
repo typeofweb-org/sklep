@@ -28,6 +28,8 @@ export interface definitions {
       | 'CANCELLED'
       | 'REFUNDED'
       | 'FAILED';
+    createdAt: string;
+    updatedAt: string;
   };
   data: definitions['Model2'][];
   meta: { total: number };
@@ -75,6 +77,8 @@ export interface definitions {
       | 'CANCELLED'
       | 'REFUNDED'
       | 'FAILED';
+    createdAt: string;
+    updatedAt: string;
   };
   Model12: { data: definitions['Model11'] };
   Model13: { data: definitions['Model4'] };
