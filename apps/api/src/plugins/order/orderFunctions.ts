@@ -10,6 +10,8 @@ const orderSelect = {
   cart: true,
   total: true,
   status: true,
+  createdAt: true,
+  updatedAt: true,
 };
 
 export async function createOrder(
@@ -120,6 +122,7 @@ export function getAllOrders(
   { take, skip }: SklepTypes['getOrdersRequestQuery'],
 ) {
   return request.server.app.db.order.findMany({
+    orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
     select: orderSelect,
     ...(take && { take, skip }),
   });

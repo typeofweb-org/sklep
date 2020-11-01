@@ -219,6 +219,7 @@ export const getProductsRoute: Hapi.ServerRoute = {
         ...query,
       }),
       request.server.app.db.product.findMany({
+        orderBy: [{ createdAt: 'desc' }],
         ...query,
         ...(take && { take, skip }),
         select: productSelect,

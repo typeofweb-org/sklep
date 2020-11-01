@@ -20,6 +20,8 @@ export const orderResponseSchema = Joi.object({
   status: Joi.string()
     .valid(...Object.keys(Enums.OrderStatus))
     .required(),
+  createdAt: Joi.date(),
+  updatedAt: Joi.date(),
 }).required();
 
 export const getAllOrdersQuerySchema = Joi.object({
