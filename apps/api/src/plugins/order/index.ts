@@ -23,7 +23,7 @@ import {
   getOrderByIdParamsSchema,
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
-  getAllOrdersRequestSchema,
+  getAllOrdersQuerySchema,
 } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
@@ -183,7 +183,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
           schema: getAllOrdersResponseSchema,
         },
         validate: {
-          query: getAllOrdersRequestSchema,
+          query: getAllOrdersQuerySchema,
         },
       },
       async handler(request) {
