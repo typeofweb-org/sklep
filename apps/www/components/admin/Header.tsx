@@ -36,6 +36,7 @@ export const Header = () => {
             aria-label="Otwórz menu"
             onClick={onClickSideNavExpand}
             isActive={isSideNavExpanded}
+            className="pl-4 w-10"
           />
           <HeaderName prefix="Sklep">Type of Web</HeaderName>
 
@@ -52,6 +53,7 @@ export const Header = () => {
               aria-label="Użytkownik"
               onClick={toggleUserInfoClick}
               isActive={isUserInfoExpanded}
+              className="pr-4 w-10"
             >
               <UserProfile20 />
             </HeaderGlobalAction>
