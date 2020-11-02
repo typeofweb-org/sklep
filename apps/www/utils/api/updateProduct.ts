@@ -10,8 +10,8 @@ export const updateProduct = (
     params: { productId },
     body: {
       ...body,
-      regularPrice: body.regularPrice * 100,
-      discountPrice: body.discountPrice ? body.discountPrice * 100 : null,
+      regularPrice: body.regularPrice,
+      discountPrice: body.discountPrice ? body.discountPrice : null,
     },
   });
 };
