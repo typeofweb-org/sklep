@@ -10,7 +10,7 @@ import { useGetProducts } from '../../utils/api/queryHooks';
 function ProductsPage() {
   const { latestData: productsResponse } = useGetProducts();
 
-  if (!productsResponse?.data) {
+  if (!productsResponse?.data.length) {
     return (
       <Layout title="Sklep strona główna">
         <Hero />
