@@ -20,10 +20,20 @@ export const orderResponseSchema = Joi.object({
   status: Joi.string()
     .valid(...Object.keys(Enums.OrderStatus))
     .required(),
+  createdAt: Joi.date().iso().required(),
+  updatedAt: Joi.date().iso().required(),
 }).required();
 
-export const getAllOrdersResponseSchema = Joi.object({
+export const getAllOrdersQuerySchema = Joi.object({
+  take: Joi.number().integer(),
+  skip: Joi.number().integer(),
+});
+
+export const getAllOrdersResponseSchema = Joi.object<SklepTypes['getOrders200Response']>({
   data: Joi.array().items(orderResponseSchema.optional()).required(),
+  meta: Joi.object({
+    total: Joi.number().integer().required(),
+  }).required(),
 }).required();
 
 export const getOrderByIdParamsSchema = Joi.object<SklepTypes['getOrdersOrderIdRequestPathParams']>(

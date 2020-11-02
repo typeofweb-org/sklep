@@ -21,7 +21,7 @@ import { OrderPlugin } from './plugins/order';
 
 const getServer = () => {
   return new Hapi.Server({
-    host: 'api.sklep.localhost',
+    host: getConfig('HOST'),
     port: getConfig('PORT'),
     routes: {
       cors: {
