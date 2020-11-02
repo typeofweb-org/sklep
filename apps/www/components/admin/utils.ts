@@ -12,6 +12,10 @@ export const getCellValue = <T extends string>({
     case 'boolean':
       return cell?.value ? 'Yes' : 'No';
     case 'number':
+      if (cell.info.header === 'discountPrice' || cell.info.header === 'regularPrice') {
+        return cell?.value / 100;
+      }
+      return cell?.value;
     case 'string':
       return cell?.value;
     default:

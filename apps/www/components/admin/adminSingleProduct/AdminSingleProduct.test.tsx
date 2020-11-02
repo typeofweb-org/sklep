@@ -60,8 +60,8 @@ describe('single product page', () => {
     expect(name).toHaveDisplayValue('Computer');
     expect(description).toHaveDisplayValue('Computer for games');
     expect(isPublic).toBeChecked();
-    expect(regularPrice).toHaveDisplayValue('1999');
-    expect(discountPrice).toHaveDisplayValue('1599');
+    expect(regularPrice).toHaveDisplayValue('19.99');
+    expect(discountPrice).toHaveDisplayValue('15.99');
   });
 
   it('deletes product', async () => {
