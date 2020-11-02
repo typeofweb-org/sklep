@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import { formatCurrency } from '../../../../../utils/currency';
+
 type PriceProps = {
   readonly regularPrice: number;
   readonly discountPrice?: number | null;
@@ -16,13 +18,13 @@ export const Price = React.memo<PriceProps>(
     const discountClassName = direction === 'column' ? 'pl-0' : 'pl-2';
 
     if (!discountPrice) {
-      return <p className="text-gray-900">{regularPrice / 100}&nbsp;PLN</p>;
+      return <p className="text-gray-900">{formatCurrency(regularPrice / 100)}</p>;
     }
 
     return (
       <p className={priceClassName}>
-        <del className="text-gray-600 text-sm">{regularPrice / 100}&nbsp;PLN</del>{' '}
-        <ins className={discountClassName}>{discountPrice / 100}&nbsp;PLN</ins>
+        <del className="text-gray-600 text-sm">{formatCurrency(regularPrice / 100)}</del>{' '}
+        <ins className={discountClassName}>{formatCurrency(discountPrice / 100)}</ins>
       </p>
     );
   },

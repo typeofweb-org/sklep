@@ -108,6 +108,7 @@ export function handleStripeEvent(request: Request, event: Stripe.Event) {
     case 'payment_intent.succeeded':
     case 'payment_intent.canceled':
     case 'payment_intent.requires_action':
+    case 'payment_intent.payment_failed':
       return updateOrderStatusForStripeEvent(
         request,
         event.data.object as Stripe.PaymentIntent,
