@@ -107,8 +107,8 @@ function getInitialValues(
     name: response.data.name,
     description: response.data.description,
     isPublic: response.data.isPublic,
-    regularPrice: response.data.regularPrice,
-    discountPrice: response.data.discountPrice,
+    regularPrice: response.data.regularPrice / 100,
+    discountPrice: response.data.discountPrice ? response.data.discountPrice / 100 : null,
     type: response.data.type,
   };
 }
