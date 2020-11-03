@@ -1,0 +1,22 @@
+name: Deploy to staging and production
+
+on:
+  push:
+    branches: [163-deploy]
+  #   branches: [develop]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: typeofweb/typeofweb-deploy-mydevil-action@v0.0.2
+        with:
+          host: 's18.mydevil.net'
+          username: 'typeofweb'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          frontend_subdomain: 'www'
+          api_subdomain: 'api'
+          env: 'production'
+          domain: typeof.shop
+          project_directory: '~/domains/typeof.shop'
