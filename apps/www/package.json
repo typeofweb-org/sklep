@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ICU_DATA=../../node_modules/full-icu next dev",
-    "build": "NODE_ICU_DATA=../../node_modules/full-icu next build",
+    "build": "next build",
     "start": "NODE_ICU_DATA=../../node_modules/full-icu next start",
     "test": "NODE_ICU_DATA=../../node_modules/full-icu jest --detectOpenHandles --forceExit",
     "test_:ci": "NODE_ICU_DATA=../../node_modules/full-icu jest",
