@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: typeofweb/typeofweb-deploy-mydevil-action@v0.0.17
+      - uses: typeofweb/typeofweb-deploy-mydevil-action@v0.0.18
         with:
           host: 's18.mydevil.net'
           username: 'typeofweb'
