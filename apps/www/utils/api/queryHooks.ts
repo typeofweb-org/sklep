@@ -25,3 +25,8 @@ useGetProductBySlug.prefetch = (queryCache: QueryCache, productIdOrSlug: string 
 
 export const useGetOrderById = (orderId: string, queryConfig?: QueryConfig<any, unknown>) =>
   useToWQuery(['/orders/{orderId}', 'GET', { params: { orderId } }] as const, queryConfig);
+
+export const useGetOrders = (query: { readonly take: number; readonly skip: number } | {} = {}) =>
+  useToWQuery(['/orders', 'GET', { query }] as const);
+useGetOrders.prefetch = (queryCache: QueryCache) =>
+  queryCache.prefetchQuery(['/orders', 'GET', {}], () => fetcher('/orders', 'GET', { query: {} }));

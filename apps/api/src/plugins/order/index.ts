@@ -2,8 +2,10 @@ import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
 import type { SklepTypes } from '@sklep/types';
+import { isNil } from 'ramda';
 import Stripe from 'stripe';
 
+import { getConfig } from '../../config';
 import type { Models } from '../../models';
 import { Enums } from '../../models';
 
@@ -22,6 +24,7 @@ import {
   getOrderByIdParamsSchema,
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
+  getAllOrdersQuerySchema,
 } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
@@ -115,17 +118,52 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
       },
     });
 
+    const verifyStripeSignature: Hapi.Lifecycle.Method = (request) => {
+      const signature = request.headers['stripe-signature'];
+      if (!signature) {
+        throw Boom.badData('Missing stripe-signature');
+      }
+
+      if (!Buffer.isBuffer(request.payload)) {
+        throw Boom.internal('request.payload is not a Buffer');
+      }
+
+      try {
+        return stripe.webhooks.constructEvent(
+          request.payload,
+          signature,
+          getConfig('STRIPE_WEBHOOK_SECRET'),
+        );
+      } catch (err) {
+        if (err instanceof Stripe.errors.StripeSignatureVerificationError) {
+          throw Boom.unauthorized('StripeSignatureVerificationError');
+        }
+        throw Boom.boomify(err);
+      }
+    };
+
     server.route({
       method: 'POST',
       path: '/stripe/webhook',
       options: {
         tags: ['api', 'order', 'stripe', 'webhook'],
+        payload: {
+          parse: false,
+          output: 'data',
+        },
         response: {
           emptyStatusCode: 200, // Stripe requires 200
         },
+        auth: false,
+        pre: [
+          {
+            method: verifyStripeSignature,
+            assign: 'verifyStripeSignature',
+          },
+        ],
       },
       async handler(request) {
-        const event = request.payload as Stripe.Event;
+        const event = request.pre.verifyStripeSignature as Stripe.Event;
 
         await handleStripeEvent(request, event);
 
@@ -180,12 +218,23 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         response: {
           schema: getAllOrdersResponseSchema,
         },
+        validate: {
+          query: getAllOrdersQuerySchema,
+        },
       },
       async handler(request) {
-        const orders = await getAllOrders(request);
+        const { take, skip } = request.query as SklepTypes['getOrdersRequestQuery'];
+
+        if (isNil(take) !== isNil(skip)) {
+          throw Boom.badRequest();
+        }
+
+        const orders = await getAllOrders(request, { take, skip });
+        const total = await request.server.app.db.order.count();
 
         return {
           data: orders,
+          meta: { total },
         };
       },
     });

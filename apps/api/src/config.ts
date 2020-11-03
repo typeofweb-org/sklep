@@ -16,6 +16,7 @@ type NameToType = {
   readonly NODE_ENV: 'production' | 'development';
   readonly PORT: number;
   readonly STRIPE_API_KEY: string;
+  readonly STRIPE_WEBHOOK_SECRET: string;
 };
 
 function getConfigForName<T extends keyof NameToType>(name: T): Nil<NameToType[T]>;

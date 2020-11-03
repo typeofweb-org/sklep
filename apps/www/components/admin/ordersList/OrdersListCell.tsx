@@ -2,20 +2,21 @@ import type { DenormalizedRow } from 'carbon-components-react';
 import { TableCell } from 'carbon-components-react';
 import React from 'react';
 
-import { getCellValue } from '../../utils';
-import { PRODUCT_FIELDS } from '../ProductFields';
+import { getCellValue } from '../utils';
 
-type Props = {
+import { ORDER_FIELDS } from './constants';
+
+type OrdersListCellsProps = {
   readonly row: DenormalizedRow;
 };
 
-export const ProductsListCells = React.memo<Props>(({ row }) => {
+export const OrdersListCells = React.memo<OrdersListCellsProps>(({ row }) => {
   return (
     <>
-      {PRODUCT_FIELDS.map(({ name }) => (
+      {ORDER_FIELDS.map(({ name }) => (
         <TableCell key={name}>{getCellValue({ row, name })}</TableCell>
       ))}
     </>
   );
 });
-ProductsListCells.displayName = 'ProductListRow';
+OrdersListCells.displayName = 'OrdersListRow';

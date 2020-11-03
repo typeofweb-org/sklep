@@ -27,9 +27,9 @@ export const ProductsTable = React.memo<
       <TableHead>
         <TableRow>
           <TableSelectAll {...getSelectionProps()} />
-          {headers.map((header) => {
-            return <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>;
-          })}
+          {headers.map((header) => (
+            <TableHeader {...getHeaderProps({ header })}>{header.header}</TableHeader>
+          ))}
         </TableRow>
       </TableHead>
       <TableBody>

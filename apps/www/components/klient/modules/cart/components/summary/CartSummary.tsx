@@ -15,7 +15,11 @@ export const CartSummary = React.memo<CartSummaryProps>(({ cart }) => {
       <div className="border border-gray-400 bg-gray-100">
         <div className="flex justify-between p-4 text-2xl border-t border-gray-300">
           <h4>Razem</h4>
-          <Price regularPrice={cart.regularSubTotal} discountPrice={cart.discountSubTotal} />
+          <Price
+            regularPrice={cart.regularSubTotal}
+            discountPrice={cart.discountSubTotal}
+            direction="column"
+          />
         </div>
       </div>
       <Link href="/zamowienie">
