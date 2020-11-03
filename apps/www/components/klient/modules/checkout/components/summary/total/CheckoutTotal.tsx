@@ -1,6 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
 import React from 'react';
 
+import { formatCurrency } from '../../../../../../../utils/currency';
 import { Price } from '../../../../../shared/components/price/Price';
 import { ShippmentMethod } from '../shippment/ShippmentMethod';
 
@@ -20,7 +21,7 @@ export const CheckoutTotal = React.memo<CheckoutTotalProps>(({ cart }) => {
         <div className="flex justify-between w-full p-4 text-2xl">
           <span>Do zapłaty</span>
           {/* @todo add shipping cost */}
-          <span>{cart.discountSubTotal} zł</span>
+          <span>{formatCurrency(cart.discountSubTotal / 100)}</span>
         </div>
       </div>
     </div>
