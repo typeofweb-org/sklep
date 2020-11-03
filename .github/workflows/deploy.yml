@@ -2,8 +2,7 @@ name: Deploy to staging and production
 
 on:
   push:
-    branches: [163-deploy]
-  #   branches: [develop]
+    branches: [develop]
 jobs:
   deploy:
     runs-on: ubuntu-latest
