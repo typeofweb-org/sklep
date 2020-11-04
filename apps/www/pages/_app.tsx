@@ -1,3 +1,4 @@
+import ms from 'ms';
 import type { AppProps } from 'next/app';
 import React from 'react';
 import '../styles/index.css';
@@ -14,11 +15,15 @@ const queryCache = new QueryCache();
 const reactQueryConfigOverrides: ReactQueryConfig = {
   queries: {
     refetchOnWindowFocus: false,
+    initialStale: true,
+    refetchOnMount: true,
+    refetchOnReconnect: false,
+    staleTime: ms('10 seconds'),
   },
   mutations: {
     throwOnError: true,
   },
-} as const;
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { dehydratedState } = pageProps as { readonly dehydratedState?: DehydratedState };
