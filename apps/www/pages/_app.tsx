@@ -15,8 +15,6 @@ const queryCache = new QueryCache();
 const reactQueryConfigOverrides: ReactQueryConfig = {
   queries: {
     refetchOnWindowFocus: false,
-    initialStale: true,
-    refetchOnMount: true,
     refetchOnReconnect: false,
     staleTime: ms('10 seconds'),
   },
