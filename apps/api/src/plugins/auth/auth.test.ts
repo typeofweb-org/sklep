@@ -59,7 +59,7 @@ describe('/auth', () => {
       expect(injection.result).toHaveProperty('message', 'TOO_EASY');
     });
 
-    it(`should return 409 when user with the same email exists`, async () => {
+    it.only(`should return 409 when user with the same email exists`, async () => {
       const server = await getServerForTest();
 
       const firstName = Faker.name.firstName();
@@ -83,6 +83,7 @@ describe('/auth', () => {
           password: '123!@#dsaASD',
         },
       });
+      console.log(injection.result);
 
       expect(injection.statusCode).toEqual(409);
     });
