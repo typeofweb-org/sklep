@@ -3,6 +3,7 @@ import ms from 'ms';
 import React from 'react';
 
 import { useGetOrderById } from '../../../../utils/api/queryHooks';
+import { formatCurrency } from '../../../../utils/currency';
 import { Price } from '../../shared/components/price/Price';
 import { CartItemImage } from '../../shared/image/CartItemImage';
 
@@ -78,7 +79,7 @@ export const CheckoutInProgress = React.memo<CheckoutInProgressProps>(({ orderId
             <div className="flex justify-between w-full p-4 text-2xl">
               <span>Do zapłaty</span>
               {/* @todo add shipping cost */}
-              <span>{cart.discountSubTotal} zł</span>
+              <span>{formatCurrency(cart.discountSubTotal / 100)}</span>
             </div>
           </div>
         </div>

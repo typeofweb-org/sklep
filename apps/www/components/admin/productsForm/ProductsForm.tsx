@@ -2,21 +2,22 @@ import { Add16 } from '@carbon/icons-react';
 import type { SklepTypes } from '@sklep/types';
 import {
   Button,
-  TextInput,
-  TextArea,
-  NumberInput,
-  Toggle,
-  Link as CarbonLink,
-  Grid,
-  Row,
   Column,
+  Grid,
   InlineLoading,
+  Link as CarbonLink,
+  NumberInput,
+  Row,
+  TextArea,
+  TextInput,
+  Toggle,
 } from 'carbon-components-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
+import type { ObjectSchema } from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 import { useToasts } from '../toasts/Toasts';
@@ -34,7 +35,14 @@ const productSchema = Yup.object({
   name: Yup.string().required().label('Nazwa produktu'),
   description: Yup.string().required().label('Opis produktu'),
   regularPrice: Yup.number().required().label('Cena produktu'),
-  discountPrice: Yup.number().optional().nullable(),
+  discountPrice: Yup.number()
+    .optional()
+    .nullable()
+    .when('regularPrice', (regularPrice: number, schema: ObjectSchema) =>
+      regularPrice
+        ? Yup.number().max(regularPrice, 'Cena promocyjna nie może być wyższa niż cena podstawowa')
+        : schema,
+    ),
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
 }).required();
