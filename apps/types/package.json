@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "chokidar \"../api/src/**/*.ts\" --ignore \"../api/src/**/*.test.ts\" --initial -c \"yarn generate-api-types\"",
-    "generate-api-types": "wait-on tcp:3002 --interval 5000 && yarn swagger-to-ts http://localhost:3002/swagger.json --output types.ts --prettier-config ../../.prettierrc"
+    "generate-api-types": "wait-on tcp:3002 --interval 5000 && yarn swagger-to-ts http://api.sklep.localhost:3002/swagger.json --output types.ts --prettier-config ../../.prettierrc"
   },
   "dependencies": {
     "@manifoldco/swagger-to-ts": "github:mmiszy/swagger-to-ts#fae0dceec79e17caa8d6bb013486d149b9927c5f"

@@ -32,7 +32,7 @@ export const Toast = ({ isVisible, hideToast }: ToastProps) => {
   }
 
   return ReactDOM.createPortal(
-    <div className="fixed top-0 right-0 px-2 h-12 mr-2 mt-2 bg-white flex items-center justify-center rounded slide-left border-l-4 border-green-600 shadow z-50">
+    <div className="fixed top-0 right-0 px-2 h-12 mr-2 mt-20 bg-white flex items-center justify-center rounded slide-left border-l-4 border-green-600 shadow z-50">
       <div className="flex justify-center items-center">
         <SuccessIcon />
         <p className="text-gray-900">Dodano do koszyka</p>

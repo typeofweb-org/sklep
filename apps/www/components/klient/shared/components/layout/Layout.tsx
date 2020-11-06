@@ -25,10 +25,11 @@ export const LoadingIndicator = () => {
 };
 
 export const Layout = React.memo<LayoutProps>(({ children, title }) => {
+  const fullTitle = title.trim() ? `${title.trim()} | Sklep Type of Web` : 'Sklep Type of Web';
   return (
     <div className="font-sans antialiased text-gray-900 min-h-screen bg-white">
       <Head>
-        <title>{title}</title>
+        <title>{fullTitle}</title>
         <link
           href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap"
           rel="stylesheet"

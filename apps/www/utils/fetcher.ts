@@ -132,6 +132,7 @@ export async function fetcher<
   if (response.ok) {
     return data as ResponseType<CurrentPath, CurrentMethod>;
   }
+
   throw new ResponseError(response.statusText, response.status, data);
 }
 
@@ -164,4 +165,18 @@ export const useToWQuery = <
     FetcherConfig<CurrentPath, CurrentMethod>,
   ],
   queryConfig?: QueryConfig<ResponseType<CurrentPath, CurrentMethod>, unknown>,
-) => usePaginatedQuery([path, method, config], () => fetcher(path, method, config), queryConfig);
+) =>
+  usePaginatedQuery(
+    [path, method, config],
+    () => {
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      const promise = fetcher(path, method, { ...config, config: { signal } });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      (promise as any).cancel = () => controller.abort();
+
+      return promise;
+    },
+    queryConfig,
+  );
