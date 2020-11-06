@@ -2,7 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 
 import { AdminLayout } from '../../../components/admin/adminLayout/AdminLayout';
-import { AdminOrderStatus } from '../../../components/admin/adminOrderStatus/adminOrderStatus';
+import { AdminSingleOrder } from '../../../components/admin/adminSingleOrder/AdminSingleOrder';
 
 export default function AdminOrderStatusPage() {
   return (
@@ -11,7 +11,7 @@ export default function AdminOrderStatusPage() {
         <title>Status zamówienia</title>
       </Head>
       <AdminLayout>
-        <AdminOrderStatus />
+        <AdminSingleOrder />
       </AdminLayout>
     </>
   );
