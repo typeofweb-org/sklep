@@ -6,7 +6,7 @@ if (!dbName.includes('test')) {
   throw new Error('Invalid DB');
 }
 
-(async () => {
+void (async () => {
   await prisma.$queryRaw(`DROP SCHEMA IF EXISTS public CASCADE;`);
   await prisma.$queryRaw(`CREATE SCHEMA public;`);
 })()

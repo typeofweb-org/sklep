@@ -18,6 +18,7 @@ import {
 import { AuthPlugin } from './plugins/auth';
 import { CartPlugin } from './plugins/cart';
 import { OrderPlugin } from './plugins/order';
+import { isPrismaError } from './prisma/prisma-helpers';
 
 const getServer = () => {
   return new Hapi.Server({
@@ -120,12 +121,11 @@ export const getServerWithPlugins = async () => {
   });
 
   server.ext('onPreResponse', ({ response }, h) => {
-    if (response instanceof Error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      switch ((response as any).code) {
+    const res = response as unknown;
+    if (isPrismaError(res)) {
+      switch (res.code) {
         case 'P2002':
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          return Boom.conflict(JSON.stringify((response as any).meta));
+          return Boom.conflict(JSON.stringify(res.meta));
       }
     }
     return h.continue;

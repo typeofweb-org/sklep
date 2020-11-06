@@ -1,4 +1,4 @@
-import type { InferGetStaticPropsType } from 'next';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { QueryCache } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -8,11 +8,17 @@ import { Layout } from '../../components/klient/shared/components/layout/Layout'
 import { useGetProducts, useGetProductBySlug } from '../../utils/api/queryHooks';
 import type { InferGetStaticPathsType } from '../../utils/types';
 
-function ProductPage({ product }: InferGetStaticPropsType<typeof getStaticProps>) {
+function ProductPage() {
+  const router = useRouter();
+  const productSlug = String(router.query.productSlug);
+  const { latestData: productResponse } = useGetProductBySlug(productSlug);
+
   return (
-    <Layout title="Sklep strona główna">
-      <FeaturedProduct product={product} />
-    </Layout>
+    productResponse?.data && (
+      <Layout title={productResponse.data.name}>
+        <FeaturedProduct product={productResponse.data} />
+      </Layout>
+    )
   );
 }
 
@@ -33,12 +39,11 @@ export const getStaticProps = async ({
   params: { productSlug },
 }: InferGetStaticPathsType<typeof getStaticPaths>) => {
   const queryCache = new QueryCache();
-  const productResponse = await useGetProductBySlug.prefetch(queryCache, productSlug);
+  await useGetProductBySlug.prefetch(queryCache, productSlug);
 
   return {
     props: {
       dehydratedState: dehydrate(queryCache),
-      product: productResponse?.data,
     },
     revalidate: 60,
   };

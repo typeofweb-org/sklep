@@ -37,11 +37,6 @@ export async function createUser(
   request: Request,
   { email, password }: { readonly email: string; readonly password: string },
 ) {
-  const existingUser = await request.server.app.db.user.findOne({ where: { email } });
-  if (existingUser) {
-    throw Boom.conflict();
-  }
-
   if (!isPasswordStrongEnough(password)) {
     throw Boom.badRequest('TOO_EASY');
   }

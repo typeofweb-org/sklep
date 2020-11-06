@@ -6,14 +6,19 @@ import { Form as FinalForm } from 'react-final-form';
 import { ValidationError } from 'yup';
 import type { ObjectSchema } from 'yup';
 
+type FinalFormWrapperProps<
+  FormValues extends object = Record<string, any>,
+  InitialFormValues = Partial<FormValues>
+> = FormProps<FormValues, InitialFormValues> & {
+  readonly schema: ObjectSchema<FormValues>;
+  readonly className?: string;
+};
+
 export const FinalFormWrapper: <
   FormValues extends object = Record<string, any>,
   InitialFormValues = Partial<FormValues>
 >(
-  props: Omit<FormProps<FormValues, InitialFormValues>, 'validate'> & {
-    readonly schema: ObjectSchema<FormValues>;
-    readonly className?: string;
-  },
+  props: FinalFormWrapperProps<FormValues, InitialFormValues>,
 ) => React.ReactElement = ({ schema, onSubmit, className, children, ...props }) => {
   const validate = React.useMemo(() => createFormValidator(schema), [schema]);
   const handleSubmit = React.useCallback<typeof onSubmit>(
