@@ -1,7 +1,7 @@
 import type { SklepTypes } from '@sklep/types';
-import Link from 'next/link';
 import React from 'react';
 
+import { BetterLink } from '../../../../shared/components/betterLink/BetterLink';
 import { Price } from '../../../../shared/components/price/Price';
 
 type CartSummaryProps = {
@@ -22,11 +22,11 @@ export const CartSummary = React.memo<CartSummaryProps>(({ cart }) => {
           />
         </div>
       </div>
-      <Link href="/zamowienie">
+      <BetterLink href="/zamowienie" disabled={!cart.totalQuantity}>
         <a className="block bg-gray-900 text-white text-lg w-full rounded-sm mt-4 p-4 shadow-sm hover:bg-gray-800 text-center">
           Przejdź do płatności
         </a>
-      </Link>
+      </BetterLink>
     </div>
   );
 });

@@ -1,9 +1,11 @@
 import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { useGetOrderById } from '../../../../utils/api/queryHooks';
 import { formatCurrency } from '../../../../utils/currency';
+import { ResponseError } from '../../../../utils/fetcher';
 import { Price } from '../../shared/components/price/Price';
 import { CartItemImage } from '../../shared/image/CartItemImage';
 
@@ -15,9 +17,10 @@ const ORDER_FINISHED_STATUSES = ['COMPLETED', 'CANCELLED', 'REFUNDED', 'FAILED']
 const POLL_INTERVAL = ms('3 seconds');
 
 export const CheckoutInProgress = React.memo<CheckoutInProgressProps>(({ orderId }) => {
+  const router = useRouter();
   const [isFinished, setIsFinished] = React.useState(false);
 
-  const { latestData: latestOrderResponse, isLoading } = useGetOrderById(orderId, {
+  const { latestData: latestOrderResponse, isLoading, error } = useGetOrderById(orderId, {
     // long polling until the order is paid
     refetchInterval: !isFinished ? POLL_INTERVAL : undefined,
     refetchIntervalInBackground: !isFinished,
@@ -25,6 +28,14 @@ export const CheckoutInProgress = React.memo<CheckoutInProgressProps>(({ orderId
   const cart = latestOrderResponse?.data.cart as
     | SklepTypes['postCart200Response']['data']
     | undefined;
+
+  React.useEffect(() => {
+    if (error instanceof ResponseError) {
+      if (error.status === 404) {
+        void router.replace('/');
+      }
+    }
+  }, [error, router]);
 
   React.useEffect(() => {
     if (
@@ -35,7 +46,7 @@ export const CheckoutInProgress = React.memo<CheckoutInProgressProps>(({ orderId
     }
   }, [latestOrderResponse?.data.status]);
 
-  if (isLoading || !cart) {
+  if (isLoading || !cart || error) {
     return null;
   }
 
