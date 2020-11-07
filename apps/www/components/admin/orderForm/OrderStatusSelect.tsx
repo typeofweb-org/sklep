@@ -20,7 +20,7 @@ export const OrderStatusSelect = React.memo<OrderStatusSelectProps>(({ input, me
             <SelectItem
               key={orderStatus}
               value={orderStatus}
-              text={normalizeOrderStatus(orderStatus)}
+              text={TRANSLATED_STATUS_ORDERS[orderStatus]}
             />
           ))}
         </Select>
@@ -32,23 +32,15 @@ export const OrderStatusSelect = React.memo<OrderStatusSelectProps>(({ input, me
 });
 OrderStatusSelect.displayName = 'OrderStatusSelect';
 
-export function normalizeOrderStatus(
-  orderStatus: SklepTypes['getOrdersStatuses200Response']['data'][number],
-) {
-  switch (orderStatus) {
-    case 'CANCELLED':
-      return 'Anulowane';
-    case 'COMPLETED':
-      return 'Zrealizoawne';
-    case 'FAILED':
-      return 'Nie powiodło się';
-    case 'ON_HOLD':
-      return 'Wstrzymane';
-    case 'PENDING':
-      return 'Oczekiwanie na potwierdzenie';
-    case 'PROCESSING':
-      return 'Przetwarzane';
-    case 'REFUNDED':
-      return 'Zrefundowane';
-  }
-}
+export const TRANSLATED_STATUS_ORDERS: Record<
+  SklepTypes['getOrdersStatuses200Response']['data'][number],
+  string
+> = {
+  CANCELLED: 'Anulowane',
+  COMPLETED: 'Zrealizoawne',
+  FAILED: 'Nie powiodło się',
+  ON_HOLD: 'Wstrzymane',
+  PENDING: 'Oczekiwanie na potwierdzenie',
+  PROCESSING: 'Przetwarzane',
+  REFUNDED: 'Zrefundowane',
+};
