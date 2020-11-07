@@ -1,7 +1,8 @@
 import { Elements } from '@stripe/react-stripe-js';
 import type { Stripe } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js/pure';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
 import { Checkout } from '../../components/klient/modules/checkout/Checkout';
 import { Layout } from '../../components/klient/shared/components/layout/Layout';
@@ -19,6 +20,14 @@ const getStripe = () => {
 
 function CheckoutPage() {
   const { cartResponseData } = useCart();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (cartResponseData && !cartResponseData.totalQuantity) {
+      void router.replace('/');
+    }
+  }, [cartResponseData, router]);
+
   return (
     <Layout title="Płatność i realizacja">
       <Elements stripe={getStripe()}>
