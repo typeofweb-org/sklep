@@ -56,3 +56,9 @@ export const updateOrderPayloadSchema = Joi.object<SklepTypes['putOrdersOrderIdR
 export const updateOrderParamsSchema = Joi.object<SklepTypes['putOrdersOrderIdRequestPathParams']>({
   orderId: Joi.string().required(),
 }).required();
+
+export const getAllOrderStatusesSchema = Joi.object<SklepTypes['getOrdersStatuses200Response']>({
+  data: Joi.array()
+    .items(Joi.string().valid(...Object.values(Enums.OrderStatus)))
+    .required(),
+}).required();

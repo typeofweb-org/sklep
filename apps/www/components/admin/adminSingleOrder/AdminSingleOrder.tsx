@@ -9,7 +9,7 @@ export const AdminSingleOrder = React.memo(() => {
   const router = useRouter();
   const orderId = router.query.orderId as string;
   const { latestData, isLoading, isError } = useGetOrderById(orderId, {
-    refetchOnReconnect: false,
+    enabled: Boolean(orderId),
   });
 
   if (!orderId) {

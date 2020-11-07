@@ -1,14 +1,15 @@
 import type { SklepTypes } from '@sklep/types';
-import { Button, InlineLoading, Select, SelectItem } from 'carbon-components-react';
+import { Button, InlineLoading } from 'carbon-components-react';
 import React from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 
 import { updateOrder } from '../../../utils/api/updateOrder';
-import { getErrorProps, ToWForm } from '../../../utils/formUtils';
+import { ToWForm } from '../../../utils/formUtils';
 import { useToasts } from '../toasts/Toasts';
 
+import { OrderStatusSelect } from './OrderStatusSelect';
 import { ORDER_STATUSES } from './constants';
 
 type OrderFormProps = {
@@ -64,17 +65,7 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   return (
     <ToWForm onSubmit={handleSubmit} schema={formSchema} initialValues={{ status }}>
       <Field<string> name="status">
-        {({ input, meta }) => (
-          <Select {...input} {...getErrorProps(meta)} id="status" labelText="Status zamówienia">
-            {ORDER_STATUSES.map((orderStatus) => (
-              <SelectItem
-                key={orderStatus}
-                value={orderStatus}
-                text={normalizeOrderStatus(orderStatus)}
-              />
-            ))}
-          </Select>
-        )}
+        {({ input, meta }) => <OrderStatusSelect input={input} meta={meta} />}
       </Field>
       <Button kind="primary" type="submit" disabled={isLoading}>
         {!isLoading && 'Zaaktualizuj status zamówienia'}
@@ -84,7 +75,3 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   );
 });
 OrderForm.displayName = 'OrderForm';
-
-function normalizeOrderStatus(orderStatus: SklepTypes['putOrdersOrderIdRequestBody']['status']) {
-  return orderStatus.charAt(0).toUpperCase() + orderStatus.slice(1).toLowerCase();
-}

@@ -15,6 +15,7 @@ import {
   handleStripeEvent,
   getAllOrders,
   updateOrder,
+  getAllOrderStatuses,
 } from './orderFunctions';
 import {
   updateOrderParamsSchema,
@@ -25,6 +26,7 @@ import {
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
   getAllOrdersQuerySchema,
+  getAllOrderStatusesSchema,
 } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
@@ -235,6 +237,24 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         return {
           data: orders,
           meta: { total },
+        };
+      },
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/statuses',
+      options: {
+        tags: ['api', 'orders'],
+        response: {
+          schema: getAllOrderStatusesSchema,
+        },
+      },
+      handler() {
+        const orderStatuses = getAllOrderStatuses();
+
+        return {
+          data: orderStatuses,
         };
       },
     });
