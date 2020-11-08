@@ -19,7 +19,7 @@ type OrderFormProps = {
 
 type OrderRequestBody = SklepTypes['putOrdersOrderIdRequestBody'];
 
-const ORDERS_STATUSES_QUERY_KEY = ['/orders', 'GET'] as const;
+const ORDERS_QUERY_KEY = ['/orders', 'GET'] as const;
 
 export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const { addToast } = useToasts();
@@ -43,7 +43,7 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   );
 
   const [mutate, { isLoading }] = useMutation(memoizedUpdateOrder, {
-    onSettled: () => cache.invalidateQueries(ORDERS_STATUSES_QUERY_KEY),
+    onSettled: () => cache.invalidateQueries(ORDERS_QUERY_KEY),
     onSuccess() {
       addToast({
         kind: 'success',
