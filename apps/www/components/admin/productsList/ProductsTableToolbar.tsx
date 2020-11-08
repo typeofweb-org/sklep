@@ -16,6 +16,8 @@ import { useToasts } from '../toasts/Toasts';
 
 import type { ProductsTableRow, ProductsTableHeader } from './ProductListUtils';
 
+export const PRODUCTS_QUERY_KEY = ['/products', 'GET'];
+
 export const ProductsTableToolbar = React.memo<
   DataTableCustomRenderProps<ProductsTableRow, ProductsTableHeader>
 >(({ getBatchActionProps, selectedRows }) => {
@@ -23,11 +25,11 @@ export const ProductsTableToolbar = React.memo<
   const cache = useQueryCache();
   const { addToast } = useToasts();
   const [mutate] = useMutation(deleteProducts, {
-    async onSuccess(settledPromises: readonly PromiseSettledResult<never>[]) {
+    onSettled: () => cache.invalidateQueries(PRODUCTS_QUERY_KEY),
+    onSuccess(settledPromises: readonly PromiseSettledResult<never>[]) {
       const totalNumberOfPromises = settledPromises.length;
       const resolvedPromises = settledPromises.filter(({ status }) => status === 'fulfilled')
         .length;
-      await cache.refetchQueries('/products');
       if (resolvedPromises === totalNumberOfPromises) {
         return addToast({
           kind: 'success',

@@ -128,3 +128,7 @@ export function getAllOrders(
     ...(take && { take, skip }),
   });
 }
+
+export function getAllOrderStatuses() {
+  return Object.values(Enums.OrderStatus);
+}
