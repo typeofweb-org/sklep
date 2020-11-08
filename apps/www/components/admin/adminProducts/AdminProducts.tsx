@@ -7,6 +7,7 @@ import { useGetProducts } from '../../../utils/api/queryHooks';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import type { Product } from '../productsList/ProductListUtils';
 import { ProductsList } from '../productsList/ProductsList';
+import { PRODUCTS_QUERY_KEY } from '../productsList/ProductsTableToolbar';
 import { useToasts } from '../toasts/Toasts';
 
 export const AdminProducts = React.memo(() => {
@@ -22,13 +23,13 @@ export const AdminProducts = React.memo(() => {
   const [mutate, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
     deleteProduct,
     {
-      async onSuccess() {
+      onSettled: () => cache.invalidateQueries(PRODUCTS_QUERY_KEY),
+      onSuccess() {
         addToast({
           kind: 'success',
           title: 'Operacja udana',
           caption: 'Produkt został usunięty pomyślnie',
         });
-        await cache.refetchQueries('/products');
         closeDeletionModal();
         resetDeletionStatus();
       },

@@ -23,7 +23,6 @@ export const getRows = (orders: readonly Order[]) => {
     return {
       ...order,
       total: formatCurrency(order.total / 100),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       status: TRANSLATED_STATUS_ORDERS[order.status],
       isSelected: undefined,
       isExpanded: undefined,

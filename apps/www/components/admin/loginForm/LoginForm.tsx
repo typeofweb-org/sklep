@@ -24,20 +24,22 @@ const loginSchema = Yup.object({
 }).required();
 export type LoginType = Yup.InferType<typeof loginSchema>;
 
+const AUTH_QUERY_KEY = ['/auth/me', 'GET'];
+
 export const LoginForm = () => {
   const router = useRouter();
   const { addToast } = useToasts();
   const cache = useQueryCache();
 
   const [mutate, { isLoading, isError, isSuccess, status }] = useMutation(login, {
-    async onSuccess() {
-      await cache.refetchQueries('/auth/me');
+    onSettled: () => cache.invalidateQueries(AUTH_QUERY_KEY),
+    onSuccess() {
       addToast({
         kind: 'success',
         title: 'Logowanie udane',
         caption: '',
       });
-      await router.replace('/admin/products');
+      void router.replace('/admin/products');
     },
   });
 

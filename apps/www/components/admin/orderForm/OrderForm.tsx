@@ -2,15 +2,15 @@ import type { SklepTypes } from '@sklep/types';
 import { Button, InlineLoading } from 'carbon-components-react';
 import React from 'react';
 import { Field } from 'react-final-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryCache } from 'react-query';
 import * as Yup from 'yup';
 
+import { useGetOrderStatuses } from '../../../utils/api/getAllOrderStatuses';
 import { updateOrder } from '../../../utils/api/updateOrder';
 import { ToWForm } from '../../../utils/formUtils';
 import { useToasts } from '../toasts/Toasts';
 
 import { OrderStatusSelect } from './OrderStatusSelect';
-import { ORDER_STATUSES } from './constants';
 
 type OrderFormProps = {
   readonly status: SklepTypes['getOrdersOrderId200Response']['data']['status'];
@@ -19,12 +19,21 @@ type OrderFormProps = {
 
 type OrderRequestBody = SklepTypes['putOrdersOrderIdRequestBody'];
 
-const formSchema = Yup.object({
-  status: Yup.string().oneOf(ORDER_STATUSES).required().label('Status produktu'),
-}).required();
+const ORDERS_STATUSES_QUERY_KEY = ['/orders', 'GET'] as const;
 
 export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const { addToast } = useToasts();
+  const { latestData } = useGetOrderStatuses();
+  const cache = useQueryCache();
+
+  const formSchema = React.useMemo(() => {
+    return Yup.object({
+      status: Yup.string()
+        .oneOf(latestData ? latestData.data : [])
+        .required()
+        .label('Status produktu'),
+    }).required();
+  }, [latestData]);
 
   const memoizedUpdateOrder = React.useCallback(
     (body: OrderRequestBody) => {
@@ -34,6 +43,7 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   );
 
   const [mutate, { isLoading }] = useMutation(memoizedUpdateOrder, {
+    onSettled: () => cache.invalidateQueries(ORDERS_STATUSES_QUERY_KEY),
     onSuccess() {
       addToast({
         kind: 'success',
@@ -61,6 +71,10 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
     },
     [mutate],
   );
+
+  if (!latestData) {
+    return null;
+  }
 
   return (
     <ToWForm onSubmit={handleSubmit} schema={formSchema} initialValues={{ status }}>
