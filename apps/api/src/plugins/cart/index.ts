@@ -6,7 +6,6 @@ import { isProd } from '../../config';
 import { Enums } from '../../models';
 
 import {
-  calculateCartTotals,
   addToCart,
   cartModelToResponse,
   clearCart,
@@ -32,7 +31,6 @@ declare module '@hapi/hapi' {
       readonly removeFromCart: typeof removeFromCart;
       readonly clearCart: typeof clearCart;
       readonly findCart: typeof findCart;
-      readonly calculateCartTotals: typeof calculateCartTotals;
       readonly cartModelToResponse: typeof cartModelToResponse;
     };
   }
@@ -48,7 +46,6 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
     server.expose('removeFromCart', removeFromCart);
     server.expose('clearCart', clearCart);
     server.expose('findCart', findCart);
-    server.expose('calculateCartTotals', calculateCartTotals);
     server.expose('cartModelToResponse', cartModelToResponse);
 
     /**

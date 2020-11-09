@@ -1,8 +1,7 @@
-import Faker from 'faker';
+import { calculateCartTotals } from './index';
+import * as Faker from 'faker';
 
-import { calculateCartTotals } from './cartFunctions';
-
-describe('cartFunctions', () => {
+describe('calculations', () => {
   describe('calculateCartTotals', () => {
     it('should calculate subtotals', () => {
       type CartArg = Parameters<typeof calculateCartTotals>[0];
