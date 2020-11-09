@@ -18,5 +18,5 @@ export function serverErrorHandler(err: unknown) {
     const field = error.validation.keys[0];
     return { [field]: error.message };
   }
-  return;
+  return err;
 }
