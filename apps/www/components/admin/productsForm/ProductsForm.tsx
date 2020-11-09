@@ -19,12 +19,12 @@ import { useMutation } from 'react-query';
 import * as Yup from 'yup';
 import type { ObjectSchema } from 'yup';
 
-import { ResponseError } from '../../../utils/fetcher';
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 import { useToasts } from '../toasts/Toasts';
 
 import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
+import { serverErrorHandler } from './utils/serverErrorHandler';
 
 export interface Validation {
   readonly source: string;
@@ -103,14 +103,9 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
   const handleSubmit = React.useCallback(
     async (body: ProductBody) => {
       try {
-        await mutate({ ...body, type: 'SINGLE' });
+        return await mutate({ ...body, type: 'SINGLE' });
       } catch (err) {
-        if (err instanceof ResponseError && err.status === 400) {
-          const error = err.data as My400Error;
-          console.log(error.statusCode);
-          const field = error.validation.keys[0];
-          return { [field]: error.message };
-        }
+        return serverErrorHandler(err);
       }
     },
     [mutate],
