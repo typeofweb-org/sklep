@@ -1,15 +1,15 @@
 type CartFromDB = {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  cartProducts: {
-    quantity: number;
-    product: {
-      id: number;
-      name: string;
-      slug: string;
-      regularPrice: number;
-      discountPrice: number | null;
+  readonly id: string;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly cartProducts: readonly {
+    readonly quantity: number;
+    readonly product: {
+      readonly id: number;
+      readonly name: string;
+      readonly slug: string;
+      readonly regularPrice: number;
+      readonly discountPrice?: number | null;
     };
   }[];
 };
@@ -22,8 +22,8 @@ export function calculateCartTotals(cart: CartFromDB) {
         (cartProduct.product.discountPrice ?? cartProduct.product.regularPrice) *
         cartProduct.quantity;
 
-      acc.regularSubTotal += Math.trunc(regularSum);
-      acc.discountSubTotal += Math.trunc(discountSum);
+      acc.regularSubTotal += Math.round(regularSum);
+      acc.discountSubTotal += Math.round(discountSum);
       acc.totalQuantity += cartProduct.quantity;
       return acc;
     },
