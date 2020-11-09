@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { useGetOrderStatuses } from '../../../utils/api/getAllOrderStatuses';
 import { updateOrder } from '../../../utils/api/updateOrder';
 import { ToWForm } from '../../../utils/formUtils';
+import { serverErrorHandler } from '../productsForm/utils/serverErrorHandler';
 import { useToasts } from '../toasts/Toasts';
 
 import { OrderStatusSelect } from './OrderStatusSelect';
@@ -64,9 +65,9 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const handleSubmit = React.useCallback(
     async (body: OrderRequestBody) => {
       try {
-        await mutate(body);
+        return await mutate(body);
       } catch (err) {
-        // @todo
+        return serverErrorHandler(err);
       }
     },
     [mutate],
