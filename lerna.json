@@ -1,8 +1,11 @@
 {
-  "packages": [
-    "apps/*"
-  ],
+  "packages": ["apps/*"],
   "version": "1.0.0-alpha.0",
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "command": {
+    "bootstrap": {
+      "mutex": "network:13419"
+    }
+  }
 }
