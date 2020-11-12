@@ -3,7 +3,7 @@ import Hapi from '@hapi/hapi';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
-import type { Context, ValidationError, ValidationErrorItem } from 'joi';
+import type { ValidationErrorItem } from 'joi';
 import Joi from 'joi';
 
 import pkg from '../package.json';
