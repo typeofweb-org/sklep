@@ -65,7 +65,7 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const handleSubmit = React.useCallback(
     async (body: OrderRequestBody) => {
       try {
-        return await mutate(body);
+        await mutate(body);
       } catch (err) {
         return serverErrorHandler(err);
       }

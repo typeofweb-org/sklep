@@ -26,18 +26,6 @@ import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
 import { serverErrorHandler } from './utils/serverErrorHandler';
 
-export interface Validation {
-  readonly source: string;
-  readonly keys: readonly string[];
-}
-
-export interface My400Error {
-  readonly statusCode: number;
-  readonly error: string;
-  readonly message: string;
-  readonly validation: Validation;
-}
-
 Yup.setLocale({
   mixed: {
     required: ({ label }) => (label ? `${label} jest polem wymaganym` : `To pole jest wymagane`),
@@ -103,7 +91,7 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
   const handleSubmit = React.useCallback(
     async (body: ProductBody) => {
       try {
-        return await mutate({ ...body, type: 'SINGLE' });
+        await mutate({ ...body, type: 'SINGLE' });
       } catch (err) {
         return serverErrorHandler(err);
       }
