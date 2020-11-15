@@ -20,11 +20,11 @@ import * as Yup from 'yup';
 import type { ObjectSchema } from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
+import { serverErrorHandler } from '../../../utils/serverErrorHandler';
 import { useToasts } from '../toasts/Toasts';
 
 import { ProductSlug } from './ProductSlug';
 import styles from './ProductsForm.module.scss';
-import { serverErrorHandler } from './utils/serverErrorHandler';
 
 Yup.setLocale({
   mixed: {

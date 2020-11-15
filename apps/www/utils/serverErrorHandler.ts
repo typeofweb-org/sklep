@@ -1,4 +1,4 @@
-import { ResponseError } from '../../../../utils/fetcher';
+import { ResponseError } from './fetcher';
 
 export interface ErrorDetail {
   readonly message: string;
