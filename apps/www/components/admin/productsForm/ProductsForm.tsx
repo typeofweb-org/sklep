@@ -92,6 +92,7 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
     async (body: ProductBody) => {
       try {
         await mutate({ ...body, type: 'SINGLE' });
+        return;
       } catch (err) {
         return serverErrorHandler(err);
       }

@@ -30,9 +30,11 @@ const badRequestErrorsTranslation: ErrorTranslation = {
 };
 
 function getTranslatedErrorMessage(message: string) {
-  return badRequestErrorsTranslation[message]
-    ? badRequestErrorsTranslation[message]
-    : 'Popraw pole';
+  if (!badRequestErrorsTranslation[message]) {
+    console.warn(`No translation for ${message}`);
+    return 'Popraw pole';
+  }
+  return badRequestErrorsTranslation[message];
 }
 
 export function serverErrorHandler(err: unknown) {
@@ -41,9 +43,9 @@ export function serverErrorHandler(err: unknown) {
 
     return details
       .map((error) => {
-        return { [`${error.path[0]}`]: getTranslatedErrorMessage('error.message') };
+        return { [error.path[0]]: getTranslatedErrorMessage(error.message) };
       })
       .reduce((error1, error2) => Object.assign(error1, error2), {});
   }
-  return err;
+  throw err;
 }
