@@ -1,4 +1,4 @@
-import { ResponseError } from './fetcher';
+import type { ResponseError } from './fetcher';
 
 export interface ErrorDetail {
   readonly message: string;
@@ -37,10 +37,9 @@ function getTranslatedErrorMessage(message: string) {
   return badRequestErrorsTranslation[message];
 }
 
-export function serverErrorHandler(err: unknown) {
-  if (err instanceof ResponseError && err.status === 400) {
+export function serverErrorHandler(err: ResponseError) {
+  if (err.status === 400) {
     const { details } = err.data as My400Error;
-
     return details
       .map((error) => {
         return { [error.path[0]]: getTranslatedErrorMessage(error.message) };
