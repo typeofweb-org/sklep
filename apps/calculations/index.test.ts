@@ -1,8 +1,8 @@
-import Faker from 'faker';
+import * as Faker from 'faker';
 
-import { calculateCartTotals } from './cartFunctions';
+import { calculateCartTotals } from './index';
 
-describe('cartFunctions', () => {
+describe('calculations', () => {
   describe('calculateCartTotals', () => {
     it('should calculate subtotals', () => {
       type CartArg = Parameters<typeof calculateCartTotals>[0];
@@ -48,6 +48,32 @@ describe('cartFunctions', () => {
         regularSubTotal: 408_20,
         discountSubTotal: 295_20,
         totalQuantity: 5,
+      });
+    });
+
+    it('rounds correctly', () => {
+      type CartArg = Parameters<typeof calculateCartTotals>[0];
+      const cart: CartArg = {
+        id: Faker.random.uuid(),
+        createdAt: Faker.date.past(),
+        updatedAt: Faker.date.past(),
+        cartProducts: [
+          {
+            quantity: 1.05,
+            product: {
+              id: Faker.random.number({ min: 0, precision: 0 }),
+              name: Faker.commerce.productName(),
+              slug: Faker.internet.userName(),
+              regularPrice: 5713,
+            },
+          },
+        ],
+      };
+
+      expect(calculateCartTotals(cart)).toEqual({
+        regularSubTotal: 5999,
+        discountSubTotal: 5999,
+        totalQuantity: 1.05,
       });
     });
   });

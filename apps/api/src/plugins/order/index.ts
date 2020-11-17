@@ -1,6 +1,7 @@
 import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { InputJsonObject } from '@prisma/client';
+import { calculateCartTotals } from '@sklep/calculations';
 import type { SklepTypes } from '@sklep/types';
 import { isNil } from 'ramda';
 import Stripe from 'stripe';
@@ -93,7 +94,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
           throw Boom.badRequest('INVALID_CART');
         }
 
-        const totals = request.server.plugins.sklepCart.calculateCartTotals(cart);
+        const totals = calculateCartTotals(cart);
         const cartTotal = totals.discountSubTotal;
 
         const cartJson = JSON.parse(
