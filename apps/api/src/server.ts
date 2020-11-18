@@ -17,6 +17,7 @@ import {
 } from './modules/products/productRoutes';
 import { AuthPlugin } from './plugins/auth';
 import { CartPlugin } from './plugins/cart';
+import { MediaPlugin } from './plugins/media';
 import { OrderPlugin } from './plugins/order';
 import { isPrismaError } from './prisma/prisma-helpers';
 
@@ -111,6 +112,17 @@ export const getServerWithPlugins = async () => {
     {
       routes: {
         prefix: '/cart',
+      },
+    },
+  );
+
+  await server.register(
+    {
+      plugin: MediaPlugin,
+    },
+    {
+      routes: {
+        prefix: '/media',
       },
     },
   );

@@ -102,11 +102,19 @@ export interface definitions {
     type: 'SINGLE' | 'BUNDLE';
   };
   Model18: { email: string; password: string };
-  Model19: { productId: number; quantity: number };
-  Model20: { productId: number };
-  Model21: { orderId: string; stripeClientSecret: string };
-  Model22: { data: definitions['Model21'] };
-  Model23: {
+  Model19: {
+    /**
+     * file
+     */
+    file: { [key: string]: any };
+    alt: string;
+    description?: string;
+  };
+  Model20: { productId: number; quantity: number };
+  Model21: { productId: number };
+  Model22: { orderId: string; stripeClientSecret: string };
+  Model23: { data: definitions['Model22'] };
+  Model24: {
     status:
       | 'PENDING'
       | 'PROCESSING'
@@ -116,6 +124,7 @@ export interface definitions {
       | 'REFUNDED'
       | 'FAILED';
   };
+  Model25: { alt: string; description: string; productId: number };
 
   getOrdersRequestQuery: {
     take?: number;
@@ -137,6 +146,11 @@ export interface definitions {
 
   getCartAll200Response: definitions['Model10'];
 
+  getMediaImagesDefaultResponse: string;
+  postMediaImagesRequestBody: definitions['Model19'];
+
+  postMediaImagesDefaultResponse: string;
+
   getOrdersStatuses200Response: definitions['Model12'];
   getOrdersOrderIdRequestPathParams: {
     orderId: string;
@@ -146,7 +160,7 @@ export interface definitions {
   putOrdersOrderIdRequestPathParams: {
     orderId: string;
   };
-  putOrdersOrderIdRequestBody: definitions['Model23'];
+  putOrdersOrderIdRequestBody: definitions['Model24'];
 
   putOrdersOrderId200Response: definitions['Model14'];
   getProductsProductIdOrSlugRequestPathParams: {
@@ -166,19 +180,19 @@ export interface definitions {
   postAuthRegisterDefaultResponse: string;
 
   postOrdersStripeWebhookDefaultResponse: string;
-  patchCartAddRequestBody: definitions['Model19'];
+  patchCartAddRequestBody: definitions['Model20'];
 
   patchCartAddDefaultResponse: string;
 
   patchCartClearDefaultResponse: string;
-  patchCartRemoveRequestBody: definitions['Model20'];
+  patchCartRemoveRequestBody: definitions['Model21'];
 
   patchCartRemoveDefaultResponse: string;
-  patchCartSetRequestBody: definitions['Model19'];
+  patchCartSetRequestBody: definitions['Model20'];
 
   patchCartSetDefaultResponse: string;
 
-  patchOrdersInitiateStripePayment200Response: definitions['Model22'];
+  patchOrdersInitiateStripePayment200Response: definitions['Model23'];
   putProductsProductIdRequestPathParams: {
     productId: number;
   };
@@ -190,6 +204,17 @@ export interface definitions {
   };
 
   deleteProductsProductIdDefaultResponse: string;
+  putMediaImagesImageIdRequestPathParams: {
+    imageId: number;
+  };
+  putMediaImagesImageIdRequestBody: definitions['Model25'];
+
+  putMediaImagesImageIdDefaultResponse: string;
+  deleteMediaImagesImageIdRequestPathParams: {
+    imageId: number;
+  };
+
+  deleteMediaImagesImageIdDefaultResponse: string;
 
   pathsDefinitions: {
     '/orders': {
@@ -227,6 +252,16 @@ export interface definitions {
         response: definitions['Model10'];
       };
     };
+    '/media/images': {
+      GET: {
+        response: string;
+      };
+      POST: {
+        requestBody: definitions['Model19'];
+
+        response: string;
+      };
+    };
     '/orders/statuses': {
       GET: {
         response: definitions['Model12'];
@@ -244,7 +279,7 @@ export interface definitions {
         requestPathParams: {
           orderId: string;
         };
-        requestBody: definitions['Model23'];
+        requestBody: definitions['Model24'];
 
         response: definitions['Model14'];
       };
@@ -289,7 +324,7 @@ export interface definitions {
     };
     '/cart/add': {
       PATCH: {
-        requestBody: definitions['Model19'];
+        requestBody: definitions['Model20'];
 
         response: string;
       };
@@ -301,21 +336,21 @@ export interface definitions {
     };
     '/cart/remove': {
       PATCH: {
-        requestBody: definitions['Model20'];
+        requestBody: definitions['Model21'];
 
         response: string;
       };
     };
     '/cart/set': {
       PATCH: {
-        requestBody: definitions['Model19'];
+        requestBody: definitions['Model20'];
 
         response: string;
       };
     };
     '/orders/initiate-stripe-payment': {
       PATCH: {
-        response: definitions['Model22'];
+        response: definitions['Model23'];
       };
     };
     '/products/{productId}': {
@@ -330,6 +365,23 @@ export interface definitions {
       DELETE: {
         requestPathParams: {
           productId: number;
+        };
+
+        response: string;
+      };
+    };
+    '/media/images/{imageId}': {
+      PUT: {
+        requestPathParams: {
+          imageId: number;
+        };
+        requestBody: definitions['Model25'];
+
+        response: string;
+      };
+      DELETE: {
+        requestPathParams: {
+          imageId: number;
         };
 
         response: string;

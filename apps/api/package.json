@@ -36,6 +36,7 @@
     "ramda": "0.27.1",
     "slugify": "1.4.6",
     "stripe": "8.120.0",
+    "uuid": "8.3.1",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {
@@ -56,6 +57,7 @@
     "@types/ms": "0.7.31",
     "@types/node": "12.12.55",
     "@types/ramda": "0.27.32",
+    "@types/uuid": "8.3.0",
     "@types/zxcvbn": "4.4.0",
     "cookie": "0.4.1",
     "cross-env": "7.0.2",
