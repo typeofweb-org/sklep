@@ -36,7 +36,8 @@ describe('/products', () => {
         url: '/products',
         headers: auth.headers,
         payload: {
-          description: Faker.lorem.sentences(5),
+          name: 123,
+          description: 123,
           isPublic: Faker.random.arrayElement([true, false]),
           discountPrice: parseInt(Faker.commerce.price(10, 49), 10),
           type: Enums.ProductType.SINGLE,
