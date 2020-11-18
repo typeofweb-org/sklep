@@ -3,6 +3,8 @@ import Joi from 'joi';
 
 import { Enums } from '../../models';
 
+import { taxRateSchema } from './taxRateSchemas';
+
 const productSchema = Joi.object({
   id: Joi.number().required(),
   slug: Joi.string().required(),
@@ -14,9 +16,10 @@ const productSchema = Joi.object({
   type: Joi.string()
     .valid(...Object.keys(Enums.ProductType))
     .required(),
+  taxRate: taxRateSchema.optional(),
 });
 
-export const addProductPayloadSchema = Joi.object<SklepTypes['postProductsRequestBody']>({
+export const addProductPayloadSchema = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().required(),
   isPublic: Joi.boolean().required(),
@@ -25,6 +28,7 @@ export const addProductPayloadSchema = Joi.object<SklepTypes['postProductsReques
   type: Joi.string()
     .valid(...Object.keys(Enums.ProductType))
     .required(),
+  taxRateId: Joi.number().required(),
 }).required();
 
 export const addProductResponseSchema = Joi.object<SklepTypes['postProducts200Response']>({

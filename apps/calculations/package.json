@@ -3,7 +3,8 @@
   "version": "1.0.0-alpha.0",
   "private": true,
   "scripts": {
-    "dev": "jest --watchAll",
+    "dev": "",
+    "dev_": "jest --watchAll",
     "test": "jest",
     "test_:ci": "jest"
   },
