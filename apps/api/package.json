@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "concurrently --kill-others-on-fail \"yarn:dev:start:*\"",
-    "dev:start:server": "wait-on tcp:5432 --interval 5000 && yarn db:migrate:up && ts-node-dev -s -H -T --respawn src/index.ts",
+    "dev:start:server": "wait-on tcp:5432 --interval 5000 && yarn db:migrate:up && ts-node-dev -s -H -T --exit-child --respawn src/index.ts",
     "dev:start:db": "docker-compose up",
     "db:stop": "docker-compose down",
     "db:migrate:up": "prisma migrate up --experimental --create-db && prisma generate",

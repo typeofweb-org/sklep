@@ -106,7 +106,9 @@ export interface definitions {
     /**
      * file
      */
-    file: { [key: string]: any };
+    file: import('stream').Readable & {
+      readonly hapi: { readonly filename: string; readonly headers: Record<string, string> };
+    };
     alt: string;
     description?: string;
   };
@@ -124,7 +126,7 @@ export interface definitions {
       | 'REFUNDED'
       | 'FAILED';
   };
-  Model25: { alt: string; description: string; productId: number };
+  Model25: { alt: string; description?: string; productId: number };
 
   getOrdersRequestQuery: {
     take?: number;
