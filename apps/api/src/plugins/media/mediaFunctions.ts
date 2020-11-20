@@ -5,7 +5,7 @@ import type Hapi from '@hapi/hapi';
 
 type Paylaod = {
   readonly alt: string;
-  readonly description?: string;
+  readonly description?: string | null;
 };
 
 export function getAllImages(server: Hapi.Server) {

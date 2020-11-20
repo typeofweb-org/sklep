@@ -30,14 +30,20 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
       path: '/images',
       options: {
         tags: ['api', 'media'],
-        auth: {
-          scope: Enums.UserRole.ADMIN,
+        auth: false, // Test purposes {
+        //scope: Enums.UserRole.ADMIN,
+        //}
+        plugins: {
+          'hapi-swagger': {
+            payloadType: 'form',
+          },
         },
         payload: {
           allow: 'multipart/form-data',
           multipart: {
-            output: 'stream',
+            output: 'file',
           },
+          uploads: process.cwd(),
           maxBytes: 32 * 1024 * 1024,
           parse: true,
         },
@@ -49,14 +55,14 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
         const {
           file,
           ...restPayload
-        } = request.payload as SklepTypes['postMediaImagesRequestBody'];
+        } = request.payload as SklepTypes['postMediaImagesRequestFormData'];
 
-        return null;
+        console.log(request.payload);
+
         // const uuid = uuidv4();
         // const extension = file.hapi.filename.split('.').pop();
         // const filePath = path.join(MEDIA_DIR, `${uuid}.${extension}`);
         // await Promise.allSettled([
-        //   createImage(),
         //   request.server.app.db.image.create({
         //     data: {
         //       path: filePath,
@@ -64,6 +70,8 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
         //     },
         //   }),
         // ]);
+
+        return null;
       },
     });
 
