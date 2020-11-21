@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
 import type { SklepTypes } from '@sklep/types';
 import getImageDimensions from 'image-size';
@@ -84,7 +85,7 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
           return { data: image };
         } catch (e) {
           await fs.promises.unlink(filePathWithExtension);
-          return h.response();
+          throw Boom.internal('image record could not be created in database');
         }
       },
     });
