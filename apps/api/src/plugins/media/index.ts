@@ -1,23 +1,28 @@
+import fs from 'fs';
 import path from 'path';
 
 import type Hapi from '@hapi/hapi';
 import type { SklepTypes } from '@sklep/types';
-import { v4 as uuidv4 } from 'uuid';
+import getImageDimensions from 'image-size';
 
 import { Enums } from '../../models';
 
 import {
   getImagePath,
   deleteImage,
-  createImage,
   getAllImages,
   updateImage,
+  assertImageFiletype,
+  addFileExtension,
 } from './mediaFunctions';
 import {
   deleteImageParamsSchema,
+  getAllImagesResponseSchema,
   postImagePayloadSchema,
+  postImageResponseSchema,
   putImageParamsSchema,
   putImagePayloadSchema,
+  putImageResponseSchema,
 } from './mediaSchemas';
 
 const MEDIA_DIR = path.join(process.cwd(), '/media');
@@ -30,9 +35,9 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
       path: '/images',
       options: {
         tags: ['api', 'media'],
-        auth: false, // Test purposes {
-        //scope: Enums.UserRole.ADMIN,
-        //}
+        auth: {
+          scope: Enums.UserRole.ADMIN,
+        },
         plugins: {
           'hapi-swagger': {
             payloadType: 'form',
@@ -43,35 +48,44 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
           multipart: {
             output: 'file',
           },
-          uploads: process.cwd(),
+          uploads: MEDIA_DIR,
           maxBytes: 32 * 1024 * 1024,
           parse: true,
+        },
+        response: {
+          schema: postImageResponseSchema,
         },
         validate: {
           payload: postImagePayloadSchema,
         },
       },
-      handler(request, h) {
+      async handler(request, h) {
         const {
           file,
           ...restPayload
         } = request.payload as SklepTypes['postMediaImagesRequestFormData'];
 
-        console.log(request.payload);
+        assertImageFiletype(file.filename, file.headers);
+        const fileExtension = file.filename.split('.').pop() as string;
+        await addFileExtension(file.path, fileExtension);
+        const filePathWithExtension = `${file.path}.${fileExtension}`;
 
-        // const uuid = uuidv4();
-        // const extension = file.hapi.filename.split('.').pop();
-        // const filePath = path.join(MEDIA_DIR, `${uuid}.${extension}`);
-        // await Promise.allSettled([
-        //   request.server.app.db.image.create({
-        //     data: {
-        //       path: filePath,
-        //       ...restPayload,
-        //     },
-        //   }),
-        // ]);
+        const imageDimensions = getImageDimensions(filePathWithExtension);
 
-        return null;
+        try {
+          const image = await request.server.app.db.image.create({
+            data: {
+              path: filePathWithExtension,
+              width: imageDimensions.width as number,
+              height: imageDimensions.height as number,
+              ...restPayload,
+            },
+          });
+          return { data: image };
+        } catch (e) {
+          await fs.promises.unlink(filePathWithExtension);
+          return h.response();
+        }
       },
     });
 
@@ -79,7 +93,13 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
       method: 'GET',
       path: '/images',
       options: {
+        auth: {
+          scope: Enums.UserRole.ADMIN,
+        },
         tags: ['api', 'images'],
+        response: {
+          schema: getAllImagesResponseSchema,
+        },
       },
       async handler(request) {
         const images = await getAllImages(request.server);
@@ -95,9 +115,15 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
       path: '/images/{imageId}',
       options: {
         tags: ['api', 'media'],
+        auth: {
+          scope: Enums.UserRole.ADMIN,
+        },
         validate: {
           params: putImageParamsSchema,
           payload: putImagePayloadSchema,
+        },
+        response: {
+          schema: putImageResponseSchema,
         },
       },
       async handler(request) {
@@ -127,7 +153,6 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
       },
       async handler(request) {
         const id = Number(request.params?.imageId);
-
         const imagePath = await getImagePath(request.server, id);
         await Promise.allSettled([
           deleteImage(imagePath),

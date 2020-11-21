@@ -31,12 +31,12 @@
     "bluebird": "3.7.2",
     "dotenv": "8.2.0",
     "hapi-swagger": "14.0.0",
+    "image-size": "0.9.3",
     "joi": "17.3.0",
     "ms": "2.1.2",
     "ramda": "0.27.1",
     "slugify": "1.4.6",
     "stripe": "8.120.0",
-    "uuid": "8.3.1",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {

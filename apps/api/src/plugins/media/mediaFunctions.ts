@@ -2,10 +2,12 @@ import fs from 'fs';
 
 import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
+import Joi from 'joi';
 
 type Paylaod = {
   readonly alt: string;
   readonly description?: string | null;
+  readonly productId?: number | null;
 };
 
 export function getAllImages(server: Hapi.Server) {
@@ -26,11 +28,6 @@ export async function getImagePath(server: Hapi.Server, imageId: number) {
   throw Boom.badRequest(`Invalid imageId`);
 }
 
-export function createImage(filePath: string, fileStream: fs.ReadStream) {
-  const writeStream = fs.createWriteStream(filePath);
-  fileStream.pipe(writeStream);
-}
-
 export function updateImage(server: Hapi.Server, imageId: number, payload: Paylaod) {
   return server.app.db.image.update({
     where: {
@@ -43,3 +40,20 @@ export function updateImage(server: Hapi.Server, imageId: number, payload: Payla
 export function deleteImage(filePath: string) {
   return fs.promises.unlink(filePath);
 }
+
+export const assertImageFiletype = (filename: string, headers: Record<string, string>) => {
+  const filenameSchema = Joi.string()
+    .regex(/\.(png|jpg|jpeg|svg|gif)$/)
+    .required();
+
+  const contentTypeSchema = Joi.string()
+    .equal('image/jpeg', 'image/png', 'image/svg+xml', 'image/gif')
+    .required();
+
+  Joi.assert(filename, filenameSchema);
+  Joi.assert(headers['content-type'], contentTypeSchema);
+};
+
+export const addFileExtension = (filePath: string, fileExtension: string) => {
+  return fs.promises.rename(filePath, `${filePath}.${fileExtension}`);
+};

@@ -14,6 +14,7 @@ const productSchema = Joi.object({
   type: Joi.string()
     .valid(...Object.keys(Enums.ProductType))
     .required(),
+  coverImageId: Joi.number().optional(),
 });
 
 export const addProductPayloadSchema = Joi.object<SklepTypes['postProductsRequestBody']>({
