@@ -60,7 +60,7 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
           payload: postImagePayloadSchema,
         },
       },
-      async handler(request, h) {
+      async handler(request) {
         const {
           file,
           ...restPayload
