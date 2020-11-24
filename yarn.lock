@@ -1422,10 +1422,10 @@
   resolved "https://registry.yarnpkg.com/@hapi/formula/-/formula-2.0.0.tgz#edade0619ed58c8e4f164f233cda70211e787128"
   integrity sha512-V87P8fv7PI0LH7LiVi8Lkf3x+KCO7pQozXRssAHNXXL9L1K+uyu4XypLXwxqVDKgyQai6qj3/KteNlrqDx4W5A==
 
-"@hapi/hapi@20.0.1":
-  version "20.0.1"
-  resolved "https://registry.yarnpkg.com/@hapi/hapi/-/hapi-20.0.1.tgz#005dd0414182090b4f60851207e38ac389cf844e"
-  integrity sha512-v8NapLf5vkKWIJoBCUBIOk6ZdH9vrxZco4GZbjdM3ROQBDl4eXwW3pySTBL7xWANYp3Nzdn+fiFWjDwdgsSoQg==
+"@hapi/hapi@20.0.3":
+  version "20.0.3"
+  resolved "https://registry.yarnpkg.com/@hapi/hapi/-/hapi-20.0.3.tgz#e72cad460394e6d2c15f9c57abb5d3332dea27e3"
+  integrity sha512-aqJVHVjoY3phiZsgsGjDRG15CoUNIs1azScqLZDOCZUSKYGTbzPi+K0QP+RUjUJ0m8L9dRuTZ27c8HKxG3wEhA==
   dependencies:
     "@hapi/accept" "^5.0.1"
     "@hapi/ammo" "^5.0.1"
@@ -3038,7 +3038,7 @@
   dependencies:
     "@types/hapi__hapi" "*"
 
-"@types/hapi__hapi@*":
+"@types/hapi__hapi@*", "@types/hapi__hapi@20.0.2":
   version "20.0.2"
   resolved "https://registry.yarnpkg.com/@types/hapi__hapi/-/hapi__hapi-20.0.2.tgz#e7571451f7fb75e87ab3873ec91b92f92cd55fff"
   integrity sha512-7FwFoaxSCtHXbHbDdArSeVABFOfMLgVkOvOUtWrqUBzw639B2rq9OHv3kOVDHY0bOao0f6ubMzUxio8WQ9QZfQ==
@@ -3052,24 +3052,10 @@
     "@types/joi" "*"
     "@types/node" "*"
 
-"@types/hapi__hapi@20.0.1":
-  version "20.0.1"
-  resolved "https://registry.yarnpkg.com/@types/hapi__hapi/-/hapi__hapi-20.0.1.tgz#21877f47803ad7b1fae566685b7e67c3dd580a9e"
-  integrity sha512-PRHXC3Cj1fZsTEX7hK1Fa8ohhhnqvbx1drRlxxgkTJQus0bppZYCPxspstTubv4j1XUDSohmFV9cvvaxN5xbqg==
-  dependencies:
-    "@hapi/boom" "^9.0.0"
-    "@hapi/iron" "^6.0.0"
-    "@types/hapi__catbox" "*"
-    "@types/hapi__mimos" "*"
-    "@types/hapi__podium" "*"
-    "@types/hapi__shot" "*"
-    "@types/joi" "*"
-    "@types/node" "*"
-
-"@types/hapi__inert@5.2.1":
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/@types/hapi__inert/-/hapi__inert-5.2.1.tgz#cce395e7470a969f63cf57d561da230218b8b2bb"
-  integrity sha512-pFvXfN9bTGgR6jkgKseXmu5/eHVGVEsGh0LKHCkcezEqZZMJV9YabREVLa6kcYEQMIDQzQSwSakSnemCFiSnOg==
+"@types/hapi__inert@5.2.2":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/@types/hapi__inert/-/hapi__inert-5.2.2.tgz#6513c487d216ed9377c2c0efceb178fda0928bfa"
+  integrity sha512-Vp9HS2wi3Qbm1oUlcTvzA2Zd+f3Dwg+tgLqWA6KTCgKbQX4LCPKIvVssbaQAVncmcpH0aPrtkAfftJlS/sMsGg==
   dependencies:
     "@types/hapi__hapi" "*"
 
