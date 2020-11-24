@@ -20,6 +20,7 @@ import * as Yup from 'yup';
 import type { ObjectSchema } from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
+import { serverErrorHandler } from '../../../utils/serverErrorHandler';
 import { useToasts } from '../toasts/Toasts';
 
 import { ProductSlug } from './ProductSlug';
@@ -91,8 +92,9 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
     async (body: ProductBody) => {
       try {
         await mutate({ ...body, type: 'SINGLE' });
+        return;
       } catch (err) {
-        // @todo
+        return serverErrorHandler(err);
       }
     },
     [mutate],

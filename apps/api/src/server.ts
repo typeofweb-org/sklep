@@ -3,6 +3,7 @@ import Hapi from '@hapi/hapi';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
+import type { ValidationErrorItem } from 'joi';
 import Joi from 'joi';
 
 import pkg from '../package.json';
@@ -21,6 +22,25 @@ import { MediaPlugin } from './plugins/media';
 import { OrderPlugin } from './plugins/order';
 import { isPrismaError } from './prisma/prisma-helpers';
 
+function errorHasDetails(
+  err: any,
+): err is Boom.Boom & { readonly details: readonly ValidationErrorItem[] } & {
+  readonly output: Boom.Output & {
+    readonly payload: Boom.Payload & {
+      // eslint-disable-next-line functional/prefer-readonly-type
+      details: readonly Omit<ValidationErrorItem, 'context'>[];
+    };
+  };
+} {
+  return (
+    err instanceof Error &&
+    Boom.isBoom(err) &&
+    'details' in err &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    Array.isArray((err as any).details)
+  );
+}
+
 const getServer = () => {
   return new Hapi.Server({
     host: getConfig('HOST'),
@@ -38,12 +58,21 @@ const getServer = () => {
         },
       },
       validate: {
+        options: {
+          abortEarly: false,
+          errors: {
+            render: false,
+          },
+        },
         failAction(_request, _h, err) {
-          if (isProd()) {
-            throw Boom.badRequest(`Invalid request payload input`);
-          } else {
-            throw err;
+          if (errorHasDetails(err)) {
+            err.output.payload.details = err.details.map(({ message, path, type }) => ({
+              message,
+              path,
+              type,
+            }));
           }
+          throw err;
         },
       },
     },
