@@ -79,35 +79,7 @@ describe('/taxes', () => {
           headers: auth.headers,
         });
 
-        const result = getInjection.result as SklepTypes['getTaxesTaxIdOrName200Response'];
-
-        expect(getInjection.statusCode).toEqual(200);
-        expect(result).toHaveProperty('data');
-      });
-
-      it('should get a single tax by name', async () => {
-        const server = await getServerForTest();
-        const auth = await createAndAuthRole(server, Enums.UserRole.ADMIN);
-
-        const postInjection = await server.inject({
-          method: 'POST',
-          url: '/taxes',
-          headers: auth.headers,
-          payload: {
-            name: Faker.lorem.sentence(5),
-            taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
-          },
-        });
-
-        const { data } = postInjection.result as SklepTypes['postTaxes200Response'];
-
-        const getInjection = await server.inject({
-          method: 'GET',
-          url: `/taxes/${data.name}`,
-          headers: auth.headers,
-        });
-
-        const result = getInjection.result as SklepTypes['getTaxesTaxIdOrName200Response'];
+        const result = getInjection.result as SklepTypes['getTaxesTaxId200Response'];
 
         expect(getInjection.statusCode).toEqual(200);
         expect(result).toHaveProperty('data');

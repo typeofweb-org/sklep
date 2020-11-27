@@ -64,7 +64,7 @@ export const getTaxesRoute: Hapi.ServerRoute = {
   },
   async handler(request): Promise<SklepTypes['getTaxes200Response']> {
     const taxes = await request.server.app.db.tax.findMany({
-      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+      orderBy: [{ name: 'desc' }, { id: 'asc' }],
       select: taxSelect,
     });
 
@@ -74,7 +74,7 @@ export const getTaxesRoute: Hapi.ServerRoute = {
 
 export const getTaxRoute: Hapi.ServerRoute = {
   method: 'GET',
-  path: '/taxes/{taxIdOrName}',
+  path: '/taxes/{taxId}',
   options: {
     tags: ['api', 'taxes'],
     auth: {
@@ -87,13 +87,9 @@ export const getTaxRoute: Hapi.ServerRoute = {
       params: getTaxParamsSchema,
     },
   },
-  async handler(request): Promise<SklepTypes['getTaxesTaxIdOrName200Response']> {
-    const params = request.params as SklepTypes['getTaxesTaxIdOrNameRequestPathParams'];
-
-    const maybeId = Number(params.taxIdOrName);
-    const query = Number.isNaN(maybeId)
-      ? { name: params.taxIdOrName as string }
-      : { id: params.taxIdOrName as number };
+  async handler(request): Promise<SklepTypes['getTaxesTaxId200Response']> {
+    const params = request.params as SklepTypes['getTaxesTaxIdRequestPathParams'];
+    const query = { id: params.taxId };
 
     const tax = await request.server.app.db.tax.findFirst({
       where: {

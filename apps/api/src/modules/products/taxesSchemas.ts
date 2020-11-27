@@ -21,10 +21,10 @@ export const getTaxesResponseSchema = Joi.object<SklepTypes['getTaxes200Response
 }).required();
 
 export const getTaxParamsSchema = Joi.object({
-  taxIdOrName: Joi.alternatives().try(Joi.number(), Joi.string()).required(),
+  taxId: Joi.number().required(),
 }).required();
 
-export const getTaxResponseSchema = Joi.object<SklepTypes['getTaxesTaxIdOrName200Response']>({
+export const getTaxResponseSchema = Joi.object<SklepTypes['getTaxesTaxId200Response']>({
   data: taxSchema.required(),
 }).required();
 

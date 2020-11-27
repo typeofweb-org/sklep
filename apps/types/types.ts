@@ -164,11 +164,22 @@ export interface definitions {
   };
 
   getProductsProductIdOrSlug200Response: definitions['Model18'];
-  getTaxesTaxIdOrNameRequestPathParams: {
-    taxIdOrName: number | string;
+  getTaxesTaxIdRequestPathParams: {
+    taxId: number;
   };
 
-  getTaxesTaxIdOrName200Response: definitions['Model19'];
+  getTaxesTaxId200Response: definitions['Model19'];
+  putTaxesTaxIdRequestPathParams: {
+    taxId: number;
+  };
+  putTaxesTaxIdRequestBody: definitions['Model22'];
+
+  putTaxesTaxId200Response: definitions['Model19'];
+  deleteTaxesTaxIdRequestPathParams: {
+    taxId: number;
+  };
+
+  deleteTaxesTaxIdDefaultResponse: string;
 
   postCart200Response: definitions['Model20'];
   postAuthLoginRequestBody: definitions['Model23'];
@@ -205,17 +216,6 @@ export interface definitions {
   };
 
   deleteProductsProductIdDefaultResponse: string;
-  putTaxesTaxIdRequestPathParams: {
-    taxId: number;
-  };
-  putTaxesTaxIdRequestBody: definitions['Model22'];
-
-  putTaxesTaxId200Response: definitions['Model19'];
-  deleteTaxesTaxIdRequestPathParams: {
-    taxId: number;
-  };
-
-  deleteTaxesTaxIdDefaultResponse: string;
 
   pathsDefinitions: {
     '/orders': {
@@ -294,13 +294,28 @@ export interface definitions {
         response: definitions['Model18'];
       };
     };
-    '/taxes/{taxIdOrName}': {
+    '/taxes/{taxId}': {
       GET: {
         requestPathParams: {
-          taxIdOrName: number | string;
+          taxId: number;
         };
 
         response: definitions['Model19'];
+      };
+      PUT: {
+        requestPathParams: {
+          taxId: number;
+        };
+        requestBody: definitions['Model22'];
+
+        response: definitions['Model19'];
+      };
+      DELETE: {
+        requestPathParams: {
+          taxId: number;
+        };
+
+        response: string;
       };
     };
     '/cart': {
@@ -375,23 +390,6 @@ export interface definitions {
       DELETE: {
         requestPathParams: {
           productId: number;
-        };
-
-        response: string;
-      };
-    };
-    '/taxes/{taxId}': {
-      PUT: {
-        requestPathParams: {
-          taxId: number;
-        };
-        requestBody: definitions['Model22'];
-
-        response: definitions['Model19'];
-      };
-      DELETE: {
-        requestPathParams: {
-          taxId: number;
         };
 
         response: string;
