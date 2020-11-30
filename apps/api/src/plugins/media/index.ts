@@ -84,7 +84,7 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
           });
           return { data: image };
         } catch (e) {
-          await fs.promises.unlink(filePathWithExtension);
+          await deleteImage(filePathWithExtension);
           throw Boom.internal('image record could not be created in database');
         }
       },
