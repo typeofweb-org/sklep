@@ -16,6 +16,17 @@ export interface definitions {
     totalQuantity: number;
     cartProducts: definitions['cartProducts'];
   };
+  address: {
+    firstName: string;
+    lastName: string;
+    streetName: string;
+    houseNumber: string;
+    apartmentNumber?: string;
+    city: string;
+    zipCode: string;
+    phone: string;
+    email: string;
+  };
   Model2: {
     id: string;
     cart: definitions['cart'];
@@ -28,6 +39,7 @@ export interface definitions {
       | 'CANCELLED'
       | 'REFUNDED'
       | 'FAILED';
+    address: definitions['address'];
     createdAt: string;
     updatedAt: string;
   };
@@ -90,6 +102,7 @@ export interface definitions {
       | 'CANCELLED'
       | 'REFUNDED'
       | 'FAILED';
+    address?: definitions['address'];
     createdAt: string;
     updatedAt: string;
   };
@@ -160,7 +173,7 @@ export interface definitions {
 
   putOrdersOrderId200Response: definitions['Model17'];
   getProductsProductIdOrSlugRequestPathParams: {
-    productIdOrSlug: number | string;
+    productIdOrSlug: number;
   };
 
   getProductsProductIdOrSlug200Response: definitions['Model18'];
@@ -288,7 +301,7 @@ export interface definitions {
     '/products/{productIdOrSlug}': {
       GET: {
         requestPathParams: {
-          productIdOrSlug: number | string;
+          productIdOrSlug: number;
         };
 
         response: definitions['Model18'];

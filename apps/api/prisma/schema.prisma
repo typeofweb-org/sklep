@@ -94,7 +94,7 @@ model Order {
   total Int
   stripePaymentIntentId String? @unique
 
-  // @todo add address
+  address Json?
 
   status OrderStatus @default(PENDING)
   createdAt DateTime @default(now())

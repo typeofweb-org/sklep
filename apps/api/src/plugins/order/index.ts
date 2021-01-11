@@ -28,6 +28,7 @@ import {
   initiateStripePaymentResponse,
   getAllOrdersQuerySchema,
   getAllOrderStatusesSchema,
+  addressSchema,
 } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
@@ -106,10 +107,15 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
           currency: 'pln',
         });
 
+        const shippingAddress = JSON.parse(
+            JSON.stringify(request.payload)
+        )
+
         const order = await createOrder(request, {
           cartJson,
           cartTotal,
           paymentIntentId: paymentIntent.id,
+          addressJson: shippingAddress as InputJsonObject
         });
 
         return {
