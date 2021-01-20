@@ -14,7 +14,53 @@ Projekt edukacyjny. Licencja: [AGPL](./LICENSE)
 127.0.0.1 www.sklep.localhost
 ```
 
-4. Aplikacja będzie dostępna pod adresem http://www.sklep.localhost:3000/ a API pod http://api.sklep.localhost:3002/
+5. Aplikacja będzie dostępna pod adresem http://www.sklep.localhost:3000/ a API pod http://api.sklep.localhost:3002/
+
+6. Rejestracja nowego użytkownika w bazie danych:
+
+- idź do `http://api.sklep.localhost:3002/documentation#`
+- klikasz w `POST ​/auth​/register`
+- następnie `Try it out`
+- w:
+
+```
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+wpisujesz dowolny adres e-mail oraz hasło, np:
+
+```
+{
+  "email": "twoj_adres_email@gmail.com",
+  "password": "twoje_haslo1123"
+}
+```
+
+pamiętaj by hasło nie było zbyt łatwe oraz aby adres e-mail był poprawny.
+
+- klikasz w `execute`
+- otwierasz nowy terminal i wpisujesz:
+
+```
+docker exec -it api_typeofweb_sklep_1 psql -U postgres
+
+potem:
+
+\c sklep
+
+następnie:
+
+UPDATE "User" SET role = 'ADMIN';
+
+A na koniec: \q żeby wyjść
+```
+
+- otwierasz `http://www.sklep.localhost:3000/admin/login` aby się zalogować, jeżeli wszystko będzie w porządku to w prawym górnym rogu zobaczysz "Logowanie udane" i zostaniesz przekierowany na stronę `http://www.sklep.localhost:3000/admin/products` gdzie możesz dodawać produkty.
+
+Jeśli będziesz chciał wyczyścić bazę danych to w folderze `apps/api` w terminalu wpisz `docker-compose down`
 
 ## Zasady
 
