@@ -4,7 +4,7 @@ import { useMutation, useQueryCache } from 'react-query';
 
 import { fetcher } from '../../../../../utils/fetcher';
 import { CART_QUERY_KEY } from '../../../shared/utils/useCart';
-import { AddressDetails } from "../Checkout";
+import type { AddressDetails } from "../Checkout";
 
 export function useStripePayment() {
   const stripe = useStripe();

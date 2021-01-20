@@ -35,7 +35,7 @@ const checkoutSchema = Yup.object({
     shippment: Yup.string().required('Pole jest wymagane'),
 }).required();
 
-const getAddressDetails = (orderDetails: any): AddressDetails => {
+const getAddressDetails = (orderDetails: AddressDetails): AddressDetails => {
     const {
         firstName,
         lastName,
