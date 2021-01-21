@@ -216,6 +216,7 @@ export interface definitions {
   patchCartSetRequestBody: definitions['Model24'];
 
   patchCartSetDefaultResponse: string;
+  patchOrdersInitiateStripePaymentRequestBody: definitions['address'];
 
   patchOrdersInitiateStripePayment200Response: definitions['Model27'];
   putProductsProductIdRequestPathParams: {
@@ -388,6 +389,8 @@ export interface definitions {
     };
     '/orders/initiate-stripe-payment': {
       PATCH: {
+        requestBody: definitions['address'];
+
         response: definitions['Model27'];
       };
     };

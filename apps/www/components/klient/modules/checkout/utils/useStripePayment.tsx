@@ -21,7 +21,8 @@ export function useStripePayment() {
     const {
       data: { stripeClientSecret, orderId },
     } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {
-      body: { addressDetails }
+      params: undefined, query: undefined,
+      body: { ...addressDetails }
     });
 
     if (!stripeClientSecret) {

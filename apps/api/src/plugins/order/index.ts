@@ -27,7 +27,7 @@ import {
   getOrderByIdResponseSchema,
   initiateStripePaymentResponse,
   getAllOrdersQuerySchema,
-  getAllOrderStatusesSchema,
+  getAllOrderStatusesSchema, addressSchema,
 } from './orderSchemas';
 
 const ORDER_CREATED_EVENT = 'order:order:created';
@@ -87,6 +87,9 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
           schema: initiateStripePaymentResponse,
         },
         auth: false,
+        validate: {
+          payload: addressSchema
+        }
       },
       async handler(request) {
         const cart = await request.server.plugins.sklepCart.findCart(request);

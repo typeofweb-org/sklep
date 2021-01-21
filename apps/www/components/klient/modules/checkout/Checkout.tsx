@@ -14,15 +14,15 @@ type CheckoutProps = {
 };
 
 export type AddressDetails = {
-    readonly firstName: String,
-    readonly lastName: String,
-    readonly streetName: String,
-    readonly houseNumber: String,
-    readonly apartmentNumber: String,
-    readonly city: String,
-    readonly zipCode: String,
-    readonly phone: String,
-    readonly email: String,
+    readonly firstName: string,
+    readonly lastName: string,
+    readonly streetName: string,
+    readonly houseNumber: string,
+    readonly apartmentNumber: string,
+    readonly city: string,
+    readonly zipCode: string,
+    readonly phone: string,
+    readonly email: string,
 }
 
 const checkoutSchema = Yup.object({
