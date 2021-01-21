@@ -158,8 +158,8 @@ export const getProductRoute: Hapi.ServerRoute = {
 
     const maybeId = Number(params.productIdOrSlug);
     const query = Number.isNaN(maybeId)
-      ? { slug: params.productIdOrSlug as string }
-      : { id: params.productIdOrSlug  as number };
+      ? { slug: params.productIdOrSlug as unknown as string }
+      : { id: params.productIdOrSlug as number };
 
     const product = await request.server.app.db.product.findFirst({
       where: {
