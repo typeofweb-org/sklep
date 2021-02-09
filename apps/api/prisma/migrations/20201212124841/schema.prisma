@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url = "***"
 }
 
 model User {
@@ -93,9 +93,8 @@ model Order {
 
   total Int
   stripePaymentIntentId String? @unique
-  address Json?
 
-  // @todo add address
+  address Json?
 
   status OrderStatus @default(PENDING)
   createdAt DateTime @default(now())

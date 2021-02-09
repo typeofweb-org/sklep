@@ -4,13 +4,14 @@ import { useMutation, useQueryCache } from 'react-query';
 
 import { fetcher } from '../../../../../utils/fetcher';
 import { CART_QUERY_KEY } from '../../../shared/utils/useCart';
+import type { AddressDetails } from "../Checkout";
 
 export function useStripePayment() {
   const stripe = useStripe();
   const elements = useElements();
   const queryCache = useQueryCache();
 
-  const pay = React.useCallback(async () => {
+  const pay = React.useCallback(async (addressDetails: AddressDetails) => {
     const cardElement = elements?.getElement(CardElement);
 
     if (!stripe || !cardElement) {
@@ -19,7 +20,10 @@ export function useStripePayment() {
 
     const {
       data: { stripeClientSecret, orderId },
-    } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {});
+    } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {
+      params: undefined, query: undefined,
+      body: { ...addressDetails }
+    });
 
     if (!stripeClientSecret) {
       throw new Error(`Couldn't obtain stripe client secret`);
