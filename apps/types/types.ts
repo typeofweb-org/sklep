@@ -173,7 +173,7 @@ export interface definitions {
 
   putOrdersOrderId200Response: definitions['Model17'];
   getProductsProductIdOrSlugRequestPathParams: {
-    productIdOrSlug: number;
+    productIdOrSlug: number | string;
   };
 
   getProductsProductIdOrSlug200Response: definitions['Model18'];
@@ -302,7 +302,7 @@ export interface definitions {
     '/products/{productIdOrSlug}': {
       GET: {
         requestPathParams: {
-          productIdOrSlug: number;
+          productIdOrSlug: number | string;
         };
 
         response: definitions['Model18'];
