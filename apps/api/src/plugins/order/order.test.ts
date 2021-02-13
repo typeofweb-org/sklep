@@ -21,6 +21,17 @@ describe('/orders', () => {
             updatedAt: Faker.date.past().toISOString(),
             cartProducts: [],
           },
+          address: {
+            firstName: Faker.name.firstName(),
+            lastName: Faker.name.lastName(),
+            streetName: Faker.address.streetName(),
+            houseNumber: Faker.address.streetAddress(),
+            apartmentNumber: Faker.address.secondaryAddress(),
+            city: Faker.address.city(),
+            zipCode: Faker.address.zipCode(),
+            phone: Faker.phone.phoneNumber(),
+            email: Faker.internet.email(),
+          },
         },
       }),
     );
@@ -51,6 +62,7 @@ describe('/orders', () => {
       cart: orders[0].cart,
       total: orders[0].total,
       status: orders[0].status,
+      address: orders[0].address,
     });
   });
 

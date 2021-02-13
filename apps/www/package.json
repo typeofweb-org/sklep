@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "cross-env NODE_ICU_DATA=../../node_modules/full-icu next dev",
     "build": "next build",
-    "start": "NODE_ICU_DATA=../../node_modules/full-icu next start",
-    "test": "NODE_ICU_DATA=../../node_modules/full-icu jest --detectOpenHandles --forceExit",
-    "test_:ci": "NODE_ICU_DATA=../../node_modules/full-icu jest",
+    "start": "cross-env NODE_ICU_DATA=../../node_modules/full-icu next start",
+    "test": "cross-env NODE_ICU_DATA=../../node_modules/full-icu jest --detectOpenHandles --forceExit",
+    "test_:ci": "cross-env NODE_ICU_DATA=../../node_modules/full-icu jest",
     "tsc": "tsc --noEmit",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "cy:open": "cypress open",
