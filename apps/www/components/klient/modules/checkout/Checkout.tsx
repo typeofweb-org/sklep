@@ -14,41 +14,16 @@ type CheckoutProps = {
 };
 
 export type AddressDetails = {
-  readonly firstName: string,
-  readonly lastName: string,
-  readonly streetName: string,
-  readonly houseNumber: string,
-  readonly apartmentNumber: string,
-  readonly city: string,
-  readonly zipCode: string,
-  readonly phone: string,
-  readonly email: string,
-}
-
-const getAddressDetails = (orderDetails: AddressDetails): AddressDetails => {
-  const {
-      firstName,
-      lastName,
-      streetName,
-      houseNumber,
-      apartmentNumber,
-      zipCode,
-      city,
-      phone,
-      email
-  } = orderDetails
-  return {
-      firstName,
-      lastName,
-      streetName,
-      houseNumber,
-      apartmentNumber,
-      zipCode,
-      city,
-      phone,
-      email
-  }
-}
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly streetName: string;
+  readonly houseNumber: string;
+  readonly apartmentNumber: string;
+  readonly city: string;
+  readonly zipCode: string;
+  readonly phone: string;
+  readonly email: string;
+};
 
 const checkoutSchema = Yup.object({
   firstName: Yup.string().required('Pole jest wymagane'),
@@ -66,13 +41,26 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
   const router = useRouter();
   const [processPayment, { isLoading }] = useStripePayment();
 
-  const handleSubmit = React.useCallback(async (values) => {
-    const address = getAddressDetails(values);
-    const response = await processPayment(address);
-    if (response?.orderId) {
-      await router.replace(`/zamowienie/${response.orderId}`);
-    }
-  }, [processPayment, router]);
+  const handleSubmit = React.useCallback(
+    async (values: AddressDetails) => {
+      const address = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        streetName: values.streetName,
+        houseNumber: values.houseNumber,
+        apartmentNumber: values.apartmentNumber,
+        zipCode: values.zipCode,
+        city: values.city,
+        phone: values.phone,
+        email: values.email,
+      };
+      const response = await processPayment(address);
+      if (response?.orderId) {
+        await router.replace(`/zamowienie/${response.orderId}`);
+      }
+    },
+    [processPayment, router],
+  );
 
   return (
     <>
