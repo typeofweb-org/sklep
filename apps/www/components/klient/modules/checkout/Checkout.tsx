@@ -30,8 +30,11 @@ const checkoutSchema = Yup.object({
   lastName: Yup.string().required('Pole jest wymagane'),
   streetName: Yup.string().required('Pole jest wymagane'),
   houseNumber: Yup.string().required('Pole jest wymagane'),
+  apartmentNumber: Yup.string(),
   city: Yup.string().required('Pole jest wymagane'),
   zipCode: Yup.string().required('Pole jest wymagane'),
+  phone: Yup.string().required('Pole jest wymagane'),
+  email: Yup.string().email().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
 }).required();
 
@@ -43,18 +46,7 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
 
   const handleSubmit = React.useCallback(
     async (values: AddressDetails) => {
-      const address = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        streetName: values.streetName,
-        houseNumber: values.houseNumber,
-        apartmentNumber: values.apartmentNumber,
-        zipCode: values.zipCode,
-        city: values.city,
-        phone: values.phone,
-        email: values.email,
-      };
-      const response = await processPayment(address);
+      const response = await processPayment(values);
       if (response?.orderId) {
         await router.replace(`/zamowienie/${response.orderId}`);
       }

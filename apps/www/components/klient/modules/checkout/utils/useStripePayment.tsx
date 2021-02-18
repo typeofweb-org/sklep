@@ -24,7 +24,7 @@ export function useStripePayment() {
       } = await fetcher(`/orders/initiate-stripe-payment`, 'PATCH', {
         params: undefined,
         query: undefined,
-        body: addressDetails,
+        body: { ...addressDetails },
       });
 
       if (!stripeClientSecret) {
