@@ -21,7 +21,7 @@ export const ProductItem = React.memo<ProductItemProps>(
     const handleAddToCartClick = React.useCallback(() => addToCart(id), [addToCart, id]);
 
     return (
-      <section className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col self-start">
+      <section className="w-full md:w-1/3 xl:w-1/4 p-4 flex flex-col self-start">
         <Link href={`/produkty/${slug}`}>
           <a>
             <ProductImage />
