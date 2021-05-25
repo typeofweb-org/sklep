@@ -1,4 +1,4 @@
-import { queryCache } from 'react-query';
+import { queryClient } from 'react-query';
 
 import { getPublicUrlFromRequest, mswMockServer } from './jest-utils';
 
@@ -19,7 +19,7 @@ rest.${request.method.toLowerCase()}('${publicUrl}', (req, res, ctx) => {
 });
 
 afterEach(() => {
-  queryCache.clear();
+  queryClient.clear();
   mswMockServer.resetHandlers();
 });
 

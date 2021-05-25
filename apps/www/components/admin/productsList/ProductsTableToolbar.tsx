@@ -9,7 +9,7 @@ import {
 } from 'carbon-components-react';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import { deleteProducts } from '../../../utils/api/deleteProducts';
 import { useToasts } from '../toasts/Toasts';
@@ -22,14 +22,15 @@ export const ProductsTableToolbar = React.memo<
   DataTableCustomRenderProps<ProductsTableRow, ProductsTableHeader>
 >(({ getBatchActionProps, selectedRows }) => {
   const router = useRouter();
-  const cache = useQueryCache();
+  const cache = useQueryClient();
   const { addToast } = useToasts();
-  const [mutate] = useMutation(deleteProducts, {
+  const { mutateAsync } = useMutation(deleteProducts, {
     onSettled: () => cache.invalidateQueries(PRODUCTS_QUERY_KEY),
     onSuccess(settledPromises: readonly PromiseSettledResult<never>[]) {
       const totalNumberOfPromises = settledPromises.length;
-      const resolvedPromises = settledPromises.filter(({ status }) => status === 'fulfilled')
-        .length;
+      const resolvedPromises = settledPromises.filter(
+        ({ status }) => status === 'fulfilled',
+      ).length;
       if (resolvedPromises === totalNumberOfPromises) {
         return addToast({
           kind: 'success',
@@ -50,8 +51,8 @@ export const ProductsTableToolbar = React.memo<
 
   const handleDeleteProducts = React.useCallback(() => {
     const productsIdsArray = selectedRows.map(({ id }) => Number(id));
-    void mutate(productsIdsArray);
-  }, [mutate, selectedRows]);
+    void mutateAsync(productsIdsArray);
+  }, [mutateAsync, selectedRows]);
   const batchActionsProps = getBatchActionProps();
 
   return (

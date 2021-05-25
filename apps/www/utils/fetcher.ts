@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import type { SklepTypes } from '@sklep/types';
 import { difference } from 'ramda';
-import type { QueryConfig } from 'react-query';
-import { usePaginatedQuery } from 'react-query';
+import type { UseQueryOptions } from 'react-query';
+import { useQuery } from 'react-query';
 
 import type { Get } from './fetcherTypes';
 
@@ -19,7 +19,7 @@ type Method =
 
 type BodyType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
-  CurrentMethod extends Method
+  CurrentMethod extends Method,
 > = Get<
   SklepTypes['pathsDefinitions'],
   readonly [CurrentPath, CurrentMethod, 'requestBody']
@@ -29,7 +29,7 @@ type BodyType<
 
 type ParamsType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
-  CurrentMethod extends Method
+  CurrentMethod extends Method,
 > = Get<
   SklepTypes['pathsDefinitions'],
   readonly [CurrentPath, CurrentMethod, 'requestPathParams']
@@ -39,7 +39,7 @@ type ParamsType<
 
 type QueryType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
-  CurrentMethod extends Method
+  CurrentMethod extends Method,
 > = Get<
   SklepTypes['pathsDefinitions'],
   readonly [CurrentPath, CurrentMethod, 'requestQuery']
@@ -49,7 +49,7 @@ type QueryType<
 
 type ResponseType<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
-  CurrentMethod extends Method
+  CurrentMethod extends Method,
 > = Get<
   SklepTypes['pathsDefinitions'],
   readonly [CurrentPath, CurrentMethod, 'response']
@@ -62,7 +62,7 @@ type ResponseType<
 type FetcherConfigCommon = { readonly config?: RequestInit };
 type FetcherConfig<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
-  CurrentMethod extends Method
+  CurrentMethod extends Method,
 > = FetcherConfigCommon &
   (BodyType<CurrentPath, CurrentMethod> extends object
     ? { readonly body: BodyType<CurrentPath, CurrentMethod> }
@@ -112,7 +112,7 @@ export function compileUrl<CurrentPath extends keyof SklepTypes['pathsDefinition
 
 export async function fetcher<
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
-  CurrentMethod extends Method
+  CurrentMethod extends Method,
 >(
   path: CurrentPath,
   method: CurrentMethod,
@@ -157,16 +157,16 @@ async function getJSON(response: Response): Promise<unknown | undefined> {
 
 export const useToWQuery = <
   CurrentPath extends keyof SklepTypes['pathsDefinitions'],
-  CurrentMethod extends Method
+  CurrentMethod extends Method,
 >(
   [path, method, config]: readonly [
     CurrentPath,
     CurrentMethod,
     FetcherConfig<CurrentPath, CurrentMethod>,
   ],
-  queryConfig?: QueryConfig<ResponseType<CurrentPath, CurrentMethod>, unknown>,
+  queryConfig?: UseQueryOptions<ResponseType<CurrentPath, CurrentMethod>>,
 ) =>
-  usePaginatedQuery(
+  useQuery(
     [path, method, config],
     () => {
       const controller = new AbortController();

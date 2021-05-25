@@ -2,7 +2,7 @@ import type { SklepTypes } from '@sklep/types';
 import { Button, InlineLoading } from 'carbon-components-react';
 import React from 'react';
 import { Field } from 'react-final-form';
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import * as Yup from 'yup';
 
 import { useGetOrderStatuses } from '../../../utils/api/getAllOrderStatuses';
@@ -24,17 +24,17 @@ const ORDERS_QUERY_KEY = ['/orders', 'GET'] as const;
 
 export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const { addToast } = useToasts();
-  const { latestData } = useGetOrderStatuses();
-  const cache = useQueryCache();
+  const { data } = useGetOrderStatuses();
+  const cache = useQueryClient();
 
   const formSchema = React.useMemo(() => {
     return Yup.object({
       status: Yup.string()
-        .oneOf(latestData ? latestData.data : [])
+        .oneOf(data ? data.data : [])
         .required()
         .label('Status produktu'),
     }).required();
-  }, [latestData]);
+  }, [data]);
 
   const memoizedUpdateOrder = React.useCallback(
     (body: OrderRequestBody) => {
@@ -43,7 +43,7 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
     [orderId],
   );
 
-  const [mutate, { isLoading }] = useMutation(memoizedUpdateOrder, {
+  const { mutateAsync, isLoading } = useMutation(memoizedUpdateOrder, {
     onSettled: () => cache.invalidateQueries(ORDERS_QUERY_KEY),
     onSuccess() {
       addToast({
@@ -65,16 +65,16 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const handleSubmit = React.useCallback(
     async (body: OrderRequestBody) => {
       try {
-        await mutate(body);
+        await mutateAsync(body);
         return;
       } catch (err) {
         return serverErrorHandler(err);
       }
     },
-    [mutate],
+    [mutateAsync],
   );
 
-  if (!latestData) {
+  if (!data) {
     return null;
   }
 

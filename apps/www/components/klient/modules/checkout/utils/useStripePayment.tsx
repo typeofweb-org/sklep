@@ -1,6 +1,6 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React from 'react';
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import { fetcher } from '../../../../../utils/fetcher';
 import { CART_QUERY_KEY } from '../../../shared/utils/useCart';
@@ -9,7 +9,7 @@ import type { AddressDetails } from '../Checkout';
 export function useStripePayment() {
   const stripe = useStripe();
   const elements = useElements();
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
 
   const pay = React.useCallback(
     async (addressDetails: AddressDetails) => {
@@ -45,6 +45,6 @@ export function useStripePayment() {
   );
 
   return useMutation(pay, {
-    onSettled: () => queryCache.invalidateQueries(CART_QUERY_KEY),
+    onSettled: () => queryClient.invalidateQueries(CART_QUERY_KEY),
   });
 }

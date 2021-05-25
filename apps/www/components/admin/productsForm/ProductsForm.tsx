@@ -68,7 +68,7 @@ export type ProductsFormProps =
 export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: ProductsFormProps) => {
   const { addToast } = useToasts();
   const router = useRouter();
-  const [mutate, { isLoading }] = useMutation(mutation, {
+  const { mutateAsync, isLoading } = useMutation(mutation, {
     onSuccess(response) {
       addToast({
         kind: 'success',
@@ -91,13 +91,13 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
   const handleSubmit = React.useCallback(
     async (body: ProductBody) => {
       try {
-        await mutate({ ...body, type: 'SINGLE' });
+        await mutateAsync({ ...body, type: 'SINGLE' });
         return;
       } catch (err) {
         return serverErrorHandler(err);
       }
     },
-    [mutate],
+    [mutateAsync],
   );
 
   return (

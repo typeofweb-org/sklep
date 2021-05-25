@@ -9,7 +9,7 @@ import {
 import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { Field } from 'react-final-form';
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import * as Yup from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
@@ -29,9 +29,9 @@ const AUTH_QUERY_KEY = ['/auth/me', 'GET'];
 export const LoginForm = () => {
   const router = useRouter();
   const { addToast } = useToasts();
-  const cache = useQueryCache();
+  const cache = useQueryClient();
 
-  const [mutate, { isLoading, isError, isSuccess, status }] = useMutation(login, {
+  const { mutateAsync, isLoading, isError, isSuccess, status } = useMutation(login, {
     onSettled: () => cache.invalidateQueries(AUTH_QUERY_KEY),
     onSuccess() {
       addToast({
@@ -45,9 +45,9 @@ export const LoginForm = () => {
 
   const handleSubmit = useCallback(
     (values: LoginType) => {
-      void mutate(values);
+      void mutateAsync(values);
     },
-    [mutate],
+    [mutateAsync],
   );
 
   const loginButtonText = React.useMemo(() => {
