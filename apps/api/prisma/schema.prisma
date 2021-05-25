@@ -5,27 +5,29 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id Int @default(autoincrement()) @id
-  name String?
-  email String @unique
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String  @unique
   password String
 
   role UserRole @default(USER)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  Session   Session[]
+  Product   Product[]
 }
 
 model Session {
-  id String @id
+  id         String   @id
   validUntil DateTime
 
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -37,24 +39,29 @@ enum UserRole {
 }
 
 model Product {
-  id Int @default(autoincrement()) @id
-  name String @unique
-  slug String @unique
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  slug        String  @unique
   description String
-  isPublic Boolean @default(false)
+  isPublic    Boolean @default(false)
 
-  regularPrice Int
+  regularPrice  Int
   discountPrice Int?
 
   type ProductType @default(SINGLE)
 
-  userId Int
+  userId  Int
   addedBy User @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  taxId Int?
-  tax Tax? @relation(name: "ProductTax", fields: [taxId], references: [id])
+  images       Image[] @relation("ProductImage")
+  coverImageId Int?
+  coverImage   Image?  @relation(name: "CoverImage", fields: [coverImageId], references: [id])
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt
+  taxId         Int?
+  tax           Tax?            @relation(name: "ProductTax", fields: [taxId], references: [id])
+  CartToProduct CartToProduct[]
 }
 
 enum ProductType {
@@ -62,9 +69,8 @@ enum ProductType {
   BUNDLE // @todo
 }
 
-
 model Cart {
-  id String @default(cuid()) @id
+  id String @id @default(cuid())
 
   cartProducts CartToProduct[]
 
@@ -73,33 +79,33 @@ model Cart {
 }
 
 model CartToProduct {
-  @@id([cartId, productId])
 
-  cart Cart @relation(fields: [cartId], references: [id])
+  cart   Cart   @relation(fields: [cartId], references: [id])
   cartId String
 
-  product Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   productId Int
 
   quantity Int @default(1)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  @@id([cartId, productId])
 }
 
 model Order {
-  id String @default(uuid()) @id
+  id   String @id @default(uuid())
   cart Json
 
-  total Int
+  total                 Int
   stripePaymentIntentId String? @unique
   address Json?
 
   // @todo add address
 
-  status OrderStatus @default(PENDING)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
 }
 
 enum OrderStatus {
@@ -112,11 +118,27 @@ enum OrderStatus {
   FAILED
 }
 
+model Image {
+  id          Int      @id @default(autoincrement())
+  width       Int
+  height      Int
+  path        String
+  alt         String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  productId Int?
+  product   Product? @relation(name: "ProductImage", fields: [productId], references: [id])
+
+  Product Product[] @relation("CoverImage")
+}
+
 model Tax {
-  id Int @default(autoincrement()) @id
-  name String @unique
-  taxRate Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  products Product[] @relation("ProductTax")
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  taxRate   Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  products  Product[] @relation("ProductTax")
 }

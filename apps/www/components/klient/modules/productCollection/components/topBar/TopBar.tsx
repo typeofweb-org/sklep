@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 
 import { SearchIcon } from '../../../../shared/components/icons/SearchIcon';
 
-export const TopBar = React.memo(() => {
+type TopBarProps = {
+  readonly handleSetInputValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+export const TopBar = React.memo<TopBarProps>(({ handleSetInputValue }) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   function handleSearchVisible() {
@@ -11,41 +15,38 @@ export const TopBar = React.memo(() => {
   }
 
   const searchStylesDesktop = clsx(
-    'hidden md:block w-0',
-    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd mr-2 w-auto px-2 h-8 ml-4',
-  );
-
-  const searchStylesMobile = clsx(
-    'md:hidden h-0 w-full',
-    isSearchVisible && 'border border-gray-600 rounded-md shadow-sd h-10 mx-6 px-2',
+    'block mr-2 mt-10 sm:mt-0 p-1 w-full sm:w-auto absolute left-0 sm:static border border-gray-600 rounded-md shadow-sd ',
+    isSearchVisible && 'hidden',
   );
 
   return (
-    <>
-      <div className="w-full z-30 top-0 px-6 py-1">
-        <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
-          <h2 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
-            STORE
-          </h2>
-          <div className="flex items-center">
-            <input
-              type="text"
-              className={searchStylesDesktop}
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button
-              aria-label="Search"
-              onClick={handleSearchVisible}
-              className="pl-3 inline-block no-underline text-gray-600 hover:text-black"
-            >
-              <SearchIcon />
-            </button>
-          </div>
+    <div className="w-full mb-10 sm:mb-4 px-4">
+      <div className="container py-3 relative flex flex-wrap justify-between items-center sm:items-start">
+        <h2 className="mb-3 sm:mb-0 uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
+          Produkty
+        </h2>
+        <div className="w-auto h-8 sm:column flex flex-row-reverse">
+          <button
+            aria-expanded={isSearchVisible}
+            onClick={handleSearchVisible}
+            className="p-1 no-underline text-gray-600 hover:text-black"
+          >
+            <span className="sr-only">Otwórz/zamknij wyszukiwarkę</span>
+            <SearchIcon />
+          </button>
+          <label className="sr-only" htmlFor="search">
+            Znajdź produkt:
+          </label>
+          <input
+            type="text"
+            id="search"
+            className={searchStylesDesktop}
+            placeholder="Szukaj"
+            onChange={handleSetInputValue}
+          />
         </div>
       </div>
-      <input type="text" id="searchInput" className={searchStylesMobile} placeholder="Search" />
-    </>
+    </div>
   );
 });
 TopBar.displayName = 'TopBar';

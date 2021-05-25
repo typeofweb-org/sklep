@@ -55,6 +55,7 @@ export interface definitions {
     regularPrice: number;
     discountPrice?: number;
     type: 'SINGLE' | 'BUNDLE';
+    coverImageId?: number;
   };
   Model5: definitions['Model4'][];
   Model6: { data: definitions['Model5']; meta: definitions['meta'] };
@@ -80,7 +81,20 @@ export interface definitions {
   Model11: { data: definitions['Model10'] };
   Model12: definitions['cart'][];
   Model13: { data: definitions['Model12'] };
-  Model14: (
+  Model14: {
+    id: number;
+    width: number;
+    height: number;
+    path: string;
+    alt: string;
+    description?: string;
+    createdAt: string;
+    updatedAt: string;
+    productId?: number;
+  };
+  Model15: definitions['Model14'][];
+  Model16: { data: definitions['Model15'] };
+  Model17: (
     | 'PENDING'
     | 'PROCESSING'
     | 'ON_HOLD'
@@ -89,8 +103,8 @@ export interface definitions {
     | 'REFUNDED'
     | 'FAILED'
   )[];
-  Model15: { data: definitions['Model14'] };
-  Model16: {
+  Model18: { data: definitions['Model17'] };
+  Model19: {
     id: string;
     cart?: definitions['cart'];
     total: number;
@@ -106,11 +120,11 @@ export interface definitions {
     createdAt: string;
     updatedAt: string;
   };
-  Model17: { data: definitions['Model16'] };
-  Model18: { data: definitions['Model4'] };
-  Model19: { data: definitions['Model7'] };
-  Model20: { data: definitions['cart'] };
-  Model21: {
+  Model20: { data: definitions['Model19'] };
+  Model21: { data: definitions['Model4'] };
+  Model22: { data: definitions['Model7'] };
+  Model23: { data: definitions['cart'] };
+  Model24: {
     name: string;
     description: string;
     isPublic: boolean;
@@ -118,13 +132,14 @@ export interface definitions {
     discountPrice?: number;
     type: 'SINGLE' | 'BUNDLE';
   };
-  Model22: { name: string; taxRate: number };
-  Model23: { email: string; password: string };
-  Model24: { productId: number; quantity: number };
-  Model25: { productId: number };
-  Model26: { orderId: string; stripeClientSecret: string };
-  Model27: { data: definitions['Model26'] };
-  Model28: {
+  Model25: { name: string; taxRate: number };
+  Model26: { email: string; password: string };
+  Model27: { data: definitions['Model14'] };
+  Model28: { productId: number; quantity: number };
+  Model29: { productId: number };
+  Model30: { orderId: string; stripeClientSecret: string };
+  Model31: { data: definitions['Model30'] };
+  Model32: {
     status:
       | 'PENDING'
       | 'PROCESSING'
@@ -134,6 +149,8 @@ export interface definitions {
       | 'REFUNDED'
       | 'FAILED';
   };
+  Model33: { alt: string; description?: string; productId?: number };
+  Model34: { data?: definitions['Model14'] };
 
   getOrdersRequestQuery: {
     take?: number;
@@ -147,89 +164,115 @@ export interface definitions {
   };
 
   getProducts200Response: definitions['Model6'];
-  postProductsRequestBody: definitions['Model21'];
+  postProductsRequestBody: definitions['Model24'];
 
-  postProducts200Response: definitions['Model18'];
+  postProducts200Response: definitions['Model21'];
 
   getTaxes200Response: definitions['Model9'];
-  postTaxesRequestBody: definitions['Model22'];
+  postTaxesRequestBody: definitions['Model25'];
 
-  postTaxes200Response: definitions['Model19'];
+  postTaxes200Response: definitions['Model22'];
 
   getAuthMe200Response: definitions['Model11'];
 
   getCartAll200Response: definitions['Model13'];
 
-  getOrdersStatuses200Response: definitions['Model15'];
+  getMediaImages200Response: definitions['Model16'];
+  postMediaImagesRequestFormData: {
+    file: {
+      readonly path: string;
+      readonly bytes: number;
+      readonly filename: string;
+      readonly headers: Record<string, string>;
+    };
+    alt: string;
+    description?: string;
+    productId?: number;
+  };
+
+  postMediaImages200Response: definitions['Model27'];
+
+  getOrdersStatuses200Response: definitions['Model18'];
   getOrdersOrderIdRequestPathParams: {
     orderId: string;
   };
 
-  getOrdersOrderId200Response: definitions['Model17'];
+  getOrdersOrderId200Response: definitions['Model20'];
   putOrdersOrderIdRequestPathParams: {
     orderId: string;
   };
-  putOrdersOrderIdRequestBody: definitions['Model28'];
+  putOrdersOrderIdRequestBody: definitions['Model32'];
 
-  putOrdersOrderId200Response: definitions['Model17'];
+  putOrdersOrderId200Response: definitions['Model20'];
   getProductsProductIdOrSlugRequestPathParams: {
     productIdOrSlug: number | string;
   };
 
-  getProductsProductIdOrSlug200Response: definitions['Model18'];
+  getProductsProductIdOrSlug200Response: definitions['Model21'];
   getTaxesTaxIdRequestPathParams: {
     taxId: number;
   };
 
-  getTaxesTaxId200Response: definitions['Model19'];
+  getTaxesTaxId200Response: definitions['Model22'];
   putTaxesTaxIdRequestPathParams: {
     taxId: number;
   };
-  putTaxesTaxIdRequestBody: definitions['Model22'];
+  putTaxesTaxIdRequestBody: definitions['Model25'];
 
-  putTaxesTaxId200Response: definitions['Model19'];
+  putTaxesTaxId200Response: definitions['Model22'];
   deleteTaxesTaxIdRequestPathParams: {
     taxId: number;
   };
 
   deleteTaxesTaxIdDefaultResponse: string;
 
-  postCart200Response: definitions['Model20'];
-  postAuthLoginRequestBody: definitions['Model23'];
+  postCart200Response: definitions['Model23'];
+  postAuthLoginRequestBody: definitions['Model26'];
 
   postAuthLoginDefaultResponse: string;
 
   postAuthLogoutDefaultResponse: string;
-  postAuthRegisterRequestBody: definitions['Model23'];
+  postAuthRegisterRequestBody: definitions['Model26'];
 
   postAuthRegisterDefaultResponse: string;
 
   postOrdersStripeWebhookDefaultResponse: string;
-  patchCartAddRequestBody: definitions['Model24'];
+  patchCartAddRequestBody: definitions['Model28'];
 
   patchCartAddDefaultResponse: string;
 
   patchCartClearDefaultResponse: string;
-  patchCartRemoveRequestBody: definitions['Model25'];
+  patchCartRemoveRequestBody: definitions['Model29'];
 
   patchCartRemoveDefaultResponse: string;
-  patchCartSetRequestBody: definitions['Model24'];
+  patchCartSetRequestBody: definitions['Model28'];
 
   patchCartSetDefaultResponse: string;
   patchOrdersInitiateStripePaymentRequestBody: definitions['address'];
 
-  patchOrdersInitiateStripePayment200Response: definitions['Model27'];
+  patchOrdersInitiateStripePayment200Response: definitions['Model31'];
   putProductsProductIdRequestPathParams: {
     productId: number;
   };
-  putProductsProductIdRequestBody: definitions['Model21'];
+  putProductsProductIdRequestBody: definitions['Model24'];
 
-  putProductsProductId200Response: definitions['Model18'];
+  putProductsProductId200Response: definitions['Model21'];
   deleteProductsProductIdRequestPathParams: {
     productId: number;
   };
 
   deleteProductsProductIdDefaultResponse: string;
+  putMediaImagesImageIdRequestPathParams: {
+    imageId: number;
+  };
+  putMediaImagesImageIdRequestBody: definitions['Model33'];
+
+  putMediaImagesImageId200Response: definitions['Model34'];
+  deleteMediaImagesImageIdRequestPathParams: {
+    imageId: number;
+  };
+
+  deleteMediaImagesImageIdDefaultResponse: string;
 
   pathsDefinitions: {
     '/orders': {
@@ -252,9 +295,9 @@ export interface definitions {
         response: definitions['Model6'];
       };
       POST: {
-        requestBody: definitions['Model21'];
+        requestBody: definitions['Model24'];
 
-        response: definitions['Model18'];
+        response: definitions['Model21'];
       };
     };
     '/taxes': {
@@ -262,9 +305,9 @@ export interface definitions {
         response: definitions['Model9'];
       };
       POST: {
-        requestBody: definitions['Model22'];
+        requestBody: definitions['Model25'];
 
-        response: definitions['Model19'];
+        response: definitions['Model22'];
       };
     };
     '/auth/me': {
@@ -277,9 +320,29 @@ export interface definitions {
         response: definitions['Model13'];
       };
     };
+    '/media/images': {
+      GET: {
+        response: definitions['Model16'];
+      };
+      POST: {
+        requestFormData: {
+          file: {
+            readonly path: string;
+            readonly bytes: number;
+            readonly filename: string;
+            readonly headers: Record<string, string>;
+          };
+          alt: string;
+          description?: string;
+          productId?: number;
+        };
+
+        response: definitions['Model27'];
+      };
+    };
     '/orders/statuses': {
       GET: {
-        response: definitions['Model15'];
+        response: definitions['Model18'];
       };
     };
     '/orders/{orderId}': {
@@ -288,15 +351,15 @@ export interface definitions {
           orderId: string;
         };
 
-        response: definitions['Model17'];
+        response: definitions['Model20'];
       };
       PUT: {
         requestPathParams: {
           orderId: string;
         };
-        requestBody: definitions['Model28'];
+        requestBody: definitions['Model32'];
 
-        response: definitions['Model17'];
+        response: definitions['Model20'];
       };
     };
     '/products/{productIdOrSlug}': {
@@ -305,7 +368,7 @@ export interface definitions {
           productIdOrSlug: number | string;
         };
 
-        response: definitions['Model18'];
+        response: definitions['Model21'];
       };
     };
     '/taxes/{taxId}': {
@@ -314,15 +377,15 @@ export interface definitions {
           taxId: number;
         };
 
-        response: definitions['Model19'];
+        response: definitions['Model22'];
       };
       PUT: {
         requestPathParams: {
           taxId: number;
         };
-        requestBody: definitions['Model22'];
+        requestBody: definitions['Model25'];
 
-        response: definitions['Model19'];
+        response: definitions['Model22'];
       };
       DELETE: {
         requestPathParams: {
@@ -334,12 +397,12 @@ export interface definitions {
     };
     '/cart': {
       POST: {
-        response: definitions['Model20'];
+        response: definitions['Model23'];
       };
     };
     '/auth/login': {
       POST: {
-        requestBody: definitions['Model23'];
+        requestBody: definitions['Model26'];
 
         response: string;
       };
@@ -351,7 +414,7 @@ export interface definitions {
     };
     '/auth/register': {
       POST: {
-        requestBody: definitions['Model23'];
+        requestBody: definitions['Model26'];
 
         response: string;
       };
@@ -363,7 +426,7 @@ export interface definitions {
     };
     '/cart/add': {
       PATCH: {
-        requestBody: definitions['Model24'];
+        requestBody: definitions['Model28'];
 
         response: string;
       };
@@ -375,14 +438,14 @@ export interface definitions {
     };
     '/cart/remove': {
       PATCH: {
-        requestBody: definitions['Model25'];
+        requestBody: definitions['Model29'];
 
         response: string;
       };
     };
     '/cart/set': {
       PATCH: {
-        requestBody: definitions['Model24'];
+        requestBody: definitions['Model28'];
 
         response: string;
       };
@@ -391,7 +454,7 @@ export interface definitions {
       PATCH: {
         requestBody: definitions['address'];
 
-        response: definitions['Model27'];
+        response: definitions['Model31'];
       };
     };
     '/products/{productId}': {
@@ -399,13 +462,30 @@ export interface definitions {
         requestPathParams: {
           productId: number;
         };
-        requestBody: definitions['Model21'];
+        requestBody: definitions['Model24'];
 
-        response: definitions['Model18'];
+        response: definitions['Model21'];
       };
       DELETE: {
         requestPathParams: {
           productId: number;
+        };
+
+        response: string;
+      };
+    };
+    '/media/images/{imageId}': {
+      PUT: {
+        requestPathParams: {
+          imageId: number;
+        };
+        requestBody: definitions['Model33'];
+
+        response: definitions['Model34'];
+      };
+      DELETE: {
+        requestPathParams: {
+          imageId: number;
         };
 
         response: string;
