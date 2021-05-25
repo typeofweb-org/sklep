@@ -13,13 +13,28 @@ type CheckoutProps = {
   readonly cart: SklepTypes['postCart200Response']['data'];
 };
 
+export type AddressDetails = {
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly streetName: string;
+  readonly houseNumber: string;
+  readonly apartmentNumber: string;
+  readonly city: string;
+  readonly zipCode: string;
+  readonly phone: string;
+  readonly email: string;
+};
+
 const checkoutSchema = Yup.object({
   firstName: Yup.string().required('Pole jest wymagane'),
   lastName: Yup.string().required('Pole jest wymagane'),
   streetName: Yup.string().required('Pole jest wymagane'),
   houseNumber: Yup.string().required('Pole jest wymagane'),
+  apartmentNumber: Yup.string(),
   city: Yup.string().required('Pole jest wymagane'),
   zipCode: Yup.string().required('Pole jest wymagane'),
+  phone: Yup.string().required('Pole jest wymagane'),
+  email: Yup.string().email().required('Pole jest wymagane'),
   shippment: Yup.string().required('Pole jest wymagane'),
 }).required();
 
@@ -29,12 +44,15 @@ export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
   const router = useRouter();
   const [processPayment, { isLoading }] = useStripePayment();
 
-  const handleSubmit = React.useCallback(async () => {
-    const response = await processPayment();
-    if (response?.orderId) {
-      await router.replace(`/zamowienie/${response.orderId}`);
-    }
-  }, [processPayment, router]);
+  const handleSubmit = React.useCallback(
+    async (values: AddressDetails) => {
+      const response = await processPayment(values);
+      if (response?.orderId) {
+        await router.replace(`/zamowienie/${response.orderId}`);
+      }
+    },
+    [processPayment, router],
+  );
 
   return (
     <>

@@ -4,6 +4,18 @@ import Joi from 'joi';
 import { Enums } from '../../models';
 import { cartResponseSchema } from '../cart/cartSchemas';
 
+export const addressSchema = Joi.object<SklepTypes['patchOrdersInitiateStripePaymentRequestBody']>({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  streetName: Joi.string().required(),
+  houseNumber: Joi.string().required(),
+  apartmentNumber: Joi.string(),
+  city: Joi.string().required(),
+  zipCode: Joi.string().required(),
+  phone: Joi.string().required(),
+  email: Joi.string().required(),
+});
+
 export const initiateStripePaymentResponse = Joi.object<
   SklepTypes['patchOrdersInitiateStripePayment200Response']
 >({
@@ -20,6 +32,7 @@ export const orderResponseSchema = Joi.object({
   status: Joi.string()
     .valid(...Object.keys(Enums.OrderStatus))
     .required(),
+  address: addressSchema.required(),
   createdAt: Joi.date().iso().required(),
   updatedAt: Joi.date().iso().required(),
 }).required();

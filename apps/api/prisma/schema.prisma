@@ -99,6 +99,7 @@ model Order {
 
   total                 Int
   stripePaymentIntentId String? @unique
+  address Json?
 
   // @todo add address
 

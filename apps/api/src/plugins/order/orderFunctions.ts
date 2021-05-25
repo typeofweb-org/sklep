@@ -10,6 +10,7 @@ const orderSelect = {
   cart: true,
   total: true,
   status: true,
+  address: true,
   createdAt: true,
   updatedAt: true,
 };
@@ -20,10 +21,12 @@ export async function createOrder(
     cartJson,
     cartTotal,
     paymentIntentId,
+    addressJson,
   }: {
     readonly cartJson: InputJsonObject;
     readonly cartTotal: number;
     readonly paymentIntentId: string;
+    readonly addressJson: InputJsonObject;
   },
 ) {
   const order = await request.server.app.db.order.create({
@@ -32,6 +35,7 @@ export async function createOrder(
       total: cartTotal,
       stripePaymentIntentId: paymentIntentId,
       status: Enums.OrderStatus.PENDING,
+      address: addressJson,
     },
   });
 
