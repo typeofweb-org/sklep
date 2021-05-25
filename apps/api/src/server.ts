@@ -16,6 +16,13 @@ import {
   getProductsRoute,
   getProductRoute,
 } from './modules/products/productRoutes';
+import {
+  addTaxRoute,
+  deleteTaxRoute,
+  editTaxRoute,
+  getTaxesRoute,
+  getTaxRoute,
+} from './modules/products/taxesRoutes';
 import { AuthPlugin } from './plugins/auth';
 import { CartPlugin } from './plugins/cart';
 import { MediaPlugin } from './plugins/media';
@@ -195,6 +202,11 @@ export const getServerWithPlugins = async () => {
   server.route(getProductRoute);
   server.route(getProductsRoute);
   server.route(deleteProductRoute);
+  server.route(addTaxRoute);
+  server.route(getTaxRoute);
+  server.route(getTaxesRoute);
+  server.route(editTaxRoute);
+  server.route(deleteTaxRoute);
 
   return server;
 };
