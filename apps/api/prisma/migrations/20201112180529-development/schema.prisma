@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+  // previewFeatures = []
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model User {
+  id Int @default(autoincrement()) @id
+  name String?
+  email String @unique
+  password String
+  
+  role UserRole @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Session {
+  id String @id
+  validUntil DateTime
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model Product {
+  id Int @default(autoincrement()) @id
+  name String @unique
+  slug String @unique
+  description String
+  isPublic Boolean @default(false)
+  
+  regularPrice Int
+  discountPrice Int?
+
+  type ProductType @default(SINGLE)
+
+  userId Int
+  addedBy User @relation(fields: [userId], references: [id])
+
+  images Image[] @relation("ProductImage")
+  coverImageId Int? @unique
+  coverImage Image? @relation(name: "CoverImage", fields: [coverImageId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum ProductType {
+  SINGLE
+  BUNDLE // @todo
+}
+
+
+model Cart {
+  id String @default(cuid()) @id
+
+  cartProducts CartToProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model CartToProduct {
+  @@id([cartId, productId])
+
+  cart Cart @relation(fields: [cartId], references: [id])
+  cartId String
+
+  product Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  quantity Int @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Order {
+  id String @default(uuid()) @id
+  cart Json
+  
+  total Int
+  stripePaymentIntentId String? @unique
+
+  // @todo add address
+
+  status OrderStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+  REFUNDED
+  FAILED
+}
+
+model Image {
+  id           Int      @default(autoincrement()) @id
+  path         String 
+  alt          String
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+
+  productId    Int?
+  product      Product? @relation(name: "ProductImage", fields: [productId], references: [id])
+}
