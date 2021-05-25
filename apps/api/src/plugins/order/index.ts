@@ -89,8 +89,8 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         },
         auth: false,
         validate: {
-          payload: addressSchema
-        }
+          payload: addressSchema,
+        },
       },
       async handler(request) {
         const cart = await request.server.plugins.sklepCart.findCart(request);
@@ -110,13 +110,13 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
           currency: 'pln',
         });
 
-        const shippingAddress = request.payload;
+        const shippingAddress = request.payload as SklepTypes['patchOrdersInitiateStripePaymentRequestBody'];
 
         const order = await createOrder(request, {
           cartJson,
           cartTotal,
           paymentIntentId: paymentIntent.id,
-          addressJson: shippingAddress as InputJsonObject
+          addressJson: shippingAddress,
         });
 
         return {

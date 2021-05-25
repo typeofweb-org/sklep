@@ -4,7 +4,7 @@ import Joi from 'joi';
 import { Enums } from '../../models';
 import { cartResponseSchema } from '../cart/cartSchemas';
 
-export const addressSchema = Joi.object({
+export const addressSchema = Joi.object<SklepTypes['patchOrdersInitiateStripePaymentRequestBody']>({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
   streetName: Joi.string().required(),
