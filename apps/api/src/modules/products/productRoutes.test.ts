@@ -107,7 +107,7 @@ describe('/products', () => {
 
       expect(injection.statusCode).toEqual(200);
 
-      const productInDb = await server.app.db.product.findOne({ where: { id: data.id } });
+      const productInDb = await server.app.db.product.findFirst({ where: { id: data.id } });
       expect(productInDb).toMatchObject(newData);
     });
     it(`should not update a product with invalid data`, async () => {

@@ -1,5 +1,5 @@
 import type { Request } from '@hapi/hapi';
-import type { InputJsonObject } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import type { SklepTypes } from '@sklep/types';
 import type Stripe from 'stripe';
 
@@ -23,10 +23,10 @@ export async function createOrder(
     paymentIntentId,
     addressJson,
   }: {
-    readonly cartJson: InputJsonObject;
+    readonly cartJson: Prisma.JsonValue;
     readonly cartTotal: number;
     readonly paymentIntentId: string;
-    readonly addressJson: InputJsonObject;
+    readonly addressJson: Prisma.JsonValue;
   },
 ) {
   const order = await request.server.app.db.order.create({
@@ -39,7 +39,7 @@ export async function createOrder(
     },
   });
 
-  request.server.events.emit('order:order:created', order);
+  void request.server.events.emit('order:order:created', order);
 
   return order;
 }
@@ -115,6 +115,7 @@ export function handleStripeEvent(request: Request, event: Stripe.Event) {
     case 'payment_intent.payment_failed':
       return updateOrderStatusForStripeEvent(
         request,
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Stripe
         event.data.object as Stripe.PaymentIntent,
         eventType,
       );
@@ -129,7 +130,7 @@ export function getAllOrders(
   return request.server.app.db.order.findMany({
     orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
     select: orderSelect,
-    ...(take && { take, skip }),
+    ...(take != null && skip != null && { take, skip }),
   });
 }
 

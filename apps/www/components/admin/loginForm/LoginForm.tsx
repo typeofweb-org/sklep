@@ -31,7 +31,7 @@ export const LoginForm = () => {
   const { addToast } = useToasts();
   const cache = useQueryClient();
 
-  const { mutateAsync, isLoading, isError, isSuccess, status } = useMutation(login, {
+  const { mutate, isLoading, isError, isSuccess, status } = useMutation(login, {
     onSettled: () => cache.invalidateQueries(AUTH_QUERY_KEY),
     onSuccess() {
       addToast({
@@ -45,9 +45,9 @@ export const LoginForm = () => {
 
   const handleSubmit = useCallback(
     (values: LoginType) => {
-      void mutateAsync(values);
+      void mutate(values);
     },
-    [mutateAsync],
+    [mutate],
   );
 
   const loginButtonText = React.useMemo(() => {

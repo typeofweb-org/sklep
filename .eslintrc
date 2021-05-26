@@ -8,9 +8,12 @@
   "plugins": ["functional", "@typescript-eslint"],
   "extends": [
     "prettier",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/errors",
     "plugin:import/typescript",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:eslint-comments/recommended"
   ],
   "rules": {
     "no-const-assign": "error",
@@ -33,13 +36,13 @@
           "**/cypress/**/*.*",
           "**/jest-setup.ts",
           "**/jest-utils.ts",
+          "**/jest-setup.tsx",
+          "**/jest-utils.tsx",
           "**/next-env.d.ts",
           "**/global.d.ts"
         ]
       }
     ],
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/consistent-type-imports": "error",
     "functional/no-let": [
       "error",
       {
@@ -50,14 +53,42 @@
     "functional/prefer-readonly-type": "error",
     "functional/no-this-expression": "error",
     "functional/no-loop-statement": "error",
-    "require-await": "error"
+    "require-await": "error",
+
+    "@typescript-eslint/consistent-type-imports": ["error", { "disallowTypeAnnotations": false }],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-floating-promises": ["error", { "ignoreVoid": true }],
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/no-confusing-non-null-assertion": "error",
+    "@typescript-eslint/switch-exhaustiveness-check": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "ignoreRestSiblings": true }
+    ],
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-extra-non-null-assertion": "error",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "@typescript-eslint/consistent-type-assertions": ["error", { "assertionStyle": "never" }],
+    "@typescript-eslint/restrict-template-expressions": ["error", { "allowNullish": true }],
+    "eslint-comments/require-description": ["error", { "ignore": ["eslint-enable"] }],
+    "import/no-default-export": "error",
+    "import/no-unresolved": "off",
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "no-unused-vars": "off"
   },
   "overrides": [
     {
       "files": ["**/*.test.tsx", "**/*.spec.tsx", "**/*.test.ts", "**/*.spec.ts"],
+      "env": { "jest": true },
       "rules": {
         "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/restrict-plus-operands": "off"
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/consistent-type-assertions": "off"
       }
     }
   ]

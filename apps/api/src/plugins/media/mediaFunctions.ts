@@ -15,7 +15,7 @@ export function getAllImages(server: Hapi.Server) {
 }
 
 export async function getImagePath(server: Hapi.Server, imageId: number) {
-  const image = await server.app.db.image.findOne({
+  const image = await server.app.db.image.findFirst({
     where: {
       id: imageId,
     },
@@ -41,15 +41,18 @@ export function deleteImage(filePath: string) {
   return fs.promises.unlink(filePath);
 }
 
-export const assertImageFiletype = (filename: string, headers: Record<string, string>) => {
-  const filenameSchema = Joi.string()
-    .regex(/\.(png|jpg|jpeg|svg|gif)$/)
-    .required();
+const filenameSchema = Joi.string()
+  .regex(/\.(png|jpg|jpeg|svg|gif)$/)
+  .required();
 
-  const contentTypeSchema = Joi.string()
-    .equal('image/jpeg', 'image/png', 'image/svg+xml', 'image/gif')
-    .required();
+const contentTypeSchema = Joi.string()
+  .equal('image/jpeg', 'image/png', 'image/svg+xml', 'image/gif')
+  .required();
 
+export const assertImageFiletype = (
+  filename: string,
+  headers: Record<string, string>,
+): asserts filename is `${string}.${'png' | 'jpg' | 'jpeg' | 'svg' | 'gif'}` => {
   Joi.assert(filename, filenameSchema);
   Joi.assert(headers['content-type'], contentTypeSchema);
 };

@@ -50,7 +50,7 @@ export async function createUser(
     },
   });
 
-  request.server.events.emit('auth:user:registered', user);
+  void request.server.events.emit('auth:user:registered', user);
 
   return user;
 }

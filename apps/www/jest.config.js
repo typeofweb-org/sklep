@@ -1,4 +1,5 @@
 module.exports = {
+  testEnvironment: 'jsdom',
   roots: ['<rootDir>'],
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
   testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next)[/\\\\]', '<rootDir>/cypress/'],
@@ -12,6 +13,6 @@ module.exports = {
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/__mocks__/fileMock.js',
   },
   setupFiles: ['./jest-setup.ts'],
-  setupFilesAfterEnv: ['next', 'jest-extended', './jest-setup-after.ts'],
+  setupFilesAfterEnv: ['next', '@testing-library/jest-dom', 'jest-extended', './jest-setup-after.ts'],
   testTimeout: 10000,
 };

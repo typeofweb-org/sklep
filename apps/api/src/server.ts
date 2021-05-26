@@ -29,12 +29,12 @@ import { MediaPlugin } from './plugins/media';
 import { OrderPlugin } from './plugins/order';
 import { isPrismaError } from './prisma/prisma-helpers';
 
-function errorHasDetails(
-  err: any,
-): err is Boom.Boom & { readonly details: readonly ValidationErrorItem[] } & {
+function errorHasDetails(err: unknown): err is Boom.Boom & {
+  readonly details: readonly ValidationErrorItem[];
+} & {
   readonly output: Boom.Output & {
     readonly payload: Boom.Payload & {
-      // eslint-disable-next-line functional/prefer-readonly-type
+      // eslint-disable-next-line functional/prefer-readonly-type -- this should be writable
       details: readonly Omit<ValidationErrorItem, 'context'>[];
     };
   };
@@ -43,7 +43,7 @@ function errorHasDetails(
     err instanceof Error &&
     Boom.isBoom(err) &&
     'details' in err &&
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/consistent-type-assertions -- ok
     Array.isArray((err as any).details)
   );
 }
@@ -169,14 +169,15 @@ export const getServerWithPlugins = async () => {
   });
 
   server.ext('onPreResponse', ({ response }, h) => {
-    const res = response as unknown;
-    if (isPrismaError(res)) {
-      switch (res.code) {
-        case 'P2002':
-          return Boom.conflict(JSON.stringify(res.meta));
-      }
+    if (!isPrismaError(response)) {
+      return h.continue;
     }
-    return h.continue;
+    switch (response.code) {
+      case 'P2002':
+        return Boom.conflict(JSON.stringify(response.meta));
+      default:
+        return h.continue;
+    }
   });
 
   server.route({

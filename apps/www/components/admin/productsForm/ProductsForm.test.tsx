@@ -1,18 +1,18 @@
-import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
 import React from 'react';
 
-import { mswMockServer } from '../../../jest-utils';
+import { initMockServer, renderWithProviders } from '../../../jest-utils';
 import { createProduct } from '../../../utils/api/createProduct';
 import { ToastsContextProvider } from '../toasts/Toasts';
 
 import type { ProductsFormProps } from './ProductsForm';
 import { ProductsForm } from './ProductsForm';
 
+const useRouter = jest.spyOn(require('next/router'), 'useRouter');
+useRouter.mockImplementation(() => ({ replace() {} }));
+
 function renderProductsForm(productsFormProps: ProductsFormProps) {
-  return render(
+  return renderWithProviders(
     <ToastsContextProvider>
       <ProductsForm {...productsFormProps} />
     </ToastsContextProvider>,
@@ -20,13 +20,7 @@ function renderProductsForm(productsFormProps: ProductsFormProps) {
 }
 
 describe('form for adding products', () => {
-  beforeEach(() =>
-    mswMockServer.use(
-      rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({}), ctx.delay(300));
-      }),
-    ),
-  );
+  const server = initMockServer();
 
   it('shows error after confirming without required data', () => {
     const { getByText } = renderProductsForm({ mode: 'ADDING', mutation: createProduct });
@@ -39,14 +33,16 @@ describe('form for adding products', () => {
   });
 
   it('allows user to add product', async () => {
+    server.post('/products').reply(200, { data: {} });
+
     const { getByLabelText, getByText, findByRole } = renderProductsForm({
       mode: 'ADDING',
       mutation: createProduct,
     });
 
-    await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    await userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    await userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    userEvent.type(getByLabelText('Cena produktu'), '99.9');
+    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
 
     userEvent.click(getByText('Dodaj produkt'));
 
@@ -54,21 +50,17 @@ describe('form for adding products', () => {
     expect(notification).toHaveTextContent('Dodałeś produkt do bazy danych');
   });
 
-  it('shows error notification after bad request mswMockServer exception', async () => {
-    mswMockServer.use(
-      rest.post(process.env.NEXT_PUBLIC_API_URL + '/products', (_req, res, ctx) => {
-        return res(ctx.status(400), ctx.delay(300), ctx.json({}));
-      }),
-    );
+  it('shows error notification after bad request', async () => {
+    server.post('/products').reply(400, { details: [] });
 
     const { getByLabelText, getByText, findByRole } = renderProductsForm({
       mode: 'ADDING',
       mutation: createProduct,
     });
 
-    await userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    await userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    await userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    userEvent.type(getByLabelText('Cena produktu'), '99.9');
+    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
 
     userEvent.click(getByText('Dodaj produkt'));
 

@@ -39,6 +39,7 @@ export const addTaxRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request): Promise<SklepTypes['postTaxes200Response']> {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const payload = request.payload as SklepTypes['postTaxesRequestBody'];
     const tax = await request.server.app.db.tax.create({
       data: {
@@ -88,6 +89,7 @@ export const getTaxRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request): Promise<SklepTypes['getTaxesTaxId200Response']> {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const params = request.params as SklepTypes['getTaxesTaxIdRequestPathParams'];
     const query = { id: params.taxId };
 
@@ -124,7 +126,9 @@ export const editTaxRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request): Promise<SklepTypes['putTaxesTaxId200Response']> {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const payload = request.payload as SklepTypes['putTaxesTaxIdRequestBody'];
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const params = request.params as SklepTypes['putTaxesTaxIdRequestPathParams'];
 
     const count = await request.server.app.db.tax.count({ where: { id: params.taxId } });
@@ -159,6 +163,7 @@ export const deleteTaxRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- params
     const params = request.params as SklepTypes['deleteTaxesTaxIdRequestPathParams'];
 
     const count = await request.server.app.db.tax.count({ where: { id: params.taxId } });

@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom';
 import type Hapi from '@hapi/hapi';
-import type { InputJsonObject } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { calculateCartTotals } from '@sklep/calculations';
 import type { SklepTypes } from '@sklep/types';
 import { isNil } from 'ramda';
@@ -68,6 +68,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         auth: false,
       },
       async handler(request) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- params
         const { orderId } = request.params as SklepTypes['getOrdersOrderIdRequestPathParams'];
 
         const order = await findOrderById(request, { orderId });
@@ -101,16 +102,19 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         const totals = calculateCartTotals(cart);
         const cartTotal = totals.discountSubTotal;
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Json
         const cartJson = JSON.parse(
           JSON.stringify(request.server.plugins.sklepCart.cartModelToResponse(cart)),
-        ) as InputJsonObject;
+        ) as Prisma.JsonValue;
 
         const paymentIntent = await stripe.paymentIntents.create({
           amount: cartTotal,
           currency: 'pln',
         });
 
-        const shippingAddress = request.payload as SklepTypes['patchOrdersInitiateStripePaymentRequestBody'];
+        const shippingAddress =
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
+          request.payload as SklepTypes['patchOrdersInitiateStripePaymentRequestBody'];
 
         const order = await createOrder(request, {
           cartJson,
@@ -173,6 +177,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         ],
       },
       async handler(request) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Pre
         const event = request.pre.verifyStripeSignature as Stripe.Event;
 
         await handleStripeEvent(request, event);
@@ -199,7 +204,9 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
       },
 
       async handler(request) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- params
         const { orderId } = request.params as SklepTypes['putOrdersOrderIdRequestPathParams'];
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
         const payload = request.payload as SklepTypes['putOrdersOrderIdRequestBody'];
 
         const order = await findOrderById(request, { orderId });
@@ -233,6 +240,7 @@ export const OrderPlugin: Hapi.Plugin<{ readonly stripeApiKey: string }> = {
         },
       },
       async handler(request) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- query
         const { take, skip } = request.query as SklepTypes['getOrdersRequestQuery'];
 
         if (isNil(take) !== isNil(skip)) {

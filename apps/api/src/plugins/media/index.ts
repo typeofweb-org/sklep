@@ -7,6 +7,24 @@ import getImageDimensions from 'image-size';
 
 import { Enums } from '../../models';
 
+type Split<Str extends string, Del extends string> = Str extends `${infer A}${Del}${infer B}`
+  ? // eslint-disable-next-line functional/prefer-readonly-type -- expected
+    [A, ...Split<B, Del>]
+  : // eslint-disable-next-line functional/prefer-readonly-type -- expected
+    [Str];
+const split = <Str extends string, Del extends string>(str: Str, del: Del) =>
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- expected
+  str.split(del) as unknown as Split<Str, Del>;
+
+type Last<Arr extends readonly unknown[]> = Arr extends readonly [...infer _, infer Head]
+  ? Head
+  : never;
+
+const pop = <Arr extends readonly unknown[]>(arr: Arr) => {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- ok
+  return arr.pop() as Last<Arr>;
+};
+
 import {
   getImagePath,
   deleteImage,
@@ -25,9 +43,19 @@ import {
   putImageResponseSchema,
 } from './mediaSchemas';
 
+const assertImageFiletype2: (
+  filename: string,
+  headers: Record<string, string>,
+) => asserts filename is
+  | `${string}.png`
+  | `${string}.jpg`
+  | `${string}.jpeg`
+  | `${string}.svg`
+  | `${string}.gif` = assertImageFiletype;
+
 const MEDIA_DIR = path.join(process.cwd(), '/media');
 
-export const MediaPlugin: Hapi.Plugin<{}> = {
+export const MediaPlugin: Hapi.Plugin<Record<string, never>> = {
   name: 'MediaPlugin',
   register(server) {
     server.route({
@@ -61,23 +89,28 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
       },
       async handler(request) {
         const {
-          file,
+          file: { filename, headers, path },
           ...restPayload
-        } = request.payload as SklepTypes['postMediaImagesRequestFormData'];
+        } =
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- formData
+          request.payload as SklepTypes['postMediaImagesRequestFormData'];
 
-        assertImageFiletype(file.filename, file.headers);
-        const fileExtension = file.filename.split('.').pop() as string;
-        await addFileExtension(file.path, fileExtension);
-        const filePathWithExtension = `${file.path}.${fileExtension}`;
+        assertImageFiletype2(filename, headers);
+        const fileExtension = pop(split(filename, '.'));
+        await addFileExtension(path, fileExtension);
+        const filePathWithExtension = `${path}.${fileExtension}`;
 
         const imageDimensions = getImageDimensions(filePathWithExtension);
+        if (!imageDimensions.width || !imageDimensions.height) {
+          throw Boom.badData();
+        }
 
         try {
           const image = await request.server.app.db.image.create({
             data: {
               path: filePathWithExtension,
-              width: imageDimensions.width as number,
-              height: imageDimensions.height as number,
+              width: imageDimensions.width,
+              height: imageDimensions.height,
               ...restPayload,
             },
           });
@@ -131,6 +164,7 @@ export const MediaPlugin: Hapi.Plugin<{}> = {
         const image = await updateImage(
           request.server,
           id,
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
           request.payload as SklepTypes['putMediaImagesImageIdRequestBody'],
         );
         return {
