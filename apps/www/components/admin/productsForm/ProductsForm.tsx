@@ -17,7 +17,6 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
-import type { ObjectSchema } from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 import { serverErrorHandler } from '../../../utils/serverErrorHandler';
@@ -28,7 +27,8 @@ import styles from './ProductsForm.module.scss';
 
 Yup.setLocale({
   mixed: {
-    required: ({ label }) => (label ? `${label} jest polem wymaganym` : `To pole jest wymagane`),
+    required: ({ label }: { label?: string }) =>
+      label ? `${label} jest polem wymaganym` : `To pole jest wymagane`,
   },
 });
 
@@ -39,10 +39,15 @@ const productSchema = Yup.object({
   discountPrice: Yup.number()
     .optional()
     .nullable()
-    .when('regularPrice', (regularPrice: number, schema: ObjectSchema) =>
-      regularPrice
-        ? Yup.number().max(regularPrice, 'Cena promocyjna nie może być wyższa niż cena podstawowa')
-        : schema,
+    .when(
+      'regularPrice',
+      (regularPrice: number, schema: Yup.NumberSchema<number | null | undefined>) =>
+        regularPrice
+          ? Yup.number().max(
+              regularPrice,
+              'Cena promocyjna nie może być wyższa niż cena podstawowa',
+            )
+          : schema,
     ),
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo

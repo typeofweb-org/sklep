@@ -1,3 +1,4 @@
+import ms from 'ms';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -8,10 +9,11 @@ type AuthProps = {
   readonly allowUnauthorized: boolean;
 };
 
-export const useAuth = () => useToWQuery(['/auth/me', 'GET', {}]);
+export const useAuth = () =>
+  useToWQuery(['/auth/me', 'GET', {}], { keepPreviousData: true, staleTime: ms('60 seconds') });
 
 export const Auth = React.memo<AuthProps>(({ children, allowUnauthorized }) => {
-  const { resolvedData, isLoading } = useAuth();
+  const { data, isLoading } = useAuth();
 
   const router = useRouter();
 
@@ -23,7 +25,7 @@ export const Auth = React.memo<AuthProps>(({ children, allowUnauthorized }) => {
     return null;
   }
 
-  if (!resolvedData?.data || resolvedData.data.user.role !== 'ADMIN') {
+  if (!data?.data || data.data.user.role !== 'ADMIN') {
     void router.replace('/admin/login');
     return null;
   }

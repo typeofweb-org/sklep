@@ -4,15 +4,13 @@ import { setIn } from 'final-form';
 import React from 'react';
 import type { FieldMetaState, FormProps } from 'react-final-form';
 import { Form as FinalForm } from 'react-final-form';
-import { ValidationError } from 'yup';
+import { InferType, ValidationError } from 'yup';
 import type { ObjectSchema } from 'yup';
+import { ObjectShape } from 'yup/lib/object';
 
-export const ToWForm: <
-  FormValues extends object = Record<string, any>,
-  InitialFormValues = Partial<FormValues>
->(
-  props: Omit<FormProps<FormValues, InitialFormValues>, 'validate'> & {
-    readonly schema: ObjectSchema<FormValues>;
+export const ToWForm: <Schema extends ObjectSchema<ObjectShape>>(
+  props: FormProps<InferType<Schema>> & { validate?: never } & {
+    readonly schema: Schema;
     readonly className?: string;
   },
 ) => React.ReactElement = ({ schema, onSubmit, className, children, ...props }) => {
@@ -38,21 +36,23 @@ export const ToWForm: <
   );
 };
 
-export const createFormValidator = <U extends object>(schema: ObjectSchema<U>) => (
-  values: U,
-): ValidationErrors | Promise<ValidationErrors> => {
-  try {
-    schema.validateSync(values, { abortEarly: false });
-  } catch (err) {
-    if (err instanceof ValidationError) {
-      return err.inner.reduce<object>((formError, innerError) => {
-        return setIn(formError, innerError.path, innerError.message);
-      }, {});
+export const createFormValidator =
+  <Schema extends ObjectSchema<any>>(schema: Schema) =>
+  (values: InferType<Schema>): ValidationErrors | Promise<ValidationErrors> => {
+    try {
+      schema.validateSync(values, { abortEarly: false });
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        return err.inner.reduce<object>((formError, innerError) => {
+          return innerError.path
+            ? setIn(formError, innerError.path, innerError.message)
+            : formError;
+        }, {});
+      }
+      console.error(err);
     }
-    console.error(err);
-  }
-  return {};
-};
+    return {};
+  };
 
 export const getErrorProps = (meta: FieldMetaState<unknown>) => {
   const isInvalid =

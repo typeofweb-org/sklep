@@ -30,7 +30,7 @@ export const Amount = React.memo<AmountProps>(({ increaseAmount, decreaseAmount 
               onBlur={onBlur}
               value={value as number}
               name={name}
-              decimalSeparator={false}
+              decimalSeparator=""
               className="w-8 border-none bg-transparent outline-none text-center"
             />
             <button
