@@ -5,16 +5,13 @@
   },
   "extends": [
     "react-app",
-    "react-app/jest",
     "plugin:jsx-a11y/recommended",
     "plugin:css-modules/recommended",
     "plugin:testing-library/react"
   ],
   "env": {
     "es6": true,
-    "browser": true,
-    "jest": true,
-    "node": true
+    "browser": true
   },
   "plugins": ["jsx-a11y", "css-modules"],
   "rules": {
