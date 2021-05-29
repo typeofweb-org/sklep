@@ -2,8 +2,12 @@ import type { QueryClient, UseQueryOptions } from 'react-query';
 
 import { fetcher, useToWQuery } from '../fetcher';
 
-export const useGetProducts = (query: { readonly take: number; readonly skip: number } | {} = {}) =>
-  useToWQuery(['/products', 'GET', { query }] as const);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- any query options
+type AnyUseQueryOptions = UseQueryOptions<any>;
+
+export const useGetProducts = (
+  query: { readonly take: number; readonly skip: number } | Record<string, never> = {},
+) => useToWQuery(['/products', 'GET', { query }] as const);
 useGetProducts.prefetch = (queryClient: QueryClient) =>
   queryClient.fetchQuery(['/products', 'GET', { query: {} }], () =>
     fetcher('/products', 'GET', { query: {} }),
@@ -11,7 +15,7 @@ useGetProducts.prefetch = (queryClient: QueryClient) =>
 
 export const useGetProductBySlug = (
   productIdOrSlug: string | number,
-  queryConfig?: UseQueryOptions<any, unknown>,
+  queryConfig?: AnyUseQueryOptions,
 ) =>
   useToWQuery(
     ['/products/{productIdOrSlug}', 'GET', { params: { productIdOrSlug } }] as const,
@@ -23,10 +27,11 @@ useGetProductBySlug.prefetch = (queryClient: QueryClient, productIdOrSlug: strin
     () => fetcher('/products/{productIdOrSlug}', 'GET', { params: { productIdOrSlug } }),
   );
 
-export const useGetOrderById = (orderId: string, queryConfig?: UseQueryOptions<any, unknown>) =>
+export const useGetOrderById = (orderId: string, queryConfig?: AnyUseQueryOptions) =>
   useToWQuery(['/orders/{orderId}', 'GET', { params: { orderId } }] as const, queryConfig);
 
-export const useGetOrders = (query: { readonly take: number; readonly skip: number } | {} = {}) =>
-  useToWQuery(['/orders', 'GET', { query }] as const);
+export const useGetOrders = (
+  query: { readonly take: number; readonly skip: number } | Record<string, never> = {},
+) => useToWQuery(['/orders', 'GET', { query }] as const);
 useGetOrders.prefetch = (queryClient: QueryClient) =>
   queryClient.fetchQuery(['/orders', 'GET', {}], () => fetcher('/orders', 'GET', { query: {} }));

@@ -1,3 +1,4 @@
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -23,48 +24,48 @@ describe('form for adding products', () => {
   const server = initMockServer();
 
   it('shows error after confirming without required data', () => {
-    const { getByText } = renderProductsForm({ mode: 'ADDING', mutation: createProduct });
+    renderProductsForm({ mode: 'ADDING', mutation: createProduct });
 
-    userEvent.click(getByText('Dodaj produkt'));
+    userEvent.click(screen.getByText('Dodaj produkt'));
 
-    expect(getByText('Nazwa produktu jest polem wymaganym')).toBeInTheDocument();
-    expect(getByText('Cena produktu jest polem wymaganym')).toBeInTheDocument();
-    expect(getByText('Opis produktu jest polem wymaganym')).toBeInTheDocument();
+    expect(screen.getByText('Nazwa produktu jest polem wymaganym')).toBeInTheDocument();
+    expect(screen.getByText('Cena produktu jest polem wymaganym')).toBeInTheDocument();
+    expect(screen.getByText('Opis produktu jest polem wymaganym')).toBeInTheDocument();
   });
 
   it('allows user to add product', async () => {
     server.post('/products').reply(200, { data: {} });
 
-    const { getByLabelText, getByText, findByRole } = renderProductsForm({
+    renderProductsForm({
       mode: 'ADDING',
       mutation: createProduct,
     });
 
-    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    userEvent.type(screen.getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    userEvent.type(screen.getByLabelText('Cena produktu'), '99.9');
+    userEvent.type(screen.getByLabelText('Opis produktu'), 'Dobra rzecz');
 
-    userEvent.click(getByText('Dodaj produkt'));
+    userEvent.click(screen.getByText('Dodaj produkt'));
 
-    const notification = await findByRole('alert');
+    const notification = await screen.findByRole('alert');
     expect(notification).toHaveTextContent('Dodałeś produkt do bazy danych');
   });
 
   it('shows error notification after bad request', async () => {
     server.post('/products').reply(400, { details: [] });
 
-    const { getByLabelText, getByText, findByRole } = renderProductsForm({
+    renderProductsForm({
       mode: 'ADDING',
       mutation: createProduct,
     });
 
-    userEvent.type(getByLabelText('Nazwa produktu'), 'Buty XYZ');
-    userEvent.type(getByLabelText('Cena produktu'), '99.9');
-    userEvent.type(getByLabelText('Opis produktu'), 'Dobra rzecz');
+    userEvent.type(screen.getByLabelText('Nazwa produktu'), 'Buty XYZ');
+    userEvent.type(screen.getByLabelText('Cena produktu'), '99.9');
+    userEvent.type(screen.getByLabelText('Opis produktu'), 'Dobra rzecz');
 
-    userEvent.click(getByText('Dodaj produkt'));
+    userEvent.click(screen.getByText('Dodaj produkt'));
 
-    const notification = await findByRole('alert');
+    const notification = await screen.findByRole('alert');
     expect(notification).toHaveTextContent(
       'Wystąpił błąd podczas dodawania produktu do bazy danych',
     );

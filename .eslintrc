@@ -82,13 +82,14 @@
   },
   "overrides": [
     {
-      "files": ["**/*.test.tsx", "**/*.spec.tsx", "**/*.test.ts", "**/*.spec.ts"],
+      "files": ["**/*.test.*", "**/*.spec.*"],
       "env": { "jest": true },
       "rules": {
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/restrict-plus-operands": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/consistent-type-assertions": "off"
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     }
   ]

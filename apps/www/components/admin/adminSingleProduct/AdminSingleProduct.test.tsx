@@ -1,4 +1,5 @@
 import type { SklepTypes } from '@sklep/types';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -38,12 +39,12 @@ describe('single product page', () => {
       TEST_PRODUCTS.find((el) => el.data.id === productId),
     );
 
-    const { findByLabelText } = renderAdminSingleProduct();
-    const name = await findByLabelText('Nazwa produktu');
-    const description = await findByLabelText('Opis produktu');
-    const regularPrice = await findByLabelText('Cena produktu');
-    const discountPrice = await findByLabelText('Promocyjna cena produktu');
-    const isPublic = await findByLabelText('Czy produkt ma być widoczny na stronie?', {
+    renderAdminSingleProduct();
+    const name = await screen.findByLabelText('Nazwa produktu');
+    const description = await screen.findByLabelText('Opis produktu');
+    const regularPrice = await screen.findByLabelText('Cena produktu');
+    const discountPrice = await screen.findByLabelText('Promocyjna cena produktu');
+    const isPublic = await screen.findByLabelText('Czy produkt ma być widoczny na stronie?', {
       exact: false,
     });
 
@@ -65,25 +66,28 @@ describe('single product page', () => {
       TEST_PRODUCTS.find((el) => el.data.id === productId),
     );
 
-    const { findByText, findByRole } = renderAdminSingleProduct();
-    const deleteButton = await findByText('Usuń produkt');
+    renderAdminSingleProduct();
+    const deleteButton = await screen.findByText('Usuń produkt');
 
     userEvent.click(deleteButton);
 
-    const confirmDeleteButton = await findByText('Usuń');
+    const confirmDeleteButton = await screen.findByText('Usuń');
     expect(confirmDeleteButton).toBeInTheDocument();
 
     userEvent.click(confirmDeleteButton);
 
-    const notification = await findByRole('alert');
+    const notification = await screen.findByRole('alert');
     expect(notification).toHaveTextContent('Produkt został usunięty pomyślnie');
   });
 
   it('shows error message after it fails to load a product', async () => {
     server.get(`/products/${productId}`).times(4).reply(400, { message: 'Bad data' });
 
-    const { findByText } = renderAdminSingleProduct();
-    const errorMessage = await findByText('Wystąpił błąd podczas pobierania danych produktu', {});
+    renderAdminSingleProduct();
+    const errorMessage = await screen.findByText(
+      'Wystąpił błąd podczas pobierania danych produktu',
+      {},
+    );
     expect(errorMessage).toBeInTheDocument();
   });
 });

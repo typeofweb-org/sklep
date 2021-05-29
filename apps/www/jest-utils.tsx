@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import Nock from 'nock';
-import React, { PropsWithChildren, ReactElement } from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { ToastsContextProvider as AdminToastsContextProvider } from './components/admin/toasts/Toasts';
@@ -59,5 +60,5 @@ export const TestProvider = ({
 };
 
 export const renderWithProviders = (Component: ReactElement) => {
-  return render(Component, { wrapper: TestProvider });
+  render(Component, { wrapper: TestProvider });
 };

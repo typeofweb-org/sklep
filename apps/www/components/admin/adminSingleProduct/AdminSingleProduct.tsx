@@ -9,6 +9,7 @@ import styles from '../../../styles/components/AdminSingleProduct.module.scss';
 import { deleteProduct } from '../../../utils/api/deleteProduct';
 import { useGetProductBySlug } from '../../../utils/api/queryHooks';
 import { updateProduct } from '../../../utils/api/updateProduct';
+import { useParams } from '../../../utils/hooks';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import { ProductsForm } from '../productsForm/ProductsForm';
 import { ProductsFormSkeleton } from '../productsForm/ProductsFormSkeleton';
@@ -17,7 +18,7 @@ import { useToasts } from '../toasts/Toasts';
 export const AdminSingleProduct = React.memo(() => {
   const { addToast } = useToasts();
   const router = useRouter();
-  const productId = Number(router.query.productId);
+  const productId = Number(useParams(['productId']).productId);
 
   const {
     data: latestProductResponse,

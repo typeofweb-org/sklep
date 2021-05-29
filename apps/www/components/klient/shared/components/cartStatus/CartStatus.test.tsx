@@ -1,5 +1,5 @@
 import type { SklepTypes } from '@sklep/types';
-import { waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { initMockServer, renderWithProviders } from '../../../../../jest-utils';
@@ -81,9 +81,9 @@ describe('adding products to cart', () => {
     server.post('/cart').reply(200, fakePostResponse);
     server.patch('/cart/add').reply(200, fakePostResponse);
 
-    const { getByTestId, getByLabelText } = renderHomeWithProduct();
-    userEvent.click(getByLabelText('Dodaj do koszyka'));
-    const cartBadge = await waitFor(() => getByTestId('cartCounter'));
+    renderHomeWithProduct();
+    userEvent.click(screen.getByLabelText('Dodaj do koszyka'));
+    const cartBadge = await screen.findByTestId('cartCounter');
     expect(cartBadge).toBeInTheDocument();
     expect(cartBadge).toHaveTextContent('1');
   });
@@ -92,9 +92,9 @@ describe('adding products to cart', () => {
     server.post('/cart').reply(200, fakeTwoItemsResponse);
     server.patch('/cart/add').reply(200, fakePostResponse);
 
-    const { getByTestId, getByLabelText } = renderHomeWithProduct();
-    userEvent.click(getByLabelText('Dodaj do koszyka'));
-    const cartBadge = await waitFor(() => getByTestId('cartCounter'));
+    renderHomeWithProduct();
+    userEvent.click(screen.getByLabelText('Dodaj do koszyka'));
+    const cartBadge = await screen.findByTestId('cartCounter');
     expect(cartBadge).toBeInTheDocument();
     expect(cartBadge).toHaveTextContent('2');
   });

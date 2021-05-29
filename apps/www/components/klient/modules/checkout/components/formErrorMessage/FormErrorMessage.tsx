@@ -2,7 +2,7 @@ import type { FieldState } from 'final-form';
 import React from 'react';
 
 interface FormErrorMessageProps {
-  readonly meta: Pick<FieldState<any>, 'error' | 'touched'>;
+  readonly meta: Pick<FieldState<unknown>, 'error' | 'touched'>;
 }
 
 export const FormErrorMessage = React.memo<FormErrorMessageProps>(({ meta }) => {

@@ -2,9 +2,10 @@ import type { SklepTypes } from '@sklep/types';
 import { Button, InlineLoading } from 'carbon-components-react';
 import React from 'react';
 import { Field } from 'react-final-form';
-import { useMutation, useQueryClient, UseQueryResult } from 'react-query';
+import type { UseQueryResult } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import * as Yup from 'yup';
-import { AnyObject } from 'yup/lib/types';
+import type { AnyObject } from 'yup/lib/types';
 
 import { useGetOrderStatuses } from '../../../utils/api/getAllOrderStatuses';
 import { updateOrder } from '../../../utils/api/updateOrder';
@@ -29,13 +30,14 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const cache = useQueryClient();
 
   type Statuses = ReturnType<typeof useGetOrderStatuses> extends UseQueryResult<{
-    data: Array<infer R>;
+    readonly data: ReadonlyArray<infer R>;
   }>
     ? R
     : never;
 
   const formSchema = React.useMemo(() => {
     return Yup.object({
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- bug in Yup
       status: Yup.string()
         .oneOf(data ? data.data : [])
         .required()

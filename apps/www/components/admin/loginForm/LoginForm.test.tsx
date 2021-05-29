@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -14,26 +14,26 @@ describe('login form', () => {
   const server = initMockServer();
 
   it('shows error after confirming without required data', () => {
-    const { getByText } = renderLoginForm();
+    renderLoginForm();
 
-    userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
+    userEvent.click(screen.getByText('Zaloguj się', { selector: 'button' }));
 
-    expect(getByText('Wpisz poprawny adres email')).toBeInTheDocument();
-    expect(getByText('Pole jest wymagane')).toBeInTheDocument();
+    expect(screen.getByText('Wpisz poprawny adres email')).toBeInTheDocument();
+    expect(screen.getByText('Pole jest wymagane')).toBeInTheDocument();
   });
 
   it('shows error after confirming with improper data', async () => {
     server.post(`/auth/login`).reply(401);
 
-    const { getByLabelText, getByText, findByRole } = renderLoginForm();
+    renderLoginForm();
 
-    userEvent.type(getByLabelText('Adres e-mail'), 'testowy@test.pl');
-    userEvent.type(getByLabelText('Hasło'), 'niepoprawne');
+    userEvent.type(screen.getByLabelText('Adres e-mail'), 'testowy@test.pl');
+    userEvent.type(screen.getByLabelText('Hasło'), 'niepoprawne');
 
-    userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
+    userEvent.click(screen.getByText('Zaloguj się', { selector: 'button' }));
 
     await waitFor(async () => {
-      const notification = await findByRole('alert');
+      const notification = await screen.findByRole('alert');
       expect(notification).toHaveTextContent('Wprowadzone dane nie są poprawne');
     });
   });
@@ -41,15 +41,15 @@ describe('login form', () => {
   it('shows notification after successful login', async () => {
     server.post(`/auth/login`).reply(204);
 
-    const { getByLabelText, getByText, findByRole } = renderLoginForm();
+    renderLoginForm();
 
-    userEvent.type(getByLabelText('Adres e-mail'), 'test@test1.pl');
-    userEvent.type(getByLabelText('Hasło'), 'qwertyTESTOWY');
+    userEvent.type(screen.getByLabelText('Adres e-mail'), 'test@test1.pl');
+    userEvent.type(screen.getByLabelText('Hasło'), 'qwertyTESTOWY');
 
-    userEvent.click(getByText('Zaloguj się', { selector: 'button' }));
+    userEvent.click(screen.getByText('Zaloguj się', { selector: 'button' }));
 
     await waitFor(async () => {
-      const notification = await findByRole('alert');
+      const notification = await screen.findByRole('alert');
       expect(notification).toHaveTextContent('Logowanie udane');
     });
   });

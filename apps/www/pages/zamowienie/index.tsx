@@ -8,15 +8,21 @@ import { Checkout } from '../../components/klient/modules/checkout/Checkout';
 import { Layout } from '../../components/klient/shared/components/layout/Layout';
 import { useCart } from '../../components/klient/shared/utils/useCart';
 
-// https://github.com/stripe/stripe-js/issues/43#issuecomment-643840075
-// lazy-load stripe only when checkout page is opened
-let mutableStripePromise: Promise<Stripe | null> | undefined;
-const getStripe = () => {
-  if (!mutableStripePromise) {
-    mutableStripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
-  }
-  return mutableStripePromise;
-};
+const getStripe = (() => {
+  // https://github.com/stripe/stripe-js/issues/43#issuecomment-643840075
+  // lazy-load stripe only when checkout page is opened
+  let mutableStripePromise: Promise<Stripe | null> | undefined;
+  return () => {
+    if (!mutableStripePromise) {
+      if (!process.env.NEXT_PUBLIC_STRIPE_KEY) {
+        throw new Error('Missing process.env.NEXT_PUBLIC_STRIPE_KEY!');
+      }
+
+      mutableStripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
+    }
+    return mutableStripePromise;
+  };
+})();
 
 function CheckoutPage() {
   const { cartResponseData } = useCart();

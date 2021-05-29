@@ -1,13 +1,12 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { useGetOrderById } from '../../../utils/api/queryHooks';
+import { useParams } from '../../../utils/hooks';
 import { OrderForm } from '../orderForm/OrderForm';
 import { OrderFormSkeleton } from '../orderForm/OrderFormSkeleton';
 
 export const AdminSingleOrder = React.memo(() => {
-  const router = useRouter();
-  const orderId = router.query.orderId as string;
+  const { orderId } = useParams(['orderId']);
   const { data, isLoading, isError } = useGetOrderById(orderId, {
     enabled: Boolean(orderId),
   });

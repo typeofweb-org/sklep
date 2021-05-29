@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import React from 'react';
 import '../styles/index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
-// eslint-disable-next-line import/no-extraneous-dependencies
+// eslint-disable-next-line import/no-extraneous-dependencies -- OK
 import { ReactQueryDevtools } from 'react-query-devtools';
 import type { DehydratedState } from 'react-query/hydration';
 import { Hydrate } from 'react-query/hydration';
@@ -24,6 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- pageProps: any;
   const { dehydratedState } = pageProps as { readonly dehydratedState?: DehydratedState };
   return (
     <QueryClientProvider client={queryClientRef.current}>

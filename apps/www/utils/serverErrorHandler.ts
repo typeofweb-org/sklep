@@ -12,11 +12,11 @@ export interface Validation {
 }
 
 export interface My400Error {
-  readonly statusCode: number;
-  readonly error: string;
-  readonly message: string;
-  readonly validation: Validation;
-  readonly details: readonly ErrorDetail[];
+  readonly statusCode?: 400;
+  readonly error?: string;
+  readonly message?: string;
+  readonly validation?: Validation;
+  readonly details?: readonly ErrorDetail[];
 }
 
 interface ErrorTranslation {
@@ -39,12 +39,15 @@ function getTranslatedErrorMessage(message: string) {
 
 export function serverErrorHandler(err: ResponseError) {
   if (err.status === 400) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- if it's our API then this assertion is okay
     const { details } = err.data as My400Error;
-    return details
-      .map((error) => {
-        return { [error.path[0]]: getTranslatedErrorMessage(error.message) };
-      })
-      .reduce((error1, error2) => Object.assign(error1, error2), {});
+    return (
+      details
+        ?.map((error) => {
+          return { [error.path[0]]: getTranslatedErrorMessage(error.message) };
+        })
+        .reduce((error1, error2) => Object.assign(error1, error2), {}) ?? {}
+    );
   }
   throw err;
 }

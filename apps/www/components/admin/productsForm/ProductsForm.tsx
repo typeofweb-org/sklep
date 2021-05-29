@@ -27,7 +27,7 @@ import styles from './ProductsForm.module.scss';
 
 Yup.setLocale({
   mixed: {
-    required: ({ label }: { label?: string }) =>
+    required: ({ label }: { readonly label?: string }) =>
       label ? `${label} jest polem wymaganym` : `To pole jest wymagane`,
   },
 });

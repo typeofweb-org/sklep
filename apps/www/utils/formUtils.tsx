@@ -4,12 +4,12 @@ import { setIn } from 'final-form';
 import React from 'react';
 import type { FieldMetaState, FormProps } from 'react-final-form';
 import { Form as FinalForm } from 'react-final-form';
-import { InferType, ValidationError } from 'yup';
-import type { ObjectSchema } from 'yup';
-import { ObjectShape } from 'yup/lib/object';
+import { ValidationError } from 'yup';
+import type { ObjectSchema, InferType } from 'yup';
+import type { ObjectShape } from 'yup/lib/object';
 
 export const ToWForm: <Schema extends ObjectSchema<ObjectShape>>(
-  props: FormProps<InferType<Schema>> & { validate?: never } & {
+  props: FormProps<InferType<Schema>> & { readonly validate?: never } & {
     readonly schema: Schema;
     readonly className?: string;
   },
@@ -37,13 +37,13 @@ export const ToWForm: <Schema extends ObjectSchema<ObjectShape>>(
 };
 
 export const createFormValidator =
-  <Schema extends ObjectSchema<any>>(schema: Schema) =>
+  <Schema extends ObjectSchema<ObjectShape>>(schema: Schema) =>
   (values: InferType<Schema>): ValidationErrors | Promise<ValidationErrors> => {
     try {
       schema.validateSync(values, { abortEarly: false });
     } catch (err) {
       if (err instanceof ValidationError) {
-        return err.inner.reduce<object>((formError, innerError) => {
+        return err.inner.reduce((formError, innerError) => {
           return innerError.path
             ? setIn(formError, innerError.path, innerError.message)
             : formError;
@@ -60,7 +60,7 @@ export const getErrorProps = (meta: FieldMetaState<unknown>) => {
 
   return {
     invalid: isInvalid,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- it's okay
     invalidText: meta.error || meta.submitError,
   };
 };

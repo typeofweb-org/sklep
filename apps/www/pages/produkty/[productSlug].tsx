@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -6,11 +5,11 @@ import { dehydrate } from 'react-query/hydration';
 import { FeaturedProduct } from '../../components/klient/modules/featuredProduct/FeaturedProduct';
 import { Layout } from '../../components/klient/shared/components/layout/Layout';
 import { useGetProducts, useGetProductBySlug } from '../../utils/api/queryHooks';
+import { useParams } from '../../utils/hooks';
 import type { InferGetStaticPathsType } from '../../utils/types';
 
 function ProductPage() {
-  const router = useRouter();
-  const productSlug = String(router.query.productSlug);
+  const productSlug = String(useParams(['productSlug']).productSlug);
   const { data: productResponse } = useGetProductBySlug(productSlug);
 
   return (

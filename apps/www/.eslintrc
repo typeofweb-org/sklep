@@ -18,7 +18,10 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": ["error"],
     "jsx-a11y/anchor-is-valid": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "ignoreRestSiblings": true }
+    ],
     "import/no-default-export": "error",
     "react/display-name": "error",
     "import/no-restricted-paths": [
@@ -38,6 +41,15 @@
       "files": "pages/**/*.tsx",
       "rules": {
         "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.*", "**/*.spec.*"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     }
   ]
