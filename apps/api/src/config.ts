@@ -39,8 +39,9 @@ function getConfigForName(name: keyof NameToType): Nil<NameToType[keyof NameToTy
       return val || parsed.pathname?.slice(1);
     case 'DB_HOSTNAME':
       return val || parsed.hostname;
+    default:
+      return val;
   }
-  return val;
 }
 
 export function getConfig<T extends keyof NameToType>(name: T): NameToType[T];

@@ -1,13 +1,13 @@
-version: '2'
+version: '3.8'
 
 services:
-  typeofweb_sklep:
+  postgres:
     image: postgres:11.5-alpine
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_DBNAME: 'sklep'
-      POSTGRES_PASSWORD: 'sklep'
+      POSTGRES_USER: postgres
+      POSTGRES_DB: sklep
+      POSTGRES_PASSWORD: sklep
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql

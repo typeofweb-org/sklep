@@ -11,12 +11,12 @@ type OrderStatusSelectProps = {
   readonly meta: FieldMetaState<unknown>;
 };
 export const OrderStatusSelect = React.memo<OrderStatusSelectProps>(({ input, meta }) => {
-  const { latestData, isLoading, isError } = useGetOrderStatuses();
+  const { data, isLoading, isError } = useGetOrderStatuses();
   return (
     <>
-      {latestData && (
+      {data && (
         <Select {...input} {...getErrorProps(meta)} id="status" labelText="Status zamówienia">
-          {latestData.data.map((orderStatus) => (
+          {data.data.map((orderStatus) => (
             <SelectItem
               key={orderStatus}
               value={orderStatus}

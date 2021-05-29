@@ -1,6 +1,6 @@
 import type Hapi from '@hapi/hapi';
 
-export type EmailPluginOptions = {};
+export type EmailPluginOptions = Record<string, never>;
 
 export const AuthPlugin: Hapi.Plugin<EmailPluginOptions> = {
   multiple: false,

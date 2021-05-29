@@ -1,15 +1,11 @@
 import type { SklepTypes } from '@sklep/types';
-import '@testing-library/jest-dom';
-import { render, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
-import React from 'react';
 
-import { mswMockServer } from '../../../../../jest-utils';
+import { initMockServer, renderWithProviders } from '../../../../../jest-utils';
 import { Hero } from '../../../modules/hero/Hero';
 import { ProductCollection } from '../../../modules/productCollection/ProductCollection';
 import { Layout } from '../../../shared/components/layout/Layout';
-import { ToastContextProvider } from '../toast/Toast';
 
 const fakeProducts: SklepTypes['getProducts200Response']['data'] = [
   {
@@ -71,44 +67,34 @@ const fakeTwoItemsResponse: SklepTypes['postCart200Response'] = {
 };
 
 const renderHomeWithProduct = () =>
-  render(
-    <ToastContextProvider>
-      <Layout title="Sklep strona główna">
-        <Hero />
-        <ProductCollection products={fakeProducts} />
-      </Layout>
-    </ToastContextProvider>,
+  renderWithProviders(
+    <Layout title="Sklep strona główna">
+      <Hero />
+      <ProductCollection products={fakeProducts} />
+    </Layout>,
   );
 
 describe('adding products to cart', () => {
-  beforeEach(() => {
-    mswMockServer.use(
-      rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
-      }),
-      rest.patch(process.env.NEXT_PUBLIC_API_URL + '/cart/add', (_req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(fakePostResponse), ctx.delay(300));
-      }),
-    );
-  });
+  const server = initMockServer();
 
   it('should CartStatus badge be visible after clicking Do koszyka', async () => {
-    const { getByTestId, getByLabelText } = renderHomeWithProduct();
-    userEvent.click(getByLabelText('Dodaj do koszyka'));
-    const cartBadge = await waitFor(() => getByTestId('cartCounter'));
+    server.post('/cart').reply(200, fakePostResponse);
+    server.patch('/cart/add').reply(200, fakePostResponse);
+
+    renderHomeWithProduct();
+    userEvent.click(screen.getByLabelText('Dodaj do koszyka'));
+    const cartBadge = await screen.findByTestId('cartCounter');
     expect(cartBadge).toBeInTheDocument();
     expect(cartBadge).toHaveTextContent('1');
   });
 
   it('should be 2 items in CartStatus badge', async () => {
-    mswMockServer.use(
-      rest.post(process.env.NEXT_PUBLIC_API_URL + '/cart', (_req, res, ctx) => {
-        return res(ctx.status(200), ctx.json(fakeTwoItemsResponse), ctx.delay(300));
-      }),
-    );
-    const { getByTestId, getByLabelText } = renderHomeWithProduct();
-    userEvent.click(getByLabelText('Dodaj do koszyka'));
-    const cartBadge = await waitFor(() => getByTestId('cartCounter'));
+    server.post('/cart').reply(200, fakeTwoItemsResponse);
+    server.patch('/cart/add').reply(200, fakePostResponse);
+
+    renderHomeWithProduct();
+    userEvent.click(screen.getByLabelText('Dodaj do koszyka'));
+    const cartBadge = await screen.findByTestId('cartCounter');
     expect(cartBadge).toBeInTheDocument();
     expect(cartBadge).toHaveTextContent('2');
   });

@@ -1,4 +1,3 @@
-import type { PrismaClient } from '@prisma/client';
 import Dotenv from 'dotenv';
 
 import { initDb, prisma } from './db';
@@ -6,17 +5,11 @@ import { getServerWithPlugins } from './server';
 
 Dotenv.config();
 
-declare module '@hapi/hapi' {
-  export interface ServerApplicationState {
-    readonly db: PrismaClient;
-  }
-}
-
 const start = async () => {
   console.log(await initDb());
   const sklepServer = await getServerWithPlugins();
 
-  // @ts-expect-error
+  // @ts-expect-error this field is readonly
   sklepServer.app.db = prisma;
 
   await sklepServer.start();

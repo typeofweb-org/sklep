@@ -4,21 +4,22 @@ import React from 'react';
 import type { FieldMetaState, FormProps } from 'react-final-form';
 import { Form as FinalForm } from 'react-final-form';
 import { ValidationError } from 'yup';
-import type { ObjectSchema } from 'yup';
+import type { ObjectSchema, InferType } from 'yup';
+import type { ObjectShape } from 'yup/lib/object';
 
 type FinalFormWrapperProps<
-  FormValues extends object = Record<string, any>,
-  InitialFormValues = Partial<FormValues>
-> = FormProps<FormValues, InitialFormValues> & {
-  readonly schema: ObjectSchema<FormValues>;
+  Schema extends ObjectSchema<ObjectShape>,
+  InitialFormValues = Partial<InferType<Schema>>,
+> = FormProps<InferType<Schema>, InitialFormValues> & {
+  readonly schema: Schema;
   readonly className?: string;
 };
 
 export const FinalFormWrapper: <
-  FormValues extends object = Record<string, any>,
-  InitialFormValues = Partial<FormValues>
+  Schema extends ObjectSchema<ObjectShape>,
+  InitialFormValues = Partial<InferType<Schema>>,
 >(
-  props: FinalFormWrapperProps<FormValues, InitialFormValues>,
+  props: FinalFormWrapperProps<Schema, InitialFormValues>,
 ) => React.ReactElement = ({ schema, onSubmit, className, children, ...props }) => {
   const validate = React.useMemo(() => createFormValidator(schema), [schema]);
   const handleSubmit = React.useCallback<typeof onSubmit>(
@@ -42,21 +43,23 @@ export const FinalFormWrapper: <
   );
 };
 
-export const createFormValidator = <U extends object>(schema: ObjectSchema<U>) => (
-  values: U,
-): ValidationErrors | Promise<ValidationErrors> => {
-  try {
-    schema.validateSync(values, { abortEarly: false });
-  } catch (err) {
-    if (err instanceof ValidationError) {
-      return err.inner.reduce<object>((formError, innerError) => {
-        return setIn(formError, innerError.path, innerError.message);
-      }, {});
+export const createFormValidator =
+  <Schema extends ObjectSchema<ObjectShape>>(schema: Schema) =>
+  (values: InferType<Schema>): ValidationErrors | Promise<ValidationErrors> => {
+    try {
+      schema.validateSync(values, { abortEarly: false });
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        return err.inner.reduce((formError, innerError) => {
+          return innerError.path
+            ? setIn(formError, innerError.path, innerError.message)
+            : formError;
+        }, {});
+      }
+      console.error(err);
     }
-    console.error(err);
-  }
-  return {};
-};
+    return {};
+  };
 
 export const getErrorProps = (meta: FieldMetaState<unknown>) => {
   const isInvalid =
@@ -64,7 +67,7 @@ export const getErrorProps = (meta: FieldMetaState<unknown>) => {
 
   return {
     invalid: isInvalid,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- it's okay
     invalidText: meta.error,
   };
 };

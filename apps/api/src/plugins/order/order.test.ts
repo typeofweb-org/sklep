@@ -13,10 +13,10 @@ describe('/orders', () => {
           status: Faker.random.arrayElement(Object.values(Enums.OrderStatus)),
           total: parseInt(Faker.commerce.price(100, 200), 10),
           cart: {
-            id: Faker.random.uuid(),
+            id: Faker.datatype.uuid(),
             regularSubTotal: parseInt(Faker.commerce.price(100, 200), 10),
             discountSubTotal: parseInt(Faker.commerce.price(100, 200), 10),
-            totalQuantity: Faker.random.number(10),
+            totalQuantity: Faker.datatype.number({ max: 10 }),
             createdAt: Faker.date.past().toISOString(),
             updatedAt: Faker.date.past().toISOString(),
             cartProducts: [],
@@ -131,7 +131,7 @@ describe('/orders', () => {
       });
 
       expect(injection.statusCode).toEqual(200);
-      const orderInDb = await server.app.db.order.findOne({ where: { id: orders[0].id } });
+      const orderInDb = await server.app.db.order.findFirst({ where: { id: orders[0].id } });
       expect(orderInDb).toMatchObject(newData);
     });
 

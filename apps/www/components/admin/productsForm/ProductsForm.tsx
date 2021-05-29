@@ -17,7 +17,6 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { useMutation } from 'react-query';
 import * as Yup from 'yup';
-import type { ObjectSchema } from 'yup';
 
 import { getErrorProps, ToWForm } from '../../../utils/formUtils';
 import { serverErrorHandler } from '../../../utils/serverErrorHandler';
@@ -28,7 +27,8 @@ import styles from './ProductsForm.module.scss';
 
 Yup.setLocale({
   mixed: {
-    required: ({ label }) => (label ? `${label} jest polem wymaganym` : `To pole jest wymagane`),
+    required: ({ label }: { readonly label?: string }) =>
+      label ? `${label} jest polem wymaganym` : `To pole jest wymagane`,
   },
 });
 
@@ -39,10 +39,15 @@ const productSchema = Yup.object({
   discountPrice: Yup.number()
     .optional()
     .nullable()
-    .when('regularPrice', (regularPrice: number, schema: ObjectSchema) =>
-      regularPrice
-        ? Yup.number().max(regularPrice, 'Cena promocyjna nie może być wyższa niż cena podstawowa')
-        : schema,
+    .when(
+      'regularPrice',
+      (regularPrice: number, schema: Yup.NumberSchema<number | null | undefined>) =>
+        regularPrice
+          ? Yup.number().max(
+              regularPrice,
+              'Cena promocyjna nie może być wyższa niż cena podstawowa',
+            )
+          : schema,
     ),
   isPublic: Yup.boolean().required().default(false),
   type: Yup.string().oneOf(['SINGLE']).required().default('SINGLE'), // @todo
@@ -68,7 +73,7 @@ export type ProductsFormProps =
 export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: ProductsFormProps) => {
   const { addToast } = useToasts();
   const router = useRouter();
-  const [mutate, { isLoading }] = useMutation(mutation, {
+  const { mutateAsync, isLoading } = useMutation(mutation, {
     onSuccess(response) {
       addToast({
         kind: 'success',
@@ -91,13 +96,13 @@ export const ProductsForm = ({ mutation, mode = 'ADDING', initialValues }: Produ
   const handleSubmit = React.useCallback(
     async (body: ProductBody) => {
       try {
-        await mutate({ ...body, type: 'SINGLE' });
+        await mutateAsync({ ...body, type: 'SINGLE' });
         return;
       } catch (err) {
         return serverErrorHandler(err);
       }
     },
-    [mutate],
+    [mutateAsync],
   );
 
   return (

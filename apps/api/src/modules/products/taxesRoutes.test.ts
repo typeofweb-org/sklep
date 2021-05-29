@@ -16,7 +16,7 @@ describe('/taxes', () => {
         headers: auth.headers,
         payload: {
           name: Faker.lorem.sentence(5),
-          taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+          taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
         },
       });
       expect(injection.statusCode).toEqual(200);
@@ -31,7 +31,7 @@ describe('/taxes', () => {
         url: '/taxes',
         headers: auth.headers,
         payload: {
-          taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+          taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
         },
       });
 
@@ -48,7 +48,7 @@ describe('/taxes', () => {
         headers: auth.headers,
         payload: {
           name: Faker.lorem.sentence(5),
-          taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+          taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
         },
       });
       expect(injection.statusCode).toEqual(403);
@@ -67,7 +67,7 @@ describe('/taxes', () => {
           headers: auth.headers,
           payload: {
             name: Faker.lorem.sentence(5),
-            taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+            taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
           },
         });
 
@@ -124,7 +124,7 @@ describe('/taxes', () => {
             headers: auth.headers,
             payload: {
               name: Faker.lorem.sentence(5),
-              taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+              taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
             },
           }),
         );
@@ -186,14 +186,14 @@ describe('/taxes', () => {
         headers: auth.headers,
         payload: {
           name: Faker.lorem.sentence(5),
-          taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+          taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
         },
       });
       const { data } = injection1.result as SklepTypes['postTaxes200Response'];
 
       const newData = {
         name: Faker.lorem.sentence(5),
-        taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+        taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
       };
 
       const injection = await server.inject({
@@ -205,7 +205,7 @@ describe('/taxes', () => {
 
       expect(injection.statusCode).toEqual(200);
 
-      const taxInDb = await server.app.db.tax.findOne({ where: { id: data.id } });
+      const taxInDb = await server.app.db.tax.findFirst({ where: { id: data.id } });
       expect(taxInDb).toMatchObject(newData);
     });
 
@@ -219,7 +219,7 @@ describe('/taxes', () => {
         headers: auth.headers,
         payload: {
           name: Faker.lorem.sentence(5),
-          taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+          taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
         },
       });
       const { data } = injection1.result as SklepTypes['postProducts200Response'];
@@ -247,7 +247,7 @@ describe('/taxes', () => {
         headers: auth.headers,
         payload: {
           name: Faker.lorem.sentence(5),
-          taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+          taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
         },
       });
 
@@ -266,7 +266,7 @@ describe('/taxes', () => {
         headers: auth.headers,
         payload: {
           name: Faker.lorem.sentence(5),
-          taxRate: Faker.random.number({ min: 1, max: 99, precision: 1 }),
+          taxRate: Faker.datatype.number({ min: 1, max: 99, precision: 1 }),
         },
       });
       const { data } = injection.result as SklepTypes['postProducts200Response'];

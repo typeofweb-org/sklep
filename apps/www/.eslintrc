@@ -3,18 +3,25 @@
   "parserOptions": {
     "project": "tsconfig.json"
   },
-  "extends": ["react-app", "plugin:jsx-a11y/recommended", "plugin:css-modules/recommended"],
+  "extends": [
+    "react-app",
+    "plugin:jsx-a11y/recommended",
+    "plugin:css-modules/recommended",
+    "plugin:testing-library/react"
+  ],
   "env": {
     "es6": true,
-    "browser": true,
-    "jest": true,
-    "node": true
+    "browser": true
   },
   "plugins": ["jsx-a11y", "css-modules"],
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": ["error"],
     "jsx-a11y/anchor-is-valid": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "ignoreRestSiblings": true }
+    ],
     "import/no-default-export": "error",
     "react/display-name": "error",
     "import/no-restricted-paths": [
@@ -34,6 +41,15 @@
       "files": "pages/**/*.tsx",
       "rules": {
         "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.*", "**/*.spec.*"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     }
   ]

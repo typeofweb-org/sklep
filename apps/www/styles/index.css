@@ -24,7 +24,7 @@ body.react-query-is-loading * {
 }
 
 .visually-hidden {
-  @apply overflow-hidden absolute whitespace-no-wrap;
+  @apply overflow-hidden absolute whitespace-nowrap;
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;

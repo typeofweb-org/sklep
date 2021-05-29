@@ -1,5 +1,5 @@
 import React from 'react';
-import { QueryCache } from 'react-query';
+import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 
 import { Hero } from '../../components/klient/modules/hero/Hero';
@@ -8,7 +8,7 @@ import { Layout } from '../../components/klient/shared/components/layout/Layout'
 import { useGetProducts } from '../../utils/api/queryHooks';
 
 function ProductsPage() {
-  const { latestData: productsResponse } = useGetProducts();
+  const { data: productsResponse } = useGetProducts();
 
   if (!productsResponse?.data.length) {
     return (
@@ -28,12 +28,12 @@ function ProductsPage() {
 }
 
 export const getStaticProps = async () => {
-  const queryCache = new QueryCache();
-  await useGetProducts.prefetch(queryCache);
+  const queryClient = new QueryClient();
+  await useGetProducts.prefetch(queryClient);
 
   return {
     props: {
-      dehydratedState: dehydrate(queryCache),
+      dehydratedState: dehydrate(queryClient),
     },
     revalidate: 60,
   };

@@ -54,6 +54,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
     server.events.on('order:order:created', (order) => {
       const cart = order.cart;
       if (typeof cart === 'object' && cart && 'id' in cart) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- ok
         const { id: cartId } = cart as { readonly id: string };
         server.app.db.cartToProduct
           .deleteMany({
@@ -115,6 +116,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
       async handler(request, h) {
         const cart = await ensureCartExists(request, h);
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
         const { quantity, productId } = request.payload as SklepTypes['patchCartAddRequestBody'];
 
         await addToCart(request, { quantity, productId, cartId: cart.id });
@@ -136,6 +138,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
       async handler(request, h) {
         const cart = await ensureCartExists(request, h);
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
         const { productId } = request.payload as SklepTypes['patchCartRemoveRequestBody'];
 
         await removeFromCart(request, { productId, cartId: cart.id });
@@ -157,6 +160,7 @@ export const CartPlugin: Hapi.Plugin<{ readonly cookiePassword: string }> = {
       async handler(request, h) {
         const cart = await ensureCartExists(request, h);
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
         const { quantity, productId } = request.payload as SklepTypes['patchCartAddRequestBody'];
 
         await setProductQuantity(request, { quantity, productId, cartId: cart.id });

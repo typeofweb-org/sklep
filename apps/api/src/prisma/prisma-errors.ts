@@ -4,7 +4,10 @@ type DatabaseConstraintFields_ = readonly string[];
 type DatabaseContraintIndex_ = string;
 type DatabaseConstraint = DatabaseConstraintFields_ | DatabaseContraintIndex_;
 
-export type PrismaError = { readonly meta: object; readonly clientVersion: string } & PrismaErrors;
+export type PrismaError = {
+  readonly meta: Record<string, unknown>;
+  readonly clientVersion: string;
+} & PrismaErrors;
 
 type PrismaErrors =
   | InputValueTooLong

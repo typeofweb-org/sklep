@@ -1,1 +1,2 @@
-CREATE DATABASE sklep;
+CREATE DATABASE sklep_test;
+

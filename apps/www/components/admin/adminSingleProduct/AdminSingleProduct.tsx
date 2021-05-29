@@ -9,6 +9,7 @@ import styles from '../../../styles/components/AdminSingleProduct.module.scss';
 import { deleteProduct } from '../../../utils/api/deleteProduct';
 import { useGetProductBySlug } from '../../../utils/api/queryHooks';
 import { updateProduct } from '../../../utils/api/updateProduct';
+import { useParams } from '../../../utils/hooks';
 import { DeleteProductConfirmationModal } from '../deleteProductConfirmationModal/DeleteProductConfirmationModal';
 import { ProductsForm } from '../productsForm/ProductsForm';
 import { ProductsFormSkeleton } from '../productsForm/ProductsFormSkeleton';
@@ -17,36 +18,41 @@ import { useToasts } from '../toasts/Toasts';
 export const AdminSingleProduct = React.memo(() => {
   const { addToast } = useToasts();
   const router = useRouter();
-  const productId = Number(router.query.productId);
+  const productId = Number(useParams(['productId']).productId);
 
-  const { latestData: latestProductResponse, isLoading, isError } = useGetProductBySlug(productId, {
+  const {
+    data: latestProductResponse,
+    isLoading,
+    isError,
+  } = useGetProductBySlug(productId, {
     refetchOnReconnect: false,
   });
 
-  const [mutate, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
-    deleteProduct,
-    {
-      onSuccess() {
-        addToast({
-          kind: 'success',
-          title: 'Operacja udana',
-          caption: 'Produkt został usunięty pomyślnie',
-        });
-        closeDeletionModal();
-        resetDeletionStatus();
-        void router.replace('/admin/products');
-      },
-      onError(error?: Error) {
-        const message = 'Nie udało się usunąć produktu';
-        const caption = error ? `${message}: ${error.message}` : `${message}.`;
-        addToast({
-          kind: 'error',
-          title: 'Wystąpił błąd',
-          caption,
-        });
-      },
+  const {
+    mutateAsync,
+    status: deletionStatus,
+    reset: resetDeletionStatus,
+  } = useMutation(deleteProduct, {
+    onSuccess() {
+      addToast({
+        kind: 'success',
+        title: 'Operacja udana',
+        caption: 'Produkt został usunięty pomyślnie',
+      });
+      closeDeletionModal();
+      resetDeletionStatus();
+      void router.replace('/admin/products');
     },
-  );
+    onError(error?: Error) {
+      const message = 'Nie udało się usunąć produktu';
+      const caption = error ? `${message}: ${error.message}` : `${message}.`;
+      addToast({
+        kind: 'error',
+        title: 'Wystąpił błąd',
+        caption,
+      });
+    },
+  });
   const memoizedUpdateProduct = React.useCallback(
     (body: SklepTypes['putProductsProductIdRequestBody']) => {
       return updateProduct(productId, body);
@@ -85,7 +91,7 @@ export const AdminSingleProduct = React.memo(() => {
       <DeleteProductConfirmationModal
         isOpen={showDeletionModal}
         product={latestProductResponse?.data}
-        handleDelete={mutate}
+        handleDelete={mutateAsync}
         handleClose={closeDeletionModal}
         status={deletionStatus}
       />

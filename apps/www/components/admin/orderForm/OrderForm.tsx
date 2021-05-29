@@ -2,8 +2,10 @@ import type { SklepTypes } from '@sklep/types';
 import { Button, InlineLoading } from 'carbon-components-react';
 import React from 'react';
 import { Field } from 'react-final-form';
-import { useMutation, useQueryCache } from 'react-query';
+import type { UseQueryResult } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import * as Yup from 'yup';
+import type { AnyObject } from 'yup/lib/types';
 
 import { useGetOrderStatuses } from '../../../utils/api/getAllOrderStatuses';
 import { updateOrder } from '../../../utils/api/updateOrder';
@@ -24,17 +26,24 @@ const ORDERS_QUERY_KEY = ['/orders', 'GET'] as const;
 
 export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const { addToast } = useToasts();
-  const { latestData } = useGetOrderStatuses();
-  const cache = useQueryCache();
+  const { data } = useGetOrderStatuses();
+  const cache = useQueryClient();
+
+  type Statuses = ReturnType<typeof useGetOrderStatuses> extends UseQueryResult<{
+    readonly data: ReadonlyArray<infer R>;
+  }>
+    ? R
+    : never;
 
   const formSchema = React.useMemo(() => {
     return Yup.object({
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- bug in Yup
       status: Yup.string()
-        .oneOf(latestData ? latestData.data : [])
+        .oneOf(data ? data.data : [])
         .required()
-        .label('Status produktu'),
+        .label('Status produktu') as Yup.StringSchema<Statuses, AnyObject, Statuses>,
     }).required();
-  }, [latestData]);
+  }, [data]);
 
   const memoizedUpdateOrder = React.useCallback(
     (body: OrderRequestBody) => {
@@ -43,7 +52,7 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
     [orderId],
   );
 
-  const [mutate, { isLoading }] = useMutation(memoizedUpdateOrder, {
+  const { mutateAsync, isLoading } = useMutation(memoizedUpdateOrder, {
     onSettled: () => cache.invalidateQueries(ORDERS_QUERY_KEY),
     onSuccess() {
       addToast({
@@ -65,16 +74,16 @@ export const OrderForm = React.memo<OrderFormProps>(({ status, orderId }) => {
   const handleSubmit = React.useCallback(
     async (body: OrderRequestBody) => {
       try {
-        await mutate(body);
+        await mutateAsync(body);
         return;
       } catch (err) {
         return serverErrorHandler(err);
       }
     },
-    [mutate],
+    [mutateAsync],
   );
 
-  if (!latestData) {
+  if (!data) {
     return null;
   }
 

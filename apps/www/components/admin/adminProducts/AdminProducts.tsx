@@ -1,6 +1,6 @@
 import type { Nil } from '@sklep/types';
 import React from 'react';
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import { deleteProduct } from '../../../utils/api/deleteProduct';
 import { useGetProducts } from '../../../utils/api/queryHooks';
@@ -18,31 +18,32 @@ export const AdminProducts = React.memo(() => {
     skip: (page - 1) * pageSize,
   });
   const { addToast } = useToasts();
-  const cache = useQueryCache();
+  const cache = useQueryClient();
 
-  const [mutate, { status: deletionStatus, reset: resetDeletionStatus }] = useMutation(
-    deleteProduct,
-    {
-      onSettled: () => cache.invalidateQueries(PRODUCTS_QUERY_KEY),
-      onSuccess() {
-        addToast({
-          kind: 'success',
-          title: 'Operacja udana',
-          caption: 'Produkt został usunięty pomyślnie',
-        });
-        closeDeletionModal();
-        resetDeletionStatus();
-      },
-      onError(error?: Error) {
-        const message = 'Nie udało się usunąć produktu';
-        addToast({
-          kind: 'error',
-          title: 'Wystąpił błąd',
-          caption: error?.message ? `${message}: ${error.message}` : message,
-        });
-      },
+  const {
+    mutateAsync,
+    status: deletionStatus,
+    reset: resetDeletionStatus,
+  } = useMutation(deleteProduct, {
+    onSettled: () => cache.invalidateQueries(PRODUCTS_QUERY_KEY),
+    onSuccess() {
+      addToast({
+        kind: 'success',
+        title: 'Operacja udana',
+        caption: 'Produkt został usunięty pomyślnie',
+      });
+      closeDeletionModal();
+      resetDeletionStatus();
     },
-  );
+    onError(error?: Error) {
+      const message = 'Nie udało się usunąć produktu';
+      addToast({
+        kind: 'error',
+        title: 'Wystąpił błąd',
+        caption: error?.message ? `${message}: ${error.message}` : message,
+      });
+    },
+  });
 
   const handlePageChange = React.useCallback(
     (data: { readonly page: number; readonly pageSize: number }) => {
@@ -78,7 +79,7 @@ export const AdminProducts = React.memo(() => {
       <DeleteProductConfirmationModal
         isOpen={showDeletionModal}
         product={productForDeletion}
-        handleDelete={mutate}
+        handleDelete={mutateAsync}
         handleClose={closeDeletionModal}
         status={deletionStatus}
       />

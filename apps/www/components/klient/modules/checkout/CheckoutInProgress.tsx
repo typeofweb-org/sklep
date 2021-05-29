@@ -1,4 +1,3 @@
-import type { SklepTypes } from '@sklep/types';
 import ms from 'ms';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -20,14 +19,16 @@ export const CheckoutInProgress = React.memo<CheckoutInProgressProps>(({ orderId
   const router = useRouter();
   const [isFinished, setIsFinished] = React.useState(false);
 
-  const { latestData: latestOrderResponse, isLoading, error } = useGetOrderById(orderId, {
+  const {
+    data: latestOrderResponse,
+    isLoading,
+    error,
+  } = useGetOrderById(orderId, {
     // long polling until the order is paid
     refetchInterval: !isFinished ? POLL_INTERVAL : undefined,
     refetchIntervalInBackground: !isFinished,
   });
-  const cart = latestOrderResponse?.data.cart as
-    | SklepTypes['postCart200Response']['data']
-    | undefined;
+  const cart = latestOrderResponse?.data.cart;
 
   React.useEffect(() => {
     if (error instanceof ResponseError) {

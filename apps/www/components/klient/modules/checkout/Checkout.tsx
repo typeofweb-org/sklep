@@ -18,7 +18,7 @@ export type AddressDetails = {
   readonly lastName: string;
   readonly streetName: string;
   readonly houseNumber: string;
-  readonly apartmentNumber: string;
+  readonly apartmentNumber?: string;
   readonly city: string;
   readonly zipCode: string;
   readonly phone: string;
@@ -42,7 +42,7 @@ export type CheckoutType = Yup.InferType<typeof checkoutSchema>;
 
 export const Checkout = React.memo<CheckoutProps>(({ cart }) => {
   const router = useRouter();
-  const [processPayment, { isLoading }] = useStripePayment();
+  const { mutateAsync: processPayment, isLoading } = useStripePayment();
 
   const handleSubmit = React.useCallback(
     async (values: AddressDetails) => {

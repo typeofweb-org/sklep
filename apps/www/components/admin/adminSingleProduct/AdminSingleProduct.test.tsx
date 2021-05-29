@@ -1,20 +1,18 @@
 import type { SklepTypes } from '@sklep/types';
-import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
 import React from 'react';
 
-import { mswMockServer } from '../../../jest-utils';
-import { ToastsContextProvider } from '../toasts/Toasts';
+import { initMockServer, renderWithProviders } from '../../../jest-utils';
 
 import { AdminSingleProduct } from './AdminSingleProduct';
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
-useRouter.mockImplementation(() => ({ query: { productId: '1' }, replace() {} }));
+const productId = 1;
+useRouter.mockImplementation(() => ({ query: { productId }, replace() {} }));
 
-const TEST_USER_DB: Record<number, SklepTypes['getProductsProductIdOrSlug200Response']> = {
-  1: {
+const TEST_PRODUCTS: ReadonlyArray<SklepTypes['getProductsProductIdOrSlug200Response']> = [
+  {
     data: {
       id: 1,
       slug: 'computer',
@@ -26,34 +24,27 @@ const TEST_USER_DB: Record<number, SklepTypes['getProductsProductIdOrSlug200Resp
       type: 'SINGLE',
     },
   },
-};
+];
 
 function renderAdminSingleProduct() {
-  return render(
-    <ToastsContextProvider>
-      <AdminSingleProduct />
-    </ToastsContextProvider>,
-  );
+  return renderWithProviders(<AdminSingleProduct />);
 }
 
 describe('single product page', () => {
-  beforeEach(() =>
-    mswMockServer.use(
-      rest.get(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (req, res, ctx) => {
-        const productId = Number(req.params.productId);
-        const productData = TEST_USER_DB[productId] || {};
-        return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
-      }),
-    ),
-  );
+  const server = initMockServer();
 
   it('loads product data', async () => {
-    const { findByLabelText } = renderAdminSingleProduct();
-    const name = await findByLabelText('Nazwa produktu');
-    const description = await findByLabelText('Opis produktu');
-    const regularPrice = await findByLabelText('Cena produktu');
-    const discountPrice = await findByLabelText('Promocyjna cena produktu');
-    const isPublic = await findByLabelText('Czy produkt ma być widoczny na stronie?', {
+    server.get(`/products/${productId}`).reply(
+      200,
+      TEST_PRODUCTS.find((el) => el.data.id === productId),
+    );
+
+    renderAdminSingleProduct();
+    const name = await screen.findByLabelText('Nazwa produktu');
+    const description = await screen.findByLabelText('Opis produktu');
+    const regularPrice = await screen.findByLabelText('Cena produktu');
+    const discountPrice = await screen.findByLabelText('Promocyjna cena produktu');
+    const isPublic = await screen.findByLabelText('Czy produkt ma być widoczny na stronie?', {
       exact: false,
     });
 
@@ -65,39 +56,37 @@ describe('single product page', () => {
   });
 
   it('deletes product', async () => {
-    mswMockServer.use(
-      rest.delete(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (req, res, ctx) => {
-        const productId = Number(req.params.productId);
-        const productData = TEST_USER_DB[productId] || {};
-        return res(ctx.status(200), ctx.json(productData), ctx.delay(300));
-      }),
+    server.get(`/products/${productId}`).reply(
+      200,
+      TEST_PRODUCTS.find((el) => el.data.id === productId),
     );
 
-    const { findByText, findByRole } = renderAdminSingleProduct();
-    const deleteButton = await findByText('Usuń produkt');
+    server.delete(`/products/${productId}`).reply(
+      200,
+      TEST_PRODUCTS.find((el) => el.data.id === productId),
+    );
+
+    renderAdminSingleProduct();
+    const deleteButton = await screen.findByText('Usuń produkt');
 
     userEvent.click(deleteButton);
 
-    const confirmDeleteButton = await findByText('Usuń');
+    const confirmDeleteButton = await screen.findByText('Usuń');
     expect(confirmDeleteButton).toBeInTheDocument();
 
     userEvent.click(confirmDeleteButton);
 
-    const notification = await findByRole('alert');
+    const notification = await screen.findByRole('alert');
     expect(notification).toHaveTextContent('Produkt został usunięty pomyślnie');
   });
 
   it('shows error message after it fails to load a product', async () => {
-    mswMockServer.use(
-      rest.get(process.env.NEXT_PUBLIC_API_URL + '/products/:productId', (_req, res, ctx) => {
-        return res(ctx.status(400), ctx.delay(300), ctx.json({ message: 'Bad data' }));
-      }),
-    );
-    const { findByText } = renderAdminSingleProduct();
-    const errorMessage = await findByText(
+    server.get(`/products/${productId}`).times(4).reply(400, { message: 'Bad data' });
+
+    renderAdminSingleProduct();
+    const errorMessage = await screen.findByText(
       'Wystąpił błąd podczas pobierania danych produktu',
       {},
-      { timeout: 10000 }, // React query will try to refetch several times
     );
     expect(errorMessage).toBeInTheDocument();
   });

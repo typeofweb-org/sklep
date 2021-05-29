@@ -7,14 +7,14 @@ describe('calculations', () => {
     it('should calculate subtotals', () => {
       type CartArg = Parameters<typeof calculateCartTotals>[0];
       const cart: CartArg = {
-        id: Faker.random.uuid(),
+        id: Faker.datatype.uuid(),
         createdAt: Faker.date.past(),
         updatedAt: Faker.date.past(),
         cartProducts: [
           {
             quantity: 1,
             product: {
-              id: Faker.random.number({ min: 0, precision: 0 }),
+              id: Faker.datatype.number({ min: 0, precision: 0 }),
               name: Faker.commerce.productName(),
               slug: Faker.internet.userName(),
               regularPrice: 123_00,
@@ -24,7 +24,7 @@ describe('calculations', () => {
           {
             quantity: 1,
             product: {
-              id: Faker.random.number({ min: 0, precision: 0 }),
+              id: Faker.datatype.number({ min: 0, precision: 0 }),
               name: Faker.commerce.productName(),
               slug: Faker.internet.userName(),
               regularPrice: 15_23,
@@ -34,7 +34,7 @@ describe('calculations', () => {
           {
             quantity: 3,
             product: {
-              id: Faker.random.number({ min: 0, precision: 0 }),
+              id: Faker.datatype.number({ min: 0, precision: 0 }),
               name: Faker.commerce.productName(),
               slug: Faker.internet.userName(),
               regularPrice: 89_99,
@@ -54,14 +54,14 @@ describe('calculations', () => {
     it('rounds correctly', () => {
       type CartArg = Parameters<typeof calculateCartTotals>[0];
       const cart: CartArg = {
-        id: Faker.random.uuid(),
+        id: Faker.datatype.uuid(),
         createdAt: Faker.date.past(),
         updatedAt: Faker.date.past(),
         cartProducts: [
           {
             quantity: 1.05,
             product: {
-              id: Faker.random.number({ min: 0, precision: 0 }),
+              id: Faker.datatype.number({ min: 0, precision: 0 }),
               name: Faker.commerce.productName(),
               slug: Faker.internet.userName(),
               regularPrice: 5713,

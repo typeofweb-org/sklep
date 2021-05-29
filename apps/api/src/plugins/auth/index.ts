@@ -82,7 +82,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
           },
         });
 
-        const sessionModel = await request.server.app.db.session.findOne({
+        const sessionModel = await request.server.app.db.session.findFirst({
           where: {
             id: sessionId,
           },
@@ -122,6 +122,7 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
           throw Boom.teapot();
         }
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
         const { email, password } = request.payload as SklepTypes['postAuthRegisterRequestBody'];
 
         await createUser(request, { email, password });
@@ -147,8 +148,9 @@ export const AuthPlugin: Hapi.Plugin<AuthPluginOptions> = {
         if (request.auth.isAuthenticated) {
           return null;
         }
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
         const { email, password } = request.payload as SklepTypes['postAuthLoginRequestBody'];
-        const user = await request.server.app.db.user.findOne({
+        const user = await request.server.app.db.user.findFirst({
           where: { email },
         });
 

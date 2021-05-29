@@ -8,5 +8,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true
+    // "typeRoots": ["./node_modules/@types", "./typings", "jest-extended"]
   }
 }

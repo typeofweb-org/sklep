@@ -11,7 +11,7 @@ type AmountProps = {
 
 export const Amount = React.memo<AmountProps>(({ increaseAmount, decreaseAmount }) => (
   <div className="flex justify-center flex-col items-center w-full border-t border-r border-l border-gray-500 py-2 mt-10">
-    <Field name="quantity">
+    <Field<number> name="quantity">
       {({ input: { onBlur, onFocus, value, onChange, name }, meta }) => (
         <>
           <div>
@@ -22,15 +22,15 @@ export const Amount = React.memo<AmountProps>(({ increaseAmount, decreaseAmount 
               aria-label="Zmniejsz ilość produktu"
               className="px-2 mr-1"
             >
-              &lt;
+              –
             </button>
             <NumberInput
               onChange={onChange}
               onFocus={onFocus}
               onBlur={onBlur}
-              value={value as number}
+              value={value}
               name={name}
-              decimalSeparator={false}
+              decimalSeparator=""
               className="w-8 border-none bg-transparent outline-none text-center"
             />
             <button
@@ -39,7 +39,7 @@ export const Amount = React.memo<AmountProps>(({ increaseAmount, decreaseAmount 
               aria-label="Zwiększ ilość produktu"
               className="px-2 ml-1"
             >
-              &gt;
+              +
             </button>
           </div>
           <div>

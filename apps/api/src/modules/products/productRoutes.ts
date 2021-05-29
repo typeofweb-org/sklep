@@ -48,8 +48,13 @@ export const addProductRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const payload = request.payload as SklepTypes['postProductsRequestBody'];
-    const user = request.auth.credentials.session!.user;
+    const user = request.auth.credentials.session?.user;
+
+    if (!user) {
+      throw Boom.unauthorized();
+    }
 
     const slug = Slugify(payload.name);
     const product = await request.server.app.db.product.create({
@@ -86,7 +91,9 @@ export const editProductRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request): Promise<SklepTypes['putProductsProductId200Response']> {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const payload = request.payload as SklepTypes['putProductsProductIdRequestBody'];
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const params = request.params as SklepTypes['putProductsProductIdRequestPathParams'];
 
     const count = await request.server.app.db.product.count({ where: { id: params.productId } });
@@ -124,6 +131,7 @@ export const deleteProductRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request) {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- body
     const params = request.params as SklepTypes['deleteProductsProductIdRequestPathParams'];
 
     const count = await request.server.app.db.product.count({ where: { id: params.productId } });
@@ -154,12 +162,15 @@ export const getProductRoute: Hapi.ServerRoute = {
   async handler(request): Promise<SklepTypes['getProductsProductIdOrSlug200Response']> {
     const user = request.auth.credentials?.session?.user;
     const isAdmin = user?.role === Enums.UserRole.ADMIN;
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- params
     const params = request.params as SklepTypes['getProductsProductIdOrSlugRequestPathParams'];
 
     const maybeId = Number(params.productIdOrSlug);
     const query = Number.isNaN(maybeId)
-      ? { slug: params.productIdOrSlug as string }
-      : { id: params.productIdOrSlug as number };
+      ? // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- typescript gets it wrong
+        { slug: params.productIdOrSlug as string }
+      : // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- typescript gets it wrong
+        { id: params.productIdOrSlug as number };
 
     const product = await request.server.app.db.product.findFirst({
       where: {
@@ -196,6 +207,7 @@ export const getProductsRoute: Hapi.ServerRoute = {
     },
   },
   async handler(request): Promise<SklepTypes['getProducts200Response']> {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- query
     const { take, skip } = request.query as SklepTypes['getProductsRequestQuery'];
 
     // if one is defined and the other is not
@@ -221,7 +233,7 @@ export const getProductsRoute: Hapi.ServerRoute = {
       request.server.app.db.product.findMany({
         orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
         ...query,
-        ...(take && { take, skip }),
+        ...(take != null && skip != null && { take, skip }),
         select: productSelect,
       }),
     ]);
